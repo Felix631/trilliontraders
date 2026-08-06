@@ -190,6 +190,27 @@ export const load = async ({
     }
     const blockConversion = new BlockConversion();
     xml = blockConversion.convertStrategy(xml, showIncompatibleStrategyDialog);
+
+    // Community strategies often include blocks from other Deriv Bot forks
+    // that are not registered in this build. Instead of rejecting the whole
+    // strategy, drop those unsupported blocks (and everything attached to
+    // them) so the remaining supported logic can still be loaded.
+    const registered_block_types = window.Blockly.Blocks;
+    const unsupported_blocks = Array.from(xml.getElementsByTagName('block')).filter(block => {
+        const block_type = block.getAttribute('type');
+        return !block_type || !Object.prototype.hasOwnProperty.call(registered_block_types, block_type);
+    });
+    const has_removed_blocks = unsupported_blocks.length > 0;
+    unsupported_blocks.forEach(block => block.parentNode?.removeChild(block));
+
+    // Unsupported shadow blocks would also fail to instantiate, remove them too.
+    Array.from(xml.getElementsByTagName('shadow')).forEach(shadow => {
+        const shadow_type = shadow.getAttribute('type');
+        if (!shadow_type || !Object.prototype.hasOwnProperty.call(registered_block_types, shadow_type)) {
+            shadow.parentNode?.removeChild(shadow);
+        }
+    });
+
     const blockly_xml = xml.querySelectorAll('block');
 
     // Check if there are any blocks in this strategy.
@@ -197,13 +218,9 @@ export const load = async ({
         return showInvalidStrategyError();
     }
 
-    // Check if all block types in XML are allowed.
-    const has_invalid_blocks = Array.from(blockly_xml).some(block => {
-        const block_type = block.getAttribute('type');
-        return !Object.keys(window.Blockly.Blocks).includes(block_type);
-    });
-    if (has_invalid_blocks) {
-        return showInvalidStrategyError();
+    // Let the user know part of the strategy could not be loaded.
+    if (has_removed_blocks) {
+        botNotification(notification_message().unsupported_blocks_removed);
     }
 
     try {
