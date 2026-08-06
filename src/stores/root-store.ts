@@ -7,6 +7,7 @@ import CommonStore from './common-store';
 import DashboardStore from './dashboard-store';
 import DataCollectionStore from './data-collection-store';
 import FlyoutHelpStore from './flyout-help-store';
+import FreeBotsStore from './free-bots-store';
 import FlyoutStore from './flyout-store';
 import GoogleDriveStore from './google-drive-store';
 import JournalStore from './journal-store';
@@ -36,6 +37,7 @@ export default class RootStore {
     public toolbar: ToolbarStore;
     public toolbox: ToolboxStore;
     public quick_strategy: QuickStrategyStore;
+    public free_bots: FreeBotsStore;
 
     public dashboard: DashboardStore;
 
@@ -77,6 +79,7 @@ export default class RootStore {
         this.toolbar = new ToolbarStore(this);
         this.toolbox = new ToolboxStore(this, this.core);
         this.quick_strategy = new QuickStrategyStore(this);
+        this.free_bots = new FreeBotsStore(this);
 
         this.dashboard = new DashboardStore(this, this.core);
 

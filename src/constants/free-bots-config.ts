@@ -1,0 +1,1671 @@
+// AUTO-GENERATED from src/xml/free-bots/*.xml — do not edit by hand.
+// Regenerate with: node scripts/generate-free-bots-config.js
+export type TFreeBot = {
+    id: string;
+    name: string;
+    creator: string;
+    file: string;
+};
+
+export type TFreeBotCreator = {
+    id: string;
+    label: string;
+    count: number;
+};
+
+export const FREE_BOTS: TFreeBot[] = [
+    {
+        "id": "1_3_2_6",
+        "name": "1 3 2 6",
+        "creator": "Official",
+        "file": "1_3_2_6-xml"
+    },
+    {
+        "id": "accumulators_dalembert",
+        "name": "accumulators dalembert",
+        "creator": "Official",
+        "file": "accumulators_dalembert-xml"
+    },
+    {
+        "id": "accumulators_dalembert_on_stat_reset",
+        "name": "accumulators dalembert on stat reset",
+        "creator": "Official",
+        "file": "accumulators_dalembert_on_stat_reset-xml"
+    },
+    {
+        "id": "accumulators_martingale",
+        "name": "accumulators martingale",
+        "creator": "Official",
+        "file": "accumulators_martingale-xml"
+    },
+    {
+        "id": "accumulators_martingale_on_stat_reset",
+        "name": "accumulators martingale on stat reset",
+        "creator": "Official",
+        "file": "accumulators_martingale_on_stat_reset-xml"
+    },
+    {
+        "id": "accumulators_reverse_dalembert",
+        "name": "accumulators reverse dalembert",
+        "creator": "Official",
+        "file": "accumulators_reverse_dalembert-xml"
+    },
+    {
+        "id": "accumulators_reverse_dalembert_on_stat_reset",
+        "name": "accumulators reverse dalembert on stat reset",
+        "creator": "Official",
+        "file": "accumulators_reverse_dalembert_on_stat_reset-xml"
+    },
+    {
+        "id": "accumulators_reverse_martingale",
+        "name": "accumulators reverse martingale",
+        "creator": "Official",
+        "file": "accumulators_reverse_martingale-xml"
+    },
+    {
+        "id": "accumulators_reverse_martingale_on_stat_reset",
+        "name": "accumulators reverse martingale on stat reset",
+        "creator": "Official",
+        "file": "accumulators_reverse_martingale_on_stat_reset-xml"
+    },
+    {
+        "id": "ai-scanner-AI-SIGNAL-SCANNER",
+        "name": "scanner AI SIGNAL SCANNER",
+        "creator": "ai",
+        "file": "ai-scanner-AI-SIGNAL-SCANNER-xml"
+    },
+    {
+        "id": "dalembert",
+        "name": "dalembert",
+        "creator": "Official",
+        "file": "dalembert-xml"
+    },
+    {
+        "id": "dalembert_max-stake",
+        "name": "dalembert max stake",
+        "creator": "Official",
+        "file": "dalembert_max-stake-xml"
+    },
+    {
+        "id": "dbotspace-free-AUTO-GREENFLAKES-E_O",
+        "name": "free AUTO GREENFLAKES E O",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-AUTO-GREENFLAKES-E_O-xml"
+    },
+    {
+        "id": "dbotspace-free-OVER1_R32-PRO",
+        "name": "free OVER1 R32 PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-OVER1_R32-PRO-xml"
+    },
+    {
+        "id": "dbotspace-free-OVER2_R43-PRO",
+        "name": "free OVER2 R43 PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-OVER2_R43-PRO-xml"
+    },
+    {
+        "id": "dbotspace-free-THE-CMV-PRO",
+        "name": "free THE CMV PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-THE-CMV-PRO-xml"
+    },
+    {
+        "id": "dbotspace-free-UNDER-BLAST-PRO",
+        "name": "free UNDER BLAST PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-UNDER-BLAST-PRO-xml"
+    },
+    {
+        "id": "dbotspace-free-UNDER7_R56-PRO",
+        "name": "free UNDER7 R56 PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-UNDER7_R56-PRO-xml"
+    },
+    {
+        "id": "dbotspace-free-UNDER8_R67-PRO",
+        "name": "free UNDER8 R67 PRO",
+        "creator": "dbotspace",
+        "file": "dbotspace-free-UNDER8_R67-PRO-xml"
+    },
+    {
+        "id": "dbtraders-Meta-Switch",
+        "name": "Meta Switch",
+        "creator": "dbtraders",
+        "file": "dbtraders-Meta-Switch-xml"
+    },
+    {
+        "id": "dbtraders-The-even-odd-bot-1",
+        "name": "The even odd bot 1",
+        "creator": "dbtraders",
+        "file": "dbtraders-The-even-odd-bot-1-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Differ-Switcher-Smart-Cycle",
+        "name": "automatedbots Differ Switcher Smart Cycle",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Differ-Switcher-Smart-Cycle-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Even-Odd-Pattern-Analysis",
+        "name": "automatedbots Even Odd Pattern Analysis",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Even-Odd-Pattern-Analysis-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Even-Odd-Percentage---Pattern-Combo",
+        "name": "automatedbots Even Odd Percentage Pattern Combo",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Even-Odd-Percentage---Pattern-Combo-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Even-Odd-Percentage-Analysis",
+        "name": "automatedbots Even Odd Percentage Analysis",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Even-Odd-Percentage-Analysis-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Infinity-Algo",
+        "name": "automatedbots Infinity Algo",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Infinity-Algo-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Novaswitch",
+        "name": "automatedbots Novaswitch",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Novaswitch-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Over-0-Recovery-Over-4",
+        "name": "automatedbots Over 0 Recovery Over 4",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Over-0-Recovery-Over-4-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-Over-3-Recovery-Over-5",
+        "name": "automatedbots Over 3 Recovery Over 5",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-Over-3-Recovery-Over-5-xml"
+    },
+    {
+        "id": "dbtraders-automatedbots-The-Under-7__8__9-Switcher",
+        "name": "automatedbots The Under 7 / 8 / 9 Switcher",
+        "creator": "dbtraders",
+        "file": "dbtraders-automatedbots-The-Under-7__8__9-Switcher-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Candle-Mine-Version-3-1-(1)",
+        "name": "flossin Candle Mine Version 3 1 (1)",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Candle-Mine-Version-3-1-(1)-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Digit-Hyper",
+        "name": "flossin Digit Hyper",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Digit-Hyper-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Dollar-Bot",
+        "name": "flossin Dollar Bot",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Dollar-Bot-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Falcon-Bot",
+        "name": "flossin Falcon Bot",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Falcon-Bot-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Gibu-V8-PRO-(2024)",
+        "name": "flossin Gibu V8 PRO (2024)",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Gibu-V8-PRO-(2024)-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Matches-and-Differs-bot",
+        "name": "flossin Matches and Differs bot",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Matches-and-Differs-bot-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Matches-and-Over-All-Day",
+        "name": "flossin Matches and Over All Day",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Matches-and-Over-All-Day-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Meta-Switch",
+        "name": "flossin Meta Switch",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Meta-Switch-xml"
+    },
+    {
+        "id": "dbtraders-flossin-TRADE-CITY-BOT-Version-2-0",
+        "name": "flossin TRADE CITY BOT Version 2 0",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-TRADE-CITY-BOT-Version-2-0-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Test_RiseFall_5TICK",
+        "name": "flossin Test RiseFall 5TICK",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Test_RiseFall_5TICK-xml"
+    },
+    {
+        "id": "dbtraders-flossin-The-dollar-pro",
+        "name": "flossin The dollar pro",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-The-dollar-pro-xml"
+    },
+    {
+        "id": "dbtraders-flossin-The-even-odd-bot-1",
+        "name": "flossin The even odd bot 1",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-The-even-odd-bot-1-xml"
+    },
+    {
+        "id": "dbtraders-flossin-Ultra-Ai-2025",
+        "name": "flossin Ultra Ai 2025",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-Ultra-Ai-2025-xml"
+    },
+    {
+        "id": "dbtraders-flossin-malix-ke-trading-bots",
+        "name": "flossin malix ke trading bots",
+        "creator": "dbtraders",
+        "file": "dbtraders-flossin-malix-ke-trading-bots-xml"
+    },
+    {
+        "id": "dollarprinter-free-AI-SIGNAL-SCANNER",
+        "name": "free AI SIGNAL SCANNER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-AI-SIGNAL-SCANNER-xml"
+    },
+    {
+        "id": "dollarprinter-free-Alpha-Version-2026-Edition",
+        "name": "free Alpha Version 2026 Edition",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Alpha-Version-2026-Edition-xml"
+    },
+    {
+        "id": "dollarprinter-free-Binary-Expert-V6-pro",
+        "name": "free Binary Expert V6 pro",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Binary-Expert-V6-pro-xml"
+    },
+    {
+        "id": "dollarprinter-free-DOLLAR-PRINTER-BOT11",
+        "name": "free DOLLAR PRINTER BOT11",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-DOLLAR-PRINTER-BOT11-xml"
+    },
+    {
+        "id": "dollarprinter-free-Dollar-Print-Ai-Version-2026",
+        "name": "free Dollar Print Ai Version 2026",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Dollar-Print-Ai-Version-2026-xml"
+    },
+    {
+        "id": "dollarprinter-free-Dp-Entry-point-Bot-V1",
+        "name": "free Dp Entry point Bot V1",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Dp-Entry-point-Bot-V1-xml"
+    },
+    {
+        "id": "dollarprinter-free-Expert-Speed-Bot-V1-2026",
+        "name": "free Expert Speed Bot V1 2026",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Expert-Speed-Bot-V1-2026-xml"
+    },
+    {
+        "id": "dollarprinter-free-Maziwa-Bot-2026-Version",
+        "name": "free Maziwa Bot 2026 Version",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-Maziwa-Bot-2026-Version-xml"
+    },
+    {
+        "id": "dollarprinter-free-SignalSniper-AutoBot-(1)",
+        "name": "free SignalSniper AutoBot (1)",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-free-SignalSniper-AutoBot-(1)-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-EVEN_MULTIPLE_SCALPER",
+        "name": "scalper EVEN MULTIPLE SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-EVEN_MULTIPLE_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-EVEN_SCALPER",
+        "name": "scalper EVEN SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-EVEN_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-FALL_SCALPER",
+        "name": "scalper FALL SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-FALL_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-ODD_MULTIPLE_SCALPER",
+        "name": "scalper ODD MULTIPLE SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-ODD_MULTIPLE_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-ODD_SCALPER",
+        "name": "scalper ODD SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-ODD_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-OVER_2_SCALPER",
+        "name": "scalper OVER 2 SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-OVER_2_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-OVER_4_SCALPER",
+        "name": "scalper OVER 4 SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-OVER_4_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-RISE_SCALPER",
+        "name": "scalper RISE SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-RISE_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-UNDER_5_SCALPER",
+        "name": "scalper UNDER 5 SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-UNDER_5_SCALPER-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-UNDER_7_SCALPER",
+        "name": "scalper UNDER 7 SCALPER",
+        "creator": "dollarprinter",
+        "file": "dollarprinter-scalper-UNDER_7_SCALPER-xml"
+    },
+    {
+        "id": "exwager-2025-MONEY8GG-SPEED-BOT",
+        "name": "2025 MONEY8GG SPEED BOT",
+        "creator": "exwager",
+        "file": "exwager-2025-MONEY8GG-SPEED-BOT-xml"
+    },
+    {
+        "id": "exwager-AI-BOT",
+        "name": "AI BOT",
+        "creator": "exwager",
+        "file": "exwager-AI-BOT-xml"
+    },
+    {
+        "id": "exwager-Accumulators_Bot",
+        "name": "Accumulators Bot",
+        "creator": "exwager",
+        "file": "exwager-Accumulators_Bot-xml"
+    },
+    {
+        "id": "exwager-Accumulators_Bot_With_Barrier",
+        "name": "Accumulators Bot With Barrier",
+        "creator": "exwager",
+        "file": "exwager-Accumulators_Bot_With_Barrier-xml"
+    },
+    {
+        "id": "exwager-AiwithEntry",
+        "name": "AiwithEntry",
+        "creator": "exwager",
+        "file": "exwager-AiwithEntry-xml"
+    },
+    {
+        "id": "exwager-Best-Over-Under-Switcher",
+        "name": "Best Over Under Switcher",
+        "creator": "exwager",
+        "file": "exwager-Best-Over-Under-Switcher-xml"
+    },
+    {
+        "id": "exwager-Consecutive_EVEN_ODD_BOT",
+        "name": "Consecutive EVEN ODD BOT",
+        "creator": "exwager",
+        "file": "exwager-Consecutive_EVEN_ODD_BOT-xml"
+    },
+    {
+        "id": "exwager-Differs-Bot",
+        "name": "Differs Bot",
+        "creator": "exwager",
+        "file": "exwager-Differs-Bot-xml"
+    },
+    {
+        "id": "exwager-Even-ODD-Bot",
+        "name": "Even ODD Bot",
+        "creator": "exwager",
+        "file": "exwager-Even-ODD-Bot-xml"
+    },
+    {
+        "id": "exwager-Martingale_Only",
+        "name": "Martingale Only",
+        "creator": "exwager",
+        "file": "exwager-Martingale_Only-xml"
+    },
+    {
+        "id": "exwager-Matches-Bot",
+        "name": "Matches Bot",
+        "creator": "exwager",
+        "file": "exwager-Matches-Bot-xml"
+    },
+    {
+        "id": "exwager-Maziwaa-AI",
+        "name": "Maziwaa AI",
+        "creator": "exwager",
+        "file": "exwager-Maziwaa-AI-xml"
+    },
+    {
+        "id": "exwager-Money8gg_Entry_Point_Bot",
+        "name": "Money8gg Entry Point Bot",
+        "creator": "exwager",
+        "file": "exwager-Money8gg_Entry_Point_Bot-xml"
+    },
+    {
+        "id": "exwager-Multipurpose",
+        "name": "Multipurpose",
+        "creator": "exwager",
+        "file": "exwager-Multipurpose-xml"
+    },
+    {
+        "id": "exwager-Nomartingale",
+        "name": "Nomartingale",
+        "creator": "exwager",
+        "file": "exwager-Nomartingale-xml"
+    },
+    {
+        "id": "exwager-Over-3-Strategy",
+        "name": "Over 3 Strategy",
+        "creator": "exwager",
+        "file": "exwager-Over-3-Strategy-xml"
+    },
+    {
+        "id": "exwager-Over-One-Strategy",
+        "name": "Over One Strategy",
+        "creator": "exwager",
+        "file": "exwager-Over-One-Strategy-xml"
+    },
+    {
+        "id": "exwager-Over-Single-Side",
+        "name": "Over Single Side",
+        "creator": "exwager",
+        "file": "exwager-Over-Single-Side-xml"
+    },
+    {
+        "id": "exwager-Over-Under-Magical-Bot",
+        "name": "Over Under Magical Bot",
+        "creator": "exwager",
+        "file": "exwager-Over-Under-Magical-Bot-xml"
+    },
+    {
+        "id": "exwager-Over_1_AI",
+        "name": "Over 1 AI",
+        "creator": "exwager",
+        "file": "exwager-Over_1_AI-xml"
+    },
+    {
+        "id": "exwager-Rise-and-Fall-Simple",
+        "name": "Rise and Fall Simple",
+        "creator": "exwager",
+        "file": "exwager-Rise-and-Fall-Simple-xml"
+    },
+    {
+        "id": "exwager-SWITCH_EVEN_ODD_MARKETS-V2",
+        "name": "SWITCH EVEN ODD MARKETS V2",
+        "creator": "exwager",
+        "file": "exwager-SWITCH_EVEN_ODD_MARKETS-V2-xml"
+    },
+    {
+        "id": "exwager-Same-Side-Over-Under",
+        "name": "Same Side Over Under",
+        "creator": "exwager",
+        "file": "exwager-Same-Side-Over-Under-xml"
+    },
+    {
+        "id": "exwager-Secret_Strategy",
+        "name": "Secret Strategy",
+        "creator": "exwager",
+        "file": "exwager-Secret_Strategy-xml"
+    },
+    {
+        "id": "exwager-Step-Indices-Bot",
+        "name": "Step Indices Bot",
+        "creator": "exwager",
+        "file": "exwager-Step-Indices-Bot-xml"
+    },
+    {
+        "id": "exwager-Switching_Markets",
+        "name": "Switching Markets",
+        "creator": "exwager",
+        "file": "exwager-Switching_Markets-xml"
+    },
+    {
+        "id": "exwager-Under-7-AI",
+        "name": "Under 7 AI",
+        "creator": "exwager",
+        "file": "exwager-Under-7-AI-xml"
+    },
+    {
+        "id": "exwager-Under-7-Bulk-Best",
+        "name": "Under 7 Bulk Best",
+        "creator": "exwager",
+        "file": "exwager-Under-7-Bulk-Best-xml"
+    },
+    {
+        "id": "exwager-Under-8-Strategy",
+        "name": "Under 8 Strategy",
+        "creator": "exwager",
+        "file": "exwager-Under-8-Strategy-xml"
+    },
+    {
+        "id": "exwager-Under-Single-Side",
+        "name": "Under Single Side",
+        "creator": "exwager",
+        "file": "exwager-Under-Single-Side-xml"
+    },
+    {
+        "id": "exwager-Under_8_AI",
+        "name": "Under 8 AI",
+        "creator": "exwager",
+        "file": "exwager-Under_8_AI-xml"
+    },
+    {
+        "id": "exwager-Under_8_under_5_AI",
+        "name": "Under 8 under 5 AI",
+        "creator": "exwager",
+        "file": "exwager-Under_8_under_5_AI-xml"
+    },
+    {
+        "id": "exwager-percentage_Even_Odd",
+        "name": "percentage Even Odd",
+        "creator": "exwager",
+        "file": "exwager-percentage_Even_Odd-xml"
+    },
+    {
+        "id": "martingale",
+        "name": "martingale",
+        "creator": "Official",
+        "file": "martingale-xml"
+    },
+    {
+        "id": "martingale_max-stake",
+        "name": "martingale max stake",
+        "creator": "Official",
+        "file": "martingale_max-stake-xml"
+    },
+    {
+        "id": "mkorean-dtool-00_Apex_Range_AI",
+        "name": "dtool 00 Apex Range AI",
+        "creator": "mkorean",
+        "file": "mkorean-dtool-00_Apex_Range_AI-xml"
+    },
+    {
+        "id": "mkorean-dtool-01_SmartRange_AI",
+        "name": "dtool 01 SmartRange AI",
+        "creator": "mkorean",
+        "file": "mkorean-dtool-01_SmartRange_AI-xml"
+    },
+    {
+        "id": "mkorean-dtrader-00_DIFFERS_HUNTER",
+        "name": "dtrader 00 DIFFERS HUNTER",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-00_DIFFERS_HUNTER-xml"
+    },
+    {
+        "id": "mkorean-dtrader-01_DIGITS_CHANGER",
+        "name": "dtrader 01 DIGITS CHANGER",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-01_DIGITS_CHANGER-xml"
+    },
+    {
+        "id": "mkorean-dtrader-02_ENTRY_POINT_HUNTER",
+        "name": "dtrader 02 ENTRY POINT HUNTER",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-02_ENTRY_POINT_HUNTER-xml"
+    },
+    {
+        "id": "mkorean-dtrader-03_OVER_1_RECOVERY_OVER_4",
+        "name": "dtrader 03 OVER 1 RECOVERY OVER 4",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-03_OVER_1_RECOVERY_OVER_4-xml"
+    },
+    {
+        "id": "mkorean-dtrader-04_OVER_SWITCHER_AI",
+        "name": "dtrader 04 OVER SWITCHER AI",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-04_OVER_SWITCHER_AI-xml"
+    },
+    {
+        "id": "mkorean-dtrader-05_RISE_FALL_HUNTER",
+        "name": "dtrader 05 RISE FALL HUNTER",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-05_RISE_FALL_HUNTER-xml"
+    },
+    {
+        "id": "mkorean-dtrader-06_SV_SWITCHER",
+        "name": "dtrader 06 SV SWITCHER",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-06_SV_SWITCHER-xml"
+    },
+    {
+        "id": "mkorean-dtrader-07_UNDER_SWITCHER_AI",
+        "name": "dtrader 07 UNDER SWITCHER AI",
+        "creator": "mkorean",
+        "file": "mkorean-dtrader-07_UNDER_SWITCHER_AI-xml"
+    },
+    {
+        "id": "mkorean-free-00_Even_Odd_King",
+        "name": "free 00 Even Odd King",
+        "creator": "mkorean",
+        "file": "mkorean-free-00_Even_Odd_King-xml"
+    },
+    {
+        "id": "mkorean-free-01_Over_Under_King",
+        "name": "free 01 Over Under King",
+        "creator": "mkorean",
+        "file": "mkorean-free-01_Over_Under_King-xml"
+    },
+    {
+        "id": "mkorean-free-02_Rise_Fall_King",
+        "name": "free 02 Rise Fall King",
+        "creator": "mkorean",
+        "file": "mkorean-free-02_Rise_Fall_King-xml"
+    },
+    {
+        "id": "mkorean-kp-00_Digit_Nexus_AI",
+        "name": "kp 00 Digit Nexus AI",
+        "creator": "mkorean",
+        "file": "mkorean-kp-00_Digit_Nexus_AI-xml"
+    },
+    {
+        "id": "mkorean-kp-01_Volt_Scalper",
+        "name": "kp 01 Volt Scalper",
+        "creator": "mkorean",
+        "file": "mkorean-kp-01_Volt_Scalper-xml"
+    },
+    {
+        "id": "mkorean-kp-02_Apex_AI",
+        "name": "kp 02 Apex AI",
+        "creator": "mkorean",
+        "file": "mkorean-kp-02_Apex_AI-xml"
+    },
+    {
+        "id": "mkorean-kp-03_NEUTRADE_AI",
+        "name": "kp 03 NEUTRADE AI",
+        "creator": "mkorean",
+        "file": "mkorean-kp-03_NEUTRADE_AI-xml"
+    },
+    {
+        "id": "mkorean-kp-04_STRADDLE_EDGE",
+        "name": "kp 04 STRADDLE EDGE",
+        "creator": "mkorean",
+        "file": "mkorean-kp-04_STRADDLE_EDGE-xml"
+    },
+    {
+        "id": "mkorean-kp-05_Pulsetrader_AI",
+        "name": "kp 05 Pulsetrader AI",
+        "creator": "mkorean",
+        "file": "mkorean-kp-05_Pulsetrader_AI-xml"
+    },
+    {
+        "id": "mkorean-mkorean-00_PROFITS_MINER_BOT",
+        "name": "mkorean 00 PROFITS MINER BOT",
+        "creator": "mkorean",
+        "file": "mkorean-mkorean-00_PROFITS_MINER_BOT-xml"
+    },
+    {
+        "id": "mkorean-mkorean-01_Mkorean_SV7_2025",
+        "name": "mkorean 01 Mkorean SV7 2025",
+        "creator": "mkorean",
+        "file": "mkorean-mkorean-01_Mkorean_SV7_2025-xml"
+    },
+    {
+        "id": "mkorean-mkorean-02_NO_LOSS_BOT",
+        "name": "mkorean 02 NO LOSS BOT",
+        "creator": "mkorean",
+        "file": "mkorean-mkorean-02_NO_LOSS_BOT-xml"
+    },
+    {
+        "id": "mkorean-mkorean-03_Ultimate_SV_8_BOT_2025",
+        "name": "mkorean 03 Ultimate SV 8 BOT 2025",
+        "creator": "mkorean",
+        "file": "mkorean-mkorean-03_Ultimate_SV_8_BOT_2025-xml"
+    },
+    {
+        "id": "mkorean-pai-00_Digits_Sniper",
+        "name": "pai 00 Digits Sniper",
+        "creator": "mkorean",
+        "file": "mkorean-pai-00_Digits_Sniper-xml"
+    },
+    {
+        "id": "mkorean-pai-01_EVEN_ODD_Switcher",
+        "name": "pai 01 EVEN ODD Switcher",
+        "creator": "mkorean",
+        "file": "mkorean-pai-01_EVEN_ODD_Switcher-xml"
+    },
+    {
+        "id": "mkorean-pai-02_World_Roller_2",
+        "name": "pai 02 World Roller 2",
+        "creator": "mkorean",
+        "file": "mkorean-pai-02_World_Roller_2-xml"
+    },
+    {
+        "id": "mkorean-pai-03_World_roller_7",
+        "name": "pai 03 World roller 7",
+        "creator": "mkorean",
+        "file": "mkorean-pai-03_World_roller_7-xml"
+    },
+    {
+        "id": "mkorean-pai-04_THE_DGT",
+        "name": "pai 04 THE DGT",
+        "creator": "mkorean",
+        "file": "mkorean-pai-04_THE_DGT-xml"
+    },
+    {
+        "id": "mkorean-pai-05_Over_Destroyer",
+        "name": "pai 05 Over Destroyer",
+        "creator": "mkorean",
+        "file": "mkorean-pai-05_Over_Destroyer-xml"
+    },
+    {
+        "id": "mkorean-pai-06_Under_Destroyer",
+        "name": "pai 06 Under Destroyer",
+        "creator": "mkorean",
+        "file": "mkorean-pai-06_Under_Destroyer-xml"
+    },
+    {
+        "id": "mkorean-pai-07_Githinji",
+        "name": "pai 07 Githinji",
+        "creator": "mkorean",
+        "file": "mkorean-pai-07_Githinji-xml"
+    },
+    {
+        "id": "mkorean-pai-08_New_2026_Year_Gift",
+        "name": "pai 08 New 2026 Year Gift",
+        "creator": "mkorean",
+        "file": "mkorean-pai-08_New_2026_Year_Gift-xml"
+    },
+    {
+        "id": "mkorean-pai-09_No_Analysis_Bot",
+        "name": "pai 09 No Analysis Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-09_No_Analysis_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-10_Updated_Even_Odd_AI_Entry_Scanner",
+        "name": "pai 10 Updated Even Odd AI Entry Scanner",
+        "creator": "mkorean",
+        "file": "mkorean-pai-10_Updated_Even_Odd_AI_Entry_Scanner-xml"
+    },
+    {
+        "id": "mkorean-pai-11_Entry_Point_Scanner",
+        "name": "pai 11 Entry Point Scanner",
+        "creator": "mkorean",
+        "file": "mkorean-pai-11_Entry_Point_Scanner-xml"
+    },
+    {
+        "id": "mkorean-pai-12_Market_Killer",
+        "name": "pai 12 Market Killer",
+        "creator": "mkorean",
+        "file": "mkorean-pai-12_Market_Killer-xml"
+    },
+    {
+        "id": "mkorean-pai-13_SPEEDBOT_updated_xm",
+        "name": "pai 13 SPEEDBOT updated xm",
+        "creator": "mkorean",
+        "file": "mkorean-pai-13_SPEEDBOT_updated_xm-xml"
+    },
+    {
+        "id": "mkorean-pai-14_Under_7_Bot",
+        "name": "pai 14 Under 7 Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-14_Under_7_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-15_Under_8_Bot",
+        "name": "pai 15 Under 8 Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-15_Under_8_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-16_Under_9_Bot",
+        "name": "pai 16 Under 9 Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-16_Under_9_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-17_Updated_Over_0_AI_Bot",
+        "name": "pai 17 Updated Over 0 AI Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-17_Updated_Over_0_AI_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-18_Updated_Over_1_AI_Bot",
+        "name": "pai 18 Updated Over 1 AI Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-18_Updated_Over_1_AI_Bot-xml"
+    },
+    {
+        "id": "mkorean-pai-19_Updated_Over_2_AI_Bot",
+        "name": "pai 19 Updated Over 2 AI Bot",
+        "creator": "mkorean",
+        "file": "mkorean-pai-19_Updated_Over_2_AI_Bot-xml"
+    },
+    {
+        "id": "mkorean-tai-00_Githinji_by_Paigey_Official",
+        "name": "tai 00 Githinji by Paigey Official",
+        "creator": "mkorean",
+        "file": "mkorean-tai-00_Githinji_by_Paigey_Official-xml"
+    },
+    {
+        "id": "mkorean-tai-01_New_2026_Year_Gift_by_Paigey_Official",
+        "name": "tai 01 New 2026 Year Gift by Paigey Official",
+        "creator": "mkorean",
+        "file": "mkorean-tai-01_New_2026_Year_Gift_by_Paigey_Official-xml"
+    },
+    {
+        "id": "mkorean-tai-02_No_Analysis_Bot_by_Paigey_Official",
+        "name": "tai 02 No Analysis Bot by Paigey Official",
+        "creator": "mkorean",
+        "file": "mkorean-tai-02_No_Analysis_Bot_by_Paigey_Official-xml"
+    },
+    {
+        "id": "mkorean-tclas-00_TradePilot_AI",
+        "name": "tclas 00 TradePilot AI",
+        "creator": "mkorean",
+        "file": "mkorean-tclas-00_TradePilot_AI-xml"
+    },
+    {
+        "id": "mkorean-tclas-01_Nexus_AI",
+        "name": "tclas 01 Nexus AI",
+        "creator": "mkorean",
+        "file": "mkorean-tclas-01_Nexus_AI-xml"
+    },
+    {
+        "id": "mkorean-tclas-02_Nova_AI",
+        "name": "tclas 02 Nova AI",
+        "creator": "mkorean",
+        "file": "mkorean-tclas-02_Nova_AI-xml"
+    },
+    {
+        "id": "mkorean-tclas-03_Vortex_AI",
+        "name": "tclas 03 Vortex AI",
+        "creator": "mkorean",
+        "file": "mkorean-tclas-03_Vortex_AI-xml"
+    },
+    {
+        "id": "mkorean-zara-00_Differs_Hunter_Bot",
+        "name": "zara 00 Differs Hunter Bot",
+        "creator": "mkorean",
+        "file": "mkorean-zara-00_Differs_Hunter_Bot-xml"
+    },
+    {
+        "id": "mkorean-zara-01_EvenOdd_Hunter_Bot",
+        "name": "zara 01 EvenOdd Hunter Bot",
+        "creator": "mkorean",
+        "file": "mkorean-zara-01_EvenOdd_Hunter_Bot-xml"
+    },
+    {
+        "id": "mkorean-zara-02_Over_Changer_V2",
+        "name": "zara 02 Over Changer V2",
+        "creator": "mkorean",
+        "file": "mkorean-zara-02_Over_Changer_V2-xml"
+    },
+    {
+        "id": "mkorean-zara-03_Raziel_Over_Under",
+        "name": "zara 03 Raziel Over Under",
+        "creator": "mkorean",
+        "file": "mkorean-zara-03_Raziel_Over_Under-xml"
+    },
+    {
+        "id": "mkorean-zara-04_SV_Switcher",
+        "name": "zara 04 SV Switcher",
+        "creator": "mkorean",
+        "file": "mkorean-zara-04_SV_Switcher-xml"
+    },
+    {
+        "id": "mkorean-zara-05_Under_Changer",
+        "name": "zara 05 Under Changer",
+        "creator": "mkorean",
+        "file": "mkorean-zara-05_Under_Changer-xml"
+    },
+    {
+        "id": "money8gg-AI-Over-1-Bot",
+        "name": "AI Over 1 Bot",
+        "creator": "money8gg",
+        "file": "money8gg-AI-Over-1-Bot-xml"
+    },
+    {
+        "id": "money8gg-AI-Trading-Bot",
+        "name": "AI Trading Bot",
+        "creator": "money8gg",
+        "file": "money8gg-AI-Trading-Bot-xml"
+    },
+    {
+        "id": "money8gg-AI-Under-7-Bot",
+        "name": "AI Under 7 Bot",
+        "creator": "money8gg",
+        "file": "money8gg-AI-Under-7-Bot-xml"
+    },
+    {
+        "id": "money8gg-AI-Under-8-Bot",
+        "name": "AI Under 8 Bot",
+        "creator": "money8gg",
+        "file": "money8gg-AI-Under-8-Bot-xml"
+    },
+    {
+        "id": "money8gg-AI-Under-8-Single",
+        "name": "AI Under 8 Single",
+        "creator": "money8gg",
+        "file": "money8gg-AI-Under-8-Single-xml"
+    },
+    {
+        "id": "money8gg-AI-with-Entry-Point",
+        "name": "AI with Entry Point",
+        "creator": "money8gg",
+        "file": "money8gg-AI-with-Entry-Point-xml"
+    },
+    {
+        "id": "money8gg-Accumulators-Barrier-Bot",
+        "name": "Accumulators Barrier Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Accumulators-Barrier-Bot-xml"
+    },
+    {
+        "id": "money8gg-Accumulators-Bot",
+        "name": "Accumulators Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Accumulators-Bot-xml"
+    },
+    {
+        "id": "money8gg-Best-Over-Under-Switcher",
+        "name": "Best Over Under Switcher",
+        "creator": "money8gg",
+        "file": "money8gg-Best-Over-Under-Switcher-xml"
+    },
+    {
+        "id": "money8gg-Christmas-2025-Even_Odd-Bot",
+        "name": "Christmas 2025 Even Odd Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Christmas-2025-Even_Odd-Bot-xml"
+    },
+    {
+        "id": "money8gg-Consecutive-Even_Odd-Bot",
+        "name": "Consecutive Even Odd Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Consecutive-Even_Odd-Bot-xml"
+    },
+    {
+        "id": "money8gg-Differs-Bot",
+        "name": "Differs Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Differs-Bot-xml"
+    },
+    {
+        "id": "money8gg-Entry-Bot",
+        "name": "Entry Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Entry-Bot-xml"
+    },
+    {
+        "id": "money8gg-Even-ODD-Bot",
+        "name": "Even ODD Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Even-ODD-Bot-xml"
+    },
+    {
+        "id": "money8gg-MONEY8GG-SPEED-BOT",
+        "name": "MONEY8GG SPEED BOT",
+        "creator": "money8gg",
+        "file": "money8gg-MONEY8GG-SPEED-BOT-xml"
+    },
+    {
+        "id": "money8gg-Martingale-Bot",
+        "name": "Martingale Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Martingale-Bot-xml"
+    },
+    {
+        "id": "money8gg-Matches-Bot",
+        "name": "Matches Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Matches-Bot-xml"
+    },
+    {
+        "id": "money8gg-Maziwaa-AI",
+        "name": "Maziwaa AI",
+        "creator": "money8gg",
+        "file": "money8gg-Maziwaa-AI-xml"
+    },
+    {
+        "id": "money8gg-Multipurpose",
+        "name": "Multipurpose",
+        "creator": "money8gg",
+        "file": "money8gg-Multipurpose-xml"
+    },
+    {
+        "id": "money8gg-No-Martingale",
+        "name": "No Martingale",
+        "creator": "money8gg",
+        "file": "money8gg-No-Martingale-xml"
+    },
+    {
+        "id": "money8gg-OVER-2-AI",
+        "name": "OVER 2 AI",
+        "creator": "money8gg",
+        "file": "money8gg-OVER-2-AI-xml"
+    },
+    {
+        "id": "money8gg-OVER-3-AI",
+        "name": "OVER 3 AI",
+        "creator": "money8gg",
+        "file": "money8gg-OVER-3-AI-xml"
+    },
+    {
+        "id": "money8gg-Only-ups-Only-downs-Bot",
+        "name": "Only ups Only downs Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Only-ups-Only-downs-Bot-xml"
+    },
+    {
+        "id": "money8gg-Over-1-Strategy",
+        "name": "Over 1 Strategy",
+        "creator": "money8gg",
+        "file": "money8gg-Over-1-Strategy-xml"
+    },
+    {
+        "id": "money8gg-Over-3-Strategy",
+        "name": "Over 3 Strategy",
+        "creator": "money8gg",
+        "file": "money8gg-Over-3-Strategy-xml"
+    },
+    {
+        "id": "money8gg-Over-5-Pyschology",
+        "name": "Over 5 Pyschology",
+        "creator": "money8gg",
+        "file": "money8gg-Over-5-Pyschology-xml"
+    },
+    {
+        "id": "money8gg-Over-Single-Side",
+        "name": "Over Single Side",
+        "creator": "money8gg",
+        "file": "money8gg-Over-Single-Side-xml"
+    },
+    {
+        "id": "money8gg-Over-Under-Bot",
+        "name": "Over Under Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Over-Under-Bot-xml"
+    },
+    {
+        "id": "money8gg-Percentage-Auto-Even_Odd",
+        "name": "Percentage Auto Even Odd",
+        "creator": "money8gg",
+        "file": "money8gg-Percentage-Auto-Even_Odd-xml"
+    },
+    {
+        "id": "money8gg-Rise-and-Fall-Simple-Bot",
+        "name": "Rise and Fall Simple Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Rise-and-Fall-Simple-Bot-xml"
+    },
+    {
+        "id": "money8gg-Same-Side-Over-Under",
+        "name": "Same Side Over Under",
+        "creator": "money8gg",
+        "file": "money8gg-Same-Side-Over-Under-xml"
+    },
+    {
+        "id": "money8gg-Secret-Strategy",
+        "name": "Secret Strategy",
+        "creator": "money8gg",
+        "file": "money8gg-Secret-Strategy-xml"
+    },
+    {
+        "id": "money8gg-Step-Indices-Bot",
+        "name": "Step Indices Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Step-Indices-Bot-xml"
+    },
+    {
+        "id": "money8gg-Switching-Bot",
+        "name": "Switching Bot",
+        "creator": "money8gg",
+        "file": "money8gg-Switching-Bot-xml"
+    },
+    {
+        "id": "money8gg-Under-7-Bulk",
+        "name": "Under 7 Bulk",
+        "creator": "money8gg",
+        "file": "money8gg-Under-7-Bulk-xml"
+    },
+    {
+        "id": "money8gg-Under-8-AI-advanced-Cont",
+        "name": "Under 8 AI advanced Cont",
+        "creator": "money8gg",
+        "file": "money8gg-Under-8-AI-advanced-Cont-xml"
+    },
+    {
+        "id": "money8gg-Under-8-Strategy",
+        "name": "Under 8 Strategy",
+        "creator": "money8gg",
+        "file": "money8gg-Under-8-Strategy-xml"
+    },
+    {
+        "id": "money8gg-Under-8-Under-5",
+        "name": "Under 8 Under 5",
+        "creator": "money8gg",
+        "file": "money8gg-Under-8-Under-5-xml"
+    },
+    {
+        "id": "money8gg-Under-Single-Side",
+        "name": "Under Single Side",
+        "creator": "money8gg",
+        "file": "money8gg-Under-Single-Side-xml"
+    },
+    {
+        "id": "osam-ADVANCED-O_U-J2-(1)",
+        "name": "ADVANCED O U J2 (1)",
+        "creator": "osam",
+        "file": "osam-ADVANCED-O_U-J2-(1)-xml"
+    },
+    {
+        "id": "osam-ADVANCED_DIFFERS-(2)-(2)",
+        "name": "ADVANCED DIFFERS (2) (2)",
+        "creator": "osam",
+        "file": "osam-ADVANCED_DIFFERS-(2)-(2)-xml"
+    },
+    {
+        "id": "osam-EVEN_Autobot-(1)",
+        "name": "EVEN Autobot (1)",
+        "creator": "osam",
+        "file": "osam-EVEN_Autobot-(1)-xml"
+    },
+    {
+        "id": "osam-EVEN_MYTH-V2-0",
+        "name": "EVEN MYTH V2 0",
+        "creator": "osam",
+        "file": "osam-EVEN_MYTH-V2-0-xml"
+    },
+    {
+        "id": "osam-EVEN_ODD-MYTH-V1",
+        "name": "EVEN ODD MYTH V1",
+        "creator": "osam",
+        "file": "osam-EVEN_ODD-MYTH-V1-xml"
+    },
+    {
+        "id": "osam-H_L-auto-vault",
+        "name": "H L auto vault",
+        "creator": "osam",
+        "file": "osam-H_L-auto-vault-xml"
+    },
+    {
+        "id": "osam-MENTORSHIP_2-(1)",
+        "name": "MENTORSHIP 2 (1)",
+        "creator": "osam",
+        "file": "osam-MENTORSHIP_2-(1)-xml"
+    },
+    {
+        "id": "osam-Mega_Mind-V1",
+        "name": "Mega Mind V1",
+        "creator": "osam",
+        "file": "osam-Mega_Mind-V1-xml"
+    },
+    {
+        "id": "osam-ODD_Autobot-(1)-(1)",
+        "name": "ODD Autobot (1) (1)",
+        "creator": "osam",
+        "file": "osam-ODD_Autobot-(1)-(1)-xml"
+    },
+    {
+        "id": "osam-ODD_MYTH-V3-0",
+        "name": "ODD MYTH V3 0",
+        "creator": "osam",
+        "file": "osam-ODD_MYTH-V3-0-xml"
+    },
+    {
+        "id": "osam-OVER_UNDER-AUTOBOT",
+        "name": "OVER UNDER AUTOBOT",
+        "creator": "osam",
+        "file": "osam-OVER_UNDER-AUTOBOT-xml"
+    },
+    {
+        "id": "osam-Osam-Digit_switcher",
+        "name": "Osam Digit switcher",
+        "creator": "osam",
+        "file": "osam-Osam-Digit_switcher-xml"
+    },
+    {
+        "id": "osam-Osam-HnR",
+        "name": "Osam HnR",
+        "creator": "osam",
+        "file": "osam-Osam-HnR-xml"
+    },
+    {
+        "id": "osam-Osam_Digit_Switcher",
+        "name": "Osam Digit Switcher",
+        "creator": "osam",
+        "file": "osam-Osam_Digit_Switcher-xml"
+    },
+    {
+        "id": "osam-Osam_Digit_Ticker",
+        "name": "Osam Digit Ticker",
+        "creator": "osam",
+        "file": "osam-Osam_Digit_Ticker-xml"
+    },
+    {
+        "id": "osam-Over-Destroyer",
+        "name": "Over Destroyer",
+        "creator": "osam",
+        "file": "osam-Over-Destroyer-xml"
+    },
+    {
+        "id": "osam-Over-HitnRun",
+        "name": "Over HitnRun",
+        "creator": "osam",
+        "file": "osam-Over-HitnRun-xml"
+    },
+    {
+        "id": "osam-Over-Pro-Bot",
+        "name": "Over Pro Bot",
+        "creator": "osam",
+        "file": "osam-Over-Pro-Bot-xml"
+    },
+    {
+        "id": "osam-Over_Destroyer-v2",
+        "name": "Over Destroyer v2",
+        "creator": "osam",
+        "file": "osam-Over_Destroyer-v2-xml"
+    },
+    {
+        "id": "osam-Over_HitnRun",
+        "name": "Over HitnRun",
+        "creator": "osam",
+        "file": "osam-Over_HitnRun-xml"
+    },
+    {
+        "id": "osam-PATEL-(with-Entry)",
+        "name": "PATEL (with Entry)",
+        "creator": "osam",
+        "file": "osam-PATEL-(with-Entry)-xml"
+    },
+    {
+        "id": "osam-PATEL-with-Entry",
+        "name": "PATEL with Entry",
+        "creator": "osam",
+        "file": "osam-PATEL-with-Entry-xml"
+    },
+    {
+        "id": "osam-Raziel-Over-Under",
+        "name": "Raziel Over Under",
+        "creator": "osam",
+        "file": "osam-Raziel-Over-Under-xml"
+    },
+    {
+        "id": "osam-Raziel-Scaling",
+        "name": "Raziel Scaling",
+        "creator": "osam",
+        "file": "osam-Raziel-Scaling-xml"
+    },
+    {
+        "id": "osam-Reborn-HnR-(1)",
+        "name": "Reborn HnR (1)",
+        "creator": "osam",
+        "file": "osam-Reborn-HnR-(1)-xml"
+    },
+    {
+        "id": "osam-TradeScript",
+        "name": "TradeScript",
+        "creator": "osam",
+        "file": "osam-TradeScript-xml"
+    },
+    {
+        "id": "osam-Under-8-pro-bot",
+        "name": "Under 8 pro bot",
+        "creator": "osam",
+        "file": "osam-Under-8-pro-bot-xml"
+    },
+    {
+        "id": "osam-Under-Destroyer",
+        "name": "Under Destroyer",
+        "creator": "osam",
+        "file": "osam-Under-Destroyer-xml"
+    },
+    {
+        "id": "osam-Under-Pro-Bot",
+        "name": "Under Pro Bot",
+        "creator": "osam",
+        "file": "osam-Under-Pro-Bot-xml"
+    },
+    {
+        "id": "osam-Under_Destroyer-v2",
+        "name": "Under Destroyer v2",
+        "creator": "osam",
+        "file": "osam-Under_Destroyer-v2-xml"
+    },
+    {
+        "id": "osam-Under_HitnRun",
+        "name": "Under HitnRun",
+        "creator": "osam",
+        "file": "osam-Under_HitnRun-xml"
+    },
+    {
+        "id": "osam-over-super-bot",
+        "name": "over super bot",
+        "creator": "osam",
+        "file": "osam-over-super-bot-xml"
+    },
+    {
+        "id": "osam-the-Astro-E_O",
+        "name": "the Astro E O",
+        "creator": "osam",
+        "file": "osam-the-Astro-E_O-xml"
+    },
+    {
+        "id": "osam-under-super-bot",
+        "name": "under super bot",
+        "creator": "osam",
+        "file": "osam-under-super-bot-xml"
+    },
+    {
+        "id": "oscars_grind",
+        "name": "oscars grind",
+        "creator": "Official",
+        "file": "oscars_grind-xml"
+    },
+    {
+        "id": "oscars_grind_max-stake",
+        "name": "oscars grind max stake",
+        "creator": "Official",
+        "file": "oscars_grind_max-stake-xml"
+    },
+    {
+        "id": "reverse_dalembert",
+        "name": "reverse dalembert",
+        "creator": "Official",
+        "file": "reverse_dalembert-xml"
+    },
+    {
+        "id": "reverse_martingale",
+        "name": "reverse martingale",
+        "creator": "Official",
+        "file": "reverse_martingale-xml"
+    },
+    {
+        "id": "signal-ai-Risk-Management-Bot",
+        "name": "ai Risk Management Bot",
+        "creator": "signal",
+        "file": "signal-ai-Risk-Management-Bot-xml"
+    },
+    {
+        "id": "traderkit-ARENA-Babaking2",
+        "name": "ARENA Babaking2",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-Babaking2-xml"
+    },
+    {
+        "id": "traderkit-ARENA-EnhancedAutoSwitchOver2bot",
+        "name": "ARENA EnhancedAutoSwitchOver2bot",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-EnhancedAutoSwitchOver2bot-xml"
+    },
+    {
+        "id": "traderkit-ARENA-HITnRUNPRO",
+        "name": "ARENA HITnRUNPRO",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-HITnRUNPRO-xml"
+    },
+    {
+        "id": "traderkit-ARENA-HuRmYAUTOBoTBYHURMYFXKE",
+        "name": "ARENA HuRmYAUTOBoTBYHURMYFXKE",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-HuRmYAUTOBoTBYHURMYFXKE-xml"
+    },
+    {
+        "id": "traderkit-ARENA-HuRmYSPEEDBOTPROv2",
+        "name": "ARENA HuRmYSPEEDBOTPROv2",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-HuRmYSPEEDBOTPROv2-xml"
+    },
+    {
+        "id": "traderkit-ARENA-M27AutoSwitchbot2024",
+        "name": "ARENA M27AutoSwitchbot2024",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-M27AutoSwitchbot2024-xml"
+    },
+    {
+        "id": "traderkit-ARENA-MIKetheG",
+        "name": "ARENA MIKetheG",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-MIKetheG-xml"
+    },
+    {
+        "id": "traderkit-ARENA-STATESDigitSwitcher",
+        "name": "ARENA STATESDigitSwitcher",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-STATESDigitSwitcher-xml"
+    },
+    {
+        "id": "traderkit-ARENA-UnderOverAutoSwitch",
+        "name": "ARENA UnderOverAutoSwitch",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-UnderOverAutoSwitch-xml"
+    },
+    {
+        "id": "traderkit-ARENA-Vx",
+        "name": "ARENA Vx",
+        "creator": "traderkit",
+        "file": "traderkit-ARENA-Vx-xml"
+    },
+    {
+        "id": "traderkit-HENRY-AlphaVersion2026Edition",
+        "name": "HENRY AlphaVersion2026Edition",
+        "creator": "traderkit",
+        "file": "traderkit-HENRY-AlphaVersion2026Edition-xml"
+    },
+    {
+        "id": "traderkit-HENRY-ExpertSpeedBotByCHOSENDOLLARPRINTERFX",
+        "name": "HENRY ExpertSpeedBotByCHOSENDOLLARPRINTERFX",
+        "creator": "traderkit",
+        "file": "traderkit-HENRY-ExpertSpeedBotByCHOSENDOLLARPRINTERFX-xml"
+    },
+    {
+        "id": "traderkit-HENRY-SignalSniperAutoBot",
+        "name": "HENRY SignalSniperAutoBot",
+        "creator": "traderkit",
+        "file": "traderkit-HENRY-SignalSniperAutoBot-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-Aibot",
+        "name": "HUNTER Aibot",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-Aibot-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-AutoDifferbylegoo",
+        "name": "HUNTER AutoDifferbylegoo",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-AutoDifferbylegoo-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-DollarprinterbotOrignal",
+        "name": "HUNTER DollarprinterbotOrignal",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-DollarprinterbotOrignal-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-KillermarketAIV22024New",
+        "name": "HUNTER KillermarketAIV22024New",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-KillermarketAIV22024New-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-MAIUNDER3NEW",
+        "name": "HUNTER MAIUNDER3NEW",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-MAIUNDER3NEW-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-MARKETKILLERBOT",
+        "name": "HUNTER MARKETKILLERBOT",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-MARKETKILLERBOT-xml"
+    },
+    {
+        "id": "traderkit-HUNTER-martingale_matches_differs",
+        "name": "HUNTER martingale matches differs",
+        "creator": "traderkit",
+        "file": "traderkit-HUNTER-martingale_matches_differs-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-Dstrike2",
+        "name": "NOVAPRIME Dstrike2",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-Dstrike2-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-MagicRecovery",
+        "name": "NOVAPRIME MagicRecovery",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-MagicRecovery-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-NOVAGRID2026",
+        "name": "NOVAPRIME NOVAGRID2026",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-NOVAGRID2026-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-Over2RecOver4",
+        "name": "NOVAPRIME Over2RecOver4",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-Over2RecOver4-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-UNDER7UNDER5",
+        "name": "NOVAPRIME UNDER7UNDER5",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-UNDER7UNDER5-xml"
+    },
+    {
+        "id": "traderkit-NOVAPRIME-UNDER8UNDER6",
+        "name": "NOVAPRIME UNDER8UNDER6",
+        "creator": "traderkit",
+        "file": "traderkit-NOVAPRIME-UNDER8UNDER6-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-Autovolt5Probot1",
+        "name": "WIZARD Autovolt5Probot1",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-Autovolt5Probot1-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-Derivwizard1",
+        "name": "WIZARD Derivwizard1",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-Derivwizard1-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-Derivwizard2",
+        "name": "WIZARD Derivwizard2",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-Derivwizard2-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-Dollarflipper",
+        "name": "WIZARD Dollarflipper",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-Dollarflipper-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-Dollarminer",
+        "name": "WIZARD Dollarminer",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-Dollarminer-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-EvenOddAutoSwitcher",
+        "name": "WIZARD EvenOddAutoSwitcher",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-EvenOddAutoSwitcher-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-RiseFallswitcherBot",
+        "name": "WIZARD RiseFallswitcherBot",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-RiseFallswitcherBot-xml"
+    },
+    {
+        "id": "traderkit-WIZARD-UnderoverAutoswitch",
+        "name": "WIZARD UnderoverAutoswitch",
+        "creator": "traderkit",
+        "file": "traderkit-WIZARD-UnderoverAutoswitch-xml"
+    }
+];
+
+export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
+    {
+        "id": "mkorean",
+        "label": "mkorean",
+        "count": 56
+    },
+    {
+        "id": "money8gg",
+        "label": "money8gg",
+        "count": 39
+    },
+    {
+        "id": "osam",
+        "label": "osam",
+        "count": 34
+    },
+    {
+        "id": "traderkit",
+        "label": "traderkit",
+        "count": 34
+    },
+    {
+        "id": "exwager",
+        "label": "exwager",
+        "count": 33
+    },
+    {
+        "id": "dbtraders",
+        "label": "dbtraders",
+        "count": 25
+    },
+    {
+        "id": "dollarprinter",
+        "label": "dollarprinter",
+        "count": 19
+    },
+    {
+        "id": "Official",
+        "label": "Official",
+        "count": 17
+    },
+    {
+        "id": "dbotspace",
+        "label": "dbotspace",
+        "count": 7
+    },
+    {
+        "id": "ai",
+        "label": "ai",
+        "count": 1
+    },
+    {
+        "id": "signal",
+        "label": "signal",
+        "count": 1
+    }
+];

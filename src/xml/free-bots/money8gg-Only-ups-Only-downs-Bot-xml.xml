@@ -1,0 +1,106 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="XQpS{Z=JV}Ihy#GLsq`y">TNumber</variable>
+    <variable id="r{GJ)U-n|q|-iPy[n7/X">Stake</variable>
+  </variables>
+  <block type="trade_definition" id="eYPU1%5`?PNBZUy7wEKI" deletable="false" x="0" y="60">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="(I#axfr;VVpfZyh|k:lb" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ10V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="qAQ``pTOCc8w.Tsfmn5%" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">runs</field>
+            <field name="TRADETYPE_LIST">runs</field>
+            <next>
+              <block type="trade_definition_contracttype" id="HzSRdto~3iyD3s|@7[*t" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="OAfnr_r@Z/EhZo9OpHBJ" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="(GvZN~Rp.u.*T9#!JkzF" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="yq@Uc}Io0ni=wHg]eSD*" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="vbDFtoDh8PRpTcAJxdF/">
+        <field name="VAR" id="XQpS{Z=JV}Ihy#GLsq`y">TNumber</field>
+        <value name="VALUE">
+          <block type="math_number" id="LnmKq}f#IT[ZwK`X%zz!">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="uTp@4Kczr(`fbIA$:D4k">
+            <field name="VAR" id="r{GJ)U-n|q|-iPy[n7/X">Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="KLjF;H98nv]Kq!LSggJV">
+                <field name="NUM">0.35</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="Hm`/HKM;s/=(:?|`h-ve">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="false"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id=":1bKNAa`TE,Qt+WiYJ=)">
+            <field name="NUM">5</field>
+          </shadow>
+          <block type="variables_get" id="r*a]$ey%/sEI@3J9MOu1">
+            <field name="VAR" id="XQpS{Z=JV}Ihy#GLsq`y">TNumber</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="+cdJ:gQk%`HXc:i6%[6M">
+            <field name="NUM">0.35</field>
+          </shadow>
+          <block type="variables_get" id="/}%3`.Y^P*|KBZwIDb6j">
+            <field name="VAR" id="r{GJ)U-n|q|-iPy[n7/X">Stake</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="Fq*7c8wXul=L0#qfT#kP" x="714" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="notify" id="ZjiN{KTX}p~Gw*9_nkiZ">
+        <field name="NOTIFICATION_TYPE">success</field>
+        <field name="NOTIFICATION_SOUND">silent</field>
+        <value name="MESSAGE">
+          <shadow type="text" id=";~o4VL0a0Xde`SVoLzG-">
+            <field name="TEXT">M8gg</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="trade_again" id="s}=f|f@9F?ArgfB0btr{"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="_k_E;;]dmkN8.Bx[@fpv" deletable="false" x="0" y="651">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="purchase" id="D+_hLw+p_Ab6K6xE*7sX">
+        <field name="PURCHASE_LIST">RUNHIGH</field>
+      </block>
+    </statement>
+  </block>
+</xml>
