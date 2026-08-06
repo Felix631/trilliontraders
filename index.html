@@ -17,22 +17,39 @@
         <!-- End Google Tag Manager -->
 
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="<%= assetPrefix %>/deriv-logo.svg" />
+        <link rel="icon" type="image/svg+xml" href="<%= assetPrefix %>/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-        <meta name="title" content="Automate Your Trades | Deriv Bot" />
+        <meta name="title" content="Trillion Trades" />
         <meta
             name="description"
             content="Import your current bot or learn how to create a trading bot from scratch with our detailed guides, FAQs, and tutorials. Start with a quick strategy!"
         />
-        <meta property="og:title" content="Deriv Bot" />
+        <meta property="og:title" content="Trillion Trades" />
         <meta
             property="og:description"
             content="Import your current bot or learn how to create a trading bot from scratch with our detailed guides, FAQs, and tutorials. Start with a quick strategy!"
         />
-        <title>Automate Your Trades | Deriv Bot</title>
+        <title>Trillion Trades</title>
         <style>
             :root {
                 font-size: 62.5%;
+            }
+            /*
+             * Pre-React cover only — same canvas as the boot splash teardown, no brand
+             * title. Avoids brand-name flash before the app bundle mounts.
+             */
+            #df-boot-splash {
+                --df-boot-theme: #8b0000;
+                position: fixed;
+                inset: 0;
+                z-index: 99999;
+                background:
+                    radial-gradient(1200px 700px at 20% 10%, color-mix(in srgb, var(--df-boot-theme) 55%, transparent), transparent 60%),
+                    radial-gradient(1000px 600px at 80% 90%, color-mix(in srgb, #efbf04 55%, transparent), transparent 60%),
+                    #1a0000;
+            }
+            #df-boot-splash[data-done='1'] {
+                display: none;
             }
         </style>
     </head>
@@ -48,6 +65,8 @@
             ></iframe
         ></noscript>
         <!-- End Google Tag Manager (noscript) -->
+
+        <div id="df-boot-splash" aria-hidden="true"></div>
 
         <div id="modal_root" class="modal-root"></div>
         <div id="popup_root" class="popup-root"></div>

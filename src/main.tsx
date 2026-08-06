@@ -1,4 +1,6 @@
 import { configure } from 'mobx';
+// Hide the pre-React boot splash as soon as the bundle executes (side-effect import).
+import './utils/boot-splash';
 import ReactDOM from 'react-dom/client';
 import { AuthWrapper } from './app/AuthWrapper';
 // Removed AnalyticsInitializer import - analytics dependency removed

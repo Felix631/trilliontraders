@@ -1,8 +1,14 @@
-# Deriv Trading Bot
+# Trillion Trades
 
-A self-hosted, visual trading-bot builder on the Deriv WebSocket API. Drag-and-drop
-strategy building with Blockly, an interactive SmartCharts chart, automated strategy
-execution, and dashboard/tutorials.
+A self-hosted, visual trading-bot builder on the Deriv WebSocket API (the Deriv Bot
+template, branded **Trillion Trades**). Drag-and-drop strategy building with Blockly,
+an interactive SmartCharts chart, automated strategy execution, and dashboard/tutorials.
+
+> **White-label twin:** this build is the direct white-label twin of
+> [`undasitepremium.vercel.app`](https://undasitepremium.vercel.app) — the same
+> Deriv Bot template, same pages and functionality (dashboard, bot builder, chart,
+> tutorials, run panel, Deriv OAuth login) — renamed **Undasite Pro → Trillion Trades**
+> (title, favicon `TT` badge, boot splash, brand config).
 
 > **Note:** Unlike the other templates in this repo (Rise/Fall, Accumulators, Digits)
 > which are **Next.js** apps, the bot is a **[Rsbuild](https://rsbuild.dev) + React
@@ -36,6 +42,11 @@ NEXT_PUBLIC_DERIV_APP_ID=your_app_id_here
 NEXT_PUBLIC_DERIV_ENV=production
 NEXT_PUBLIC_DERIV_REFERRAL_LINK=your_referral_link_here
 
+# Optional: white-label OAuth identifiers (the twin build mirrors the deployed
+# partner env surface; leave empty to use the classic app-id OAuth flow).
+DERIV_OAUTH_CLIENT_ID=
+DERIV_WS_APP_ID=
+
 # Optional: Google Drive integration (leave blank to disable).
 GD_CLIENT_ID=
 GD_APP_ID=
@@ -47,6 +58,8 @@ GD_API_KEY=
 | `NEXT_PUBLIC_DERIV_APP_ID` | Deriv app id issued for your registered app. Drives OAuth login/sign-up and WebSocket connections. Without it, Log in / Sign up stay disabled. |
 | `NEXT_PUBLIC_DERIV_ENV` | `production` for live Deriv endpoints; `preview` (or `staging`) for staging. Read by both the bot's URL resolver and `@deriv/core` for OAuth. |
 | `NEXT_PUBLIC_DERIV_REFERRAL_LINK` | Affiliate referral link — appended as `affiliate_token` / `utm_campaign` on OAuth (optional). |
+| `DERIV_OAUTH_CLIENT_ID` | OAuth 2.0 client id for the white-label PKCE login flow (optional — falls back to the app-id flow when empty). |
+| `DERIV_WS_APP_ID` | WebSocket app id consumed by the vendored deriv-core when set (optional). |
 | `GD_CLIENT_ID` / `GD_APP_ID` / `GD_API_KEY` | Google Drive integration credentials for saving/loading strategies (optional). |
 
 > These variables are injected at **build time** via Rsbuild's `source.define`
@@ -94,8 +107,9 @@ environment yet:**
 
 ## Branding & White-labeling
 
-Branding (logo, primary color, fonts, app name) is driven by **`brand.config.json`**,
-not Next.js config:
+Branding (logo, primary color, fonts, app name) is driven by **`brand.config.json`**
+(this repo ships the **Trillion Trades** brand — deep blue `#0047ab` accents, Inter
+font, maroon/gold boot splash and a `TT` favicon), not Next.js config:
 
 - **Colors / fonts / app name** — edit `brand.config.json`, then run
   `npm run generate:brand-css` to bake the values into the theme CSS variables. This
