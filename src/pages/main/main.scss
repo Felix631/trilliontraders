@@ -66,16 +66,27 @@
 
         .dc-tabs {
             &__active-line {
-                background-color: var(--general-main-1);
+                // Premium navy tab chrome — white-label twin of the reference site
+                // (.main__container .dc-tabs__active-line is #0047ab there).
+                background-color: var(--site-tab-active, #0047ab);
                 transition: none;
             }
 
             &__active {
-                background: var(--general-main-1);
+                background: var(--site-tab-active, #0047ab);
+            }
+
+            &__item {
+                color: var(--text-colored-background);
+
+                svg path,
+                svg g path {
+                    fill: var(--text-colored-background);
+                }
             }
 
             &__list {
-                background: var(--general-section-1);
+                background: var(--bot-studio-header-bg, var(--general-section-1));
                 justify-content: start;
 
                 @include mobile-or-tablet-screen {

@@ -63,10 +63,46 @@
     --app-card-virtual: #{constants.$gradient-virtual};
     --app-card-virtual-swap-free: #{constants.$gradient-virtual-swap-free};
 
+    /*
+     * Premium brand palette — white-label twin of the reference site
+     * (undasitepremium.vercel.app). These --site-* tokens drive the navy
+     * header/tab chrome, the active-tab pill and the accent surfaces, and
+     * match the values baked into the reference deployment's CSS.
+     */
+    --site-primary: #0047ab;
+    --site-primary-rgb: 0, 71, 171;
+    --site-secondary: #071225;
+    --site-secondary-rgb: 7, 18, 37;
+    --site-accent: #4f8cff;
+    --site-accent-rgb: 79, 140, 255;
+    --site-accent-soft: #4f8cff;
+    --site-tab-active: #0047ab;
+    --site-surface: #0a1830;
+    --site-surface-elevated: #0d1d38;
+    --site-border: #4f8cff38;
+    --bot-studio-header-bg: #071225;
+
     // Opacity
     --tw-border-opacity: 1;
 
     .theme--light {
+        // Premium app surfaces (light)
+        --app-page-background: #f3f7fc;
+        --app-panel-background: #ffffff;
+        --app-card-background: #ffffff;
+        --app-card-background-alt: #f8fbff;
+        --app-elevated-background: #eef5ff;
+        --app-hover-background: #eef5ff;
+        --app-border-color: #d9e5f2;
+        --app-border-strong-color: #b9cbe0;
+        --app-accent-color: #4f8cff;
+        --app-accent-soft: #4f8cff38;
+        --app-text-title: #0b1f3a;
+        --app-text-subtle: #b8cce2;
+        --app-text-muted: #8eabc9;
+        --app-scroll-thumb: #b9cbe0;
+        --app-scroll-track: #eef5ff;
+
         // General
         --general-main-1: #{constants.$color-white};
         --general-main-2: #{constants.$color-white};
@@ -214,6 +250,23 @@
     }
 
     .theme--dark {
+        // Premium app surfaces (dark)
+        --app-page-background: #071225;
+        --app-panel-background: #0a1830;
+        --app-card-background: #0d1d38;
+        --app-card-background-alt: #10284d;
+        --app-elevated-background: #14305a;
+        --app-hover-background: #11294f;
+        --app-border-color: #17365f;
+        --app-border-strong-color: #28558e;
+        --app-accent-color: #1457d9;
+        --app-accent-soft: #1457d924;
+        --app-text-title: #f4f8ff;
+        --app-text-subtle: #334b68;
+        --app-text-muted: #5a6d84;
+        --app-scroll-thumb: #28558e;
+        --app-scroll-track: #071225;
+
         // General
         --general-main-1: #{constants.$color-black};
         --general-main-2: #{constants.$color-black-3};

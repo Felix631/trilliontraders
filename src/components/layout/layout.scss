@@ -4,10 +4,76 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    // Premium page canvas — white-label twin of the reference site's
+    // --app-page-background (light: #f3f7fc, dark: #071225).
+    background: var(--app-page-background, var(--general-main-1));
 
     .deriv-header {
-        background: var(--general-main-1);
+        // Premium navy header chrome — white-label twin of the reference site
+        // (--bot-studio-header-bg in the reference deployment's CSS).
+        background: var(--bot-studio-header-bg, var(--general-main-1));
+        border-bottom: 0.1rem solid var(--site-border, transparent);
         height: 5.6rem;
+
+        // White header content on the navy band (logo text, hamburger, account
+        // switcher trigger, login/signup buttons).
+        .app-header__logo-text,
+        .app-header__logo-badge,
+        .app-header__menu,
+        .mobile-menu__toggle button,
+        .auth-actions button {
+            color: var(--text-colored-background);
+        }
+
+        .app-header__logo-badge {
+            background: color-mix(in srgb, var(--site-primary, var(--brand-primary)) 25%, transparent);
+        }
+
+        // Icon fills in the header chrome — scoped so dropdown panels that live in
+        // the header DOM (account switcher) keep their own surface colors.
+        .app-header__logo svg path,
+        .app-header__logo svg g path,
+        .mobile-menu__toggle button svg path,
+        .mobile-menu__toggle button svg g path,
+        .app-header__menu svg path,
+        .app-header__menu svg g path,
+        .deriv-account-switcher__button svg path,
+        .deriv-account-switcher__button svg g path,
+        .account-info .deriv-account-switcher__button svg path,
+        .account-info .deriv-account-switcher__button svg g path {
+            fill: var(--text-colored-background);
+        }
+
+        .auth-actions__spinner {
+            color: var(--text-colored-background);
+        }
+
+        // Account switcher trigger + balance on navy
+        .deriv-account-switcher__button,
+        .account-info .deriv-account-switcher__button {
+            color: var(--text-colored-background);
+
+            span,
+            .deriv-text {
+                color: var(--text-colored-background);
+            }
+        }
+
+        // The dropdown panel keeps its own light/dark surface.
+        .deriv-account-switcher__container,
+        .account-switcher__container {
+            color: var(--text-prominent);
+
+            span,
+            .deriv-text {
+                color: var(--text-prominent);
+            }
+
+            svg path,
+            svg g path {
+                fill: var(--text-general);
+            }
+        }
     }
 
     &.quick-strategy-active {
