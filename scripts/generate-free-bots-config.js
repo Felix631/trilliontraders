@@ -12,12 +12,24 @@ import path from 'node:path';
 
 const dir = path.resolve('src/xml/free-bots');
 const outFile = path.resolve('src/constants/free-bots-config.ts');
-const files = fs.readdirSync(dir).filter(f => f.endsWith('.xml')).sort();
+
+// Collect *.xml recursively so subfolders (e.g. newly-added/) are included.
+const collectXml = dirPath => {
+    const out = [];
+    for (const entry of fs.readdirSync(dirPath, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        const full = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) out.push(...collectXml(full));
+        else if (entry.name.endsWith('.xml')) out.push(full);
+    }
+    return out;
+};
+const files = collectXml(dir);
 
 // Creators that group community bots; anything else is an "Official" built-in.
 const KNOWN_CREATORS = new Set([
     'mkorean', 'money8gg', 'traderkit', 'osam', 'exwager',
     'dbtraders', 'dollarprinter', 'dbotspace', 'signal', 'ai',
+    'newlyadded',
 ]);
 
 const toDisplay = raw =>
@@ -28,9 +40,12 @@ const toDisplay = raw =>
         .trim();
 
 const bots = files.map(file => {
-    // file looks like: <chunk>-xml.xml  (chunk = webpack chunk name)
-    const fileBase = file.replace(/\.xml$/, '');
-    const chunk = fileBase.replace(/-xml$/, '');
+    // file looks like: <chunk>-xml.xml  (chunk = webpack chunk name);
+    // the dynamic import keeps the path relative to src/xml/free-bots,
+    // so subfolder bots keep their folder in the `file` field.
+    const rel = path.relative(dir, file);
+    const fileBase = rel.replace(/\.xml$/, '');
+    const chunk = path.basename(fileBase).replace(/-xml$/, '');
     const first = chunk.split('-')[0];
     const isKnown = KNOWN_CREATORS.has(first);
     const creator = isKnown ? first : 'Official';
@@ -39,8 +54,8 @@ const bots = files.map(file => {
         id: chunk,
         name: toDisplay(rest),
         creator,
-        // On-disk module base name (incl. the -xml suffix) used for the
-        // dynamic import: import(`../xml/free-bots/${file}.xml`)
+        // On-disk module base name (incl. the -xml suffix and subfolder)
+        // used for the dynamic import: import(`../xml/free-bots/${file}.xml`)
         file: fileBase,
     };
 });
