@@ -1,0 +1,292 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="G4c^SRpm%7+Ej4ufRF9o">Ufo stake</variable>
+    <variable id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</variable>
+    <variable id="%)D#eiv/%DYX)]qF,@BE">Ufo first target profit</variable>
+    <variable id="ydLX;^Mc8`,jz_[YspE:">Ufo total expected profit</variable>
+    <variable id="!B..](}sQh`{R1SdIMs|">Ufo stop loss</variable>
+    <variable id="LHG^UuA/^w%+3QnjwSx-">Ufo martingale token</variable>
+  </variables>
+  <block type="after_purchase" id="35-,;twL9*rST^W1C!an" x="714" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="HH!|]8pX-y{4]bGcqf#9">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="d;efUM2,IVDX=~fB7H@P">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="wFmVAfI#v`62|95H2)Yv">
+            <field name="VAR" id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="7IS$c}!sFpJ4?Z{1_JPq">
+                <field name="VAR" id="G4c^SRpm%7+Ej4ufRF9o">Ufo stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="qZ6TY].,=2_Eelrz$tg[">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="`oS{Q[vA/c_Gme55_1`H">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="c3cI-Tx+{Xi{xX7w(@[="></block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="*ccp5Wau$S}O8z11{ybN">
+                        <field name="VAR" id="ydLX;^Mc8`,jz_[YspE:">Ufo total expected profit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_print" id="OFF7uTmTM$:2/_waX6(^">
+                    <value name="TEXT">
+                      <shadow type="text" id="hm[L(T?q]z:g3Edsm]a5">
+                        <field name="TEXT">Ufo total expected profit printed!</field>
+                      </shadow>
+                    </value>
+                    <next>
+                      <block type="notify" id="5_(v79P0Oem,4w)*X*(?">
+                        <field name="NOTIFICATION_TYPE">success</field>
+                        <field name="NOTIFICATION_SOUND">earned-money</field>
+                        <value name="MESSAGE">
+                          <shadow type="text" id="l39[(XCQ]#+eo^)bWs~H">
+                            <field name="TEXT">Ufo total expected profit printed!</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="trade_again" id="%lJ/nyk`omKR[Tg/{+Kc"></block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="i-:B6uU7/$K.WPs[hU{6">
+            <field name="VAR" id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="~QdbV:WcXjwA_Lc!:w*B">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <shadow type="math_number" id="**1T^$S,u|!d9_h9$7^U">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="W7!.@0Qvr}{Id$_ShwZA">
+                    <field name="VAR" id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="-*a#Pqf{$TqJ[L$u)l`:">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="^TVV$T/Qk85+PTZC9ve{">
+                    <field name="VAR" id="LHG^UuA/^w%+3QnjwSx-">Ufo martingale token</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="~+^wCr^b=F-N3{KW(f6*">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="%}[H|H}1fwm1v$.*;ACJ">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="math_arithmetic" id="1qPo)GBM30eN.wYk4g,r">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                          <shadow type="math_number" id="4Y^D[rm/2nQ_~bXfD?wx">
+                            <field name="NUM">1</field>
+                          </shadow>
+                          <block type="total_profit" id="C;=AmDz-}DM1C)Q[:0UI"></block>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="TT]kR^06]^2XUO4N17:r">
+                            <field name="NUM">-1</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="j!iG;vqZ`d0Qd{LC}AR7">
+                        <field name="VAR" id="!B..](}sQh`{R1SdIMs|">Ufo stop loss</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_print" id="@SoMR5V]Eh@/ct[X|9U3">
+                    <value name="TEXT">
+                      <shadow type="text" id="7hGfkTC,$X9+ag1B_tqh">
+                        <field name="TEXT">Stop loss hit!</field>
+                      </shadow>
+                    </value>
+                    <next>
+                      <block type="notify" id="YwW)N/vh.3+cv?v]%NCE">
+                        <field name="NOTIFICATION_TYPE">error</field>
+                        <field name="NOTIFICATION_SOUND">announcement</field>
+                        <value name="MESSAGE">
+                          <shadow type="text" id="]iAwYX(Xp]$`y{yL08z1">
+                            <field name="TEXT">Stop loss hit!</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="trade_again" id="KL6f@Pk)M/JFB-TN{vYI"></block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="trade_definition" id="]yeQ}U{(dIYn:xYszs04" deletable="false" x="-1" y="160">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="cwCjw1?x`Rkz4huR./Wy" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ10V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="k=ll=EWFk5=NGT##}K*Q" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">multiplier</field>
+            <field name="TRADETYPE_LIST">multiplier</field>
+            <next>
+              <block type="trade_definition_contracttype" id="%RV8;?LeGd=;p#5x,C|G" deletable="false" movable="false">
+                <field name="TYPE_LIST">MULTUP</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="g!BlcVh(:WSz{fl3nH8d" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="+8IHq,a|j%okYUK:TPG?" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="N{2K7DWn?%e1{}[n5u:G" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="tfjW_FvLZT0CWrhba;=K">
+        <field name="VAR" id="G4c^SRpm%7+Ej4ufRF9o">Ufo stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="~Ij_?9v%q35a:mXL0Y5D">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="=:4@`[8XP?qk.q:jngGM">
+            <field name="VAR" id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="SkOrdGIN7/pBER+=PCyx">
+                <field name="VAR" id="G4c^SRpm%7+Ej4ufRF9o">Ufo stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="GxNGtPZmKU%]@LOLLGfp">
+                <field name="VAR" id="%)D#eiv/%DYX)]qF,@BE">Ufo first target profit</field>
+                <value name="VALUE">
+                  <block type="math_number" id="`Gjp9+cR3-Ka9J21VC)h">
+                    <field name="NUM">40</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id=":?nKSG|~XRu=wcp}!3x)">
+                    <field name="VAR" id="ydLX;^Mc8`,jz_[YspE:">Ufo total expected profit</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="`@OQuL|7XQb6yqWyq3L[">
+                        <field name="NUM">100</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id=",N1lez_iu-DS[AwQL,3A">
+                        <field name="VAR" id="!B..](}sQh`{R1SdIMs|">Ufo stop loss</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="f_VCmXPBWT-x9X0DC}J`">
+                            <field name="NUM">50</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="cv|HWD`9CkK`Ck0l`lgK">
+                            <field name="VAR" id="LHG^UuA/^w%+3QnjwSx-">Ufo martingale token</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="4h{|JC3O[R0$EPX??Kc+">
+                                <field name="NUM">30</field>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_multiplier" id="0jR(my-`DG;dsCbt/IzY" collapsed="true">
+        <field name="MULTIPLIERTYPE_LIST">4000</field>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="@X]ClD$j-F4FrJtm$B;n" inline="true">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="}Aa|6AW#%8hbEj]kjSox">
+            <field name="VAR" id=")wo-BQi#}L{g5:85wh[d">Ufo M stake</field>
+          </block>
+        </value>
+        <statement name="MULTIPLIER_PARAMS">
+          <block type="multiplier_take_profit" id="kU~u/YS/q;2HCbJoPD2~">
+            <value name="AMOUNT">
+              <shadow type="math_number_positive" id="Y,hCS%zZK,U5ZQ#eyu2M" inline="true">
+                <field name="NUM">0</field>
+              </shadow>
+              <block type="variables_get" id="ln6Z(v{S=dmJ@oislc,d">
+                <field name="VAR" id="%)D#eiv/%DYX)]qF,@BE">Ufo first target profit</field>
+              </block>
+            </value>
+            <next>
+              <block type="multiplier_stop_loss" id="qv,l]SmJbb%/z#8P#yAn">
+                <value name="AMOUNT">
+                  <shadow type="math_number_positive" id="$Mlby?/5@wHm*Vk/WmsF" inline="true">
+                    <field name="NUM">0</field>
+                  </shadow>
+                  <block type="variables_get" id="*OHtL[v/~jAz!2zrpjO6">
+                    <field name="VAR" id="!B..](}sQh`{R1SdIMs|">Ufo stop loss</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id=";]^x.-SQ)Ks4#E=g|Gtx" collapsed="true" deletable="false" x="0" y="1050">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="purchase" id="93@|)gzVoCu6k?[q[d(K">
+        <field name="PURCHASE_LIST">MULTUP</field>
+      </block>
+    </statement>
+  </block>
+</xml>

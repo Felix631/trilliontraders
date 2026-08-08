@@ -1551,6 +1551,66 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "signal-ai-Risk-Management-Bot-xml"
     },
     {
+        "id": "tradepro-M-M-Update-2026",
+        "name": "M M Update 2026",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-M-M-Update-2026-xml"
+    },
+    {
+        "id": "tradepro-Mathews-Emergency-Aid-Bot",
+        "name": "Mathews Emergency Aid Bot",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Mathews-Emergency-Aid-Bot-xml"
+    },
+    {
+        "id": "tradepro-Mathews-Emergency-Sniper-V2-1",
+        "name": "Mathews Emergency Sniper V2 1",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Mathews-Emergency-Sniper-V2-1-xml"
+    },
+    {
+        "id": "tradepro-Mathews-SPD-Bot-API-Updated",
+        "name": "Mathews SPD Bot API Updated",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Mathews-SPD-Bot-API-Updated-xml"
+    },
+    {
+        "id": "tradepro-Mathews-Speedbot-2025-Update",
+        "name": "Mathews Speedbot 2025 Update",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Mathews-Speedbot-2025-Update-xml"
+    },
+    {
+        "id": "tradepro-Ufo-Accumulator-Printer",
+        "name": "Ufo Accumulator Printer",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Ufo-Accumulator-Printer-xml"
+    },
+    {
+        "id": "tradepro-Ufo-Entry-Point-Scanner",
+        "name": "Ufo Entry Point Scanner",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Ufo-Entry-Point-Scanner-xml"
+    },
+    {
+        "id": "tradepro-Ufo-Even-Odd-Predictor",
+        "name": "Ufo Even Odd Predictor",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Ufo-Even-Odd-Predictor-xml"
+    },
+    {
+        "id": "tradepro-Ufo-M28-Odd-Even-Shifter",
+        "name": "Ufo M28 Odd Even Shifter",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Ufo-M28-Odd-Even-Shifter-xml"
+    },
+    {
+        "id": "tradepro-Ufo-Multiplier-Printer",
+        "name": "Ufo Multiplier Printer",
+        "creator": "tradepro",
+        "file": "tradepro/tradepro-Ufo-Multiplier-Printer-xml"
+    },
+    {
         "id": "traderkit-ARENA-Babaking2",
         "name": "ARENA Babaking2",
         "creator": "traderkit",
@@ -1801,6 +1861,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "Official",
         "label": "Official",
         "count": 17
+    },
+    {
+        "id": "tradepro",
+        "label": "tradepro",
+        "count": 10
     },
     {
         "id": "dbotspace",
