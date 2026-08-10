@@ -62,6 +62,7 @@ window.Blockly.Blocks.math_on_list = {
             'ticks',
             'lists_repeat',
             'lastDigitList',
+            'stat_list',
             'ohlc_values_in_list',
             'procedures_callreturn',
         ];
