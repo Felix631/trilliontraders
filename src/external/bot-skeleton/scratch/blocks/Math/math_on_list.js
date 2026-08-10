@@ -68,7 +68,12 @@ window.Blockly.Blocks.math_on_list = {
         ];
         return {
             LIST: () => {
-                return !type_list.includes(this.childBlocks_[0]?.type);
+                // Read the live LIST connection target (always current) and fall back to the
+                // cached child list, so a freshly loaded workspace can never falsely flag the
+                // block as "missing input values" even before Blockly refreshes its cache.
+                const list_input = this.getInput('LIST');
+                const child_block = list_input?.connection?.targetBlock() || this.childBlocks_[0];
+                return !type_list.includes(child_block?.type);
             },
         };
     },
