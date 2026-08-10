@@ -279,6 +279,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbtraders-The-even-odd-bot-1-xml"
     },
     {
+        "id": "dbx-Matches-Pro-Bot",
+        "name": "Matches Pro Bot",
+        "creator": "dbx",
+        "file": "dbx/dbx-Matches-Pro-Bot-xml"
+    },
+    {
         "id": "dollarprinter-free-AI-SIGNAL-SCANNER",
         "name": "free AI SIGNAL SCANNER",
         "creator": "dollarprinter",
@@ -1875,6 +1881,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "ai",
         "label": "ai",
+        "count": 1
+    },
+    {
+        "id": "dbx",
+        "label": "dbx",
         "count": 1
     },
     {
