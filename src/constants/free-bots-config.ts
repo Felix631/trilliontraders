@@ -279,6 +279,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbtraders-The-even-odd-bot-1-xml"
     },
     {
+        "id": "dbx-DBX-Hitmap-AutoSwitch",
+        "name": "DBX Hitmap AutoSwitch",
+        "creator": "dbx",
+        "file": "dbx/dbx-DBX-Hitmap-AutoSwitch-xml"
+    },
+    {
         "id": "dbx-DBX-V2-Matches-Mode",
         "name": "DBX V2 Matches Mode",
         "creator": "dbx",
@@ -1887,7 +1893,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbx",
         "label": "dbx",
-        "count": 2
+        "count": 3
     },
     {
         "id": "ai",
