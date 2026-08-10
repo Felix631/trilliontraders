@@ -285,6 +285,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbx/dbx-DBX-Hitmap-AutoSwitch-xml"
     },
     {
+        "id": "dbx-DBX-V2-Differs-Hunter",
+        "name": "DBX V2 Differs Hunter",
+        "creator": "dbx",
+        "file": "dbx/dbx-DBX-V2-Differs-Hunter-xml"
+    },
+    {
         "id": "dbx-DBX-V2-Matches-Mode",
         "name": "DBX V2 Matches Mode",
         "creator": "dbx",
@@ -1893,7 +1899,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbx",
         "label": "dbx",
-        "count": 3
+        "count": 4
     },
     {
         "id": "ai",
