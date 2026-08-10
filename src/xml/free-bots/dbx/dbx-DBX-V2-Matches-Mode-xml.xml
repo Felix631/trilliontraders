@@ -1,0 +1,295 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="var_Stake_dbxa1">Stake</variable>
+    <variable id="var_InitialStake_dbxb2">InitialStake</variable>
+    <variable id="var_TakeProfit_dbxc3">TakeProfit</variable>
+    <variable id="var_Martingale_dbxd4">Martingale</variable>
+    <variable id="var_MartingaleLevel_dbxe5">MartingaleLevel</variable>
+    <variable id="var_lossCounter_dbxf6">lossCounter</variable>
+    <variable id="var_Prediction_dbxg7">Prediction</variable>
+  </variables>
+  <block type="trade_definition" id="td_dbx_a1" deletable="false" x="0" y="60">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="mkt_dbx_a2" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ100V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="tt_dbx_a3" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">matchesdiffers</field>
+            <next>
+              <block type="trade_definition_contracttype" id="ct_dbx_a4" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITMATCH</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="ci_dbx_a5" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="rs_dbx_a6" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="re_dbx_a7" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="set_dbx_b1">
+        <field name="VAR" id="var_Stake_dbxa1">Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="num_dbx_b2">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="set_dbx_b3">
+            <field name="VAR" id="var_InitialStake_dbxb2">InitialStake</field>
+            <value name="VALUE">
+              <block type="math_number" id="num_dbx_b4">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="set_dbx_b5">
+                <field name="VAR" id="var_TakeProfit_dbxc3">TakeProfit</field>
+                <value name="VALUE">
+                  <block type="math_number" id="num_dbx_b6">
+                    <field name="NUM">15</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="set_dbx_b7">
+                    <field name="VAR" id="var_Martingale_dbxd4">Martingale</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="num_dbx_b8">
+                        <field name="NUM">2</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="set_dbx_b9">
+                        <field name="VAR" id="var_MartingaleLevel_dbxe5">MartingaleLevel</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="num_dbx_ba">
+                            <field name="NUM">5</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="set_dbx_bb">
+                            <field name="VAR" id="var_lossCounter_dbxf6">lossCounter</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="num_dbx_bc">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="set_dbx_bd">
+                                <field name="VAR" id="var_Prediction_dbxg7">Prediction</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="num_dbx_be">
+                                    <field name="NUM">4</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="to_dbx_c1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="dur_dbx_c2">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="amt_dbx_c3">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="get_dbx_c4">
+            <field name="VAR" id="var_Stake_dbxa1">Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="pred_dbx_c5">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="get_dbx_c6">
+            <field name="VAR" id="var_Prediction_dbxg7">Prediction</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="bp_dbx_d1" deletable="false" x="0" y="640">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="variables_set" id="set_dbx_d2">
+        <field name="VAR" id="var_Prediction_dbxg7">Prediction</field>
+        <value name="VALUE">
+          <block type="math_on_list" id="mol_dbx_d3">
+            <mutation op="MODE"></mutation>
+            <field name="OP">MODE</field>
+            <value name="LIST">
+              <block type="stat_list" id="sl_dbx_d4"></block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="purchase" id="pur_dbx_d5">
+            <field name="PURCHASE_LIST">DIGITMATCH</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="ap_dbx_e1" x="714" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="if_dbx_e2">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="logic_compare" id="cmp_dbx_e3">
+            <field name="OP">GTE</field>
+            <value name="A">
+              <block type="total_profit" id="tp_dbx_e4"></block>
+            </value>
+            <value name="B">
+              <block type="variables_get" id="get_dbx_e5">
+                <field name="VAR" id="var_TakeProfit_dbxc3">TakeProfit</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="notify" id="ntf_dbx_e6">
+            <field name="NOTIFICATION_TYPE">success</field>
+            <field name="NOTIFICATION_SOUND">silent</field>
+            <value name="MESSAGE">
+              <shadow type="text" id="txt_dbx_e7">
+                <field name="TEXT">Take profit reached - DBX V2 stopped</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="controls_if" id="if_dbx_e8">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="contract_check_result" id="ck_dbx_e9">
+                <field name="CHECK_RESULT">win</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="set_dbx_ea">
+                <field name="VAR" id="var_Stake_dbxa1">Stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="get_dbx_eb">
+                    <field name="VAR" id="var_InitialStake_dbxb2">InitialStake</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="set_dbx_ec">
+                    <field name="VAR" id="var_lossCounter_dbxf6">lossCounter</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="num_dbx_ed">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="variables_set" id="set_dbx_ee">
+                <field name="VAR" id="var_Stake_dbxa1">Stake</field>
+                <value name="VALUE">
+                  <block type="math_arithmetic" id="arith_dbx_ef">
+                    <field name="OP">MULTIPLY</field>
+                    <value name="A">
+                      <shadow type="math_number" id="num_dbx_eg">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="get_dbx_eh">
+                        <field name="VAR" id="var_Stake_dbxa1">Stake</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <shadow type="math_number" id="num_dbx_ei">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="get_dbx_ej">
+                        <field name="VAR" id="var_Martingale_dbxd4">Martingale</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="math_change" id="chg_dbx_ek">
+                    <field name="VAR" id="var_lossCounter_dbxf6">lossCounter</field>
+                    <value name="DELTA">
+                      <shadow type="math_number" id="num_dbx_el">
+                        <field name="NUM">1</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="if_dbx_em">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="cmp_dbx_en">
+                    <field name="OP">LTE</field>
+                    <value name="A">
+                      <block type="variables_get" id="get_dbx_eo">
+                        <field name="VAR" id="var_lossCounter_dbxf6">lossCounter</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="get_dbx_ep">
+                        <field name="VAR" id="var_MartingaleLevel_dbxe5">MartingaleLevel</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="trade_again" id="ta_dbx_eq"></block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="notify" id="ntf_dbx_er">
+                    <field name="NOTIFICATION_TYPE">error</field>
+                    <field name="NOTIFICATION_SOUND">silent</field>
+                    <value name="MESSAGE">
+                      <shadow type="text" id="txt_dbx_es">
+                        <field name="TEXT">Max recovery reached - DBX V2 stopped</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

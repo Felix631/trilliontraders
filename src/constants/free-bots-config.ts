@@ -279,10 +279,16 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbtraders-The-even-odd-bot-1-xml"
     },
     {
-        "id": "dbx-Matches-Pro-Bot",
-        "name": "Matches Pro Bot",
+        "id": "dbx-DBX-V2-Matches-Mode",
+        "name": "DBX V2 Matches Mode",
         "creator": "dbx",
-        "file": "dbx/dbx-Matches-Pro-Bot-xml"
+        "file": "dbx/dbx-DBX-V2-Matches-Mode-xml"
+    },
+    {
+        "id": "dbx-DBX-V2-Matches-Random",
+        "name": "DBX V2 Matches Random",
+        "creator": "dbx",
+        "file": "dbx/dbx-DBX-V2-Matches-Random-xml"
     },
     {
         "id": "dollarprinter-free-AI-SIGNAL-SCANNER",
@@ -1879,13 +1885,13 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 7
     },
     {
-        "id": "ai",
-        "label": "ai",
-        "count": 1
-    },
-    {
         "id": "dbx",
         "label": "dbx",
+        "count": 2
+    },
+    {
+        "id": "ai",
+        "label": "ai",
         "count": 1
     },
     {
