@@ -291,6 +291,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbx/dbx-DBX-V2-Differs-Hunter-xml"
     },
     {
+        "id": "dbx-DBX-V2-Differs-Repeat",
+        "name": "DBX V2 Differs Repeat",
+        "creator": "dbx",
+        "file": "dbx/dbx-DBX-V2-Differs-Repeat-xml"
+    },
+    {
         "id": "dbx-DBX-V2-Matches-Mode",
         "name": "DBX V2 Matches Mode",
         "creator": "dbx",
@@ -1899,7 +1905,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbx",
         "label": "dbx",
-        "count": 4
+        "count": 5
     },
     {
         "id": "ai",
