@@ -47,7 +47,7 @@
       <block type="text_print" id="pWT.9S]f^7aa8oA(v{r@">
         <value name="TEXT">
           <shadow type="text" id="3o;|BRdHUtb}Z}b0kPw#">
-            <field name="TEXT">SPEEDBOT ??</field>
+            <field name="TEXT">SPEEDBOT 👌</field>
           </shadow>
         </value>
         <next>
@@ -359,7 +359,7 @@
                                 <field name="TEXT"></field>
                               </shadow>
                               <block type="text" id="(7e,nL]O_E(T|[e@4}`~">
-                                <field name="TEXT">paigey\'s speed bot </field>
+                                <field name="TEXT">paigey's speed bot </field>
                               </block>
                             </value>
                             <next>

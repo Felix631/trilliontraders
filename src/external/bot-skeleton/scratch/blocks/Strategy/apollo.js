@@ -199,3 +199,92 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.apollo_purchase = block =
     const quantity = block.getFieldValue('CONTRACT_QUANTITY') || 1;
     return `Bot.apolloPurchase('${purchaseList}', ${multipleContracts}, ${quantity});\n`;
 };
+
+const APOLLO_PURCHASE2_OPTIONS = [
+    [localize('Rise'), 'CALL'],
+    [localize('Fall'), 'PUT'],
+    [localize('Even'), 'DIGITEVEN'],
+    [localize('Odd'), 'DIGITODD'],
+    [localize('Over'), 'DIGITOVER'],
+    [localize('Under'), 'DIGITUNDER'],
+    [localize('Matches'), 'DIGITMATCH'],
+    [localize('Differs'), 'DIGITDIFF'],
+];
+
+const PREDICTION_CONTRACT_TYPES = ['DIGITOVER', 'DIGITUNDER', 'DIGITMATCH', 'DIGITDIFF'];
+
+window.Blockly.Blocks.apollo_purchase2 = {
+    init() {
+        this.jsonInit(this.definition());
+        this.setNextStatement(false);
+        this.updatePredictionVisibility_();
+    },
+    definition() {
+        return {
+            ...strategyBlockConfig,
+            message0: localize('Purchase {{ contract_type }}', { contract_type: '%1' }),
+            args0: [
+                {
+                    type: 'field_dropdown',
+                    name: 'PURCHASE_LIST',
+                    options: APOLLO_PURCHASE2_OPTIONS,
+                },
+            ],
+            message1: localize('Prediction: %1'),
+            args1: [{ type: 'input_value', name: 'PREDICTION' }],
+            previousStatement: null,
+            tooltip: localize('This block purchases contract of a specified type.'),
+        };
+    },
+    meta() {
+        return {
+            display_name: localize('Purchase'),
+            description: localize('Use this block to purchase the specific contract you want. This block can only be used within the Purchase conditions block.'),
+            key_words: localize('buy'),
+        };
+    },
+    onchange(event) {
+        if (!this.workspace || window.Blockly.derivWorkspace.isFlyoutVisible || this.workspace.isDragging()) {
+            return;
+        }
+        this.updatePredictionVisibility_(event);
+    },
+    updatePredictionVisibility_(event) {
+        const visible = PREDICTION_CONTRACT_TYPES.includes(this.getFieldValue('PURCHASE_LIST'));
+        const input = this.getInput('PREDICTION');
+        if (input) input.setVisible(visible);
+        const changed =
+            event &&
+            event.type === window.Blockly.Events.BLOCK_CHANGE &&
+            event.blockId === this.id &&
+            event.name === 'PURCHASE_LIST';
+        if (visible && changed) this.ensurePredictionShadow_();
+        if (this.rendered) this.render();
+    },
+    ensurePredictionShadow_() {
+        const input = this.getInput('PREDICTION');
+        if (!input?.connection || input.connection.targetBlock()) return;
+        const block = this.workspace.newBlock('math_number_positive');
+        block.setShadow(true);
+        block.setFieldValue(1, 'NUM');
+        block.outputConnection.connect(input.connection);
+        block.initSvg();
+        block.render();
+    },
+    restricted_parents: ['before_purchase'],
+};
+addEnableDisableContextMenu(window.Blockly.Blocks.apollo_purchase2);
+
+window.Blockly.JavaScript.javascriptGenerator.forBlock.apollo_purchase2 = block => {
+    const purchaseList = block.getFieldValue('PURCHASE_LIST');
+    if (!PREDICTION_CONTRACT_TYPES.includes(purchaseList)) {
+        return `Bot.purchase('${purchaseList}');\n`;
+    }
+    const prediction =
+        window.Blockly.JavaScript.javascriptGenerator.valueToCode(
+            block,
+            'PREDICTION',
+            window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
+        ) || '1';
+    return `Bot.purchase('${purchaseList}', ${prediction});\n`;
+};

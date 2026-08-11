@@ -161,6 +161,7 @@ export const ToolboxItems = () =>
             <Category id='purchase_conditions' name={localize('Purchase conditions')}>
                 <Block type='before_purchase' />
                 <Block type='purchase' />
+                <Block type='apollo_purchase2' />
             </Category>
             <Category id='sell_conditions' name={localize('Sell conditions (optional)')}>
                 <Block type='during_purchase' />
@@ -432,6 +433,20 @@ export const ToolboxItems = () =>
                     <Block type='stat_list' />
                     <Block type='ticks' />
                     <Block type='lastDigitList' />
+                    <Block type='even_odd_analysis'>
+                        <Value name='N'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>1000</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='last_digits_condition'>
+                        <Value name='N'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>3</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
                     <Block type='check_direction' />
                     <Block type='is_candle_black' />
                     <Block type='read_ohlc'>

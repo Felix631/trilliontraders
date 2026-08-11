@@ -4,7 +4,7 @@
     <variable id=":o#E4Mv[vmJES2fN=qo0">Prediction</variable>
     <variable id=":Z8WvPXWG?qCe|8=iii1">Expected Profit</variable>
     <variable id="]_MS:$MrQakFy~dy[v}a">text</variable>
-    <variable id="K`h}~iKgn?Z)RHYaKFfT">Under Prediction</variable>
+    <variable id="K`h}~iKgn?Z)RHYaKFfT">Over Prediction</variable>
     <variable id="HyNhO~!rk1(6_u;tk|_i">Trade Direction</variable>
     <variable id="L.cN$B-UUzkS|eDQm2xZ">Stop Loss</variable>
     <variable id="V3`ByiTyoj~_e_hJc;X=">Stake1</variable>
@@ -24,7 +24,7 @@
             <field name="TRADETYPE_LIST">overunder</field>
             <next>
               <block type="trade_definition_contracttype" id="+:36ts]!!))@0zb2Cw?}" deletable="false" movable="false">
-                <field name="TYPE_LIST">DIGITUNDER</field>
+                <field name="TYPE_LIST">DIGITOVER</field>
                 <next>
                   <block type="trade_definition_candleinterval" id="`-._(9_zhwbfP0b9+,d}" deletable="false" movable="false">
                     <field name="CANDLEINTERVAL_LIST">60</field>
@@ -80,10 +80,10 @@
                     </value>
                     <next>
                       <block type="variables_set" id="|aPCht%cR1;/{xBLPS3`">
-                        <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Under Prediction</field>
+                        <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Over Prediction</field>
                         <value name="VALUE">
                           <block type="math_number" id="q?286.t{mx:LnX9J5j[,">
-                            <field name="NUM">7</field>
+                            <field name="NUM">2</field>
                           </block>
                         </value>
                         <next>
@@ -91,7 +91,7 @@
                             <field name="VAR" id="@GRV-f=US~_%4pd.i}2Q">Recovery Prediction</field>
                             <value name="VALUE">
                               <block type="math_number" id=":kdVhp0U=xE2ALN65?fz">
-                                <field name="NUM">5</field>
+                                <field name="NUM">4</field>
                               </block>
                             </value>
                             <next>
@@ -167,7 +167,7 @@
                     <field name="TEXT"></field>
                   </shadow>
                   <block type="text" id="#GiuOl|!IS#.dQ,z^u{[">
-                    <field name="TEXT">Congrats.  Take Profit hit ?? </field>
+                    <field name="TEXT">Congrats.  Take Profit hit 👍 </field>
                   </block>
                 </value>
                 <next>
@@ -247,7 +247,7 @@
                     <field name="VAR" id=":o#E4Mv[vmJES2fN=qo0">Prediction</field>
                     <value name="VALUE">
                       <block type="variables_get" id="z!x0@[~P}s`m{WK{O*N2">
-                        <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Under Prediction</field>
+                        <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Over Prediction</field>
                       </block>
                     </value>
                     <next>
@@ -420,12 +420,12 @@
         </value>
         <statement name="DO0">
           <block type="apollo_purchase" id="4oUF0V`vAb?3~p;(}guu">
-            <field name="PURCHASE_LIST">DIGITUNDER</field>
+            <field name="PURCHASE_LIST">DIGITOVER</field>
           </block>
         </statement>
         <statement name="ELSE">
           <block type="apollo_purchase" id="ws]_ha)nio4mZUG4NH[d">
-            <field name="PURCHASE_LIST">DIGITUNDER</field>
+            <field name="PURCHASE_LIST">DIGITOVER</field>
           </block>
         </statement>
       </block>
@@ -439,7 +439,7 @@
         <field name="VAR" id=":o#E4Mv[vmJES2fN=qo0">Prediction</field>
         <value name="VALUE">
           <block type="variables_get" id="G:bSQLMo@(lMc^5Z(#QV">
-            <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Under Prediction</field>
+            <field name="VAR" id="K`h}~iKgn?Z)RHYaKFfT">Over Prediction</field>
           </block>
         </value>
         <next>

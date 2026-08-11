@@ -10,10 +10,16 @@ let purchase_reference;
 
 export default Engine =>
     class Purchase extends Engine {
-        purchase(contract_type) {
+        purchase(contract_type, prediction) {
             // Prevent calling purchase twice
             if (this.store.getState().scope !== BEFORE_PURCHASE) {
                 return Promise.resolve();
+            }
+
+            // The Apollo purchase block may pass an explicit prediction
+            // (e.g. for Over/Under/Matches/Differs digit contracts).
+            if (prediction !== undefined && prediction !== null) {
+                this.tradeOptions = { ...this.tradeOptions, prediction };
             }
 
             // Strategy blocks (Concept Block / Contract Sequence) and the

@@ -735,6 +735,126 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "exwager-Under-Single-Side-xml"
     },
     {
+        "id": "githinji-Digits-Sniper",
+        "name": "Digits Sniper",
+        "creator": "githinji",
+        "file": "githinji/githinji-Digits-Sniper-xml"
+    },
+    {
+        "id": "githinji-Entry-Point-Scanner",
+        "name": "Entry Point Scanner",
+        "creator": "githinji",
+        "file": "githinji/githinji-Entry-Point-Scanner-xml"
+    },
+    {
+        "id": "githinji-EVEN-ODD-Switcher",
+        "name": "EVEN ODD Switcher",
+        "creator": "githinji",
+        "file": "githinji/githinji-EVEN-ODD-Switcher-xml"
+    },
+    {
+        "id": "githinji-Githinji",
+        "name": "Githinji",
+        "creator": "githinji",
+        "file": "githinji/githinji-Githinji-xml"
+    },
+    {
+        "id": "githinji-Market-Killer",
+        "name": "Market Killer",
+        "creator": "githinji",
+        "file": "githinji/githinji-Market-Killer-xml"
+    },
+    {
+        "id": "githinji-New-2026-Year-Gift",
+        "name": "New 2026 Year Gift",
+        "creator": "githinji",
+        "file": "githinji/githinji-New-2026-Year-Gift-xml"
+    },
+    {
+        "id": "githinji-No-Analysis-Bot",
+        "name": "No Analysis Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-No-Analysis-Bot-xml"
+    },
+    {
+        "id": "githinji-Over-Destroyer",
+        "name": "Over Destroyer",
+        "creator": "githinji",
+        "file": "githinji/githinji-Over-Destroyer-xml"
+    },
+    {
+        "id": "githinji-SPEEDBOT-updated",
+        "name": "SPEEDBOT updated",
+        "creator": "githinji",
+        "file": "githinji/githinji-SPEEDBOT-updated-xml"
+    },
+    {
+        "id": "githinji-THE-DGT",
+        "name": "THE DGT",
+        "creator": "githinji",
+        "file": "githinji/githinji-THE-DGT-xml"
+    },
+    {
+        "id": "githinji-Under-7-Bot",
+        "name": "Under 7 Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Under-7-Bot-xml"
+    },
+    {
+        "id": "githinji-Under-8-Bot",
+        "name": "Under 8 Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Under-8-Bot-xml"
+    },
+    {
+        "id": "githinji-Under-9-Bot",
+        "name": "Under 9 Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Under-9-Bot-xml"
+    },
+    {
+        "id": "githinji-Under-Destroyer",
+        "name": "Under Destroyer",
+        "creator": "githinji",
+        "file": "githinji/githinji-Under-Destroyer-xml"
+    },
+    {
+        "id": "githinji-Updated-Even-Odd-AI-Entry-Scanner",
+        "name": "Updated Even Odd AI Entry Scanner",
+        "creator": "githinji",
+        "file": "githinji/githinji-Updated-Even-Odd-AI-Entry-Scanner-xml"
+    },
+    {
+        "id": "githinji-Updated-Over-0-AI-Bot",
+        "name": "Updated Over 0 AI Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Updated-Over-0-AI-Bot-xml"
+    },
+    {
+        "id": "githinji-Updated-Over-1-AI-Bot",
+        "name": "Updated Over 1 AI Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Updated-Over-1-AI-Bot-xml"
+    },
+    {
+        "id": "githinji-Updated-Over-2-AI-Bot",
+        "name": "Updated Over 2 AI Bot",
+        "creator": "githinji",
+        "file": "githinji/githinji-Updated-Over-2-AI-Bot-xml"
+    },
+    {
+        "id": "githinji-World-Roller-2",
+        "name": "World Roller 2",
+        "creator": "githinji",
+        "file": "githinji/githinji-World-Roller-2-xml"
+    },
+    {
+        "id": "githinji-World-roller-7",
+        "name": "World roller 7",
+        "creator": "githinji",
+        "file": "githinji/githinji-World-roller-7-xml"
+    },
+    {
         "id": "globaltrades-Concept-AI",
         "name": "Concept AI",
         "creator": "globaltrades",
@@ -907,126 +1027,6 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "mkorean 03 Ultimate SV 8 BOT 2025",
         "creator": "mkorean",
         "file": "mkorean-mkorean-03_Ultimate_SV_8_BOT_2025-xml"
-    },
-    {
-        "id": "mkorean-pai-00_Digits_Sniper",
-        "name": "pai 00 Digits Sniper",
-        "creator": "mkorean",
-        "file": "mkorean-pai-00_Digits_Sniper-xml"
-    },
-    {
-        "id": "mkorean-pai-01_EVEN_ODD_Switcher",
-        "name": "pai 01 EVEN ODD Switcher",
-        "creator": "mkorean",
-        "file": "mkorean-pai-01_EVEN_ODD_Switcher-xml"
-    },
-    {
-        "id": "mkorean-pai-02_World_Roller_2",
-        "name": "pai 02 World Roller 2",
-        "creator": "mkorean",
-        "file": "mkorean-pai-02_World_Roller_2-xml"
-    },
-    {
-        "id": "mkorean-pai-03_World_roller_7",
-        "name": "pai 03 World roller 7",
-        "creator": "mkorean",
-        "file": "mkorean-pai-03_World_roller_7-xml"
-    },
-    {
-        "id": "mkorean-pai-04_THE_DGT",
-        "name": "pai 04 THE DGT",
-        "creator": "mkorean",
-        "file": "mkorean-pai-04_THE_DGT-xml"
-    },
-    {
-        "id": "mkorean-pai-05_Over_Destroyer",
-        "name": "pai 05 Over Destroyer",
-        "creator": "mkorean",
-        "file": "mkorean-pai-05_Over_Destroyer-xml"
-    },
-    {
-        "id": "mkorean-pai-06_Under_Destroyer",
-        "name": "pai 06 Under Destroyer",
-        "creator": "mkorean",
-        "file": "mkorean-pai-06_Under_Destroyer-xml"
-    },
-    {
-        "id": "mkorean-pai-07_Githinji",
-        "name": "pai 07 Githinji",
-        "creator": "mkorean",
-        "file": "mkorean-pai-07_Githinji-xml"
-    },
-    {
-        "id": "mkorean-pai-08_New_2026_Year_Gift",
-        "name": "pai 08 New 2026 Year Gift",
-        "creator": "mkorean",
-        "file": "mkorean-pai-08_New_2026_Year_Gift-xml"
-    },
-    {
-        "id": "mkorean-pai-09_No_Analysis_Bot",
-        "name": "pai 09 No Analysis Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-09_No_Analysis_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-10_Updated_Even_Odd_AI_Entry_Scanner",
-        "name": "pai 10 Updated Even Odd AI Entry Scanner",
-        "creator": "mkorean",
-        "file": "mkorean-pai-10_Updated_Even_Odd_AI_Entry_Scanner-xml"
-    },
-    {
-        "id": "mkorean-pai-11_Entry_Point_Scanner",
-        "name": "pai 11 Entry Point Scanner",
-        "creator": "mkorean",
-        "file": "mkorean-pai-11_Entry_Point_Scanner-xml"
-    },
-    {
-        "id": "mkorean-pai-12_Market_Killer",
-        "name": "pai 12 Market Killer",
-        "creator": "mkorean",
-        "file": "mkorean-pai-12_Market_Killer-xml"
-    },
-    {
-        "id": "mkorean-pai-13_SPEEDBOT_updated_xm",
-        "name": "pai 13 SPEEDBOT updated xm",
-        "creator": "mkorean",
-        "file": "mkorean-pai-13_SPEEDBOT_updated_xm-xml"
-    },
-    {
-        "id": "mkorean-pai-14_Under_7_Bot",
-        "name": "pai 14 Under 7 Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-14_Under_7_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-15_Under_8_Bot",
-        "name": "pai 15 Under 8 Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-15_Under_8_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-16_Under_9_Bot",
-        "name": "pai 16 Under 9 Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-16_Under_9_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-17_Updated_Over_0_AI_Bot",
-        "name": "pai 17 Updated Over 0 AI Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-17_Updated_Over_0_AI_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-18_Updated_Over_1_AI_Bot",
-        "name": "pai 18 Updated Over 1 AI Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-18_Updated_Over_1_AI_Bot-xml"
-    },
-    {
-        "id": "mkorean-pai-19_Updated_Over_2_AI_Bot",
-        "name": "pai 19 Updated Over 2 AI Bot",
-        "creator": "mkorean",
-        "file": "mkorean-pai-19_Updated_Over_2_AI_Bot-xml"
     },
     {
         "id": "mkorean-tai-00_Githinji_by_Paigey_Official",
@@ -1986,14 +1986,14 @@ export const FREE_BOTS: TFreeBot[] = [
 
 export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
-        "id": "mkorean",
-        "label": "mkorean",
-        "count": 56
-    },
-    {
         "id": "money8gg",
         "label": "money8gg",
         "count": 39
+    },
+    {
+        "id": "mkorean",
+        "label": "mkorean",
+        "count": 36
     },
     {
         "id": "osam",
@@ -2019,6 +2019,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "newlyadded",
         "label": "newlyadded",
         "count": 24
+    },
+    {
+        "id": "githinji",
+        "label": "githinji",
+        "count": 20
     },
     {
         "id": "dollarprinter",

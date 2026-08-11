@@ -6,7 +6,7 @@ Downloads Deriv Bot XML strategies from bot-library sites into
 src/xml/free-bots/<site>/<site>-<name>-xml.xml so the free-bots-config
 generator picks them up.
 
-Three extraction modes per site:
+Four extraction modes per site:
 
 1. webpack chunk mode  (chunks = { "<chunk name>": "<hash>" })
    XMLs are embedded as single-quoted JS strings in lazy chunks served at
@@ -18,6 +18,10 @@ Three extraction modes per site:
 3. manifest mode       (manifest = "<path>", name_field = "name", url_path = "/bots/")
    The site publishes a JSON manifest (list of {name, ...}); each bot is
    fetched from <base><url_path><url-encoded-name>
+
+4. inline chunk mode   (bundle = "<bundle path>", inline_chunks = {name: chunk_id})
+   XMLs are inlined in the main bundle as `let <v>='<xml ...>'` modules keyed
+   by chunk id.
 
 Usage:  python3 scripts/download-site-bots.py
 """
@@ -37,6 +41,34 @@ SITES = {
         "name_field": "name",
         "url_path": "/bots/",
         "chunks": {},
+    },
+    # githinji.site (Githinji tenant): the bot XMLs are inlined in the main
+    # bundle as `let <v>='<xml ...>'` modules keyed by chunk id.
+    "githinji": {
+        "base": "https://githinji.site",
+        "bundle": "/static/js/index.8b4f414f.js",
+        "inline_chunks": {
+            "Digits-Sniper": 10479,
+            "EVEN-ODD-Switcher": 6421,
+            "World-Roller-2": 11313,
+            "World-roller-7": 88220,
+            "THE-DGT": 97960,
+            "Over-Destroyer": 35657,
+            "Under-Destroyer": 66917,
+            "Githinji": 68392,
+            "New-2026-Year-Gift": 85271,
+            "No-Analysis-Bot": 65327,
+            "Updated-Even-Odd-AI-Entry-Scanner": 24319,
+            "Entry-Point-Scanner": 62175,
+            "Market-Killer": 13759,
+            "SPEEDBOT-updated": 39439,
+            "Under-7-Bot": 46796,
+            "Under-8-Bot": 80446,
+            "Under-9-Bot": 25138,
+            "Updated-Over-0-AI-Bot": 73700,
+            "Updated-Over-1-AI-Bot": 60162,
+            "Updated-Over-2-AI-Bot": 7400,
+        },
     },
     # globaltrades.site free-bots page: direct files at /bots/<name>.xml
     # (only the 4 bots on the free-bots page are kept).
@@ -80,7 +112,21 @@ def js_single_quote_unescape(s):
                 i += 2
             elif n == "u" and i + 5 < len(s):
                 try:
-                    out.append(chr(int(s[i + 2 : i + 6], 16)))
+                    code = int(s[i + 2 : i + 6], 16)
+                    # Combine valid surrogate pairs (e.g. emoji) into one char.
+                    if 0xD800 <= code <= 0xDBFF and s[i + 6 : i + 8] == "\\u":
+                        try:
+                            low = int(s[i + 8 : i + 12], 16)
+                            if 0xDC00 <= low <= 0xDFFF:
+                                out.append(chr(0x10000 + ((code - 0xD800) << 10) + (low - 0xDC00)))
+                                i += 12
+                                continue
+                        except ValueError:
+                            pass
+                    if 0xD800 <= code <= 0xDFFF:
+                        out.append("\ufffd")  # lone surrogate -> replacement char
+                    else:
+                        out.append(chr(code))
                     i += 6
                 except ValueError:
                     out.append("\\u")
@@ -121,6 +167,34 @@ def main():
         os.makedirs(out_dir, exist_ok=True)
         print(f"=== {site} ({cfg['base']}) ===")
 
+        if cfg.get("inline_chunks"):
+            bundle_js = http_get(cfg["base"] + cfg["bundle"])
+            for name, chunk_id in sorted(cfg["inline_chunks"].items()):
+                prefix = (
+                    re.escape(str(chunk_id))
+                    + ':function(e,n,t){"use strict";t.r(n),t.d(n,{default:function(){return '
+                )
+                start = bundle_js.find(prefix)
+                if start == -1:
+                    print(f"  FAIL extract {name} (chunk {chunk_id})")
+                    continue
+                tail = bundle_js[start + len(prefix) :]
+                # XMLs may contain escaped single quotes (e.g. paigey\\'s) and
+                # may end with escapes after </xml> (e.g. </xml>\\n'), so anchor
+                # on the closing </xml> and skip trailing escape sequences to
+                # the unescaped closing quote.
+                m = re.search(r"let [a-zA-Z_$]+='([\s\S]*?</xml>)(?:\\[\s\S])*?'", tail)
+                if not m:
+                    print(f"  FAIL extract {name} (chunk {chunk_id}, no XML string)")
+                    continue
+                xml = js_single_quote_unescape(m.group(1))
+                dest = os.path.join(out_dir, f"{site}-{name}-xml.xml")
+                with open(dest, "w", encoding="utf-8") as f:
+                    f.write(xml)
+                total += 1
+                print(f"  ok {site}-{name}-xml.xml ({len(xml)} bytes)")
+            continue
+
         if cfg.get("manifest"):
             try:
                 manifest = json.loads(http_get(cfg["base"] + cfg["manifest"]))
@@ -150,7 +224,7 @@ def main():
             except Exception as exc:
                 print(f"  FAIL download {name}: {exc}")
                 continue
-            if dest_name.endswith(".xml.xml") or dest_name.endswith("-xml.xml"):
+            if dest_name.endswith("-xml.xml"):
                 if "<xml" not in payload:
                     print(f"  FAIL extract {name} (not an XML file)")
                     continue

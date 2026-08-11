@@ -97,6 +97,50 @@ export default Engine =>
             return digits;
         }
 
+        checkLastDigitsCondition(n, condition, compare_value = 0) {
+            const compare = Number.parseInt(compare_value, 10);
+            const value = Number.isNaN(compare) ? 0 : compare;
+            return new Promise(resolve => {
+                this.getLastDigitList()
+                    .then(digits => {
+                        const list = digits.slice(-n);
+                        if (!list.length) {
+                            resolve(false);
+                            return;
+                        }
+                        switch (condition) {
+                            case 'ALL_EVEN':
+                                resolve(list.every(digit => digit % 2 === 0));
+                                break;
+                            case 'ALL_ODD':
+                                resolve(list.every(digit => digit % 2 !== 0));
+                                break;
+                            case 'ALL_SAME':
+                                resolve(list.every(digit => digit === list[0]));
+                                break;
+                            case 'LESS_THAN':
+                                resolve(list.every(digit => digit < value));
+                                break;
+                            case 'GREATER_THAN':
+                                resolve(list.every(digit => digit > value));
+                                break;
+                            case 'LESS_OR_EQUAL':
+                                resolve(list.every(digit => digit <= value));
+                                break;
+                            case 'GREATER_OR_EQUAL':
+                                resolve(list.every(digit => digit >= value));
+                                break;
+                            default:
+                                resolve(false);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking last digits condition:', error);
+                        resolve(false);
+                    });
+            });
+        }
+
         checkDirection(dir) {
             return new Promise(resolve =>
                 this.$scope.ticksService
