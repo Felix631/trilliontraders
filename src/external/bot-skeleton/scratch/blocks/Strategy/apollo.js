@@ -1,6 +1,6 @@
 import { localize } from '@deriv-com/translations';
-import { getContractTypeOptions } from '../../../shared';
-import { excludeOptionFromContextMenu, modifyContextMenu } from '../../../utils';
+import { getContractTypeOptions } from '../../shared';
+import { excludeOptionFromContextMenu, modifyContextMenu } from '../../utils';
 
 const SYMBOL_OPTIONS = [
     ['R_10', 'R_10'],

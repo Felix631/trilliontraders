@@ -1,5 +1,5 @@
 import { localize } from '@deriv-com/translations';
-import { modifyContextMenu } from '../../../utils';
+import { modifyContextMenu } from '../../utils';
 
 const analysisBlockConfig = {
     colour: window.Blockly.Colours.Base.colour,

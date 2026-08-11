@@ -1,5 +1,5 @@
 import { localize } from '@deriv-com/translations';
-import { excludeOptionFromContextMenu, modifyContextMenu } from '../../../utils';
+import { excludeOptionFromContextMenu, modifyContextMenu } from '../../utils';
 
 const valueInput = name => ({
     type: 'input_value',
