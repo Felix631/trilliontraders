@@ -29,7 +29,7 @@ const files = collectXml(dir);
 const KNOWN_CREATORS = new Set([
     'mkorean', 'money8gg', 'traderkit', 'osam', 'exwager',
     'dbtraders', 'dollarprinter', 'dbotspace', 'signal', 'ai',
-    'newlyadded', 'tradepro', 'dbx',
+    'newlyadded', 'tradepro', 'dbx', 'dtraderdbot', 'globaltrades',
 ]);
 
 const toDisplay = raw =>

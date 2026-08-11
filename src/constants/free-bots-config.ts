@@ -423,6 +423,108 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dollarprinter-scalper-UNDER_7_SCALPER-xml"
     },
     {
+        "id": "dtraderdbot-1_3_2_6",
+        "name": "1 3 2 6",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-1_3_2_6-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_dalembert_on_stat_reset",
+        "name": "accumulators dalembert on stat reset",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_dalembert_on_stat_reset-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_dalembert",
+        "name": "accumulators dalembert",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_dalembert-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_martingale_on_stat_reset",
+        "name": "accumulators martingale on stat reset",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_martingale_on_stat_reset-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_martingale",
+        "name": "accumulators martingale",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_martingale-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_reverse_dalembert_on_stat_reset",
+        "name": "accumulators reverse dalembert on stat reset",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_dalembert_on_stat_reset-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_reverse_dalembert",
+        "name": "accumulators reverse dalembert",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_dalembert-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_reverse_martingale_on_stat_reset",
+        "name": "accumulators reverse martingale on stat reset",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_martingale_on_stat_reset-xml"
+    },
+    {
+        "id": "dtraderdbot-accumulators_reverse_martingale",
+        "name": "accumulators reverse martingale",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_martingale-xml"
+    },
+    {
+        "id": "dtraderdbot-dalembert_max-stake",
+        "name": "dalembert max stake",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-dalembert_max-stake-xml"
+    },
+    {
+        "id": "dtraderdbot-dalembert",
+        "name": "dalembert",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-dalembert-xml"
+    },
+    {
+        "id": "dtraderdbot-martingale_max-stake",
+        "name": "martingale max stake",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-martingale_max-stake-xml"
+    },
+    {
+        "id": "dtraderdbot-martingale",
+        "name": "martingale",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-martingale-xml"
+    },
+    {
+        "id": "dtraderdbot-oscars_grind_max-stake",
+        "name": "oscars grind max stake",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-oscars_grind_max-stake-xml"
+    },
+    {
+        "id": "dtraderdbot-oscars_grind",
+        "name": "oscars grind",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-oscars_grind-xml"
+    },
+    {
+        "id": "dtraderdbot-reverse_dalembert",
+        "name": "reverse dalembert",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-reverse_dalembert-xml"
+    },
+    {
+        "id": "dtraderdbot-reverse_martingale",
+        "name": "reverse martingale",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-reverse_martingale-xml"
+    },
+    {
         "id": "exwager-2025-MONEY8GG-SPEED-BOT",
         "name": "2025 MONEY8GG SPEED BOT",
         "creator": "exwager",
@@ -619,6 +721,60 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "Under Single Side",
         "creator": "exwager",
         "file": "exwager-Under-Single-Side-xml"
+    },
+    {
+        "id": "globaltrades-ADVANCED_DIFFERS-(2)-(2)",
+        "name": "ADVANCED DIFFERS (2) (2)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-ADVANCED_DIFFERS-(2)-(2)-xml"
+    },
+    {
+        "id": "globaltrades-ADVANCED-O_U-J2-(1)",
+        "name": "ADVANCED O U J2 (1)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-ADVANCED-O_U-J2-(1)-xml"
+    },
+    {
+        "id": "globaltrades-EVEN_Autobot-(1)",
+        "name": "EVEN Autobot (1)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-EVEN_Autobot-(1)-xml"
+    },
+    {
+        "id": "globaltrades-MENTORSHIP_2-(1)",
+        "name": "MENTORSHIP 2 (1)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-MENTORSHIP_2-(1)-xml"
+    },
+    {
+        "id": "globaltrades-ODD_Autobot-(1)-(1)",
+        "name": "ODD Autobot (1) (1)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-ODD_Autobot-(1)-(1)-xml"
+    },
+    {
+        "id": "globaltrades-OVER_UNDER-AUTOBOT",
+        "name": "OVER UNDER AUTOBOT",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-OVER_UNDER-AUTOBOT-xml"
+    },
+    {
+        "id": "globaltrades-PATEL-(with-Entry)",
+        "name": "PATEL (with Entry)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-PATEL-(with-Entry)-xml"
+    },
+    {
+        "id": "globaltrades-Raziel-Over-Under",
+        "name": "Raziel Over Under",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-Raziel-Over-Under-xml"
+    },
+    {
+        "id": "globaltrades-Reborn-HnR-(1)",
+        "name": "Reborn HnR (1)",
+        "creator": "globaltrades",
+        "file": "globaltrades/globaltrades-Reborn-HnR-(1)-xml"
     },
     {
         "id": "martingale_max-stake",
@@ -1893,9 +2049,19 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 17
     },
     {
+        "id": "dtraderdbot",
+        "label": "dtraderdbot",
+        "count": 17
+    },
+    {
         "id": "tradepro",
         "label": "tradepro",
         "count": 10
+    },
+    {
+        "id": "globaltrades",
+        "label": "globaltrades",
+        "count": 9
     },
     {
         "id": "dbotspace",
