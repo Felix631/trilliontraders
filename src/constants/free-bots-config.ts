@@ -723,58 +723,28 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "exwager-Under-Single-Side-xml"
     },
     {
-        "id": "globaltrades-ADVANCED_DIFFERS-(2)-(2)",
-        "name": "ADVANCED DIFFERS (2) (2)",
+        "id": "globaltrades-Concept-AI",
+        "name": "Concept AI",
         "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-ADVANCED_DIFFERS-(2)-(2)-xml"
+        "file": "globaltrades/globaltrades-Concept-AI-xml"
     },
     {
-        "id": "globaltrades-ADVANCED-O_U-J2-(1)",
-        "name": "ADVANCED O U J2 (1)",
+        "id": "globaltrades-GT-Digit-Switcher",
+        "name": "GT Digit Switcher",
         "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-ADVANCED-O_U-J2-(1)-xml"
+        "file": "globaltrades/globaltrades-GT-Digit-Switcher-xml"
     },
     {
-        "id": "globaltrades-EVEN_Autobot-(1)",
-        "name": "EVEN Autobot (1)",
+        "id": "globaltrades-GT-HnR",
+        "name": "GT HnR",
         "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-EVEN_Autobot-(1)-xml"
+        "file": "globaltrades/globaltrades-GT-HnR-xml"
     },
     {
-        "id": "globaltrades-MENTORSHIP_2-(1)",
-        "name": "MENTORSHIP 2 (1)",
+        "id": "globaltrades-GT-Sequence-Rotator",
+        "name": "GT Sequence Rotator",
         "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-MENTORSHIP_2-(1)-xml"
-    },
-    {
-        "id": "globaltrades-ODD_Autobot-(1)-(1)",
-        "name": "ODD Autobot (1) (1)",
-        "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-ODD_Autobot-(1)-(1)-xml"
-    },
-    {
-        "id": "globaltrades-OVER_UNDER-AUTOBOT",
-        "name": "OVER UNDER AUTOBOT",
-        "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-OVER_UNDER-AUTOBOT-xml"
-    },
-    {
-        "id": "globaltrades-PATEL-(with-Entry)",
-        "name": "PATEL (with Entry)",
-        "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-PATEL-(with-Entry)-xml"
-    },
-    {
-        "id": "globaltrades-Raziel-Over-Under",
-        "name": "Raziel Over Under",
-        "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-Raziel-Over-Under-xml"
-    },
-    {
-        "id": "globaltrades-Reborn-HnR-(1)",
-        "name": "Reborn HnR (1)",
-        "creator": "globaltrades",
-        "file": "globaltrades/globaltrades-Reborn-HnR-(1)-xml"
+        "file": "globaltrades/globaltrades-GT-Sequence-Rotator-xml"
     },
     {
         "id": "martingale_max-stake",
@@ -2059,11 +2029,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 10
     },
     {
-        "id": "globaltrades",
-        "label": "globaltrades",
-        "count": 9
-    },
-    {
         "id": "dbotspace",
         "label": "dbotspace",
         "count": 7
@@ -2072,6 +2037,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "dbx",
         "label": "dbx",
         "count": 5
+    },
+    {
+        "id": "globaltrades",
+        "label": "globaltrades",
+        "count": 4
     },
     {
         "id": "ai",

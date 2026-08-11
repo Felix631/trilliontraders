@@ -170,6 +170,52 @@ export const ToolboxItems = () =>
                 <Block type='after_purchase' />
                 <Block type='trade_again' />
             </Category>
+            <Category id='strategy_control' name={localize('Strategy control')}>
+                <Block type='strategy_concept_block_apply'>
+                    <Value name='TICK_COUNT'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>15</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='THRESHOLD'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>70</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='OVER_BARRIER'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>2</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='UNDER_BARRIER'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>7</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='WAIT_BEFORE_SCAN'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>5</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='COOLDOWN'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>3</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='WIN_STREAK_LOCK'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>3</Field>
+                        </Shadow>
+                    </Value>
+                    <Value name='LOCK_THRESHOLD'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>80</Field>
+                        </Shadow>
+                    </Value>
+                </Block>
+                <Block type='strategy_contract_sequence_diff0_over12_apply' />
+                <Block type='strategy_rotate_market' />
+            </Category>
 
             <Category id='analysis' name={localize('Analysis')}>
                 <Category id='indicators' name={localize('Indicators')}>

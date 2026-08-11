@@ -16,6 +16,21 @@ export default Engine =>
                 return Promise.resolve();
             }
 
+            // Strategy blocks (Concept Block / Contract Sequence) may override
+            // the contract type chosen by the purchase block and may block the
+            // purchase entirely until their conditions are met.
+            if (this._contractSequenceActive && this.tradeOptions?.contract_type) {
+                contract_type = this.tradeOptions.contract_type;
+            } else if (this._conceptBlockActive && this.tradeOptions?.contract_type) {
+                contract_type = this.tradeOptions.contract_type;
+            }
+            if (
+                (this._contractSequenceBlocked || this._conceptBlockBlocked) &&
+                (this._contractSequenceActive || this._conceptBlockActive)
+            ) {
+                return Promise.resolve();
+            }
+
             const onSuccess = response => {
                 // Don't unnecessarily send a forget request for a purchased contract.
                 const { buy } = response;

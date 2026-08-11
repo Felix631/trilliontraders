@@ -96,8 +96,9 @@ const Interpreter = () => {
 
     function initFunc(js_interpreter, scope) {
         const bot_interface = bot.getInterface();
-        const { getTicksInterface, alert, prompt, sleep, console: custom_console } = bot_interface;
+        const { getTicksInterface, getStrategyInterface, alert, prompt, sleep, console: custom_console } = bot_interface;
         const ticks_interface = getTicksInterface;
+        const strategy_interface = getStrategyInterface;
 
         js_interpreter.setProperty(scope, 'console', js_interpreter.nativeToPseudo(custom_console));
         js_interpreter.setProperty(scope, 'alert', js_interpreter.nativeToPseudo(alert));
@@ -111,6 +112,10 @@ const Interpreter = () => {
         const pseudo_bot_interface = js_interpreter.nativeToPseudo(bot_interface);
 
         Object.entries(ticks_interface).forEach(([name, f]) =>
+            js_interpreter.setProperty(pseudo_bot_interface, name, createAsync(js_interpreter, f))
+        );
+
+        Object.entries(strategy_interface).forEach(([name, f]) =>
             js_interpreter.setProperty(pseudo_bot_interface, name, createAsync(js_interpreter, f))
         );
 

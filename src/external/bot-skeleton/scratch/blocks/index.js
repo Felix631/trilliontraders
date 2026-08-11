@@ -13,4 +13,5 @@ import './Binary/Tools/Time';
 import './Binary/Trade Definition';
 import './Logic';
 import './Math';
+import './Strategy';
 import './Text';

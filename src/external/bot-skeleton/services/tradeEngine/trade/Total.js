@@ -29,6 +29,8 @@ export default Engine =>
         clearStatistics() {
             this.sessionRuns = 0;
             this.sessionProfit = 0;
+            this._consecutiveWins = 0;
+            this._consecutiveLosses = 0;
             if (!this.accountInfo) return;
             const { loginid: accountID } = this.accountInfo;
             globalStat[accountID] = { ...skeleton };
@@ -40,6 +42,13 @@ export default Engine =>
             const profit = getRoundedNumber(Number(sellPrice) - Number(buyPrice), currency);
 
             const win = profit > 0;
+
+            this._consecutiveWins = win ? (this._consecutiveWins || 0) + 1 : 0;
+            this._consecutiveLosses = win ? 0 : (this._consecutiveLosses || 0) + 1;
+
+            if (typeof this.onStrategySettlement === 'function') {
+                this.onStrategySettlement(win);
+            }
 
             const accountStat = this.getAccountStat();
 

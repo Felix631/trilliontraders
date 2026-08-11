@@ -45,14 +45,7 @@
       </block>
     </statement>
     <statement name="INITIALIZATION">
-      <block type="text_print" id="MMU{{O!vK{R9{(K9)j_!">
-        <value name="TEXT">
-          <shadow type="text" id="mJALkq2]xN[^2g1%$go:">
-            <field name="TEXT">success</field>
-          </shadow>
-        </value>
-        <next>
-          <block type="variables_set" id="7Nuu0BlD@s?[)h.sp0(7">
+      <block type="variables_set" id="7Nuu0BlD@s?[)h.sp0(7">
             <field name="VAR" id="W4$:ZQCmEz#8+=4ysv5Y">stop loss</field>
             <value name="VALUE">
               <block type="math_number" id=")4~Yx%R|[)sWuPdC#^u`">
@@ -72,7 +65,7 @@
                     <field name="VAR" id="j}8O`Vs+RJljIwPu-_:_">initial amount</field>
                     <value name="VALUE">
                       <block type="math_number" id="}-_{=qgy!h9yFj;7oS!~">
-                        <field name="NUM">1</field>
+                        <field name="NUM">5.97</field>
                       </block>
                     </value>
                     <next>
@@ -80,7 +73,7 @@
                         <field name="VAR" id="%L?;380E6Lr^3b.%}t5Q">win amount</field>
                         <value name="VALUE">
                           <block type="math_number" id="2U3f]Op(ILUS1_a.M{x1">
-                            <field name="NUM">1</field>
+                            <field name="NUM">5.97</field>
                           </block>
                         </value>
                         <next>
@@ -100,8 +93,6 @@
               </block>
             </next>
           </block>
-        </next>
-      </block>
     </statement>
     <statement name="SUBMARKET">
       <block type="trade_definition_tradeoptions" id=":n}P]1d@wt)!Ni?TZy_,">

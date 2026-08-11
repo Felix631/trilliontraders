@@ -14,6 +14,7 @@ import OpenContract from './OpenContract';
 import Proposal from './Proposal';
 import Purchase from './Purchase';
 import Sell from './Sell';
+import Strategy from './Strategy';
 import Ticks from './Ticks';
 import Total from './Total';
 
@@ -62,7 +63,7 @@ const watchScope = ({ store, stopScope, passScope, passFlag }) => {
     });
 };
 
-export default class TradeEngine extends Balance(Purchase(Sell(OpenContract(Proposal(Ticks(Total(class {}))))))) {
+export default class TradeEngine extends Balance(Purchase(Sell(OpenContract(Proposal(Ticks(Total(Strategy(class {})))))))) {
     constructor($scope) {
         super();
         this.observer = $scope.observer;
@@ -84,6 +85,8 @@ export default class TradeEngine extends Balance(Purchase(Sell(OpenContract(Prop
         this.initArgs = args;
         this.options = options;
         this.startPromise = this.loginAndGetBalance(token);
+
+        if (typeof this.resetStrategyState === 'function') this.resetStrategyState();
 
         if (!this.checkTicksPromiseExists()) this.watchTicks(symbol);
     }

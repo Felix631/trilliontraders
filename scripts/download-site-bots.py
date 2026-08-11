@@ -14,6 +14,7 @@ Usage:  python3 scripts/download-site-bots.py
 """
 import os
 import re
+import urllib.parse
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,18 +43,15 @@ SITES = {
             "reverse_martingale-xml": "34d11096",
         },
     },
+    # globaltrades.site serves its free bots as plain XML files at
+    # /bots/<url-encoded-name>.xml (fetched by the app's free-bots page).
     "globaltrades": {
-        "base": "https://globaltrades.site",
+        "base": "https://globaltrades.site/bots",
         "chunks": {
-            "EVEN_Autobot-(1)-xml": "6a14412d",
-            "ODD_Autobot-(1)-(1)-xml": "ae17ac9d",
-            "ADVANCED_DIFFERS-(2)-(2)-xml": "3bdc3203",
-            "ADVANCED-O_U-J2-(1)-xml": "74ac4731",
-            "PATEL-(with-Entry)-xml": "215cab01",
-            "OVER_UNDER-AUTOBOT-xml": "bc800fff",
-            "Raziel-Over-Under-xml": "e00c650b",
-            "MENTORSHIP_2-(1)-xml": "8a2152d9",
-            "Reborn-HnR-(1)-xml": "99125d7c",
+            "Concept AI.xml": None,
+            "GT HnR\U0001F916.xml": None,
+            "GT Digit Switcher.xml": None,
+            "GT Sequence Rotator.xml": None,
         },
     },
 }
@@ -120,22 +118,38 @@ def main():
         os.makedirs(out_dir, exist_ok=True)
         print(f"=== {site} ({cfg['base']}) ===")
         for name, h in sorted(cfg["chunks"].items()):
-            url = f"{cfg['base']}/static/js/async/{name}.{h}.js"
-            try:
-                with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
-                    js = r.read().decode("utf-8", errors="replace")
-            except Exception as exc:
-                print(f"  FAIL download {name}: {exc}")
-                continue
-            xml = extract_xml(js)
-            if xml is None or "<xml" not in xml:
-                print(f"  FAIL extract {name} ({len(js)} bytes)")
-                continue
-            dest = os.path.join(out_dir, f"{site}-{name}.xml")
+            if h is None:
+                # Direct XML file mode: name is "<Bot Name>.xml" served by the site.
+                url = f"{cfg['base']}/{urllib.parse.quote(name)}"
+                try:
+                    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
+                        xml = r.read().decode("utf-8", errors="replace")
+                except Exception as exc:
+                    print(f"  FAIL download {name}: {exc}")
+                    continue
+                if "<xml" not in xml:
+                    print(f"  FAIL extract {name} (not an XML file)")
+                    continue
+                safe = re.sub(r"[^A-Za-z0-9]+", "-", name.replace(".xml", "")).strip("-")
+                dest = os.path.join(out_dir, f"{site}-{safe}-xml.xml")
+            else:
+                # Webpack chunk mode: name is the chunk name, h is the hash.
+                url = f"{cfg['base']}/static/js/async/{name}.{h}.js"
+                try:
+                    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
+                        js = r.read().decode("utf-8", errors="replace")
+                except Exception as exc:
+                    print(f"  FAIL download {name}: {exc}")
+                    continue
+                xml = extract_xml(js)
+                if xml is None or "<xml" not in xml:
+                    print(f"  FAIL extract {name} ({len(js)} bytes)")
+                    continue
+                dest = os.path.join(out_dir, f"{site}-{name}.xml")
             with open(dest, "w", encoding="utf-8") as f:
                 f.write(xml)
             total += 1
-            print(f"  ok {site}-{name}.xml ({len(xml)} bytes)")
+            print(f"  ok {os.path.basename(dest)} ({len(xml)} bytes)")
     print(f"\nTotal saved: {total}")
 
 
