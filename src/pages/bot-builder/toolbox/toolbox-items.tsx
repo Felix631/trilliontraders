@@ -215,6 +215,9 @@ export const ToolboxItems = () =>
                 </Block>
                 <Block type='strategy_contract_sequence_diff0_over12_apply' />
                 <Block type='strategy_rotate_market' />
+                <Block type='active_symbol_changer' />
+                <Block type='contract_changer_block' />
+                <Block type='apollo_purchase' />
             </Category>
 
             <Category id='analysis' name={localize('Analysis')}>

@@ -1,1 +1,2 @@
+import './apollo';
 import './strategy';

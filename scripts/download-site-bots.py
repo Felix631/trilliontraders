@@ -2,16 +2,26 @@
 """
 download-site-bots.py
 
-Downloads Deriv Bot XML strategies that are embedded as webpack lazy chunks
-in bot-library SPAs (e.g. dtraderdbot.com, globaltrades.site) and saves each
-one into src/xml/free-bots/<site>/<site>-<chunkname>.xml so the
-free-bots-config generator picks them up.
+Downloads Deriv Bot XML strategies from bot-library sites into
+src/xml/free-bots/<site>/<site>-<name>-xml.xml so the free-bots-config
+generator picks them up.
 
-Chunk URLs look like:  <base>/static/js/async/<chunkname>.<hash>.js
-Each chunk contains the XML as a single-quoted JS string:  let <v>='<xml ...>...</xml>'
+Three extraction modes per site:
+
+1. webpack chunk mode  (chunks = { "<chunk name>": "<hash>" })
+   XMLs are embedded as single-quoted JS strings in lazy chunks served at
+   <base>/static/js/async/<name>.<hash>.js
+
+2. direct file mode    (chunks = { "<Bot Name>.xml": None })
+   XMLs are plain files served at <base>/<url-encoded-name>
+
+3. manifest mode       (manifest = "<path>", name_field = "name", url_path = "/bots/")
+   The site publishes a JSON manifest (list of {name, ...}); each bot is
+   fetched from <base><url_path><url-encoded-name>
 
 Usage:  python3 scripts/download-site-bots.py
 """
+import json
 import os
 import re
 import urllib.parse
@@ -19,32 +29,17 @@ import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# name -> hash  (from the webpack .u() chunk map in each site's index bundle)
 SITES = {
+    # dtraderdbot.com free-bots page: manifest-driven.
     "dtraderdbot": {
         "base": "https://dtraderdbot.com",
-        "chunks": {
-            "1_3_2_6-xml": "997670a5",
-            "accumulators_dalembert-xml": "4e9caf5f",
-            "accumulators_dalembert_on_stat_reset-xml": "f01383f8",
-            "accumulators_martingale-xml": "c2be8327",
-            "accumulators_martingale_on_stat_reset-xml": "7b41d04c",
-            "accumulators_reverse_dalembert-xml": "45d8eeee",
-            "accumulators_reverse_dalembert_on_stat_reset-xml": "ee324e12",
-            "accumulators_reverse_martingale-xml": "d0de6f9d",
-            "accumulators_reverse_martingale_on_stat_reset-xml": "fbc078b8",
-            "dalembert-xml": "3069ed68",
-            "dalembert_max-stake-xml": "9e318940",
-            "martingale-xml": "63536d13",
-            "martingale_max-stake-xml": "1897593e",
-            "oscars_grind-xml": "f07b964f",
-            "oscars_grind_max-stake-xml": "49369f44",
-            "reverse_dalembert-xml": "0e5bfef2",
-            "reverse_martingale-xml": "34d11096",
-        },
+        "manifest": "/bots/manifest.json",
+        "name_field": "name",
+        "url_path": "/bots/",
+        "chunks": {},
     },
-    # globaltrades.site serves its free bots as plain XML files at
-    # /bots/<url-encoded-name>.xml (fetched by the app's free-bots page).
+    # globaltrades.site free-bots page: direct files at /bots/<name>.xml
+    # (only the 4 bots on the free-bots page are kept).
     "globaltrades": {
         "base": "https://globaltrades.site/bots",
         "chunks": {
@@ -101,14 +96,22 @@ def js_single_quote_unescape(s):
 
 def extract_xml(chunk_js):
     """Pull the XML string out of a webpack chunk (let <v>='...'; export default)."""
-    # The export is `default:()=><v>` and the XML is `let <v>='<xml ...>'`.
     m = re.search(r"let\s+([A-Za-z_$][\w$]*)\s*=\s*'([\s\S]*?)'\}\}\]\);\s*$", chunk_js)
     if not m:
-        # Fallback: any single-quoted string that starts with an <xml element.
         m = re.search(r"'(\s*<xml[\s\S]*?)'", chunk_js)
     if not m:
         return None
     return js_single_quote_unescape(m.group(2))
+
+
+def http_get(url):
+    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
+        return r.read().decode("utf-8", errors="replace")
+
+
+def safe_name(name):
+    """Turn '<Bot Name>.xml' into '<Bot-Name>' (ascii, dashes)."""
+    return re.sub(r"[^A-Za-z0-9]+", "-", name.replace(".xml", "")).strip("-")
 
 
 def main():
@@ -117,39 +120,51 @@ def main():
         out_dir = os.path.join(ROOT, "src", "xml", "free-bots", site)
         os.makedirs(out_dir, exist_ok=True)
         print(f"=== {site} ({cfg['base']}) ===")
-        for name, h in sorted(cfg["chunks"].items()):
-            if h is None:
-                # Direct XML file mode: name is "<Bot Name>.xml" served by the site.
-                url = f"{cfg['base']}/{urllib.parse.quote(name)}"
-                try:
-                    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
-                        xml = r.read().decode("utf-8", errors="replace")
-                except Exception as exc:
-                    print(f"  FAIL download {name}: {exc}")
+
+        if cfg.get("manifest"):
+            try:
+                manifest = json.loads(http_get(cfg["base"] + cfg["manifest"]))
+            except Exception as exc:
+                print(f"  FAIL manifest {cfg['manifest']}: {exc}")
+                continue
+            entries = []
+            for entry in manifest:
+                name = entry.get(cfg.get("name_field", "name"), "")
+                if not name:
                     continue
-                if "<xml" not in xml:
+                url = cfg["base"] + cfg.get("url_path", "/") + urllib.parse.quote(name)
+                entries.append((name, url, f"{site}-{safe_name(name)}-xml.xml"))
+        else:
+            entries = []
+            for name, h in sorted(cfg["chunks"].items()):
+                if h is None:
+                    url = f"{cfg['base']}/{urllib.parse.quote(name)}"
+                    entries.append((name, url, f"{site}-{safe_name(name)}-xml.xml"))
+                else:
+                    url = f"{cfg['base']}/static/js/async/{name}.{h}.js"
+                    entries.append((name, url, f"{site}-{name}.xml"))
+
+        for name, url, dest_name in entries:
+            try:
+                payload = http_get(url)
+            except Exception as exc:
+                print(f"  FAIL download {name}: {exc}")
+                continue
+            if dest_name.endswith(".xml.xml") or dest_name.endswith("-xml.xml"):
+                if "<xml" not in payload:
                     print(f"  FAIL extract {name} (not an XML file)")
                     continue
-                safe = re.sub(r"[^A-Za-z0-9]+", "-", name.replace(".xml", "")).strip("-")
-                dest = os.path.join(out_dir, f"{site}-{safe}-xml.xml")
+                xml = payload
             else:
-                # Webpack chunk mode: name is the chunk name, h is the hash.
-                url = f"{cfg['base']}/static/js/async/{name}.{h}.js"
-                try:
-                    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
-                        js = r.read().decode("utf-8", errors="replace")
-                except Exception as exc:
-                    print(f"  FAIL download {name}: {exc}")
-                    continue
-                xml = extract_xml(js)
+                xml = extract_xml(payload)
                 if xml is None or "<xml" not in xml:
-                    print(f"  FAIL extract {name} ({len(js)} bytes)")
+                    print(f"  FAIL extract {name} ({len(payload)} bytes)")
                     continue
-                dest = os.path.join(out_dir, f"{site}-{name}.xml")
+            dest = os.path.join(out_dir, dest_name)
             with open(dest, "w", encoding="utf-8") as f:
                 f.write(xml)
             total += 1
-            print(f"  ok {os.path.basename(dest)} ({len(xml)} bytes)")
+            print(f"  ok {dest_name} ({len(xml)} bytes)")
     print(f"\nTotal saved: {total}")
 
 

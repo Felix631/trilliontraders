@@ -423,106 +423,118 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dollarprinter-scalper-UNDER_7_SCALPER-xml"
     },
     {
-        "id": "dtraderdbot-1_3_2_6",
-        "name": "1 3 2 6",
+        "id": "dtraderdbot-AI-BOT-1",
+        "name": "AI BOT 1",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-1_3_2_6-xml"
+        "file": "dtraderdbot/dtraderdbot-AI-BOT-1-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_dalembert_on_stat_reset",
-        "name": "accumulators dalembert on stat reset",
+        "id": "dtraderdbot-Alpha-Version-2025-1",
+        "name": "Alpha Version 2025 1",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_dalembert_on_stat_reset-xml"
+        "file": "dtraderdbot/dtraderdbot-Alpha-Version-2025-1-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_dalembert",
-        "name": "accumulators dalembert",
+        "id": "dtraderdbot-AUTO-C4-PRO-1",
+        "name": "AUTO C4 PRO 1",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_dalembert-xml"
+        "file": "dtraderdbot/dtraderdbot-AUTO-C4-PRO-1-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_martingale_on_stat_reset",
-        "name": "accumulators martingale on stat reset",
+        "id": "dtraderdbot-Best-bot-for-Digits",
+        "name": "Best bot for Digits",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_martingale_on_stat_reset-xml"
+        "file": "dtraderdbot/dtraderdbot-Best-bot-for-Digits-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_martingale",
-        "name": "accumulators martingale",
+        "id": "dtraderdbot-BEST-FOR-DIFFERS-MARKET",
+        "name": "BEST FOR DIFFERS MARKET",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_martingale-xml"
+        "file": "dtraderdbot/dtraderdbot-BEST-FOR-DIFFERS-MARKET-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_reverse_dalembert_on_stat_reset",
-        "name": "accumulators reverse dalembert on stat reset",
+        "id": "dtraderdbot-BEST-FOR-OVER-5",
+        "name": "BEST FOR OVER 5",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_dalembert_on_stat_reset-xml"
+        "file": "dtraderdbot/dtraderdbot-BEST-FOR-OVER-5-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_reverse_dalembert",
-        "name": "accumulators reverse dalembert",
+        "id": "dtraderdbot-Db-best-bot",
+        "name": "Db best bot",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_dalembert-xml"
+        "file": "dtraderdbot/dtraderdbot-Db-best-bot-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_reverse_martingale_on_stat_reset",
-        "name": "accumulators reverse martingale on stat reset",
+        "id": "dtraderdbot-DollarprinterbotOrignal",
+        "name": "DollarprinterbotOrignal",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_martingale_on_stat_reset-xml"
+        "file": "dtraderdbot/dtraderdbot-DollarprinterbotOrignal-xml"
     },
     {
-        "id": "dtraderdbot-accumulators_reverse_martingale",
-        "name": "accumulators reverse martingale",
+        "id": "dtraderdbot-ErickBenson-speedbot",
+        "name": "ErickBenson speedbot",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-accumulators_reverse_martingale-xml"
+        "file": "dtraderdbot/dtraderdbot-ErickBenson-speedbot-xml"
     },
     {
-        "id": "dtraderdbot-dalembert_max-stake",
-        "name": "dalembert max stake",
+        "id": "dtraderdbot-EVEN-ODD-SPEEDBOT",
+        "name": "EVEN ODD SPEEDBOT",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-dalembert_max-stake-xml"
+        "file": "dtraderdbot/dtraderdbot-EVEN-ODD-SPEEDBOT-xml"
     },
     {
-        "id": "dtraderdbot-dalembert",
-        "name": "dalembert",
+        "id": "dtraderdbot-EXPERTS-E-O-bot-1",
+        "name": "EXPERTS E O bot 1",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-dalembert-xml"
+        "file": "dtraderdbot/dtraderdbot-EXPERTS-E-O-bot-1-xml"
     },
     {
-        "id": "dtraderdbot-martingale_max-stake",
-        "name": "martingale max stake",
+        "id": "dtraderdbot-EXPERTS-E-O-bot",
+        "name": "EXPERTS E O bot",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-martingale_max-stake-xml"
+        "file": "dtraderdbot/dtraderdbot-EXPERTS-E-O-bot-xml"
     },
     {
-        "id": "dtraderdbot-martingale",
-        "name": "martingale",
+        "id": "dtraderdbot-OVER-UNDER-BOT-1",
+        "name": "OVER UNDER BOT 1",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-martingale-xml"
+        "file": "dtraderdbot/dtraderdbot-OVER-UNDER-BOT-1-xml"
     },
     {
-        "id": "dtraderdbot-oscars_grind_max-stake",
-        "name": "oscars grind max stake",
+        "id": "dtraderdbot-OVER-UNDER-BOT",
+        "name": "OVER UNDER BOT",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-oscars_grind_max-stake-xml"
+        "file": "dtraderdbot/dtraderdbot-OVER-UNDER-BOT-xml"
     },
     {
-        "id": "dtraderdbot-oscars_grind",
-        "name": "oscars grind",
+        "id": "dtraderdbot-Over-under-signal",
+        "name": "Over under signal",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-oscars_grind-xml"
+        "file": "dtraderdbot/dtraderdbot-Over-under-signal-xml"
     },
     {
-        "id": "dtraderdbot-reverse_dalembert",
-        "name": "reverse dalembert",
+        "id": "dtraderdbot-Rise-and-fall-bor",
+        "name": "Rise and fall bor",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-reverse_dalembert-xml"
+        "file": "dtraderdbot/dtraderdbot-Rise-and-fall-bor-xml"
     },
     {
-        "id": "dtraderdbot-reverse_martingale",
-        "name": "reverse martingale",
+        "id": "dtraderdbot-SPEEDBOT-VERSION-2",
+        "name": "SPEEDBOT VERSION 2",
         "creator": "dtraderdbot",
-        "file": "dtraderdbot/dtraderdbot-reverse_martingale-xml"
+        "file": "dtraderdbot/dtraderdbot-SPEEDBOT-VERSION-2-xml"
+    },
+    {
+        "id": "dtraderdbot-VVA-5-with-entry",
+        "name": "VVA 5 with entry",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-VVA-5-with-entry-xml"
+    },
+    {
+        "id": "dtraderdbot-WALL-PERFECT-ENTRY-BOT",
+        "name": "WALL PERFECT ENTRY BOT",
+        "creator": "dtraderdbot",
+        "file": "dtraderdbot/dtraderdbot-WALL-PERFECT-ENTRY-BOT-xml"
     },
     {
         "id": "exwager-2025-MONEY8GG-SPEED-BOT",
@@ -2014,13 +2026,13 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 19
     },
     {
-        "id": "Official",
-        "label": "Official",
-        "count": 17
-    },
-    {
         "id": "dtraderdbot",
         "label": "dtraderdbot",
+        "count": 19
+    },
+    {
+        "id": "Official",
+        "label": "Official",
         "count": 17
     },
     {

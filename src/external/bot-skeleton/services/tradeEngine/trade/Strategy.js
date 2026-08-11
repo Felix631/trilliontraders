@@ -137,6 +137,36 @@ export default Engine =>
             this._conceptCooldownRemaining = 0;
             this._conceptLockRemaining = 0;
             this._conceptLockThreshold = null;
+            this._nextContractType = null;
+        }
+
+        /* ------------------------------------------------------------------
+         * Apollo blocks (symbol changer / contract changer / apollo purchase)
+         * ---------------------------------------------------------------- */
+        async setActiveSymbol(symbol) {
+            if (!symbol || symbol === 'disable' || symbol === 'none') {
+                return;
+            }
+            await this.setMarket(symbol);
+        }
+
+        async setContractType(contractType) {
+            this._nextContractType = contractType || null;
+        }
+
+        async apolloPurchase(contractType, multipleContracts = false, quantity = 1) {
+            if (this._nextContractType) {
+                contractType = this._nextContractType;
+            }
+            if (this._contractSequenceActive && this.tradeOptions?.contract_type) {
+                contractType = this.tradeOptions.contract_type;
+            } else if (this._conceptBlockActive && this.tradeOptions?.contract_type) {
+                contractType = this.tradeOptions.contract_type;
+            }
+            const count = multipleContracts && Number(quantity) > 1 ? Math.min(Number(quantity), 50) : 1;
+            for (let i = 0; i < count; i += 1) {
+                await this.purchase(contractType);
+            }
         }
 
         async getDigitsForStrategy(n) {

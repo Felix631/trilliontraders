@@ -16,10 +16,17 @@ export default Engine =>
                 return Promise.resolve();
             }
 
-            // Strategy blocks (Concept Block / Contract Sequence) may override
-            // the contract type chosen by the purchase block and may block the
-            // purchase entirely until their conditions are met.
-            if (this._contractSequenceActive && this.tradeOptions?.contract_type) {
+            // Strategy blocks (Concept Block / Contract Sequence) and the
+            // Apollo contract changer may override the contract type chosen by
+            // the purchase block and may block the purchase entirely until
+            // their conditions are met.
+            if (this._nextContractType) {
+                contract_type = this._nextContractType;
+                if ((contract_type === 'DIGITEVEN' || contract_type === 'DIGITODD') && this.tradeOptions) {
+                    delete this.tradeOptions.prediction;
+                    delete this.tradeOptions.barrier;
+                }
+            } else if (this._contractSequenceActive && this.tradeOptions?.contract_type) {
                 contract_type = this.tradeOptions.contract_type;
             } else if (this._conceptBlockActive && this.tradeOptions?.contract_type) {
                 contract_type = this.tradeOptions.contract_type;
