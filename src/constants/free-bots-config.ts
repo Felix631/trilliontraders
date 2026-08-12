@@ -75,6 +75,114 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "ai-scanner-AI-SIGNAL-SCANNER-xml"
     },
     {
+        "id": "binaryentry-DIGITS-1-3-2-6-Multiplier-Bot",
+        "name": "DIGITS 1 3 2 6 Multiplier Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-DIGITS-1-3-2-6-Multiplier-Bot-xml"
+    },
+    {
+        "id": "binaryentry-DIGITS-Martingale-Adjustment-Bot",
+        "name": "DIGITS Martingale Adjustment Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-DIGITS-Martingale-Adjustment-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Even-Odd-Beginner-Bot",
+        "name": "Even Odd Beginner Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Even-Odd-Beginner-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Even-Odd-Intermediate-Bot",
+        "name": "Even Odd Intermediate Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Even-Odd-Intermediate-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Even-Odd-Pro-Bot",
+        "name": "Even Odd Pro Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Even-Odd-Pro-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Matches-Differs-Beginner-Bot",
+        "name": "Matches Differs Beginner Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Matches-Differs-Beginner-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Matches-Differs-Intermediate-Bot",
+        "name": "Matches Differs Intermediate Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Matches-Differs-Intermediate-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Matches-Differs-Pro-Bot",
+        "name": "Matches Differs Pro Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Matches-Differs-Pro-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Oscar-s-Grind-Bot",
+        "name": "Oscar s Grind Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Oscar-s-Grind-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Over-Under-Beginner-Bot",
+        "name": "Over Under Beginner Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Over-Under-Beginner-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Over-Under-Intermediate-Bot",
+        "name": "Over Under Intermediate Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Over-Under-Intermediate-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Over-Under-Pro-Bot",
+        "name": "Over Under Pro Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Over-Under-Pro-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Rise-Fall-Beginner-Bot",
+        "name": "Rise Fall Beginner Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Rise-Fall-Beginner-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Rise-Fall-Intermediate-Bot",
+        "name": "Rise Fall Intermediate Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Rise-Fall-Intermediate-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Rise-Fall-Pro-Bot",
+        "name": "Rise Fall Pro Bot",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Rise-Fall-Pro-Bot-xml"
+    },
+    {
+        "id": "binaryentry-Switch-Bot-Beginner",
+        "name": "Switch Bot Beginner",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Switch-Bot-Beginner-xml"
+    },
+    {
+        "id": "binaryentry-Switch-Bot-Intermediate",
+        "name": "Switch Bot Intermediate",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Switch-Bot-Intermediate-xml"
+    },
+    {
+        "id": "binaryentry-Switch-Bot-Pro",
+        "name": "Switch Bot Pro",
+        "creator": "binaryentry",
+        "file": "binaryentry/binaryentry-Switch-Bot-Pro-xml"
+    },
+    {
         "id": "dalembert_max-stake",
         "name": "dalembert max stake",
         "creator": "Official",
@@ -2034,6 +2142,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "dtraderdbot",
         "label": "dtraderdbot",
         "count": 19
+    },
+    {
+        "id": "binaryentry",
+        "label": "binaryentry",
+        "count": 18
     },
     {
         "id": "Official",
