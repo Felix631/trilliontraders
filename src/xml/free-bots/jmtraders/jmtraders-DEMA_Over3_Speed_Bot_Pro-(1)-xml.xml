@@ -1,0 +1,1405 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <!--
+    ===================================================================
+    BOT NAME : DEMA Over 3 Speed Bot Pro (with Over 5 Recovery)
+    AUTHOR   : Ronald — Deriv OU Bot Project
+    VERSION  : 3.0 — Combined & Improved
+    ===================================================================
+    STRATEGY OVERVIEW:
+      PRIMARY MODE (Over 3):
+        - Read completed 5-min candle closes (indexes 2, 3, 4)
+        - Compute 3-period DEMA approximation from candle data
+        - Extract last digit of DEMA (previous and current)
+        - When BOTH DEMA digits > 3, buy DIGITOVER 3
+        - Probability edge: ~60% base win rate on Over 3
+
+      RECOVERY MODE (Over 5 — activated after a loss):
+        - Switches prediction to 5 (digits 6-9 win = 40% payout
+          but combined with DEMA filter requiring BOTH digits > 5,
+          the conditional probability is much higher)
+        - Uses 2.5x martingale stake multiplier
+        - Max 4 recovery steps before resetting
+        - Resets to primary mode after a recovery win
+
+      SPEED:
+        - Bot processes every tick for fastest signal detection
+        - Candle duplicate guard prevents same-candle re-entry
+        - Trades fire instantly when conditions align
+
+    RISK MANAGEMENT:
+        - Session Take Profit: $10
+        - Session Stop Loss: $20
+        - Max martingale steps: 4
+        - Stake resets on win or max steps reached
+    ===================================================================
+    EDITABLE PARAMETERS:
+        SYMBOL_LIST       1HZ100V (Volatility 100 1s)
+        CANDLEINTERVAL    300 (5-minute candles)
+        Initial Stake     0.35 USD
+        Take Profit       10 USD
+        Stop Loss         20 USD
+        Price Scale       10000 (for digit extraction)
+        Martingale Mult   2.5
+        Max Mart Steps    4
+    ===================================================================
+  -->
+  <variables>
+    <variable id="v_stake">Stake</variable>
+    <variable id="v_initial_stake">Initial_Stake</variable>
+    <variable id="v_take_profit">Take_Profit</variable>
+    <variable id="v_stop_loss">Stop_Loss</variable>
+    <variable id="v_price_scale">Price_Scale</variable>
+    <variable id="v_prediction">Prediction</variable>
+    <variable id="v_martingale_mult">Martingale_Mult</variable>
+    <variable id="v_max_mart_steps">Max_Mart_Steps</variable>
+    <variable id="v_mart_step">Mart_Step</variable>
+    <variable id="v_is_recovery">Is_Recovery</variable>
+    <variable id="v_close_1">Close_1</variable>
+    <variable id="v_close_2">Close_2</variable>
+    <variable id="v_close_3">Close_3</variable>
+    <variable id="v_ema_prev">EMA_Prev</variable>
+    <variable id="v_ema_now">EMA_Now</variable>
+    <variable id="v_ema_ema_prev">EMA_EMA_Prev</variable>
+    <variable id="v_ema_ema_now">EMA_EMA_Now</variable>
+    <variable id="v_dema_prev">DEMA_Prev</variable>
+    <variable id="v_dema_now">DEMA_Now</variable>
+    <variable id="v_dema_prev_units">DEMA_Prev_Units</variable>
+    <variable id="v_dema_now_units">DEMA_Now_Units</variable>
+    <variable id="v_dema_prev_digit">DEMA_Prev_Digit</variable>
+    <variable id="v_dema_now_digit">DEMA_Now_Digit</variable>
+    <variable id="v_last_candle_key">Last_Candle_Key</variable>
+    <variable id="v_current_candle_key">Current_Candle_Key</variable>
+    <variable id="v_consecutive_losses">Consecutive_Losses</variable>
+  </variables>
+
+  <!-- ============= TRADE DEFINITION ============= -->
+  <block type="trade_definition" id="trade_def_root" deletable="false" x="0" y="0">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="td_market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ100V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="td_tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="td_contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="td_candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">300</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="td_restart" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="td_error" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <!-- ============= INITIALIZATION ============= -->
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="init_stake_base">
+        <field name="VAR" id="v_initial_stake">Initial_Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="n_init_stake">
+            <field name="NUM">0.35</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="init_stake">
+            <field name="VAR" id="v_stake">Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="n_stake_start">
+                <field name="NUM">0.35</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="init_tp">
+                <field name="VAR" id="v_take_profit">Take_Profit</field>
+                <value name="VALUE">
+                  <block type="math_number" id="n_tp">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="init_sl">
+                    <field name="VAR" id="v_stop_loss">Stop_Loss</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="n_sl">
+                        <field name="NUM">20</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="init_scale">
+                        <field name="VAR" id="v_price_scale">Price_Scale</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="n_scale">
+                            <field name="NUM">10000</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="init_pred">
+                            <field name="VAR" id="v_prediction">Prediction</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="n_pred">
+                                <field name="NUM">3</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="init_mart_mult">
+                                <field name="VAR" id="v_martingale_mult">Martingale_Mult</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="n_mart_mult">
+                                    <field name="NUM">2.5</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="init_max_mart">
+                                    <field name="VAR" id="v_max_mart_steps">Max_Mart_Steps</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="n_max_mart">
+                                        <field name="NUM">4</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="variables_set" id="init_mart_step">
+                                        <field name="VAR" id="v_mart_step">Mart_Step</field>
+                                        <value name="VALUE">
+                                          <block type="math_number" id="n_mart_step">
+                                            <field name="NUM">0</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" id="init_recovery">
+                                            <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                                            <value name="VALUE">
+                                              <block type="logic_boolean" id="b_recovery_false">
+                                                <field name="BOOL">FALSE</field>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="variables_set" id="init_last_key">
+                                                <field name="VAR" id="v_last_candle_key">Last_Candle_Key</field>
+                                                <value name="VALUE">
+                                                  <block type="math_number" id="n_last_key">
+                                                    <field name="NUM">0</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="variables_set" id="init_curr_key">
+                                                    <field name="VAR" id="v_current_candle_key">Current_Candle_Key</field>
+                                                    <value name="VALUE">
+                                                      <block type="math_number" id="n_curr_key">
+                                                        <field name="NUM">0</field>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="variables_set" id="init_consec">
+                                                        <field name="VAR" id="v_consecutive_losses">Consecutive_Losses</field>
+                                                        <value name="VALUE">
+                                                          <block type="math_number" id="n_consec">
+                                                            <field name="NUM">0</field>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="variables_set" id="init_c1">
+                                                            <field name="VAR" id="v_close_1">Close_1</field>
+                                                            <value name="VALUE">
+                                                              <block type="math_number" id="n_c1">
+                                                                <field name="NUM">0</field>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="variables_set" id="init_c2">
+                                                                <field name="VAR" id="v_close_2">Close_2</field>
+                                                                <value name="VALUE">
+                                                                  <block type="math_number" id="n_c2">
+                                                                    <field name="NUM">0</field>
+                                                                  </block>
+                                                                </value>
+                                                                <next>
+                                                                  <block type="variables_set" id="init_c3">
+                                                                    <field name="VAR" id="v_close_3">Close_3</field>
+                                                                    <value name="VALUE">
+                                                                      <block type="math_number" id="n_c3">
+                                                                        <field name="NUM">0</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <next>
+                                                                      <block type="variables_set" id="init_ep">
+                                                                        <field name="VAR" id="v_ema_prev">EMA_Prev</field>
+                                                                        <value name="VALUE">
+                                                                          <block type="math_number" id="n_ep">
+                                                                            <field name="NUM">0</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <next>
+                                                                          <block type="variables_set" id="init_en">
+                                                                            <field name="VAR" id="v_ema_now">EMA_Now</field>
+                                                                            <value name="VALUE">
+                                                                              <block type="math_number" id="n_en">
+                                                                                <field name="NUM">0</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <next>
+                                                                              <block type="variables_set" id="init_eep">
+                                                                                <field name="VAR" id="v_ema_ema_prev">EMA_EMA_Prev</field>
+                                                                                <value name="VALUE">
+                                                                                  <block type="math_number" id="n_eep">
+                                                                                    <field name="NUM">0</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <next>
+                                                                                  <block type="variables_set" id="init_een">
+                                                                                    <field name="VAR" id="v_ema_ema_now">EMA_EMA_Now</field>
+                                                                                    <value name="VALUE">
+                                                                                      <block type="math_number" id="n_een">
+                                                                                        <field name="NUM">0</field>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <next>
+                                                                                      <block type="variables_set" id="init_dp">
+                                                                                        <field name="VAR" id="v_dema_prev">DEMA_Prev</field>
+                                                                                        <value name="VALUE">
+                                                                                          <block type="math_number" id="n_dp">
+                                                                                            <field name="NUM">0</field>
+                                                                                          </block>
+                                                                                        </value>
+                                                                                        <next>
+                                                                                          <block type="variables_set" id="init_dn">
+                                                                                            <field name="VAR" id="v_dema_now">DEMA_Now</field>
+                                                                                            <value name="VALUE">
+                                                                                              <block type="math_number" id="n_dn">
+                                                                                                <field name="NUM">0</field>
+                                                                                              </block>
+                                                                                            </value>
+                                                                                            <next>
+                                                                                              <block type="variables_set" id="init_dpu">
+                                                                                                <field name="VAR" id="v_dema_prev_units">DEMA_Prev_Units</field>
+                                                                                                <value name="VALUE">
+                                                                                                  <block type="math_number" id="n_dpu">
+                                                                                                    <field name="NUM">0</field>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                                <next>
+                                                                                                  <block type="variables_set" id="init_dnu">
+                                                                                                    <field name="VAR" id="v_dema_now_units">DEMA_Now_Units</field>
+                                                                                                    <value name="VALUE">
+                                                                                                      <block type="math_number" id="n_dnu">
+                                                                                                        <field name="NUM">0</field>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <next>
+                                                                                                      <block type="variables_set" id="init_dpd">
+                                                                                                        <field name="VAR" id="v_dema_prev_digit">DEMA_Prev_Digit</field>
+                                                                                                        <value name="VALUE">
+                                                                                                          <block type="math_number" id="n_dpd">
+                                                                                                            <field name="NUM">0</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                        <next>
+                                                                                                          <block type="variables_set" id="init_dnd">
+                                                                                                            <field name="VAR" id="v_dema_now_digit">DEMA_Now_Digit</field>
+                                                                                                            <value name="VALUE">
+                                                                                                              <block type="math_number" id="n_dnd">
+                                                                                                                <field name="NUM">0</field>
+                                                                                                              </block>
+                                                                                                            </value>
+                                                                                                          </block>
+                                                                                                        </next>
+                                                                                                      </block>
+                                                                                                    </next>
+                                                                                                  </block>
+                                                                                                </next>
+                                                                                              </block>
+                                                                                            </next>
+                                                                                          </block>
+                                                                                        </next>
+                                                                                      </block>
+                                                                                    </next>
+                                                                                  </block>
+                                                                                </next>
+                                                                              </block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <!-- ============= TRADE OPTIONS (SUBMARKET) ============= -->
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="td_opts">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="dur_shadow">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="math_number" id="dur_val">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="amt_shadow">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="amt_get">
+            <field name="VAR" id="v_stake">Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="pred_shadow">
+            <field name="NUM">3</field>
+          </shadow>
+          <block type="variables_get" id="pred_get">
+            <field name="VAR" id="v_prediction">Prediction</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+
+  <!-- =============================================================
+       BEFORE PURCHASE — Runs every tick for speed.
+       Reads completed 5-min candles, computes DEMA, extracts digits,
+       and fires trade when conditions are met.
+       ============================================================= -->
+  <block type="before_purchase" id="bp_root" deletable="false" x="0" y="900">
+    <statement name="BEFOREPURCHASE_STACK">
+      <!-- Step 1: Read 3 completed 5-min candle closes -->
+      <block type="variables_set" id="bp_read_c1">
+        <field name="VAR" id="v_close_1">Close_1</field>
+        <value name="VALUE">
+          <block type="read_ohlc" id="bp_ohlc_1">
+            <field name="OHLCFIELD_LIST">close</field>
+            <field name="CANDLEINTERVAL_LIST">300</field>
+            <value name="CANDLEINDEX">
+              <block type="math_number" id="bp_idx_2">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="bp_read_c2">
+            <field name="VAR" id="v_close_2">Close_2</field>
+            <value name="VALUE">
+              <block type="read_ohlc" id="bp_ohlc_2">
+                <field name="OHLCFIELD_LIST">close</field>
+                <field name="CANDLEINTERVAL_LIST">300</field>
+                <value name="CANDLEINDEX">
+                  <block type="math_number" id="bp_idx_3">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="bp_read_c3">
+                <field name="VAR" id="v_close_3">Close_3</field>
+                <value name="VALUE">
+                  <block type="read_ohlc" id="bp_ohlc_3">
+                    <field name="OHLCFIELD_LIST">close</field>
+                    <field name="CANDLEINTERVAL_LIST">300</field>
+                    <value name="CANDLEINDEX">
+                      <block type="math_number" id="bp_idx_4">
+                        <field name="NUM">4</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <!-- Step 2: Compute EMA (simple 2-period average approximation) -->
+                  <!-- ema_prev = (close_3 + close_2) / 2 -->
+                  <block type="variables_set" id="bp_calc_ep">
+                    <field name="VAR" id="v_ema_prev">EMA_Prev</field>
+                    <value name="VALUE">
+                      <block type="math_arithmetic" id="bp_ep_div">
+                        <field name="OP">DIVIDE</field>
+                        <value name="A">
+                          <block type="math_arithmetic" id="bp_ep_add">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                              <block type="variables_get" id="bp_ep_c3">
+                                <field name="VAR" id="v_close_3">Close_3</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="variables_get" id="bp_ep_c2">
+                                <field name="VAR" id="v_close_2">Close_2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="bp_ep_two">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <!-- ema_now = (ema_prev + close_1) / 2 -->
+                      <block type="variables_set" id="bp_calc_en">
+                        <field name="VAR" id="v_ema_now">EMA_Now</field>
+                        <value name="VALUE">
+                          <block type="math_arithmetic" id="bp_en_div">
+                            <field name="OP">DIVIDE</field>
+                            <value name="A">
+                              <block type="math_arithmetic" id="bp_en_add">
+                                <field name="OP">ADD</field>
+                                <value name="A">
+                                  <block type="variables_get" id="bp_en_ep">
+                                    <field name="VAR" id="v_ema_prev">EMA_Prev</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="variables_get" id="bp_en_c1">
+                                    <field name="VAR" id="v_close_1">Close_1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="bp_en_two">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <next>
+                          <!-- Step 3: Compute EMA of EMA -->
+                          <!-- ema_ema_prev = (close_3 + ema_prev) / 2 -->
+                          <block type="variables_set" id="bp_calc_eep">
+                            <field name="VAR" id="v_ema_ema_prev">EMA_EMA_Prev</field>
+                            <value name="VALUE">
+                              <block type="math_arithmetic" id="bp_eep_div">
+                                <field name="OP">DIVIDE</field>
+                                <value name="A">
+                                  <block type="math_arithmetic" id="bp_eep_add">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="bp_eep_c3">
+                                        <field name="VAR" id="v_close_3">Close_3</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="variables_get" id="bp_eep_ep">
+                                        <field name="VAR" id="v_ema_prev">EMA_Prev</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number" id="bp_eep_two">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <!-- ema_ema_now = (ema_ema_prev + ema_now) / 2 -->
+                              <block type="variables_set" id="bp_calc_een">
+                                <field name="VAR" id="v_ema_ema_now">EMA_EMA_Now</field>
+                                <value name="VALUE">
+                                  <block type="math_arithmetic" id="bp_een_div">
+                                    <field name="OP">DIVIDE</field>
+                                    <value name="A">
+                                      <block type="math_arithmetic" id="bp_een_add">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="bp_een_eep">
+                                            <field name="VAR" id="v_ema_ema_prev">EMA_EMA_Prev</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="variables_get" id="bp_een_en">
+                                            <field name="VAR" id="v_ema_now">EMA_Now</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="math_number" id="bp_een_two">
+                                        <field name="NUM">2</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <!-- Step 4: DEMA = 2*EMA - EMA_of_EMA -->
+                                  <!-- dema_prev = 2 * ema_prev - ema_ema_prev -->
+                                  <block type="variables_set" id="bp_calc_dp">
+                                    <field name="VAR" id="v_dema_prev">DEMA_Prev</field>
+                                    <value name="VALUE">
+                                      <block type="math_arithmetic" id="bp_dp_sub">
+                                        <field name="OP">MINUS</field>
+                                        <value name="A">
+                                          <block type="math_arithmetic" id="bp_dp_mul">
+                                            <field name="OP">MULTIPLY</field>
+                                            <value name="A">
+                                              <block type="math_number" id="bp_dp_2">
+                                                <field name="NUM">2</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="variables_get" id="bp_dp_ep">
+                                                <field name="VAR" id="v_ema_prev">EMA_Prev</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="variables_get" id="bp_dp_eep">
+                                            <field name="VAR" id="v_ema_ema_prev">EMA_EMA_Prev</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <!-- dema_now = 2 * ema_now - ema_ema_now -->
+                                      <block type="variables_set" id="bp_calc_dn">
+                                        <field name="VAR" id="v_dema_now">DEMA_Now</field>
+                                        <value name="VALUE">
+                                          <block type="math_arithmetic" id="bp_dn_sub">
+                                            <field name="OP">MINUS</field>
+                                            <value name="A">
+                                              <block type="math_arithmetic" id="bp_dn_mul">
+                                                <field name="OP">MULTIPLY</field>
+                                                <value name="A">
+                                                  <block type="math_number" id="bp_dn_2">
+                                                    <field name="NUM">2</field>
+                                                  </block>
+                                                </value>
+                                                <value name="B">
+                                                  <block type="variables_get" id="bp_dn_en">
+                                                    <field name="VAR" id="v_ema_now">EMA_Now</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="variables_get" id="bp_dn_een">
+                                                <field name="VAR" id="v_ema_ema_now">EMA_EMA_Now</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <!-- Step 5: Scale DEMA to integer units and extract last digit -->
+                                          <!-- dema_prev_units = round(dema_prev * price_scale) -->
+                                          <block type="variables_set" id="bp_calc_dpu">
+                                            <field name="VAR" id="v_dema_prev_units">DEMA_Prev_Units</field>
+                                            <value name="VALUE">
+                                              <block type="math_round" id="bp_dpu_round">
+                                                <field name="OP">ROUND</field>
+                                                <value name="NUM">
+                                                  <shadow type="math_number" id="bp_dpu_sh">
+                                                    <field name="NUM">0</field>
+                                                  </shadow>
+                                                  <block type="math_arithmetic" id="bp_dpu_mul">
+                                                    <field name="OP">MULTIPLY</field>
+                                                    <value name="A">
+                                                      <block type="variables_get" id="bp_dpu_dp">
+                                                        <field name="VAR" id="v_dema_prev">DEMA_Prev</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="B">
+                                                      <block type="variables_get" id="bp_dpu_sc">
+                                                        <field name="VAR" id="v_price_scale">Price_Scale</field>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <!-- dema_now_units = round(dema_now * price_scale) -->
+                                              <block type="variables_set" id="bp_calc_dnu">
+                                                <field name="VAR" id="v_dema_now_units">DEMA_Now_Units</field>
+                                                <value name="VALUE">
+                                                  <block type="math_round" id="bp_dnu_round">
+                                                    <field name="OP">ROUND</field>
+                                                    <value name="NUM">
+                                                      <shadow type="math_number" id="bp_dnu_sh">
+                                                        <field name="NUM">0</field>
+                                                      </shadow>
+                                                      <block type="math_arithmetic" id="bp_dnu_mul">
+                                                        <field name="OP">MULTIPLY</field>
+                                                        <value name="A">
+                                                          <block type="variables_get" id="bp_dnu_dn">
+                                                            <field name="VAR" id="v_dema_now">DEMA_Now</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="B">
+                                                          <block type="variables_get" id="bp_dnu_sc">
+                                                            <field name="VAR" id="v_price_scale">Price_Scale</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <!-- dema_prev_digit = dema_prev_units - floor(dema_prev_units/10)*10 -->
+                                                  <block type="variables_set" id="bp_calc_dpd">
+                                                    <field name="VAR" id="v_dema_prev_digit">DEMA_Prev_Digit</field>
+                                                    <value name="VALUE">
+                                                      <block type="math_arithmetic" id="bp_dpd_sub">
+                                                        <field name="OP">MINUS</field>
+                                                        <value name="A">
+                                                          <block type="variables_get" id="bp_dpd_u">
+                                                            <field name="VAR" id="v_dema_prev_units">DEMA_Prev_Units</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="B">
+                                                          <block type="math_arithmetic" id="bp_dpd_mul10">
+                                                            <field name="OP">MULTIPLY</field>
+                                                            <value name="A">
+                                                              <block type="math_round" id="bp_dpd_floor">
+                                                                <field name="OP">ROUNDDOWN</field>
+                                                                <value name="NUM">
+                                                                  <shadow type="math_number" id="bp_dpd_fl_sh">
+                                                                    <field name="NUM">0</field>
+                                                                  </shadow>
+                                                                  <block type="math_arithmetic" id="bp_dpd_div10">
+                                                                    <field name="OP">DIVIDE</field>
+                                                                    <value name="A">
+                                                                      <block type="variables_get" id="bp_dpd_u2">
+                                                                        <field name="VAR" id="v_dema_prev_units">DEMA_Prev_Units</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="B">
+                                                                      <block type="math_number" id="bp_dpd_10a">
+                                                                        <field name="NUM">10</field>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                            <value name="B">
+                                                              <block type="math_number" id="bp_dpd_10b">
+                                                                <field name="NUM">10</field>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <!-- dema_now_digit = dema_now_units - floor(dema_now_units/10)*10 -->
+                                                      <block type="variables_set" id="bp_calc_dnd">
+                                                        <field name="VAR" id="v_dema_now_digit">DEMA_Now_Digit</field>
+                                                        <value name="VALUE">
+                                                          <block type="math_arithmetic" id="bp_dnd_sub">
+                                                            <field name="OP">MINUS</field>
+                                                            <value name="A">
+                                                              <block type="variables_get" id="bp_dnd_u">
+                                                                <field name="VAR" id="v_dema_now_units">DEMA_Now_Units</field>
+                                                              </block>
+                                                            </value>
+                                                            <value name="B">
+                                                              <block type="math_arithmetic" id="bp_dnd_mul10">
+                                                                <field name="OP">MULTIPLY</field>
+                                                                <value name="A">
+                                                                  <block type="math_round" id="bp_dnd_floor">
+                                                                    <field name="OP">ROUNDDOWN</field>
+                                                                    <value name="NUM">
+                                                                      <shadow type="math_number" id="bp_dnd_fl_sh">
+                                                                        <field name="NUM">0</field>
+                                                                      </shadow>
+                                                                      <block type="math_arithmetic" id="bp_dnd_div10">
+                                                                        <field name="OP">DIVIDE</field>
+                                                                        <value name="A">
+                                                                          <block type="variables_get" id="bp_dnd_u2">
+                                                                            <field name="VAR" id="v_dema_now_units">DEMA_Now_Units</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="math_number" id="bp_dnd_10a">
+                                                                            <field name="NUM">10</field>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="B">
+                                                                  <block type="math_number" id="bp_dnd_10b">
+                                                                    <field name="NUM">10</field>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <!-- Step 6: Candle duplicate guard -->
+                                                          <block type="variables_set" id="bp_set_ckey">
+                                                            <field name="VAR" id="v_current_candle_key">Current_Candle_Key</field>
+                                                            <value name="VALUE">
+                                                              <block type="math_round" id="bp_ckey_round">
+                                                                <field name="OP">ROUND</field>
+                                                                <value name="NUM">
+                                                                  <shadow type="math_number" id="bp_ckey_sh">
+                                                                    <field name="NUM">0</field>
+                                                                  </shadow>
+                                                                  <block type="math_arithmetic" id="bp_ckey_mul">
+                                                                    <field name="OP">MULTIPLY</field>
+                                                                    <value name="A">
+                                                                      <block type="variables_get" id="bp_ckey_c1">
+                                                                        <field name="VAR" id="v_close_1">Close_1</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="B">
+                                                                      <block type="variables_get" id="bp_ckey_sc">
+                                                                        <field name="VAR" id="v_price_scale">Price_Scale</field>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <!-- Step 7: ENTRY LOGIC
+                                                                   PRIMARY MODE: Both DEMA digits > 3 AND new candle
+                                                                   RECOVERY MODE: Both DEMA digits > 5 AND new candle (higher confidence)
+                                                              -->
+                                                              <block type="controls_if" id="bp_entry_gate">
+                                                                <value name="IF0">
+                                                                  <block type="logic_operation" id="bp_gate_and_main">
+                                                                    <field name="OP">AND</field>
+                                                                    <value name="A">
+                                                                      <!-- Data validity: all closes > 0 -->
+                                                                      <block type="logic_operation" id="bp_valid_and">
+                                                                        <field name="OP">AND</field>
+                                                                        <value name="A">
+                                                                          <block type="logic_operation" id="bp_valid_and2">
+                                                                            <field name="OP">AND</field>
+                                                                            <value name="A">
+                                                                              <block type="logic_compare" id="bp_v_c1">
+                                                                                <field name="OP">GT</field>
+                                                                                <value name="A">
+                                                                                  <block type="variables_get" id="bp_vc1g">
+                                                                                    <field name="VAR" id="v_close_1">Close_1</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <value name="B">
+                                                                                  <block type="math_number" id="bp_vc1z">
+                                                                                    <field name="NUM">0</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="B">
+                                                                              <block type="logic_compare" id="bp_v_c2">
+                                                                                <field name="OP">GT</field>
+                                                                                <value name="A">
+                                                                                  <block type="variables_get" id="bp_vc2g">
+                                                                                    <field name="VAR" id="v_close_2">Close_2</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <value name="B">
+                                                                                  <block type="math_number" id="bp_vc2z">
+                                                                                    <field name="NUM">0</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="logic_compare" id="bp_v_c3">
+                                                                            <field name="OP">GT</field>
+                                                                            <value name="A">
+                                                                              <block type="variables_get" id="bp_vc3g">
+                                                                                <field name="VAR" id="v_close_3">Close_3</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="B">
+                                                                              <block type="math_number" id="bp_vc3z">
+                                                                                <field name="NUM">0</field>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="B">
+                                                                      <!-- New candle guard -->
+                                                                      <block type="logic_compare" id="bp_new_candle">
+                                                                        <field name="OP">NEQ</field>
+                                                                        <value name="A">
+                                                                          <block type="variables_get" id="bp_nc_curr">
+                                                                            <field name="VAR" id="v_current_candle_key">Current_Candle_Key</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="variables_get" id="bp_nc_last">
+                                                                            <field name="VAR" id="v_last_candle_key">Last_Candle_Key</field>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                                <statement name="DO0">
+                                                                  <!-- Decide mode: recovery requires digits > 5, primary requires > 3 -->
+                                                                  <block type="controls_if" id="bp_mode_check">
+                                                                    <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+                                                                    <!-- Recovery mode: Is_Recovery AND both digits > 5 -->
+                                                                    <value name="IF0">
+                                                                      <block type="logic_operation" id="bp_rec_cond">
+                                                                        <field name="OP">AND</field>
+                                                                        <value name="A">
+                                                                          <block type="logic_operation" id="bp_rec_cond2">
+                                                                            <field name="OP">AND</field>
+                                                                            <value name="A">
+                                                                              <block type="variables_get" id="bp_rec_flag">
+                                                                                <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="B">
+                                                                              <block type="logic_compare" id="bp_rec_dpd5">
+                                                                                <field name="OP">GT</field>
+                                                                                <value name="A">
+                                                                                  <block type="variables_get" id="bp_rec_dpd_g">
+                                                                                    <field name="VAR" id="v_dema_prev_digit">DEMA_Prev_Digit</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <value name="B">
+                                                                                  <block type="math_number" id="bp_rec_5a">
+                                                                                    <field name="NUM">5</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="logic_compare" id="bp_rec_dnd5">
+                                                                            <field name="OP">GT</field>
+                                                                            <value name="A">
+                                                                              <block type="variables_get" id="bp_rec_dnd_g">
+                                                                                <field name="VAR" id="v_dema_now_digit">DEMA_Now_Digit</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="B">
+                                                                              <block type="math_number" id="bp_rec_5b">
+                                                                                <field name="NUM">5</field>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <statement name="DO0">
+                                                                      <!-- RECOVERY TRADE: Over 5 -->
+                                                                      <block type="variables_set" id="bp_set_pred5">
+                                                                        <field name="VAR" id="v_prediction">Prediction</field>
+                                                                        <value name="VALUE">
+                                                                          <block type="math_number" id="bp_pred5_val">
+                                                                            <field name="NUM">5</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <next>
+                                                                          <block type="variables_set" id="bp_lock_key_rec">
+                                                                            <field name="VAR" id="v_last_candle_key">Last_Candle_Key</field>
+                                                                            <value name="VALUE">
+                                                                              <block type="variables_get" id="bp_lk_curr_rec">
+                                                                                <field name="VAR" id="v_current_candle_key">Current_Candle_Key</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <next>
+                                                                              <block type="purchase" id="bp_buy_rec">
+                                                                                <field name="PURCHASE_LIST">DIGITOVER</field>
+                                                                              </block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </statement>
+                                                                    <!-- Primary mode: NOT recovery AND both digits > 3 -->
+                                                                    <value name="IF1">
+                                                                      <block type="logic_operation" id="bp_pri_cond">
+                                                                        <field name="OP">AND</field>
+                                                                        <value name="A">
+                                                                          <block type="logic_negate" id="bp_pri_not_rec">
+                                                                            <value name="BOOL">
+                                                                              <block type="variables_get" id="bp_pri_rec_flag">
+                                                                                <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="logic_operation" id="bp_pri_digits">
+                                                                            <field name="OP">AND</field>
+                                                                            <value name="A">
+                                                                              <block type="logic_compare" id="bp_pri_dpd3">
+                                                                                <field name="OP">GT</field>
+                                                                                <value name="A">
+                                                                                  <block type="variables_get" id="bp_pri_dpd_g">
+                                                                                    <field name="VAR" id="v_dema_prev_digit">DEMA_Prev_Digit</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <value name="B">
+                                                                                  <block type="math_number" id="bp_pri_3a">
+                                                                                    <field name="NUM">3</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="B">
+                                                                              <block type="logic_compare" id="bp_pri_dnd3">
+                                                                                <field name="OP">GT</field>
+                                                                                <value name="A">
+                                                                                  <block type="variables_get" id="bp_pri_dnd_g">
+                                                                                    <field name="VAR" id="v_dema_now_digit">DEMA_Now_Digit</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <value name="B">
+                                                                                  <block type="math_number" id="bp_pri_3b">
+                                                                                    <field name="NUM">3</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <statement name="DO1">
+                                                                      <!-- PRIMARY TRADE: Over 3 -->
+                                                                      <block type="variables_set" id="bp_set_pred3">
+                                                                        <field name="VAR" id="v_prediction">Prediction</field>
+                                                                        <value name="VALUE">
+                                                                          <block type="math_number" id="bp_pred3_val">
+                                                                            <field name="NUM">3</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <next>
+                                                                          <block type="variables_set" id="bp_lock_key_pri">
+                                                                            <field name="VAR" id="v_last_candle_key">Last_Candle_Key</field>
+                                                                            <value name="VALUE">
+                                                                              <block type="variables_get" id="bp_lk_curr_pri">
+                                                                                <field name="VAR" id="v_current_candle_key">Current_Candle_Key</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <next>
+                                                                              <block type="purchase" id="bp_buy_pri">
+                                                                                <field name="PURCHASE_LIST">DIGITOVER</field>
+                                                                              </block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </statement>
+                                                                  </block>
+                                                                </statement>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+
+  <!-- ============= DURING PURCHASE ============= -->
+  <block type="during_purchase" id="dp_root" deletable="false" x="900" y="900">
+    <statement name="DURING_PURCHASE_STACK">
+      <block type="controls_if" id="dp_sell_check">
+        <value name="IF0">
+          <block type="check_sell" id="dp_check_sell"></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+
+  <!-- =============================================================
+       AFTER PURCHASE — Handle win/loss, martingale, recovery logic,
+       and session TP/SL.
+       ============================================================= -->
+  <block type="after_purchase" id="ap_root" deletable="false" x="0" y="2400">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="ap_result_check">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <!-- === WIN === -->
+        <value name="IF0">
+          <block type="contract_check_result" id="ap_check_win">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <!-- Reset everything on win -->
+          <block type="variables_set" id="ap_win_stake">
+            <field name="VAR" id="v_stake">Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="ap_win_init">
+                <field name="VAR" id="v_initial_stake">Initial_Stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="ap_win_pred">
+                <field name="VAR" id="v_prediction">Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="ap_win_pred3">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="ap_win_recovery">
+                    <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                    <value name="VALUE">
+                      <block type="logic_boolean" id="ap_win_rec_false">
+                        <field name="BOOL">FALSE</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="ap_win_mart_step">
+                        <field name="VAR" id="v_mart_step">Mart_Step</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="ap_win_ms0">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="ap_win_consec">
+                            <field name="VAR" id="v_consecutive_losses">Consecutive_Losses</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="ap_win_cl0">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="notify" id="ap_win_notify">
+                                <field name="NOTIFICATION_TYPE">success</field>
+                                <field name="NOTIFICATION_SOUND">silent</field>
+                                <value name="MESSAGE">
+                                  <shadow type="text" id="ap_win_msg_sh">
+                                    <field name="TEXT">WIN</field>
+                                  </shadow>
+                                  <block type="text_join" id="ap_win_join">
+                                    <mutation xmlns="http://www.w3.org/1999/xhtml" items="2"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text" id="ap_win_lbl">
+                                        <field name="TEXT">WIN. Profit: </field>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="total_profit" id="ap_win_tp"></block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <!-- === LOSS === -->
+        <statement name="ELSE">
+          <!-- Increment consecutive losses -->
+          <block type="math_change" id="ap_loss_inc">
+            <field name="VAR" id="v_consecutive_losses">Consecutive_Losses</field>
+            <value name="DELTA">
+              <shadow type="math_number" id="ap_loss_inc_1">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <next>
+              <!-- Increment martingale step -->
+              <block type="math_change" id="ap_loss_mart_inc">
+                <field name="VAR" id="v_mart_step">Mart_Step</field>
+                <value name="DELTA">
+                  <shadow type="math_number" id="ap_loss_ms_1">
+                    <field name="NUM">1</field>
+                  </shadow>
+                </value>
+                <next>
+                  <!-- Check if max martingale steps reached -->
+                  <block type="controls_if" id="ap_mart_max_check">
+                    <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                    <value name="IF0">
+                      <block type="logic_compare" id="ap_mart_cmp">
+                        <field name="OP">GTE</field>
+                        <value name="A">
+                          <block type="variables_get" id="ap_mart_step_g">
+                            <field name="VAR" id="v_mart_step">Mart_Step</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="variables_get" id="ap_mart_max_g">
+                            <field name="VAR" id="v_max_mart_steps">Max_Mart_Steps</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <!-- Max steps reached: reset to base -->
+                      <block type="variables_set" id="ap_reset_stake_max">
+                        <field name="VAR" id="v_stake">Stake</field>
+                        <value name="VALUE">
+                          <block type="variables_get" id="ap_reset_init_max">
+                            <field name="VAR" id="v_initial_stake">Initial_Stake</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="ap_reset_mart_max">
+                            <field name="VAR" id="v_mart_step">Mart_Step</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="ap_reset_ms_max">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="ap_reset_rec_max">
+                                <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                                <value name="VALUE">
+                                  <block type="logic_boolean" id="ap_rec_false_max">
+                                    <field name="BOOL">FALSE</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="ap_reset_pred_max">
+                                    <field name="VAR" id="v_prediction">Prediction</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="ap_pred3_max">
+                                        <field name="NUM">3</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <!-- Apply martingale: multiply stake and switch to recovery -->
+                      <block type="variables_set" id="ap_mart_stake">
+                        <field name="VAR" id="v_stake">Stake</field>
+                        <value name="VALUE">
+                          <block type="math_arithmetic" id="ap_mart_mul">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <block type="variables_get" id="ap_mart_stake_g">
+                                <field name="VAR" id="v_stake">Stake</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="variables_get" id="ap_mart_mult_g">
+                                <field name="VAR" id="v_martingale_mult">Martingale_Mult</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <next>
+                          <!-- Activate recovery mode (Over 5) -->
+                          <block type="variables_set" id="ap_set_recovery">
+                            <field name="VAR" id="v_is_recovery">Is_Recovery</field>
+                            <value name="VALUE">
+                              <block type="logic_boolean" id="ap_rec_true">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="ap_set_pred5">
+                                <field name="VAR" id="v_prediction">Prediction</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="ap_pred5">
+                                    <field name="NUM">5</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="notify" id="ap_loss_notify">
+                        <field name="NOTIFICATION_TYPE">warn</field>
+                        <field name="NOTIFICATION_SOUND">silent</field>
+                        <value name="MESSAGE">
+                          <shadow type="text" id="ap_loss_msg_sh">
+                            <field name="TEXT">LOSS</field>
+                          </shadow>
+                          <block type="text_join" id="ap_loss_join">
+                            <mutation xmlns="http://www.w3.org/1999/xhtml" items="4"></mutation>
+                            <value name="ADD0">
+                              <block type="text" id="ap_loss_lbl">
+                                <field name="TEXT">LOSS #</field>
+                              </block>
+                            </value>
+                            <value name="ADD1">
+                              <block type="variables_get" id="ap_loss_consec_g">
+                                <field name="VAR" id="v_consecutive_losses">Consecutive_Losses</field>
+                              </block>
+                            </value>
+                            <value name="ADD2">
+                              <block type="text" id="ap_loss_lbl2">
+                                <field name="TEXT"> | P/L: </field>
+                              </block>
+                            </value>
+                            <value name="ADD3">
+                              <block type="total_profit" id="ap_loss_total"></block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <!-- TP / SL Check -->
+          <block type="controls_if" id="ap_tp_sl">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+            <!-- Take Profit -->
+            <value name="IF0">
+              <block type="logic_compare" id="ap_tp_cmp">
+                <field name="OP">GTE</field>
+                <value name="A">
+                  <block type="total_profit" id="ap_tp_total"></block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="ap_tp_get">
+                    <field name="VAR" id="v_take_profit">Take_Profit</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="notify" id="ap_tp_notify">
+                <field name="NOTIFICATION_TYPE">success</field>
+                <field name="NOTIFICATION_SOUND">silent</field>
+                <value name="MESSAGE">
+                  <shadow type="text" id="ap_tp_msg">
+                    <field name="TEXT">Take Profit reached. Bot stopped.</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <!-- Stop Loss -->
+            <value name="IF1">
+              <block type="logic_compare" id="ap_sl_cmp">
+                <field name="OP">LTE</field>
+                <value name="A">
+                  <block type="total_profit" id="ap_sl_total"></block>
+                </value>
+                <value name="B">
+                  <block type="math_single" id="ap_sl_neg">
+                    <field name="OP">NEG</field>
+                    <value name="NUM">
+                      <shadow type="math_number" id="ap_sl_sh">
+                        <field name="NUM">20</field>
+                      </shadow>
+                      <block type="variables_get" id="ap_sl_get">
+                        <field name="VAR" id="v_stop_loss">Stop_Loss</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="notify" id="ap_sl_notify">
+                <field name="NOTIFICATION_TYPE">error</field>
+                <field name="NOTIFICATION_SOUND">silent</field>
+                <value name="MESSAGE">
+                  <shadow type="text" id="ap_sl_msg">
+                    <field name="TEXT">Stop Loss reached. Bot stopped.</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <!-- Neither TP nor SL: trade again -->
+            <statement name="ELSE">
+              <block type="trade_again" id="ap_trade_again"></block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

@@ -183,6 +183,120 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "binaryentry/binaryentry-Switch-Bot-Pro-xml"
     },
     {
+        "id": "chichitraders-2-PREDICTIONS-BOT-with(-no-entry)-(1)",
+        "name": "2 PREDICTIONS BOT with( no entry) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-2-PREDICTIONS-BOT-with(-no-entry)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-ADVANCED-GOLD-MINER(2-Prediction-With-Entry)-(1)",
+        "name": "ADVANCED GOLD MINER(2 Prediction With Entry) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-ADVANCED-GOLD-MINER(2-Prediction-With-Entry)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-AI-HIGH-LOW-TICK(by-chichitrades)",
+        "name": "AI HIGH LOW TICK(by chichitrades)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-AI-HIGH-LOW-TICK(by-chichitrades)-xml"
+    },
+    {
+        "id": "chichitraders-AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)",
+        "name": "AI ONLY UPS DOWNS BOT(by chichitrades) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-ASIANS-SPEED-BOT(updated-version)-(1)",
+        "name": "ASIANS SPEED BOT(updated version) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-ASIANS-SPEED-BOT(updated-version)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-Even-Odd-Auto-Scanner",
+        "name": "Even Odd Auto Scanner",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-Even-Odd-Auto-Scanner-xml"
+    },
+    {
+        "id": "chichitraders-EVEN-ODD-SPEED-BOT-By-CHICHI-(1)",
+        "name": "EVEN ODD SPEED BOT By CHICHI (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-EVEN-ODD-SPEED-BOT-By-CHICHI-(1)-xml"
+    },
+    {
+        "id": "chichitraders-ONLY-UPS-ONLY-DOWNS-BOT(updated-version)-(1)",
+        "name": "ONLY UPS ONLY DOWNS BOT(updated version) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-ONLY-UPS-ONLY-DOWNS-BOT(updated-version)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-OVER-1-RECOVERY-UNDER-5-BOT-(1)",
+        "name": "OVER 1 RECOVERY UNDER 5 BOT (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-OVER-1-RECOVERY-UNDER-5-BOT-(1)-xml"
+    },
+    {
+        "id": "chichitraders-OVER-3-RECOVERY-OVER-4-BOT-(1)",
+        "name": "OVER 3 RECOVERY OVER 4 BOT (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-OVER-3-RECOVERY-OVER-4-BOT-(1)-xml"
+    },
+    {
+        "id": "chichitraders-Over-Under-Auto-Space-BY-chichi",
+        "name": "Over Under Auto Space BY chichi",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-Over-Under-Auto-Space-BY-chichi-xml"
+    },
+    {
+        "id": "chichitraders-PHANTOM-OVER-3,-UNDER-5,-OVER-4-Switch-Bot-(2)",
+        "name": "PHANTOM OVER 3, UNDER 5, OVER 4 Switch Bot (2)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-PHANTOM-OVER-3,-UNDER-5,-OVER-4-Switch-Bot-(2)-xml"
+    },
+    {
+        "id": "chichitraders-RISE-FALL-AUTO-SWITCH-BOT-(1)",
+        "name": "RISE FALL AUTO SWITCH BOT (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-RISE-FALL-AUTO-SWITCH-BOT-(1)-xml"
+    },
+    {
+        "id": "chichitraders-SPEED-BOT-(by-chichitrades)-(1)",
+        "name": "SPEED BOT (by chichitrades) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-SPEED-BOT-(by-chichitrades)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-STEP-INDICES-AUTO-SWITCH-AI-BOT",
+        "name": "STEP INDICES AUTO SWITCH AI BOT",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-STEP-INDICES-AUTO-SWITCH-AI-BOT-xml"
+    },
+    {
+        "id": "chichitraders-STEP-INDICES-QUANTUM-AI-(by-chichi)-(1)",
+        "name": "STEP INDICES QUANTUM AI (by chichi) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-STEP-INDICES-QUANTUM-AI-(by-chichi)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-STEP-INDICES-SPEED-BOT(updated-version)-(1)",
+        "name": "STEP INDICES SPEED BOT(updated version) (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-STEP-INDICES-SPEED-BOT(updated-version)-(1)-xml"
+    },
+    {
+        "id": "chichitraders-UNDER-6-WITH-RECOVERY-OVER-3-(1)",
+        "name": "UNDER 6 WITH RECOVERY OVER 3 (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-UNDER-6-WITH-RECOVERY-OVER-3-(1)-xml"
+    },
+    {
+        "id": "chichitraders-UNDER-8-RECOVERY-OVER-4-(1)",
+        "name": "UNDER 8 RECOVERY OVER 4 (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/chichitraders-UNDER-8-RECOVERY-OVER-4-(1)-xml"
+    },
+    {
         "id": "dalembert_max-stake",
         "name": "dalembert max stake",
         "creator": "Official",
@@ -985,6 +1099,102 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "GT Sequence Rotator",
         "creator": "globaltrades",
         "file": "globaltrades/globaltrades-GT-Sequence-Rotator-xml"
+    },
+    {
+        "id": "jmtraders-2026-Killer-version-Bot🤑-(2)",
+        "name": "2026 Killer version Bot🤑 (2)",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-2026-Killer-version-Bot🤑-(2)-xml"
+    },
+    {
+        "id": "jmtraders-AUTO-Even-Odd-AI-By-Bram",
+        "name": "AUTO Even Odd AI By Bram",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-AUTO-Even-Odd-AI-By-Bram-xml"
+    },
+    {
+        "id": "jmtraders-AUTO-OVER-AI-by-CEOBRAM",
+        "name": "AUTO OVER AI by CEOBRAM",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-AUTO-OVER-AI-by-CEOBRAM-xml"
+    },
+    {
+        "id": "jmtraders-BRAM-ENTRYPOINT-BOT",
+        "name": "BRAM ENTRYPOINT BOT",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-BRAM-ENTRYPOINT-BOT-xml"
+    },
+    {
+        "id": "jmtraders-BRAM-EVEN-&-ODD",
+        "name": "BRAM EVEN & ODD",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-BRAM-EVEN-&-ODD-xml"
+    },
+    {
+        "id": "jmtraders-BRAM-only-ups-&-only-downs",
+        "name": "BRAM only ups & only downs",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-BRAM-only-ups-&-only-downs-xml"
+    },
+    {
+        "id": "jmtraders-BRAM-OVER-&-UNDER-no-entry",
+        "name": "BRAM OVER & UNDER no entry",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-BRAM-OVER-&-UNDER-no-entry-xml"
+    },
+    {
+        "id": "jmtraders-BRAM-RISE-&-FALL",
+        "name": "BRAM RISE & FALL",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-BRAM-RISE-&-FALL-xml"
+    },
+    {
+        "id": "jmtraders-DEMA_Over3_Speed_Bot_Pro-(1)",
+        "name": "DEMA Over3 Speed Bot Pro (1)",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-DEMA_Over3_Speed_Bot_Pro-(1)-xml"
+    },
+    {
+        "id": "jmtraders-Dollarprinter_2025_Bot",
+        "name": "Dollarprinter 2025 Bot",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-Dollarprinter_2025_Bot-xml"
+    },
+    {
+        "id": "jmtraders-Even-Odd-Reverse-Strategy-Bot",
+        "name": "Even Odd Reverse Strategy Bot",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-Even-Odd-Reverse-Strategy-Bot-xml"
+    },
+    {
+        "id": "jmtraders-OverunderAutoswitch",
+        "name": "OverunderAutoswitch",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-OverunderAutoswitch-xml"
+    },
+    {
+        "id": "jmtraders-PATEL-(with-Entry)",
+        "name": "PATEL (with Entry)",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-PATEL-(with-Entry)-xml"
+    },
+    {
+        "id": "jmtraders-Raziel-Over-Under",
+        "name": "Raziel Over Under",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-Raziel-Over-Under-xml"
+    },
+    {
+        "id": "jmtraders-TradeScript",
+        "name": "TradeScript",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-TradeScript-xml"
+    },
+    {
+        "id": "jmtraders-WallStreetKiller(1)-(3)",
+        "name": "WallStreetKiller(1) (3)",
+        "creator": "jmtraders",
+        "file": "jmtraders/jmtraders-WallStreetKiller(1)-(3)-xml"
     },
     {
         "id": "martingale_max-stake",
@@ -2134,6 +2344,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 20
     },
     {
+        "id": "chichitraders",
+        "label": "chichitraders",
+        "count": 19
+    },
+    {
         "id": "dollarprinter",
         "label": "dollarprinter",
         "count": 19
@@ -2152,6 +2367,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "Official",
         "label": "Official",
         "count": 17
+    },
+    {
+        "id": "jmtraders",
+        "label": "jmtraders",
+        "count": 16
     },
     {
         "id": "tradepro",
