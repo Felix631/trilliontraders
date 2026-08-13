@@ -425,15 +425,13 @@
           </block>
         </value>
         <statement name="DO0">
-          <block type="apollo_purchase" id="ZIu(a,2Hj/!q4UzZ%=8_">
+          <block type="purchase" id="ZIu(a,2Hj/!q4UzZ%=8_">
             <field name="PURCHASE_LIST">DIGITOVER</field>
-            <field name="MULTIPLE_CONTRACTS">FALSE</field>
           </block>
         </statement>
         <statement name="ELSE">
-          <block type="apollo_purchase" id="FCvo9t6WR?3TptKI`BI.">
+          <block type="purchase" id="FCvo9t6WR?3TptKI`BI.">
             <field name="PURCHASE_LIST">DIGITUNDER</field>
-            <field name="MULTIPLE_CONTRACTS">FALSE</field>
           </block>
         </statement>
       </block>

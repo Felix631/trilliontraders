@@ -9,6 +9,9 @@
     <variable id="|Ag{[(Qw/K$g1v=k)zNh">Take Profit</variable>
     <variable id="is-FMy]az2Q0g8j+I|5%">Initial Stake</variable>
     <variable id="2]oO6`(1|9(H8I5QalfU">Stop Loss</variable>
+    <variable id="GJDS-OK">ldc ok</variable>
+    <variable id="GJDS-I">ldc i</variable>
+    <variable id="GJDS-D">ldc digit</variable>
   </variables>
   <block type="trade_definition" id="A#/;j,6f#0U+1=7ki!yj" deletable="false" x="0" y="60">
     <statement name="TRADE_OPTIONS">
@@ -131,6 +134,174 @@
       </block>
     </statement>
     <statement name="SUBMARKET">
+      <block type="controls_if" id="GJDS-SEL-1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="logic_compare" id="GJDS-SEL-2">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="GJDS-SEL-3">
+                <field name="VAR" id="IM`$tVl|sMs}DRvM~ehT">Recovery Mode</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_boolean" id="GJDS-SEL-4">
+                <field name="BOOL">FALSE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="controls_if" id="GJDS-SEL-5">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="4"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="GJDS-SEL-6">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="GJDS-SEL-7">
+                    <field name="VAR" id="VdB}$ex/2@iTcD81P,_8">Step Count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="GJDS-SEL-8">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="GJDS-SEL-9">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-10">
+                    <field name="NUM">8</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="logic_compare" id="GJDS-SEL-11">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="GJDS-SEL-12">
+                    <field name="VAR" id="VdB}$ex/2@iTcD81P,_8">Step Count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="GJDS-SEL-13">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="variables_set" id="GJDS-SEL-14">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-15">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF2">
+              <block type="logic_compare" id="GJDS-SEL-16">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="GJDS-SEL-17">
+                    <field name="VAR" id="VdB}$ex/2@iTcD81P,_8">Step Count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="GJDS-SEL-18">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO2">
+              <block type="variables_set" id="GJDS-SEL-19">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-20">
+                    <field name="NUM">7</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF3">
+              <block type="logic_compare" id="GJDS-SEL-21">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="GJDS-SEL-22">
+                    <field name="VAR" id="VdB}$ex/2@iTcD81P,_8">Step Count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="GJDS-SEL-23">
+                    <field name="NUM">4</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO3">
+              <block type="variables_set" id="GJDS-SEL-24">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-25">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF4">
+              <block type="logic_compare" id="GJDS-SEL-26">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="GJDS-SEL-27">
+                    <field name="VAR" id="VdB}$ex/2@iTcD81P,_8">Step Count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="GJDS-SEL-28">
+                    <field name="NUM">5</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO4">
+              <block type="variables_set" id="GJDS-SEL-29">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-30">
+                    <field name="NUM">6</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="variables_set" id="GJDS-SEL-31">
+                <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="GJDS-SEL-32">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="GJDS-SEL-33">
+            <field name="VAR" id="e)q23w3jC#7SPFJi_~rC">Recovery Prediction</field>
+            <value name="VALUE">
+              <block type="math_number" id="GJDS-SEL-34">
+                <field name="NUM">3</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
       <block type="trade_definition_tradeoptions" id="ZX}~CNjTLNB`G}x2}_$8">
         <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
         <field name="DURATIONTYPE_LIST">t</field>
@@ -393,13 +564,8 @@
               </block>
             </value>
             <statement name="DO0">
-              <block type="apollo_purchase2" id="DUP?{*J~YCo#j0Eue:$R">
+              <block type="purchase" id="DUP?{*J~YCo#j0Eue:$R">
                 <field name="PURCHASE_LIST">DIGITUNDER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="_i?i[(;mi`BzYlMRw74]">
-                    <field name="NUM">8</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF1">
@@ -418,13 +584,8 @@
               </block>
             </value>
             <statement name="DO1">
-              <block type="apollo_purchase2" id="0}*f;I`f7^g7EuAT~5qK">
+              <block type="purchase" id="0}*f;I`f7^g7EuAT~5qK">
                 <field name="PURCHASE_LIST">DIGITOVER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="7qmjC*_uW[r`D#=8)=pC">
-                    <field name="NUM">1</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF2">
@@ -443,13 +604,8 @@
               </block>
             </value>
             <statement name="DO2">
-              <block type="apollo_purchase2" id="q|JV;%/W9I#zt0RA6zxy">
+              <block type="purchase" id="q|JV;%/W9I#zt0RA6zxy">
                 <field name="PURCHASE_LIST">DIGITUNDER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="cwJDjZXSyZob`kfT~;3`">
-                    <field name="NUM">7</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF3">
@@ -468,13 +624,8 @@
               </block>
             </value>
             <statement name="DO3">
-              <block type="apollo_purchase2" id="^H+KWe2uHqnD_5lTU{iR">
+              <block type="purchase" id="^H+KWe2uHqnD_5lTU{iR">
                 <field name="PURCHASE_LIST">DIGITOVER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="q+FJeR_Z!wZAaww4$K0*">
-                    <field name="NUM">2</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF4">
@@ -493,13 +644,8 @@
               </block>
             </value>
             <statement name="DO4">
-              <block type="apollo_purchase2" id="KWX:lr~m*Zm?g52x0:dO">
+              <block type="purchase" id="KWX:lr~m*Zm?g52x0:dO">
                 <field name="PURCHASE_LIST">DIGITUNDER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="2)i~#e2vsWZ[s)Mc5MgO">
-                    <field name="NUM">6</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF5">
@@ -518,13 +664,8 @@
               </block>
             </value>
             <statement name="DO5">
-              <block type="apollo_purchase2" id="g(axr7MwzFJShpZ5y#q;">
+              <block type="purchase" id="g(axr7MwzFJShpZ5y#q;">
                 <field name="PURCHASE_LIST">DIGITOVER</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="a_m.7ytxpJye6bZJC.$T">
-                    <field name="NUM">3</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
           </block>
@@ -533,48 +674,228 @@
           <block type="controls_if" id="]LWG=D9]]=7agD9+olXO">
             <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
             <value name="IF0">
-              <block type="last_digits_condition" id="@81Mi6G/89HIFghGEG-w">
-                <field name="CONDITION">ALL_EVEN</field>
-                <value name="N">
-                  <shadow type="math_number" id="ZPT*O.KqjMAgHgiZ4bkA">
-                    <field name="NUM">4</field>
-                  </shadow>
-                </value>
+              <block type="procedures_callreturn" id="@81Mi6G/89HIFghGEG-w">
+                <mutation name="ALL_EVEN"></mutation>
               </block>
             </value>
             <statement name="DO0">
-              <block type="apollo_purchase2" id="%$ry8]hjW^6}Rq{7/MTh">
+              <block type="purchase" id="%$ry8]hjW^6}Rq{7/MTh">
                 <field name="PURCHASE_LIST">DIGITODD</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="+D]a,:O{5x69#BsPhG-y">
-                    <field name="NUM">3</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
             <value name="IF1">
-              <block type="last_digits_condition" id="rAzYY]vjU5tR+mn{i1!+">
-                <field name="CONDITION">ALL_ODD</field>
-                <value name="N">
-                  <shadow type="math_number" id="g]S3rYxKwWnJO,L4KA0u">
-                    <field name="NUM">4</field>
-                  </shadow>
-                </value>
+              <block type="procedures_callreturn" id="rAzYY]vjU5tR+mn{i1!+">
+                <mutation name="ALL_ODD"></mutation>
               </block>
             </value>
             <statement name="DO1">
-              <block type="apollo_purchase2" id="dKwS3YJ,3y3LH-k/PgF{">
+              <block type="purchase" id="dKwS3YJ,3y3LH-k/PgF{">
                 <field name="PURCHASE_LIST">DIGITEVEN</field>
-                <value name="PREDICTION">
-                  <shadow type="math_number_positive" id="W^j)]}.!K..kM!7*`2uc">
-                    <field name="NUM">3</field>
-                  </shadow>
-                </value>
               </block>
             </statement>
           </block>
         </statement>
       </block>
     </statement>
+  </block>
+  <block type="procedures_defreturn" id="GJDS-FN-EVEN" x="0" y="1500">
+    <field name="NAME">ALL_EVEN</field>
+    <comment pinned="false" h="80" w="160">Checks if the last 4 digits are all even.</comment>
+    <statement name="STACK">
+      <block type="variables_set" id="GJDS-FN1">
+        <field name="VAR" id="GJDS-OK">ldc ok</field>
+        <value name="VALUE">
+          <block type="logic_boolean" id="GJDS-FN2">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_for" id="GJDS-FN3">
+            <field name="VAR" id="GJDS-I">ldc i</field>
+            <value name="FROM">
+              <shadow type="math_number" id="GJDS-FN4">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="TO">
+              <shadow type="math_number" id="GJDS-FN5">
+                <field name="NUM">4</field>
+              </shadow>
+            </value>
+            <value name="BY">
+              <shadow type="math_number" id="GJDS-FN6">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <statement name="DO">
+              <block type="variables_set" id="GJDS-FN7">
+                <field name="VAR" id="GJDS-D">ldc digit</field>
+                <value name="VALUE">
+                  <block type="lists_getIndex" id="GJDS-FN8">
+                    <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="true"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FROM_END</field>
+                    <value name="VALUE">
+                      <block type="lastDigitList" id="GJDS-FN9"></block>
+                    </value>
+                    <value name="AT">
+                      <block type="variables_get" id="GJDS-FN10">
+                        <field name="VAR" id="GJDS-I">ldc i</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="controls_if" id="GJDS-FN11">
+                    <value name="IF0">
+                      <block type="logic_compare" id="GJDS-FN12">
+                        <field name="OP">NEQ</field>
+                        <value name="A">
+                          <block type="math_modulo" id="GJDS-FN13">
+                            <value name="DIVIDEND">
+                              <block type="variables_get" id="GJDS-FN14">
+                                <field name="VAR" id="GJDS-D">ldc digit</field>
+                              </block>
+                            </value>
+                            <value name="DIVISOR">
+                              <shadow type="math_number" id="GJDS-FN15">
+                                <field name="NUM">2</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="GJDS-FN16">
+                            <field name="NUM">0</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="variables_set" id="GJDS-FN17">
+                        <field name="VAR" id="GJDS-OK">ldc ok</field>
+                        <value name="VALUE">
+                          <block type="logic_boolean" id="GJDS-FN18">
+                            <field name="BOOL">FALSE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="RETURN">
+      <shadow type="logic_boolean" id="GJDS-FN19">
+        <field name="BOOL">FALSE</field>
+      </shadow>
+      <block type="variables_get" id="GJDS-FN20">
+        <field name="VAR" id="GJDS-OK">ldc ok</field>
+      </block>
+    </value>
+  </block>
+  <block type="procedures_defreturn" id="GJDS-FN-ODD" x="0" y="1780">
+    <field name="NAME">ALL_ODD</field>
+    <comment pinned="false" h="80" w="160">Checks if the last 4 digits are all odd.</comment>
+    <statement name="STACK">
+      <block type="variables_set" id="GJDS-FNO1">
+        <field name="VAR" id="GJDS-OK">ldc ok</field>
+        <value name="VALUE">
+          <block type="logic_boolean" id="GJDS-FNO2">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_for" id="GJDS-FNO3">
+            <field name="VAR" id="GJDS-I">ldc i</field>
+            <value name="FROM">
+              <shadow type="math_number" id="GJDS-FNO4">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="TO">
+              <shadow type="math_number" id="GJDS-FNO5">
+                <field name="NUM">4</field>
+              </shadow>
+            </value>
+            <value name="BY">
+              <shadow type="math_number" id="GJDS-FNO6">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <statement name="DO">
+              <block type="variables_set" id="GJDS-FNO7">
+                <field name="VAR" id="GJDS-D">ldc digit</field>
+                <value name="VALUE">
+                  <block type="lists_getIndex" id="GJDS-FNO8">
+                    <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="true"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FROM_END</field>
+                    <value name="VALUE">
+                      <block type="lastDigitList" id="GJDS-FNO9"></block>
+                    </value>
+                    <value name="AT">
+                      <block type="variables_get" id="GJDS-FNO10">
+                        <field name="VAR" id="GJDS-I">ldc i</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="controls_if" id="GJDS-FNO11">
+                    <value name="IF0">
+                      <block type="logic_compare" id="GJDS-FNO12">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                          <block type="math_modulo" id="GJDS-FNO13">
+                            <value name="DIVIDEND">
+                              <block type="variables_get" id="GJDS-FNO14">
+                                <field name="VAR" id="GJDS-D">ldc digit</field>
+                              </block>
+                            </value>
+                            <value name="DIVISOR">
+                              <shadow type="math_number" id="GJDS-FNO15">
+                                <field name="NUM">2</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="GJDS-FNO16">
+                            <field name="NUM">0</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="variables_set" id="GJDS-FNO17">
+                        <field name="VAR" id="GJDS-OK">ldc ok</field>
+                        <value name="VALUE">
+                          <block type="logic_boolean" id="GJDS-FNO18">
+                            <field name="BOOL">FALSE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="RETURN">
+      <shadow type="logic_boolean" id="GJDS-FNO19">
+        <field name="BOOL">FALSE</field>
+      </shadow>
+      <block type="variables_get" id="GJDS-FNO20">
+        <field name="VAR" id="GJDS-OK">ldc ok</field>
+      </block>
+    </value>
   </block>
 </xml>
