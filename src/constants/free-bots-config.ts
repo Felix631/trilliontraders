@@ -1101,6 +1101,24 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "globaltrades/globaltrades-GT-Sequence-Rotator-xml"
     },
     {
+        "id": "isaacmrdollars-Even-Odd-King",
+        "name": "Even Odd King",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/isaacmrdollars-Even-Odd-King-xml"
+    },
+    {
+        "id": "isaacmrdollars-Over-Under-King",
+        "name": "Over Under King",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/isaacmrdollars-Over-Under-King-xml"
+    },
+    {
+        "id": "isaacmrdollars-Rise-Fall-King",
+        "name": "Rise Fall King",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/isaacmrdollars-Rise-Fall-King-xml"
+    },
+    {
         "id": "jmtraders-2026-Killer-version-Bot🤑-(2)",
         "name": "2026 Killer version Bot🤑 (2)",
         "creator": "jmtraders",
@@ -2392,6 +2410,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "globaltrades",
         "label": "globaltrades",
         "count": 4
+    },
+    {
+        "id": "isaacmrdollars",
+        "label": "isaacmrdollars",
+        "count": 3
     },
     {
         "id": "ai",

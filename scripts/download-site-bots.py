@@ -46,7 +46,7 @@ SITES = {
     # bundle as `let <v>='<xml ...>'` modules keyed by chunk id.
     "githinji": {
         "base": "https://githinji.site",
-        "bundle": "/static/js/index.8b4f414f.js",
+        "bundle": "/static/js/index.6b3377e6.js",
         "inline_chunks": {
             "Digits-Sniper": 10479,
             "EVEN-ODD-Switcher": 6421,
@@ -81,12 +81,24 @@ SITES = {
             "GT Sequence Rotator.xml": None,
         },
     },
+    # isaacmrdollars.site (IsaacMrDollars tenant, botFolder "freebots"): the
+    # premium AI bots are inlined in the main bundle as `let <v>='<xml ...>'`
+    # modules keyed by chunk id.
+    "isaacmrdollars": {
+        "base": "https://isaacmrdollars.site",
+        "bundle": "/static/js/index.6b3377e6.js",
+        "inline_chunks": {
+            "Even-Odd-King": 66964,
+            "Over-Under-King": 22063,
+            "Rise-Fall-King": 96048,
+        },
+    },
     # chichitraders.site (ChichiTrades tenant): the bot XMLs are inlined in the
     # main bundle as `let <v>='<xml ...>'` modules keyed by chunk id (same
     # require.context pattern as githinji, newer module header format).
     "chichitraders": {
         "base": "https://chichitraders.site",
-        "bundle": "/static/js/index.01168ead.js",
+        "bundle": "/static/js/index.d359683a.js",
         "inline_chunks": {
             "AI-HIGH-LOW-TICK(by-chichitrades)": 81426,
             "AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)": 38882,

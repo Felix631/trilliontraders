@@ -9,9 +9,6 @@
     <variable id="5msg(6{x,9QeL#7Q7T,V">Trade Odd</variable>
     <variable id="O8@$uUmB}1Vz92}my~$k">Martingale</variable>
     <variable id="l:1/T=rFAp[8aXlzc$25">No. of consecutive Pattern</variable>
-    <variable id="GJSC-OK">ldc ok</variable>
-    <variable id="GJSC-I">ldc i</variable>
-    <variable id="GJSC-D">ldc digit</variable>
   </variables>
   <block type="trade_definition" id="V`aaJ)I1Sn@6AfE-:g.o" deletable="false" x="0" y="60">
     <statement name="TRADE_OPTIONS">
@@ -131,8 +128,16 @@
               <block type="controls_if" id=".IMZge3]DI6O6ipK9U5T">
                 <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
                 <value name="IF0">
-                  <block type="procedures_callreturn" id="#*UyK/mrH){8!w5HQT5C">
-                    <mutation name="ALL_ODD"></mutation>
+                  <block type="last_digits_condition" id="#*UyK/mrH){8!w5HQT5C">
+                    <field name="CONDITION">ALL_ODD</field>
+                    <value name="N">
+                      <shadow type="math_number" id="uJi2jER]ymWM-TH}lr$?">
+                        <field name="NUM">3</field>
+                      </shadow>
+                      <block type="variables_get" id="|M*TqT#+{I02Rz@pa^J%">
+                        <field name="VAR" id="l:1/T=rFAp[8aXlzc$25">No. of consecutive Pattern</field>
+                      </block>
+                    </value>
                   </block>
                 </value>
                 <statement name="DO0">
@@ -146,8 +151,16 @@
                   </block>
                 </statement>
                 <value name="IF1">
-                  <block type="procedures_callreturn" id="XPXC1VJEr+2FDE{Mm8!=">
-                    <mutation name="ALL_EVEN"></mutation>
+                  <block type="last_digits_condition" id="XPXC1VJEr+2FDE{Mm8!=">
+                    <field name="CONDITION">ALL_EVEN</field>
+                    <value name="N">
+                      <shadow type="math_number" id="ZBf,hsJ!cEw%tI?yjQ@?">
+                        <field name="NUM">3</field>
+                      </shadow>
+                      <block type="variables_get" id="~Ik1F87o)`08^bN@-wK@">
+                        <field name="VAR" id="l:1/T=rFAp[8aXlzc$25">No. of consecutive Pattern</field>
+                      </block>
+                    </value>
                   </block>
                 </value>
                 <statement name="DO1">
@@ -336,8 +349,10 @@
           </block>
         </value>
         <statement name="DO0">
-          <block type="purchase" id="4-UAUC3hi(`}Z}/.mr,y">
+          <block type="apollo_purchase" id="4-UAUC3hi(`}Z}/.mr,y">
             <field name="PURCHASE_LIST">DIGITEVEN</field>
+            <field name="MULTIPLE_CONTRACTS">FALSE</field>
+            <field name="CONTRACT_QUANTITY">1</field>
           </block>
         </statement>
         <value name="IF1">
@@ -363,8 +378,10 @@
           </block>
         </value>
         <statement name="DO1">
-          <block type="purchase" id="k73tVhS4GUqj,7yxZs6m">
+          <block type="apollo_purchase" id="k73tVhS4GUqj,7yxZs6m">
             <field name="PURCHASE_LIST">DIGITODD</field>
+            <field name="MULTIPLE_CONTRACTS">FALSE</field>
+            <field name="CONTRACT_QUANTITY">1</field>
           </block>
         </statement>
       </block>
@@ -378,211 +395,5 @@
   </block>
   <block type="math_number" id="v~kjZ,AdTrPdw`O2VPF6" disabled="true" x="0" y="2060">
     <field name="NUM">3</field>
-  </block>
-  <block type="procedures_defreturn" id="GJSC-FN-ODD" x="0" y="2120">
-    <field name="NAME">ALL_ODD</field>
-    <comment pinned="false" h="80" w="160">Checks if the last N digits (consecutive pattern) are all odd.</comment>
-    <statement name="STACK">
-      <block type="variables_set" id="GJSC-FN1">
-        <field name="VAR" id="GJSC-OK">ldc ok</field>
-        <value name="VALUE">
-          <block type="logic_boolean" id="GJSC-FN2">
-            <field name="BOOL">TRUE</field>
-          </block>
-        </value>
-        <next>
-          <block type="controls_for" id="GJSC-FN3">
-            <field name="VAR" id="GJSC-I">ldc i</field>
-            <value name="FROM">
-              <shadow type="math_number" id="GJSC-FN4">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="TO">
-              <shadow type="math_number" id="GJSC-FN5">
-                <field name="NUM">3</field>
-              </shadow>
-              <block type="variables_get" id="GJSC-FN5B">
-                <field name="VAR" id="l:1/T=rFAp[8aXlzc$25">No. of consecutive Pattern</field>
-              </block>
-            </value>
-            <value name="BY">
-              <shadow type="math_number" id="GJSC-FN6">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <statement name="DO">
-              <block type="variables_set" id="GJSC-FN7">
-                <field name="VAR" id="GJSC-D">ldc digit</field>
-                <value name="VALUE">
-                  <block type="lists_getIndex" id="GJSC-FN8">
-                    <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="true"></mutation>
-                    <field name="MODE">GET</field>
-                    <field name="WHERE">FROM_END</field>
-                    <value name="VALUE">
-                      <block type="lastDigitList" id="GJSC-FN9"></block>
-                    </value>
-                    <value name="AT">
-                      <block type="variables_get" id="GJSC-FN10">
-                        <field name="VAR" id="GJSC-I">ldc i</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <next>
-                  <block type="controls_if" id="GJSC-FN11">
-                    <value name="IF0">
-                      <block type="logic_compare" id="GJSC-FN12">
-                        <field name="OP">EQ</field>
-                        <value name="A">
-                          <block type="math_modulo" id="GJSC-FN13">
-                            <value name="DIVIDEND">
-                              <block type="variables_get" id="GJSC-FN14">
-                                <field name="VAR" id="GJSC-D">ldc digit</field>
-                              </block>
-                            </value>
-                            <value name="DIVISOR">
-                              <shadow type="math_number" id="GJSC-FN15">
-                                <field name="NUM">2</field>
-                              </shadow>
-                            </value>
-                          </block>
-                        </value>
-                        <value name="B">
-                          <shadow type="math_number" id="GJSC-FN16">
-                            <field name="NUM">0</field>
-                          </shadow>
-                        </value>
-                      </block>
-                    </value>
-                    <statement name="DO0">
-                      <block type="variables_set" id="GJSC-FN17">
-                        <field name="VAR" id="GJSC-OK">ldc ok</field>
-                        <value name="VALUE">
-                          <block type="logic_boolean" id="GJSC-FN18">
-                            <field name="BOOL">FALSE</field>
-                          </block>
-                        </value>
-                      </block>
-                    </statement>
-                  </block>
-                </next>
-              </block>
-            </statement>
-          </block>
-        </next>
-      </block>
-    </statement>
-    <value name="RETURN">
-      <shadow type="logic_boolean" id="GJSC-FN19">
-        <field name="BOOL">FALSE</field>
-      </shadow>
-      <block type="variables_get" id="GJSC-FN20">
-        <field name="VAR" id="GJSC-OK">ldc ok</field>
-      </block>
-    </value>
-  </block>
-  <block type="procedures_defreturn" id="GJSC-FN-EVEN" x="0" y="2400">
-    <field name="NAME">ALL_EVEN</field>
-    <comment pinned="false" h="80" w="160">Checks if the last N digits (consecutive pattern) are all even.</comment>
-    <statement name="STACK">
-      <block type="variables_set" id="GJSC-FNE1">
-        <field name="VAR" id="GJSC-OK">ldc ok</field>
-        <value name="VALUE">
-          <block type="logic_boolean" id="GJSC-FNE2">
-            <field name="BOOL">TRUE</field>
-          </block>
-        </value>
-        <next>
-          <block type="controls_for" id="GJSC-FNE3">
-            <field name="VAR" id="GJSC-I">ldc i</field>
-            <value name="FROM">
-              <shadow type="math_number" id="GJSC-FNE4">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="TO">
-              <shadow type="math_number" id="GJSC-FNE5">
-                <field name="NUM">3</field>
-              </shadow>
-              <block type="variables_get" id="GJSC-FNE5B">
-                <field name="VAR" id="l:1/T=rFAp[8aXlzc$25">No. of consecutive Pattern</field>
-              </block>
-            </value>
-            <value name="BY">
-              <shadow type="math_number" id="GJSC-FNE6">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <statement name="DO">
-              <block type="variables_set" id="GJSC-FNE7">
-                <field name="VAR" id="GJSC-D">ldc digit</field>
-                <value name="VALUE">
-                  <block type="lists_getIndex" id="GJSC-FNE8">
-                    <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="true"></mutation>
-                    <field name="MODE">GET</field>
-                    <field name="WHERE">FROM_END</field>
-                    <value name="VALUE">
-                      <block type="lastDigitList" id="GJSC-FNE9"></block>
-                    </value>
-                    <value name="AT">
-                      <block type="variables_get" id="GJSC-FNE10">
-                        <field name="VAR" id="GJSC-I">ldc i</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <next>
-                  <block type="controls_if" id="GJSC-FNE11">
-                    <value name="IF0">
-                      <block type="logic_compare" id="GJSC-FNE12">
-                        <field name="OP">NEQ</field>
-                        <value name="A">
-                          <block type="math_modulo" id="GJSC-FNE13">
-                            <value name="DIVIDEND">
-                              <block type="variables_get" id="GJSC-FNE14">
-                                <field name="VAR" id="GJSC-D">ldc digit</field>
-                              </block>
-                            </value>
-                            <value name="DIVISOR">
-                              <shadow type="math_number" id="GJSC-FNE15">
-                                <field name="NUM">2</field>
-                              </shadow>
-                            </value>
-                          </block>
-                        </value>
-                        <value name="B">
-                          <shadow type="math_number" id="GJSC-FNE16">
-                            <field name="NUM">0</field>
-                          </shadow>
-                        </value>
-                      </block>
-                    </value>
-                    <statement name="DO0">
-                      <block type="variables_set" id="GJSC-FNE17">
-                        <field name="VAR" id="GJSC-OK">ldc ok</field>
-                        <value name="VALUE">
-                          <block type="logic_boolean" id="GJSC-FNE18">
-                            <field name="BOOL">FALSE</field>
-                          </block>
-                        </value>
-                      </block>
-                    </statement>
-                  </block>
-                </next>
-              </block>
-            </statement>
-          </block>
-        </next>
-      </block>
-    </statement>
-    <value name="RETURN">
-      <shadow type="logic_boolean" id="GJSC-FNE19">
-        <field name="BOOL">FALSE</field>
-      </shadow>
-      <block type="variables_get" id="GJSC-FNE20">
-        <field name="VAR" id="GJSC-OK">ldc ok</field>
-      </block>
-    </value>
   </block>
 </xml>

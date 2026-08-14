@@ -371,7 +371,7 @@
   </block>
   <block type="before_purchase" id="licmPn={lrajX{,il-1Y" deletable="false" x="0" y="1168">
     <statement name="BEFOREPURCHASE_STACK">
-      <block type="purchase" id="g0$#P)s}l;60LDPCzx1`">
+      <block type="apollo_purchase" id="g0$#P)s}l;60LDPCzx1`">
         <field name="PURCHASE_LIST">DIGITOVER</field>
       </block>
     </statement>

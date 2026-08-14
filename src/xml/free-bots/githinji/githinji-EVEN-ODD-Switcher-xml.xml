@@ -292,12 +292,12 @@
           </block>
         </value>
         <statement name="DO0">
-          <block type="purchase" id="4yCOaMWczKLZsb]XlT7O">
+          <block type="apollo_purchase" id="4yCOaMWczKLZsb]XlT7O">
             <field name="PURCHASE_LIST">DIGITEVEN</field>
           </block>
         </statement>
         <statement name="ELSE">
-          <block type="purchase" id="Nx`Xkt9ejjuv}0Hw}=4b">
+          <block type="apollo_purchase" id="Nx`Xkt9ejjuv}0Hw}=4b">
             <field name="PURCHASE_LIST">DIGITODD</field>
           </block>
         </statement>
