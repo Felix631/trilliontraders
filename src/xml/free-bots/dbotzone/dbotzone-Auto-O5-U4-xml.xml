@@ -1,38 +1,39 @@
 <xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
   <variables>
-    <variable id="var_Stake_dzo01">Stake</variable>
-    <variable id="var_InitialStake_dzo02">Initial Stake</variable>
-    <variable id="var_Martingale_dzo03">Martingale</variable>
-    <variable id="var_TakeProfit_dzo04">Take Profit</variable>
-    <variable id="var_StopLoss_dzo05">Stop Loss</variable>
-    <variable id="var_Digits_dzo06">Digits</variable>
-    <variable id="var_Cold_dzo07">Cold</variable>
-    <variable id="var_Hot_dzo08">Hot</variable>
-    <variable id="var_Last_dzo09">Last</variable>
-    <variable id="var_Ready_dzo10">Ready</variable>
-    <variable id="var_Prediction_dzo11">Prediction</variable>
+    <variable id="o5u4_var_stake">Stake</variable>
+    <variable id="o5u4_var_mstake">Martingale_stake</variable>
+    <variable id="o5u4_var_msize">Martingale_size</variable>
+    <variable id="o5u4_var_count">Prediction_count</variable>
+    <variable id="o5u4_var_plist">Prediction_list</variable>
+    <variable id="o5u4_var_sl">Stop_loss</variable>
+    <variable id="o5u4_var_tp">Take_profit</variable>
+    <variable id="o5u4_var_digits">Digits</variable>
+    <variable id="o5u4_var_cold">Cold</variable>
+    <variable id="o5u4_var_hot">Hot</variable>
+    <variable id="o5u4_var_last">Last</variable>
+    <variable id="o5u4_var_ready">Ready</variable>
   </variables>
-  <block type="trade_definition" id="td_dzo_a1" deletable="false" x="0" y="60">
+  <block type="trade_definition" id="o5u4_td_1" deletable="false" x="0" y="110">
     <statement name="TRADE_OPTIONS">
-      <block type="trade_definition_market" id="mkt_dzo_a2" deletable="false" movable="false">
+      <block type="trade_definition_market" id="o5u4_mkt_1" deletable="false" movable="false">
         <field name="MARKET_LIST">synthetic_index</field>
         <field name="SUBMARKET_LIST">random_index</field>
         <field name="SYMBOL_LIST">R_100</field>
         <next>
-          <block type="trade_definition_tradetype" id="tt_dzo_a3" deletable="false" movable="false">
+          <block type="trade_definition_tradetype" id="o5u4_tt_1" deletable="false" movable="false">
             <field name="TRADETYPECAT_LIST">digits</field>
             <field name="TRADETYPE_LIST">overunder</field>
             <next>
-              <block type="trade_definition_contracttype" id="ct_dzo_a4" deletable="false" movable="false">
+              <block type="trade_definition_contracttype" id="o5u4_ct_1" deletable="false" movable="false">
                 <field name="TYPE_LIST">both</field>
                 <next>
-                  <block type="trade_definition_candleinterval" id="ci_dzo_a5" deletable="false" movable="false">
+                  <block type="trade_definition_candleinterval" id="o5u4_ci_1" deletable="false" movable="false">
                     <field name="CANDLEINTERVAL_LIST">60</field>
                     <next>
-                      <block type="trade_definition_restartbuysell" id="rs_dzo_a6" deletable="false" movable="false">
+                      <block type="trade_definition_restartbuysell" id="o5u4_rbs_1" deletable="false" movable="false">
                         <field name="TIME_MACHINE_ENABLED">FALSE</field>
                         <next>
-                          <block type="trade_definition_restartonerror" id="re_dzo_a7" deletable="false" movable="false">
+                          <block type="trade_definition_restartonerror" id="o5u4_re_1" deletable="false" movable="false">
                             <field name="RESTARTONERROR">TRUE</field>
                           </block>
                         </next>
@@ -47,45 +48,78 @@
       </block>
     </statement>
     <statement name="INITIALIZATION">
-      <block type="variables_set" id="set_dzo_b1">
-        <field name="VAR" id="var_Stake_dzo01">Stake</field>
+      <block type="variables_set" id="o5u4_set_1">
+        <field name="VAR" id="o5u4_var_stake">Stake</field>
         <value name="VALUE">
-          <block type="math_number" id="num_dzo_b2">
+          <block type="math_number" id="o5u4_num_1">
             <field name="NUM">0.35</field>
           </block>
         </value>
         <next>
-          <block type="variables_set" id="set_dzo_b3">
-            <field name="VAR" id="var_InitialStake_dzo02">Initial Stake</field>
+          <block type="variables_set" id="o5u4_set_2">
+            <field name="VAR" id="o5u4_var_mstake">Martingale_stake</field>
             <value name="VALUE">
-              <block type="math_number" id="num_dzo_b4">
-                <field name="NUM">0.35</field>
+              <block type="variables_get" id="o5u4_get_1">
+                <field name="VAR" id="o5u4_var_stake">Stake</field>
               </block>
             </value>
             <next>
-              <block type="variables_set" id="set_dzo_b5">
-                <field name="VAR" id="var_Martingale_dzo03">Martingale</field>
+              <block type="variables_set" id="o5u4_set_3">
+                <field name="VAR" id="o5u4_var_msize">Martingale_size</field>
                 <value name="VALUE">
-                  <block type="math_number" id="num_dzo_b6">
+                  <block type="math_number" id="o5u4_num_2">
                     <field name="NUM">2</field>
                   </block>
                 </value>
                 <next>
-                  <block type="variables_set" id="set_dzo_b7">
-                    <field name="VAR" id="var_TakeProfit_dzo04">Take Profit</field>
+                  <block type="variables_set" id="o5u4_set_4">
+                    <field name="VAR" id="o5u4_var_sl">Stop_loss</field>
                     <value name="VALUE">
-                      <block type="math_number" id="num_dzo_b8">
-                        <field name="NUM">10</field>
+                      <block type="math_number" id="o5u4_num_3">
+                        <field name="NUM">5</field>
                       </block>
                     </value>
                     <next>
-                      <block type="variables_set" id="set_dzo_b9">
-                        <field name="VAR" id="var_StopLoss_dzo05">Stop Loss</field>
+                      <block type="variables_set" id="o5u4_set_5">
+                        <field name="VAR" id="o5u4_var_tp">Take_profit</field>
                         <value name="VALUE">
-                          <block type="math_number" id="num_dzo_ba">
-                            <field name="NUM">5</field>
+                          <block type="math_number" id="o5u4_num_4">
+                            <field name="NUM">10</field>
                           </block>
                         </value>
+                        <next>
+                          <block type="lists_create_with" id="o5u4_lcw_1">
+                            <field name="VARIABLE" id="o5u4_var_plist">Prediction_list</field>
+                            <statement name="STACK">
+                              <block type="lists_statement" id="o5u4_ls_1" movable="false">
+                                <value name="VALUE">
+                                  <block type="math_number" id="o5u4_num_5">
+                                    <field name="NUM">5</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="lists_statement" id="o5u4_ls_2" movable="false">
+                                    <value name="VALUE">
+                                      <block type="math_number" id="o5u4_num_6">
+                                        <field name="NUM">4</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="variables_set" id="o5u4_set_6">
+                                <field name="VAR" id="o5u4_var_count">Prediction_count</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="o5u4_num_7">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>
@@ -97,67 +131,237 @@
       </block>
     </statement>
     <statement name="SUBMARKET">
-      <block type="trade_definition_tradeoptions" id="to_dzo_c1">
+      <block type="trade_definition_tradeoptions" id="o5u4_to_1">
         <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
         <field name="DURATIONTYPE_LIST">t</field>
         <value name="DURATION">
-          <shadow type="math_number_positive" id="dur_dzo_c2">
+          <shadow type="math_number_positive" id="o5u4_shd_1">
             <field name="NUM">1</field>
           </shadow>
         </value>
         <value name="AMOUNT">
-          <shadow type="math_number_positive" id="amt_dzo_c3">
+          <shadow type="math_number_positive" id="o5u4_shd_2">
             <field name="NUM">0.35</field>
           </shadow>
-          <block type="variables_get" id="get_dzo_c4">
-            <field name="VAR" id="var_Stake_dzo01">Stake</field>
+          <block type="variables_get" id="o5u4_get_2">
+            <field name="VAR" id="o5u4_var_mstake">Martingale_stake</field>
           </block>
         </value>
         <value name="PREDICTION">
-          <shadow type="math_number_positive" id="pred_dzo_c5">
-            <field name="NUM">5</field>
+          <shadow type="math_number_positive" id="o5u4_shd_3" inline="true">
+            <field name="NUM">1</field>
           </shadow>
-          <block type="variables_get" id="get_dzo_c6">
-            <field name="VAR" id="var_Prediction_dzo11">Prediction</field>
+          <block type="lists_getIndex" id="o5u4_gix_1">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="true"></mutation>
+            <field name="MODE">GET</field>
+            <field name="WHERE">FROM_START</field>
+            <value name="VALUE">
+              <block type="variables_get" id="o5u4_get_3">
+                <field name="VAR" id="o5u4_var_plist">Prediction_list</field>
+              </block>
+            </value>
+            <value name="AT">
+              <block type="variables_get" id="o5u4_get_4">
+                <field name="VAR" id="o5u4_var_count">Prediction_count</field>
+              </block>
+            </value>
           </block>
         </value>
       </block>
     </statement>
   </block>
-  <block type="before_purchase" id="bp_dzo_d1" deletable="false" x="0" y="640">
+  <block type="after_purchase" id="o5u4_ap_1" x="1173" y="110">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="o5u4_if_1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="o5u4_ccr_1">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="o5u4_set_7">
+            <field name="VAR" id="o5u4_var_mstake">Martingale_stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="o5u4_get_5">
+                <field name="VAR" id="o5u4_var_stake">Stake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="o5u4_set_8">
+            <field name="VAR" id="o5u4_var_mstake">Martingale_stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="o5u4_ma_1">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="o5u4_shn_1">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="o5u4_get_6">
+                    <field name="VAR" id="o5u4_var_mstake">Martingale_stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="o5u4_shn_2">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="o5u4_get_7">
+                    <field name="VAR" id="o5u4_var_msize">Martingale_size</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="controls_if" id="o5u4_if_2">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="o5u4_cmp_1">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="o5u4_get_8">
+                    <field name="VAR" id="o5u4_var_count">Prediction_count</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="o5u4_num_8">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="o5u4_set_9">
+                <field name="VAR" id="o5u4_var_count">Prediction_count</field>
+                <value name="VALUE">
+                  <block type="math_number" id="o5u4_num_9">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="variables_set" id="o5u4_set_10">
+                <field name="VAR" id="o5u4_var_count">Prediction_count</field>
+                <value name="VALUE">
+                  <block type="math_number" id="o5u4_num_10">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="o5u4_if_3">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="o5u4_cmp_2">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="o5u4_tp_1"></block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="o5u4_get_9">
+                        <field name="VAR" id="o5u4_var_tp">Take_profit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_print" id="o5u4_txt_1">
+                    <value name="TEXT">
+                      <shadow type="text" id="o5u4_shd_4">
+                        <field name="TEXT">TAKE PROFIT HIT - Bot stopped</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="controls_if" id="o5u4_if_4">
+                    <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                    <value name="IF0">
+                      <block type="logic_compare" id="o5u4_cmp_3">
+                        <field name="OP">GTE</field>
+                        <value name="A">
+                          <block type="math_arithmetic" id="o5u4_ma_2">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <shadow type="math_number" id="o5u4_shn_3">
+                                <field name="NUM">1</field>
+                              </shadow>
+                              <block type="total_profit" id="o5u4_tp_2"></block>
+                            </value>
+                            <value name="B">
+                              <shadow type="math_number" id="o5u4_shn_4">
+                                <field name="NUM">-1</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="variables_get" id="o5u4_get_10">
+                            <field name="VAR" id="o5u4_var_sl">Stop_loss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="text_print" id="o5u4_txt_2">
+                        <value name="TEXT">
+                          <shadow type="text" id="o5u4_shd_5">
+                            <field name="TEXT">STOP LOSS HIT - Bot stopped</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="trade_again" id="o5u4_ta_1"></block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="o5u4_bp_1" deletable="false" x="0" y="1248">
     <statement name="BEFOREPURCHASE_STACK">
-      <block type="variables_set" id="set_dzo_d2">
-        <field name="VAR" id="var_Digits_dzo06">Digits</field>
+      <block type="variables_set" id="o5u4_set_11">
+        <field name="VAR" id="o5u4_var_digits">Digits</field>
         <value name="VALUE">
-          <block type="lists_getSublist" id="sub_dzo_d3">
+          <block type="lists_getSublist" id="o5u4_sub_1">
             <mutation at1="true" at2="false"></mutation>
             <field name="WHERE1">FROM_END</field>
             <field name="WHERE2">LAST</field>
             <value name="LIST">
-              <block type="lastDigitList" id="ldl_dzo_d4"></block>
+              <block type="lastDigitList" id="o5u4_ldl_1"></block>
             </value>
             <value name="AT1">
-              <block type="math_number" id="num_dzo_d5">
+              <block type="math_number" id="o5u4_num_11">
                 <field name="NUM">99</field>
               </block>
             </value>
           </block>
         </value>
         <next>
-          <block type="variables_set" id="set_dzo_d6">
-            <field name="VAR" id="var_Cold_dzo07">Cold</field>
+          <block type="variables_set" id="o5u4_set_12">
+            <field name="VAR" id="o5u4_var_cold">Cold</field>
             <value name="VALUE">
-              <block type="lists_getIndex" id="gix_dzo_d7">
+              <block type="lists_getIndex" id="o5u4_gix_2">
                 <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="false"></mutation>
                 <field name="MODE">GET</field>
                 <field name="WHERE">FIRST</field>
                 <value name="VALUE">
-                  <block type="math_on_list" id="mol_dzo_d8">
+                  <block type="math_on_list" id="o5u4_mol_1">
                     <mutation op="ANTIMODE"></mutation>
                     <field name="OP">ANTIMODE</field>
                     <value name="LIST">
-                      <block type="variables_get" id="get_dzo_d9">
-                        <field name="VAR" id="var_Digits_dzo06">Digits</field>
+                      <block type="variables_get" id="o5u4_get_11">
+                        <field name="VAR" id="o5u4_var_digits">Digits</field>
                       </block>
                     </value>
                   </block>
@@ -165,20 +369,20 @@
               </block>
             </value>
             <next>
-              <block type="variables_set" id="set_dzo_da">
-                <field name="VAR" id="var_Hot_dzo08">Hot</field>
+              <block type="variables_set" id="o5u4_set_13">
+                <field name="VAR" id="o5u4_var_hot">Hot</field>
                 <value name="VALUE">
-                  <block type="lists_getIndex" id="gix_dzo_db">
+                  <block type="lists_getIndex" id="o5u4_gix_3">
                     <mutation xmlns="http://www.w3.org/1999/xhtml" statement="false" at="false"></mutation>
                     <field name="MODE">GET</field>
-                    <field name="WHERE">LAST</field>
+                    <field name="WHERE">FIRST</field>
                     <value name="VALUE">
-                      <block type="math_on_list" id="mol_dzo_dc">
+                      <block type="math_on_list" id="o5u4_mol_2">
                         <mutation op="MODE"></mutation>
                         <field name="OP">MODE</field>
                         <value name="LIST">
-                          <block type="variables_get" id="get_dzo_dd">
-                            <field name="VAR" id="var_Digits_dzo06">Digits</field>
+                          <block type="variables_get" id="o5u4_get_12">
+                            <field name="VAR" id="o5u4_var_digits">Digits</field>
                           </block>
                         </value>
                       </block>
@@ -186,48 +390,48 @@
                   </block>
                 </value>
                 <next>
-                  <block type="variables_set" id="set_dzo_de">
-                    <field name="VAR" id="var_Last_dzo09">Last</field>
+                  <block type="variables_set" id="o5u4_set_14">
+                    <field name="VAR" id="o5u4_var_last">Last</field>
                     <value name="VALUE">
-                      <block type="last_digit" id="ld_dzo_df"></block>
+                      <block type="last_digit" id="o5u4_ld_1"></block>
                     </value>
                     <next>
-                      <block type="variables_set" id="set_dzo_dg">
-                        <field name="VAR" id="var_Ready_dzo10">Ready</field>
+                      <block type="variables_set" id="o5u4_set_15">
+                        <field name="VAR" id="o5u4_var_ready">Ready</field>
                         <value name="VALUE">
-                          <block type="logic_operation" id="lop_dzo_dh">
+                          <block type="logic_operation" id="o5u4_lop_1">
                             <field name="OP">AND</field>
                             <value name="A">
-                              <block type="logic_operation" id="lop_dzo_di">
+                              <block type="logic_operation" id="o5u4_lop_2">
                                 <field name="OP">AND</field>
                                 <value name="A">
-                                  <block type="logic_operation" id="lop_dzo_dj">
+                                  <block type="logic_operation" id="o5u4_lop_3">
                                     <field name="OP">OR</field>
                                     <value name="A">
-                                      <block type="logic_compare" id="cmp_dzo_dk">
+                                      <block type="logic_compare" id="o5u4_cmp_4">
                                         <field name="OP">EQ</field>
                                         <value name="A">
-                                          <block type="variables_get" id="get_dzo_dl">
-                                            <field name="VAR" id="var_Last_dzo09">Last</field>
+                                          <block type="variables_get" id="o5u4_get_13">
+                                            <field name="VAR" id="o5u4_var_last">Last</field>
                                           </block>
                                         </value>
                                         <value name="B">
-                                          <block type="math_number" id="num_dzo_dm">
+                                          <block type="math_number" id="o5u4_num_12">
                                             <field name="NUM">4</field>
                                           </block>
                                         </value>
                                       </block>
                                     </value>
                                     <value name="B">
-                                      <block type="logic_compare" id="cmp_dzo_dn">
+                                      <block type="logic_compare" id="o5u4_cmp_5">
                                         <field name="OP">EQ</field>
                                         <value name="A">
-                                          <block type="variables_get" id="get_dzo_do">
-                                            <field name="VAR" id="var_Last_dzo09">Last</field>
+                                          <block type="variables_get" id="o5u4_get_14">
+                                            <field name="VAR" id="o5u4_var_last">Last</field>
                                           </block>
                                         </value>
                                         <value name="B">
-                                          <block type="math_number" id="num_dzo_dp">
+                                          <block type="math_number" id="o5u4_num_13">
                                             <field name="NUM">5</field>
                                           </block>
                                         </value>
@@ -236,71 +440,76 @@
                                   </block>
                                 </value>
                                 <value name="B">
-                                  <block type="logic_operation" id="lop_dzo_dq">
-                                    <field name="OP">OR</field>
+                                  <block type="logic_operation" id="o5u4_lop_4">
+                                    <field name="OP">AND</field>
                                     <value name="A">
-                                      <block type="logic_compare" id="cmp_dzo_dr">
-                                        <field name="OP">EQ</field>
+                                      <block type="logic_operation" id="o5u4_lop_5">
+                                        <field name="OP">AND</field>
                                         <value name="A">
-                                          <block type="variables_get" id="get_dzo_ds">
-                                            <field name="VAR" id="var_Cold_dzo07">Cold</field>
+                                          <block type="logic_compare" id="o5u4_cmp_6">
+                                            <field name="OP">NEQ</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="o5u4_get_15">
+                                                <field name="VAR" id="o5u4_var_hot">Hot</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="o5u4_num_14">
+                                                <field name="NUM">4</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
                                         <value name="B">
-                                          <block type="math_number" id="num_dzo_dt">
-                                            <field name="NUM">4</field>
+                                          <block type="logic_compare" id="o5u4_cmp_7">
+                                            <field name="OP">NEQ</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="o5u4_get_16">
+                                                <field name="VAR" id="o5u4_var_hot">Hot</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="o5u4_num_15">
+                                                <field name="NUM">5</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
                                       </block>
                                     </value>
                                     <value name="B">
-                                      <block type="logic_compare" id="cmp_dzo_du">
-                                        <field name="OP">EQ</field>
+                                      <block type="logic_operation" id="o5u4_lop_6">
+                                        <field name="OP">AND</field>
                                         <value name="A">
-                                          <block type="variables_get" id="get_dzo_dv">
-                                            <field name="VAR" id="var_Cold_dzo07">Cold</field>
+                                          <block type="logic_compare" id="o5u4_cmp_8">
+                                            <field name="OP">NEQ</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="o5u4_get_17">
+                                                <field name="VAR" id="o5u4_var_cold">Cold</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="o5u4_num_16">
+                                                <field name="NUM">4</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
                                         <value name="B">
-                                          <block type="math_number" id="num_dzo_dw">
-                                            <field name="NUM">5</field>
+                                          <block type="logic_compare" id="o5u4_cmp_9">
+                                            <field name="OP">NEQ</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="o5u4_get_18">
+                                                <field name="VAR" id="o5u4_var_cold">Cold</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="o5u4_num_17">
+                                                <field name="NUM">5</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
-                                      </block>
-                                    </value>
-                                  </block>
-                                </value>
-                              </block>
-                            </value>
-                            <value name="B">
-                              <block type="logic_operation" id="lop_dzo_dx">
-                                <field name="OP">OR</field>
-                                <value name="A">
-                                  <block type="logic_compare" id="cmp_dzo_dy">
-                                    <field name="OP">GT</field>
-                                    <value name="A">
-                                      <block type="variables_get" id="get_dzo_dz">
-                                        <field name="VAR" id="var_Hot_dzo08">Hot</field>
-                                      </block>
-                                    </value>
-                                    <value name="B">
-                                      <block type="math_number" id="num_dzo_e1">
-                                        <field name="NUM">5</field>
-                                      </block>
-                                    </value>
-                                  </block>
-                                </value>
-                                <value name="B">
-                                  <block type="logic_compare" id="cmp_dzo_e2">
-                                    <field name="OP">LT</field>
-                                    <value name="A">
-                                      <block type="variables_get" id="get_dzo_e3">
-                                        <field name="VAR" id="var_Hot_dzo08">Hot</field>
-                                      </block>
-                                    </value>
-                                    <value name="B">
-                                      <block type="math_number" id="num_dzo_e4">
-                                        <field name="NUM">4</field>
                                       </block>
                                     </value>
                                   </block>
@@ -310,58 +519,38 @@
                           </block>
                         </value>
                         <next>
-                          <block type="controls_if" id="if_dzo_e5">
+                          <block type="controls_if" id="o5u4_if_5">
                             <value name="IF0">
-                              <block type="variables_get" id="get_dzo_e6">
-                                <field name="VAR" id="var_Ready_dzo10">Ready</field>
+                              <block type="variables_get" id="o5u4_get_19">
+                                <field name="VAR" id="o5u4_var_ready">Ready</field>
                               </block>
                             </value>
                             <statement name="DO0">
-                              <block type="controls_if" id="if_dzo_e7">
+                              <block type="controls_if" id="o5u4_if_6">
                                 <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
                                 <value name="IF0">
-                                  <block type="logic_compare" id="cmp_dzo_e8">
-                                    <field name="OP">GT</field>
+                                  <block type="logic_compare" id="o5u4_cmp_10">
+                                    <field name="OP">EQ</field>
                                     <value name="A">
-                                      <block type="variables_get" id="get_dzo_e9">
-                                        <field name="VAR" id="var_Hot_dzo08">Hot</field>
+                                      <block type="variables_get" id="o5u4_get_20">
+                                        <field name="VAR" id="o5u4_var_count">Prediction_count</field>
                                       </block>
                                     </value>
                                     <value name="B">
-                                      <block type="math_number" id="num_dzo_ea">
-                                        <field name="NUM">5</field>
+                                      <block type="math_number" id="o5u4_num_18">
+                                        <field name="NUM">2</field>
                                       </block>
                                     </value>
                                   </block>
                                 </value>
                                 <statement name="DO0">
-                                  <block type="variables_set" id="set_dzo_eb">
-                                    <field name="VAR" id="var_Prediction_dzo11">Prediction</field>
-                                    <value name="VALUE">
-                                      <block type="math_number" id="num_dzo_eb1">
-                                        <field name="NUM">5</field>
-                                      </block>
-                                    </value>
-                                    <next>
-                                      <block type="purchase" id="pur_dzo_eb2">
-                                        <field name="PURCHASE_LIST">DIGITOVER</field>
-                                      </block>
-                                    </next>
+                                  <block type="purchase" id="o5u4_pur_1">
+                                    <field name="PURCHASE_LIST">DIGITUNDER</field>
                                   </block>
                                 </statement>
                                 <statement name="ELSE">
-                                  <block type="variables_set" id="set_dzo_ed">
-                                    <field name="VAR" id="var_Prediction_dzo11">Prediction</field>
-                                    <value name="VALUE">
-                                      <block type="math_number" id="num_dzo_ed1">
-                                        <field name="NUM">4</field>
-                                      </block>
-                                    </value>
-                                    <next>
-                                      <block type="purchase" id="pur_dzo_ed2">
-                                        <field name="PURCHASE_LIST">DIGITUNDER</field>
-                                      </block>
-                                    </next>
+                                  <block type="purchase" id="o5u4_pur_2">
+                                    <field name="PURCHASE_LIST">DIGITOVER</field>
                                   </block>
                                 </statement>
                               </block>
@@ -376,114 +565,6 @@
             </next>
           </block>
         </next>
-      </block>
-    </statement>
-  </block>
-  <block type="after_purchase" id="ap_dzo_f1" x="714" y="60">
-    <statement name="AFTERPURCHASE_STACK">
-      <block type="controls_if" id="if_dzo_f2">
-        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
-        <value name="IF0">
-          <block type="logic_compare" id="cmp_dzo_f3">
-            <field name="OP">GTE</field>
-            <value name="A">
-              <block type="total_profit" id="tp_dzo_f4"></block>
-            </value>
-            <value name="B">
-              <block type="variables_get" id="get_dzo_f5">
-                <field name="VAR" id="var_TakeProfit_dzo04">Take Profit</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <statement name="DO0">
-          <block type="text_print" id="txt_dzo_f6">
-            <value name="TEXT">
-              <shadow type="text" id="shd_dzo_f7">
-                <field name="TEXT">TAKE PROFIT HIT - Bot stopped</field>
-              </shadow>
-            </value>
-          </block>
-        </statement>
-        <value name="IF1">
-          <block type="logic_compare" id="cmp_dzo_f8">
-            <field name="OP">LTE</field>
-            <value name="A">
-              <block type="total_profit" id="tp_dzo_f9"></block>
-            </value>
-            <value name="B">
-              <block type="math_single" id="ms_dzo_fa">
-                <field name="OP">NEG</field>
-                <value name="NUM">
-                  <shadow type="math_number" id="shn_dzo_fb">
-                    <field name="NUM">5</field>
-                  </shadow>
-                  <block type="variables_get" id="get_dzo_fc">
-                    <field name="VAR" id="var_StopLoss_dzo05">Stop Loss</field>
-                  </block>
-                </value>
-              </block>
-            </value>
-          </block>
-        </value>
-        <statement name="DO1">
-          <block type="text_print" id="txt_dzo_fd">
-            <value name="TEXT">
-              <shadow type="text" id="shd_dzo_fe">
-                <field name="TEXT">STOP LOSS HIT - Bot stopped</field>
-              </shadow>
-            </value>
-          </block>
-        </statement>
-        <statement name="ELSE">
-          <block type="controls_if" id="if_dzo_ff">
-            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
-            <value name="IF0">
-              <block type="contract_check_result" id="ck_dzo_fg">
-                <field name="CHECK_RESULT">win</field>
-              </block>
-            </value>
-            <statement name="DO0">
-              <block type="variables_set" id="set_dzo_fh">
-                <field name="VAR" id="var_Stake_dzo01">Stake</field>
-                <value name="VALUE">
-                  <block type="variables_get" id="get_dzo_fi">
-                    <field name="VAR" id="var_InitialStake_dzo02">Initial Stake</field>
-                  </block>
-                </value>
-              </block>
-            </statement>
-            <statement name="ELSE">
-              <block type="variables_set" id="set_dzo_fj">
-                <field name="VAR" id="var_Stake_dzo01">Stake</field>
-                <value name="VALUE">
-                  <block type="math_arithmetic" id="ma_dzo_fk">
-                    <field name="OP">MULTIPLY</field>
-                    <value name="A">
-                      <shadow type="math_number" id="shn_dzo_fl">
-                        <field name="NUM">1</field>
-                      </shadow>
-                      <block type="variables_get" id="get_dzo_fm">
-                        <field name="VAR" id="var_Stake_dzo01">Stake</field>
-                      </block>
-                    </value>
-                    <value name="B">
-                      <shadow type="math_number" id="shn_dzo_fn">
-                        <field name="NUM">2</field>
-                      </shadow>
-                      <block type="variables_get" id="get_dzo_fo">
-                        <field name="VAR" id="var_Martingale_dzo03">Martingale</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-              </block>
-            </statement>
-            <next>
-              <block type="trade_again" id="ta_dzo_fp"></block>
-            </next>
-          </block>
-        </statement>
       </block>
     </statement>
   </block>
