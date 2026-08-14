@@ -1,0 +1,195 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="gt.concept.initialStake">Initial Stake</variable>
+    <variable id="gt.concept.martingale">Martingale Multiplier</variable>
+    <variable id="gt.concept.currentStake">Current Stake</variable>
+  </variables>
+  <block type="trade_definition" id="gt.concept.tradeDef" deletable="false" x="0" y="50">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="gt.concept.market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ100V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="gt.concept.tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="gt.concept.contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="gt.concept.candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="gt.concept.restartbs" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="gt.concept.restarterr" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="gt.concept.setInitial">
+        <field name="VAR" id="gt.concept.initialStake">Initial Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="gt.concept.initialNum">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="gt.concept.setMartingale">
+            <field name="VAR" id="gt.concept.martingale">Martingale Multiplier</field>
+            <value name="VALUE">
+              <block type="math_number" id="gt.concept.martingaleNum">
+                <field name="NUM">2.1</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="gt.concept.setCurrent">
+                <field name="VAR" id="gt.concept.currentStake">Current Stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="gt.concept.getInitialForCurrent">
+                    <field name="VAR" id="gt.concept.initialStake">Initial Stake</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="gt.concept.tradeoptions">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <block type="math_number" id="gt.concept.durationNum">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <block type="variables_get" id="gt.concept.getCurrentStake">
+            <field name="VAR" id="gt.concept.currentStake">Current Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="gt.concept.predictionShadow">
+            <field name="NUM">2</field>
+          </shadow>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="gt.concept.beforePurchase" deletable="false" x="0" y="900">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="strategy_concept_block_apply" id="gt.concept.applyConcept">
+        <value name="TICK_COUNT">
+          <shadow type="math_number" id="gt.concept.ticksShadow">
+            <field name="NUM">15</field>
+          </shadow>
+        </value>
+        <value name="THRESHOLD">
+          <shadow type="math_number" id="gt.concept.thrShadow">
+            <field name="NUM">70</field>
+          </shadow>
+        </value>
+        <value name="OVER_BARRIER">
+          <shadow type="math_number" id="gt.concept.overShadow">
+            <field name="NUM">2</field>
+          </shadow>
+        </value>
+        <value name="UNDER_BARRIER">
+          <shadow type="math_number" id="gt.concept.underShadow">
+            <field name="NUM">7</field>
+          </shadow>
+        </value>
+        <value name="WAIT_BEFORE_SCAN">
+          <shadow type="math_number" id="gt.concept.scanShadow">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+        <value name="COOLDOWN">
+          <shadow type="math_number" id="gt.concept.cooldownShadow">
+            <field name="NUM">3</field>
+          </shadow>
+        </value>
+        <value name="WIN_STREAK_LOCK">
+          <shadow type="math_number" id="gt.concept.winLockShadow">
+            <field name="NUM">3</field>
+          </shadow>
+        </value>
+        <value name="LOCK_THRESHOLD">
+          <shadow type="math_number" id="gt.concept.lockThrShadow">
+            <field name="NUM">80</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="purchase" id="gt.concept.purchase">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="gt.concept.afterPurchase" x="760" y="50">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="gt.concept.resultIf">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="gt.concept.checkWin">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="gt.concept.resetStake">
+            <field name="VAR" id="gt.concept.currentStake">Current Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="gt.concept.getInitialOnWin">
+                <field name="VAR" id="gt.concept.initialStake">Initial Stake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="gt.concept.martingaleStake">
+            <field name="VAR" id="gt.concept.currentStake">Current Stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="gt.concept.multiplyStake">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="gt.concept.shadowA">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="gt.concept.getCurrentOnLoss">
+                    <field name="VAR" id="gt.concept.currentStake">Current Stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="gt.concept.shadowB">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="gt.concept.getMartingaleOnLoss">
+                    <field name="VAR" id="gt.concept.martingale">Martingale Multiplier</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="gt.concept.tradeAgain"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

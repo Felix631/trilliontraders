@@ -1,0 +1,158 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="gt.seq.initialStake">Initial Stake</variable>
+    <variable id="gt.seq.martingale">Martingale Multiplier</variable>
+    <variable id="gt.seq.currentStake">Current Stake</variable>
+  </variables>
+  <block type="trade_definition" id="gt.seq.tradeDef" deletable="false" x="0" y="50">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="gt.seq.market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">R_10</field>
+        <next>
+          <block type="trade_definition_tradetype" id="gt.seq.tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="gt.seq.contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="gt.seq.candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="gt.seq.restartbs" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="gt.seq.restarterr" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="gt.seq.setInitial">
+        <field name="VAR" id="gt.seq.initialStake">Initial Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="gt.seq.initialNum">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="gt.seq.setMartingale">
+            <field name="VAR" id="gt.seq.martingale">Martingale Multiplier</field>
+            <value name="VALUE">
+              <block type="math_number" id="gt.seq.martingaleNum">
+                <field name="NUM">2.1</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="gt.seq.setCurrent">
+                <field name="VAR" id="gt.seq.currentStake">Current Stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="gt.seq.getInitialForCurrent">
+                    <field name="VAR" id="gt.seq.initialStake">Initial Stake</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="gt.seq.tradeoptions">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <block type="math_number" id="gt.seq.durationNum">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <block type="variables_get" id="gt.seq.getCurrentStake">
+            <field name="VAR" id="gt.seq.currentStake">Current Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="gt.seq.predictionShadow">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="gt.seq.beforePurchase" deletable="false" x="0" y="900">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="strategy_contract_sequence_diff0_over12_apply" id="gt.seq.applySequence">
+        <next>
+          <block type="purchase" id="gt.seq.purchase">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="gt.seq.afterPurchase" x="760" y="50">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="gt.seq.resultIf">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="gt.seq.checkWin">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="gt.seq.resetStake">
+            <field name="VAR" id="gt.seq.currentStake">Current Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="gt.seq.getInitialOnWin">
+                <field name="VAR" id="gt.seq.initialStake">Initial Stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="strategy_rotate_market" id="gt.seq.rotateMarket"></block>
+            </next>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="gt.seq.martingaleStake">
+            <field name="VAR" id="gt.seq.currentStake">Current Stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="gt.seq.multiplyStake">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="gt.seq.shadowA">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="gt.seq.getCurrentOnLoss">
+                    <field name="VAR" id="gt.seq.currentStake">Current Stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="gt.seq.shadowB">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="gt.seq.getMartingaleOnLoss">
+                    <field name="VAR" id="gt.seq.martingale">Martingale Multiplier</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="gt.seq.tradeAgain"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

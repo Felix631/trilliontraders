@@ -1,0 +1,800 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="eo_v1">Strategy Type</variable>
+    <variable id="eo_v2">Stake</variable>
+    <variable id="eo_v3">Initial Stake</variable>
+    <variable id="eo_v4">Martingale Multiplier</variable>
+    <variable id="eo_v5">Use Martingale</variable>
+    <variable id="eo_v6">Take Profit (Wins)</variable>
+    <variable id="eo_v7">Stop Loss ($)</variable>
+    <variable id="eo_v8">Run Count</variable>
+    <variable id="eo_v9">Recovery Count</variable>
+    <variable id="eo_v10">Max Recovery Trades</variable>
+    <variable id="eo_v11">% Confirmation Threshold</variable>
+    <variable id="eo_v12">Digits for % Check</variable>
+    <variable id="eo_v13">text</variable>
+  </variables>
+
+  <block type="trade_definition" id="eo_td_main" deletable="false" x="0" y="60">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="eo_td_market" deletable="false" movable="false">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" vh_enabled="false" vh_max_steps="1" vh_min_trades="1" vh_stake="0.35"></mutation>
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">R_50</field>
+        <field name="ALTERNATE_MARKETS">FALSE</field>
+        <field name="ALTERNATE_EVERY">1</field>
+        <field name="MULTI_MARKET">FALSE</field>
+        <field name="VH_ENABLED">FALSE</field>
+        <field name="VH_SETTINGS_BTN">VH Settings</field>
+        <next>
+          <block type="trade_definition_tradetype" id="eo_td_type" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">evenodd</field>
+            <next>
+              <block type="trade_definition_contracttype" id="eo_td_contract" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="eo_td_candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="eo_td_restart" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="eo_td_err" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <statement name="INITIALIZATION">
+      <block type="variables_set_option" id="eo_init_strat">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+        <field name="VAR" id="eo_v1">Strategy Type</field>
+        <field name="OPTION">Switch After 3 Runs (Aggressive)</field>
+        <next>
+          <block type="variables_set" id="eo_init_stake">
+            <field name="VAR" id="eo_v2">Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="eo_stake_num">
+                <field name="NUM">0.5</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="eo_init_marti">
+                <field name="VAR" id="eo_v4">Martingale Multiplier</field>
+                <value name="VALUE">
+                  <block type="math_number" id="eo_marti_num">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="eo_init_use_marti">
+                    <field name="VAR" id="eo_v5">Use Martingale</field>
+                    <value name="VALUE">
+                      <block type="logic_boolean" id="eo_marti_bool">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="eo_init_tp">
+                        <field name="VAR" id="eo_v6">Take Profit (Wins)</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="eo_tp_num">
+                            <field name="NUM">8</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="eo_init_sl">
+                            <field name="VAR" id="eo_v7">Stop Loss ($)</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="eo_sl_num">
+                                <field name="NUM">10</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="eo_init_maxrec">
+                                <field name="VAR" id="eo_v10">Max Recovery Trades</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="eo_maxrec_num">
+                                    <field name="NUM">3</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="eo_init_pct">
+                                    <field name="VAR" id="eo_v11">% Confirmation Threshold</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="eo_pct_num">
+                                        <field name="NUM">60</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="variables_set" id="eo_init_digcheck">
+                                        <field name="VAR" id="eo_v12">Digits for % Check</field>
+                                        <value name="VALUE">
+                                          <block type="math_number" id="eo_digcheck_num">
+                                            <field name="NUM">20</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" id="eo_init_init_stake" collapsed="true">
+                                            <field name="VAR" id="eo_v3">Initial Stake</field>
+                                            <value name="VALUE">
+                                              <block type="variables_get" id="eo_get_stake_for_init">
+                                                <field name="VAR" id="eo_v2">Stake</field>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="variables_set" id="eo_init_runcount" collapsed="true">
+                                                <field name="VAR" id="eo_v8">Run Count</field>
+                                                <value name="VALUE">
+                                                  <block type="math_number" id="eo_runcount_zero">
+                                                    <field name="NUM">0</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="variables_set" id="eo_init_reccount" collapsed="true">
+                                                    <field name="VAR" id="eo_v9">Recovery Count</field>
+                                                    <value name="VALUE">
+                                                      <block type="math_number" id="eo_reccount_zero">
+                                                        <field name="NUM">0</field>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="eo_tradeopts">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="false"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="eo_dur_shadow">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="eo_amt_shadow">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="eo_get_stake_for_opts">
+            <field name="VAR" id="eo_v2">Stake</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+
+  <block type="after_purchase" id="eo_after_purchase" collapsed="false" x="760" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+
+      <block type="notify" id="eo_notify_runs" collapsed="true">
+        <field name="NOTIFICATION_TYPE">success</field>
+        <field name="NOTIFICATION_SOUND">silent</field>
+        <value name="MESSAGE">
+          <shadow type="text" id="eo_notify_shadow">
+            <field name="TEXT">Run Count</field>
+          </shadow>
+          <block type="variables_get" id="eo_get_runcount_notify">
+            <field name="VAR" id="eo_v8">Run Count</field>
+          </block>
+        </value>
+        <next>
+
+          <block type="controls_if" id="eo_win_loss_check" collapsed="false">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="contract_check_result" id="eo_check_win">
+                <field name="CHECK_RESULT">win</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="eo_win_reset_stake">
+                <field name="VAR" id="eo_v2">Stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="eo_get_init_stake_win">
+                    <field name="VAR" id="eo_v3">Initial Stake</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="math_change" id="eo_win_inc_runcount">
+                    <field name="VAR" id="eo_v8">Run Count</field>
+                    <value name="DELTA">
+                      <shadow type="math_number" id="eo_delta_one">
+                        <field name="NUM">1</field>
+                      </shadow>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="eo_win_reset_rec">
+                        <field name="VAR" id="eo_v9">Recovery Count</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="eo_rec_zero_win">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="controls_if" id="eo_loss_marti_check">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_operation" id="eo_marti_and_cond">
+                    <field name="OP">AND</field>
+                    <value name="A">
+                      <block type="logic_compare" id="eo_marti_eq_true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                          <block type="variables_get" id="eo_get_use_marti">
+                            <field name="VAR" id="eo_v5">Use Martingale</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_boolean" id="eo_bool_true_marti">
+                            <field name="BOOL">TRUE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_compare" id="eo_rec_lt_max">
+                        <field name="OP">LT</field>
+                        <value name="A">
+                          <block type="variables_get" id="eo_get_rec_count">
+                            <field name="VAR" id="eo_v9">Recovery Count</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="variables_get" id="eo_get_max_rec">
+                            <field name="VAR" id="eo_v10">Max Recovery Trades</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="eo_loss_marti_set">
+                    <field name="VAR" id="eo_v2">Stake</field>
+                    <value name="VALUE">
+                      <block type="math_arithmetic" id="eo_marti_multiply">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                          <shadow type="math_number" id="eo_marti_a_shadow">
+                            <field name="NUM">1</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_get_stake_marti">
+                            <field name="VAR" id="eo_v2">Stake</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="eo_marti_b_shadow">
+                            <field name="NUM">2</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_get_multiplier">
+                            <field name="VAR" id="eo_v4">Martingale Multiplier</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="math_change" id="eo_inc_rec_count">
+                        <field name="VAR" id="eo_v9">Recovery Count</field>
+                        <value name="DELTA">
+                          <shadow type="math_number" id="eo_rec_delta_one">
+                            <field name="NUM">1</field>
+                          </shadow>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="variables_set" id="eo_loss_reset_stake">
+                    <field name="VAR" id="eo_v2">Stake</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="eo_get_init_stake_loss">
+                        <field name="VAR" id="eo_v3">Initial Stake</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="eo_loss_reset_rec">
+                        <field name="VAR" id="eo_v9">Recovery Count</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="eo_rec_zero_loss">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+
+              <block type="controls_if" id="eo_tp_sl_check" collapsed="true">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+
+                <value name="IF0">
+                  <block type="logic_compare" id="eo_tp_cmp">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="variables_get" id="eo_get_runcount_tp">
+                        <field name="VAR" id="eo_v8">Run Count</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="eo_get_tp">
+                        <field name="VAR" id="eo_v6">Take Profit (Wins)</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_join" id="eo_tp_msg_join">
+                    <field name="VARIABLE" id="eo_v13">text</field>
+                    <statement name="STACK">
+                      <block type="text_statement" id="eo_tp_msg_1">
+                        <value name="TEXT">
+                          <shadow type="text" id="eo_tp_msg1_shadow">
+                            <field name="TEXT">🎯 TARGET HIT! Won </field>
+                          </shadow>
+                        </value>
+                        <next>
+                          <block type="text_statement" id="eo_tp_msg_2">
+                            <value name="TEXT">
+                              <shadow type="text" id="eo_tp_msg2_shadow">
+                                <field name="TEXT"></field>
+                              </shadow>
+                              <block type="variables_get" id="eo_get_tp_msg">
+                                <field name="VAR" id="eo_v6">Take Profit (Wins)</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="text_statement" id="eo_tp_msg_3">
+                                <value name="TEXT">
+                                  <shadow type="text" id="eo_tp_msg3_shadow">
+                                    <field name="TEXT"> trades. Total Profit: </field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="text_statement" id="eo_tp_msg_4">
+                                    <value name="TEXT">
+                                      <shadow type="text" id="eo_tp_msg4_shadow">
+                                        <field name="TEXT"></field>
+                                      </shadow>
+                                      <block type="total_profit" id="eo_total_profit_tp"></block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="text_print" id="eo_tp_print">
+                        <value name="TEXT">
+                          <shadow type="text" id="eo_tp_print_shadow">
+                            <field name="TEXT">Session Complete</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_get_text_tp">
+                            <field name="VAR" id="eo_v13">text</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+
+                <value name="IF1">
+                  <block type="logic_compare" id="eo_sl_cmp">
+                    <field name="OP">LTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="eo_total_profit_sl"></block>
+                    </value>
+                    <value name="B">
+                      <block type="math_single" id="eo_sl_neg">
+                        <field name="OP">NEG</field>
+                        <value name="NUM">
+                          <shadow type="math_number" id="eo_sl_shadow">
+                            <field name="NUM">9</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_get_sl">
+                            <field name="VAR" id="eo_v7">Stop Loss ($)</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="text_print" id="eo_sl_print">
+                    <value name="TEXT">
+                      <shadow type="text" id="eo_sl_print_shadow">
+                        <field name="TEXT">🛑 Stop Loss Hit — Bot Stopped</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+
+                <statement name="ELSE">
+                  <block type="trade_again" id="eo_trade_again"></block>
+                </statement>
+              </block>
+
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+
+  <block type="before_purchase" id="eo_before_purchase" collapsed="true" deletable="false" x="0" y="1200">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="eo_strat_router">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="4"></mutation>
+
+        <value name="IF0">
+          <block type="variables_is_option" id="eo_is_strat0">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+            <field name="VAR" id="eo_v1">Strategy Type</field>
+            <field name="OPTION">Switch After 3 Runs (Aggressive)</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="controls_if" id="eo_s0_parity">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="eo_s0_even3">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s0_n3_even">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="eo_s0_buy_odd">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="eo_s0_odd3">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s0_n3_odd">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="eo_s0_buy_even">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+
+        <value name="IF1">
+          <block type="variables_is_option" id="eo_is_strat1">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+            <field name="VAR" id="eo_v1">Strategy Type</field>
+            <field name="OPTION">Switch After 4 Runs (Balanced)</field>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="controls_if" id="eo_s1_parity">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="eo_s1_even4">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s1_n4_even">
+                    <field name="NUM">4</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="eo_s1_buy_odd">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="eo_s1_odd4">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s1_n4_odd">
+                    <field name="NUM">4</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="eo_s1_buy_even">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+
+        <value name="IF2">
+          <block type="variables_is_option" id="eo_is_strat2">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+            <field name="VAR" id="eo_v1">Strategy Type</field>
+            <field name="OPTION">Switch After 5 Runs (Conservative)</field>
+          </block>
+        </value>
+        <statement name="DO2">
+          <block type="controls_if" id="eo_s2_parity">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="eo_s2_even5">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s2_n5_even">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="eo_s2_buy_odd">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="eo_s2_odd5">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s2_n5_odd">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="eo_s2_buy_even">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+
+        <value name="IF3">
+          <block type="variables_is_option" id="eo_is_strat3">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+            <field name="VAR" id="eo_v1">Strategy Type</field>
+            <field name="OPTION">Switch After 3 Runs + 60% Filter (Smart)</field>
+          </block>
+        </value>
+        <statement name="DO3">
+          <block type="controls_if" id="eo_s3_even_outer">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="eo_s3_last3_even">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s3_n3e">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="controls_if" id="eo_s3_even_pct_inner">
+                <value name="IF0">
+                  <block type="logic_compare" id="eo_s3_even_pct_cmp">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="even_odd_analysis" id="eo_s3_even_pct_block">
+                        <field name="ANALYSIS_TYPE">EVEN_PERCENTAGE</field>
+                        <value name="N">
+                          <shadow type="math_number" id="eo_s3_pct_n_shadow">
+                            <field name="NUM">20</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_s3_get_digcheck">
+                            <field name="VAR" id="eo_v12">Digits for % Check</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="eo_s3_get_pct_thresh">
+                        <field name="VAR" id="eo_v11">% Confirmation Threshold</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="apollo_purchase2" id="eo_s3_buy_odd">
+                    <field name="PURCHASE_LIST">DIGITODD</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="eo_s3_last3_odd">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s3_n3o">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="controls_if" id="eo_s3_odd_pct_inner">
+                <value name="IF0">
+                  <block type="logic_compare" id="eo_s3_odd_pct_cmp">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="even_odd_analysis" id="eo_s3_odd_pct_block">
+                        <field name="ANALYSIS_TYPE">ODD_PERCENTAGE</field>
+                        <value name="N">
+                          <shadow type="math_number" id="eo_s3_pct_n_shadow2">
+                            <field name="NUM">20</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_s3_get_digcheck2">
+                            <field name="VAR" id="eo_v12">Digits for % Check</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="eo_s3_get_pct_thresh2">
+                        <field name="VAR" id="eo_v11">% Confirmation Threshold</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="apollo_purchase2" id="eo_s3_buy_even">
+                    <field name="PURCHASE_LIST">DIGITEVEN</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </statement>
+
+        <value name="IF4">
+          <block type="variables_is_option" id="eo_is_strat4">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22Switch%20After%203%20Runs%20(Aggressive)%22%2C%22Switch%20After%203%20Runs%20(Aggressive)%22%5D%2C%5B%22Switch%20After%204%20Runs%20(Balanced)%22%2C%22Switch%20After%204%20Runs%20(Balanced)%22%5D%2C%5B%22Switch%20After%205%20Runs%20(Conservative)%22%2C%22Switch%20After%205%20Runs%20(Conservative)%22%5D%2C%5B%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%2C%22Switch%20After%203%20Runs%20%2B%2060%25%20Filter%20(Smart)%22%5D%2C%5B%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%2C%22Switch%20After%205%20Runs%20%2B%2060%25%20Filter%20(Safer)%22%5D%5D"></mutation>
+            <field name="VAR" id="eo_v1">Strategy Type</field>
+            <field name="OPTION">Switch After 5 Runs + 60% Filter (Safer)</field>
+          </block>
+        </value>
+        <statement name="DO4">
+          <block type="controls_if" id="eo_s4_even_outer">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="eo_s4_last5_even">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s4_n5e">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="controls_if" id="eo_s4_even_pct_inner">
+                <value name="IF0">
+                  <block type="logic_compare" id="eo_s4_even_pct_cmp">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="even_odd_analysis" id="eo_s4_even_pct_block">
+                        <field name="ANALYSIS_TYPE">EVEN_PERCENTAGE</field>
+                        <value name="N">
+                          <shadow type="math_number" id="eo_s4_pct_n_shadow">
+                            <field name="NUM">20</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_s4_get_digcheck">
+                            <field name="VAR" id="eo_v12">Digits for % Check</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="eo_s4_get_pct_thresh">
+                        <field name="VAR" id="eo_v11">% Confirmation Threshold</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="apollo_purchase2" id="eo_s4_buy_odd">
+                    <field name="PURCHASE_LIST">DIGITODD</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="eo_s4_last5_odd">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="eo_s4_n5o">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="controls_if" id="eo_s4_odd_pct_inner">
+                <value name="IF0">
+                  <block type="logic_compare" id="eo_s4_odd_pct_cmp">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="even_odd_analysis" id="eo_s4_odd_pct_block">
+                        <field name="ANALYSIS_TYPE">ODD_PERCENTAGE</field>
+                        <value name="N">
+                          <shadow type="math_number" id="eo_s4_pct_n_shadow2">
+                            <field name="NUM">20</field>
+                          </shadow>
+                          <block type="variables_get" id="eo_s4_get_digcheck2">
+                            <field name="VAR" id="eo_v12">Digits for % Check</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="eo_s4_get_pct_thresh2">
+                        <field name="VAR" id="eo_v11">% Confirmation Threshold</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="apollo_purchase2" id="eo_s4_buy_even">
+                    <field name="PURCHASE_LIST">DIGITEVEN</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </statement>
+
+      </block>
+    </statement>
+  </block>
+
+</xml>

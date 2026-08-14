@@ -1,0 +1,290 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="vInitStake">initial_stake</variable>
+    <variable id="vRsi">rsi</variable>
+    <variable id="vStake">stake</variable>
+    <variable id="vTP">take_profit</variable>
+    <variable id="vSL">stop_loss</variable>
+    <variable id="vMart">martingale</variable>
+  </variables>
+  <block type="trade_definition" id="trade_def" deletable="false" x="0" y="110">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="td_market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ75V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="td_tt" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">callput</field>
+            <field name="TRADETYPE_LIST">callput</field>
+            <next>
+              <block type="trade_definition_contracttype" id="td_ct" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="td_ci" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="td_rbs" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="td_roe" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="init1">
+        <field name="VAR" id="vInitStake">initial_stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="n_init">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="init2">
+            <field name="VAR" id="vStake">stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="g_init">
+                <field name="VAR" id="vInitStake">initial_stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="init3">
+                <field name="VAR" id="vTP">take_profit</field>
+                <value name="VALUE">
+                  <block type="math_number" id="n_tp">
+                    <field name="NUM">50</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="init4">
+                    <field name="VAR" id="vSL">stop_loss</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="n_sl">
+                        <field name="NUM">15</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="init5">
+                        <field name="VAR" id="vMart">martingale</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="n_m">
+                            <field name="NUM">1.5</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="td_to">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="false"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="sh_dur">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="sh_amt">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="g_stake">
+            <field name="VAR" id="vStake">stake</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="ap" deletable="false" x="714" y="110">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="ap_if">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+        <value name="IF0">
+          <block type="logic_compare" id="ap_cmp_tp">
+            <field name="OP">GTE</field>
+            <value name="A">
+              <block type="total_profit" id="tp_a"></block>
+            </value>
+            <value name="B">
+              <block type="variables_get" id="g_tp">
+                <field name="VAR" id="vTP">take_profit</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="text_print" id="pr_tp">
+            <value name="TEXT">
+              <shadow type="text" id="sh_tp">
+                <field name="TEXT">Take profit reached. Stopping.</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_compare" id="ap_cmp_sl">
+            <field name="OP">LTE</field>
+            <value name="A">
+              <block type="total_profit" id="tp_b"></block>
+            </value>
+            <value name="B">
+              <block type="math_single" id="neg_sl">
+                <field name="OP">NEG</field>
+                <value name="NUM">
+                  <shadow type="math_number" id="sh_sl">
+                    <field name="NUM">15</field>
+                  </shadow>
+                  <block type="variables_get" id="g_sl">
+                    <field name="VAR" id="vSL">stop_loss</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="text_print" id="pr_sl">
+            <value name="TEXT">
+              <shadow type="text" id="sh_sl_t">
+                <field name="TEXT">Stop loss hit. Stopping.</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="controls_if" id="wl_if">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="contract_check_result" id="ccr">
+                <field name="CHECK_RESULT">win</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="reset_stake">
+                <field name="VAR" id="vStake">stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="g_is">
+                    <field name="VAR" id="vInitStake">initial_stake</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="variables_set" id="mart_stake">
+                <field name="VAR" id="vStake">stake</field>
+                <value name="VALUE">
+                  <block type="math_arithmetic" id="mul_m">
+                    <field name="OP">MULTIPLY</field>
+                    <value name="A">
+                      <shadow type="math_number" id="sh_ma">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="g_st">
+                        <field name="VAR" id="vStake">stake</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <shadow type="math_number" id="sh_mb">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="g_m">
+                        <field name="VAR" id="vMart">martingale</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="trade_again"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="bp" deletable="false" x="0" y="968">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="rsi_statement" id="rsi_stmt">
+        <field name="VARIABLE" id="vRsi">rsi</field>
+        <statement name="STATEMENT">
+          <block type="input_list" id="il" deletable="false" movable="false">
+            <value name="INPUT_LIST">
+              <block type="ticks" id="tks"></block>
+            </value>
+            <next>
+              <block type="period" id="pd" deletable="false" movable="false">
+                <value name="PERIOD">
+                  <block type="math_number" id="n_period">
+                    <field name="NUM">14</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="controls_if" id="if_buy">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="cmp_up">
+                <field name="OP">GT</field>
+                <value name="A">
+                  <block type="variables_get" id="g_rsi_a">
+                    <field name="VAR" id="vRsi">rsi</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="n45">
+                    <field name="NUM">45</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="purchase" id="pur_up">
+                <field name="PURCHASE_LIST">CALL</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="logic_compare" id="cmp_dn">
+                <field name="OP">LT</field>
+                <value name="A">
+                  <block type="variables_get" id="g_rsi_b">
+                    <field name="VAR" id="vRsi">rsi</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="n62">
+                    <field name="NUM">62</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="purchase" id="pur_dn">
+                <field name="PURCHASE_LIST">PUT</field>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

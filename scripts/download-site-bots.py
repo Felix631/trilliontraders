@@ -23,6 +23,12 @@ Four extraction modes per site:
    XMLs are inlined in the main bundle as `let <v>='<xml ...>'` modules keyed
    by chunk id.
 
+5. catalog API mode    (catalog = "<path>", xml_template = "<path with {id}>")
+   The site's bot store is served by a JSON catalog API listing folders of
+   bots ({id, name, ...}); each bot's XML is fetched from the xml_template
+   URL with {id} replaced by the bot id. Files are saved as
+   <site>-<bot id>-xml.xml.
+
 Usage:  python3 scripts/download-site-bots.py
 """
 import json
@@ -30,6 +36,7 @@ import os
 import re
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -120,6 +127,14 @@ SITES = {
             "STEP-INDICES-AUTO-SWITCH-AI-BOT": 4098,
             "STEP-INDICES-QUANTUM-AI-(by-chichi)-(1)": 35580,
         },
+    },
+    # denarapro.com free-bots section: the marketplace (async chunk 795) reads
+    # its catalog from the shared Denara bots API and lazy-loads each bot XML
+    # from the {id}/xml endpoint.
+    "denarapro": {
+        "base": "https://undasite.com",
+        "catalog": "/api/public/denarabot/catalog",
+        "xml_template": "/api/public/denarabot/bots/{id}/xml",
     },
 }
 
@@ -214,6 +229,47 @@ def safe_name(name):
 def download_site(site, cfg, out_dir):
     """Download all bots configured for one site. Returns how many were saved."""
     total = 0
+
+    if cfg.get("catalog"):
+        # Catalog API mode: fetch the JSON catalog, then each bot's XML.
+        try:
+            catalog = json.loads(http_get(cfg["base"] + cfg["catalog"]))
+        except Exception as exc:
+            print(f"  FAIL catalog {cfg['catalog']}: {exc}")
+            return total
+        folders = catalog.get("folders", []) if isinstance(catalog, dict) else []
+        bots = []
+        for folder in folders:
+            for bot in folder.get("bots", []):
+                bots.append(bot)
+        print(f"  catalog: {len(folders)} folders, {len(bots)} bots")
+
+        def fetch_one(bot):
+            bot_id = bot.get("id", "")
+            if not bot_id:
+                return (None, None, "missing id")
+            url = cfg["base"] + cfg["xml_template"].format(id=urllib.parse.quote(bot_id))
+            try:
+                payload = json.loads(http_get(url))
+            except Exception as exc:
+                return (bot_id, None, str(exc))
+            xml = payload.get("xml", "") if isinstance(payload, dict) else ""
+            if not xml or "<xml" not in xml:
+                return (bot_id, None, "empty/invalid XML")
+            return (bot_id, xml, None)
+
+        with ThreadPoolExecutor(max_workers=12) as pool:
+            for bot_id, xml, err in pool.map(fetch_one, bots):
+                if err or xml is None:
+                    if bot_id:
+                        print(f"  FAIL download {bot_id}: {err}")
+                    continue
+                dest = os.path.join(out_dir, f"{site}-{bot_id}-xml.xml")
+                with open(dest, "w", encoding="utf-8") as f:
+                    f.write(xml)
+                total += 1
+                print(f"  ok {site}-{bot_id}-xml.xml ({len(xml)} bytes)")
+        return total
 
     if cfg.get("inline_chunks"):
         bundle_js = http_get(cfg["base"] + cfg["bundle"])

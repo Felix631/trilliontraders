@@ -531,6 +531,2928 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbx/dbx-DBX-V2-Matches-Random-xml"
     },
     {
+        "id": "denarapro-bs-ai-version-2",
+        "name": "bs ai version 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bs-ai-version-2-xml"
+    },
+    {
+        "id": "denarapro-bs-binary-bot-1",
+        "name": "bs binary bot 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bs-binary-bot-1-xml"
+    },
+    {
+        "id": "denarapro-bs-binarybeast-01",
+        "name": "bs binarybeast 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bs-binarybeast-01-xml"
+    },
+    {
+        "id": "denarapro-bs-binarybeast-v2-pro",
+        "name": "bs binarybeast v2 pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bs-binarybeast-v2-pro-xml"
+    },
+    {
+        "id": "denarapro-bt-apex-switcher",
+        "name": "bt apex switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-apex-switcher-xml"
+    },
+    {
+        "id": "denarapro-bt-bella-pro-00",
+        "name": "bt bella pro 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-bella-pro-00-xml"
+    },
+    {
+        "id": "denarapro-bt-bella-pro-with-sl-01",
+        "name": "bt bella pro with sl 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-bella-pro-with-sl-01-xml"
+    },
+    {
+        "id": "denarapro-bt-bella-switcher-with-sl-03",
+        "name": "bt bella switcher with sl 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-bella-switcher-with-sl-03-xml"
+    },
+    {
+        "id": "denarapro-bt-binary-matrix-ai",
+        "name": "bt binary matrix ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-binary-matrix-ai-xml"
+    },
+    {
+        "id": "denarapro-bt-digit-pro-v1",
+        "name": "bt digit pro v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-digit-pro-v1-xml"
+    },
+    {
+        "id": "denarapro-bt-dollar-miner-06",
+        "name": "bt dollar miner 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-dollar-miner-06-xml"
+    },
+    {
+        "id": "denarapro-bt-entry-scanner",
+        "name": "bt entry scanner",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-entry-scanner-xml"
+    },
+    {
+        "id": "denarapro-bt-even-odd-pattern-reverse",
+        "name": "bt even odd pattern reverse",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-even-odd-pattern-reverse-xml"
+    },
+    {
+        "id": "denarapro-bt-even-odd-pattern-same",
+        "name": "bt even odd pattern same",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-even-odd-pattern-same-xml"
+    },
+    {
+        "id": "denarapro-bt-even-odd-percentage",
+        "name": "bt even odd percentage",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-even-odd-percentage-xml"
+    },
+    {
+        "id": "denarapro-bt-even-odd-streak-switcher",
+        "name": "bt even odd streak switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-even-odd-streak-switcher-xml"
+    },
+    {
+        "id": "denarapro-bt-multi-virtualhook-recovery",
+        "name": "bt multi virtualhook recovery",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-multi-virtualhook-recovery-xml"
+    },
+    {
+        "id": "denarapro-bt-over-under-virtualhook-pro",
+        "name": "bt over under virtualhook pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-over-under-virtualhook-pro-xml"
+    },
+    {
+        "id": "denarapro-bt-over2-under7-reversal",
+        "name": "bt over2 under7 reversal",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-over2-under7-reversal-xml"
+    },
+    {
+        "id": "denarapro-bt-over4-under5-reversal",
+        "name": "bt over4 under5 reversal",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-over4-under5-reversal-xml"
+    },
+    {
+        "id": "denarapro-bt-punisher-v2-02",
+        "name": "bt punisher v2 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-punisher-v2-02-xml"
+    },
+    {
+        "id": "denarapro-bt-rise-fall-reversal",
+        "name": "bt rise fall reversal",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-rise-fall-reversal-xml"
+    },
+    {
+        "id": "denarapro-bt-signal-sniper-04",
+        "name": "bt signal sniper 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-signal-sniper-04-xml"
+    },
+    {
+        "id": "denarapro-bt-tradeq-v5-pro-premium-05",
+        "name": "bt tradeq v5 pro premium 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-bt-tradeq-v5-pro-premium-05-xml"
+    },
+    {
+        "id": "denarapro-dbs-auto-greenflakes-eo",
+        "name": "dbs auto greenflakes eo",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-auto-greenflakes-eo-xml"
+    },
+    {
+        "id": "denarapro-dbs-even-multiple-scalper",
+        "name": "dbs even multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-even-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-even-scalper",
+        "name": "dbs even scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-even-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-fall-scalper",
+        "name": "dbs fall scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-fall-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-odd-multiple-scalper",
+        "name": "dbs odd multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-odd-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-odd-scalper",
+        "name": "dbs odd scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-odd-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-over-2-scalper",
+        "name": "dbs over 2 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-over-2-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-over-4-scalper",
+        "name": "dbs over 4 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-over-4-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-over1-r32-pro",
+        "name": "dbs over1 r32 pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-over1-r32-pro-xml"
+    },
+    {
+        "id": "denarapro-dbs-over2-r43-pro",
+        "name": "dbs over2 r43 pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-over2-r43-pro-xml"
+    },
+    {
+        "id": "denarapro-dbs-rise-scalper",
+        "name": "dbs rise scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-rise-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-the-cmv-pro",
+        "name": "dbs the cmv pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-the-cmv-pro-xml"
+    },
+    {
+        "id": "denarapro-dbs-under-5-scalper",
+        "name": "dbs under 5 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-under-5-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-under-7-scalper",
+        "name": "dbs under 7 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-under-7-scalper-xml"
+    },
+    {
+        "id": "denarapro-dbs-under-blast-pro",
+        "name": "dbs under blast pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-under-blast-pro-xml"
+    },
+    {
+        "id": "denarapro-dbs-under7-r56-pro",
+        "name": "dbs under7 r56 pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-under7-r56-pro-xml"
+    },
+    {
+        "id": "denarapro-dbs-under8-r67-pro",
+        "name": "dbs under8 r67 pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbs-under8-r67-pro-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_differ_switcher_smart_cycle",
+        "name": "dbt automatedbots differ switcher smart cycle",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_differ_switcher_smart_cycle-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_even_odd_pattern_analysis",
+        "name": "dbt automatedbots even odd pattern analysis",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_even_odd_pattern_analysis-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_even_odd_percentage_analysis",
+        "name": "dbt automatedbots even odd percentage analysis",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_even_odd_percentage_analysis-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_even_odd_percentage_pattern_combo",
+        "name": "dbt automatedbots even odd percentage pattern combo",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_even_odd_percentage_pattern_combo-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_infinity_algo",
+        "name": "dbt automatedbots infinity algo",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_infinity_algo-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_novaswitch",
+        "name": "dbt automatedbots novaswitch",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_novaswitch-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_over_0_recovery_over_4",
+        "name": "dbt automatedbots over 0 recovery over 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_over_0_recovery_over_4-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_over_3_recovery_over_5",
+        "name": "dbt automatedbots over 3 recovery over 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_over_3_recovery_over_5-xml"
+    },
+    {
+        "id": "denarapro-dbt-automatedbots_the_under_7_8_9_switcher",
+        "name": "dbt automatedbots the under 7 8 9 switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automatedbots_the_under_7_8_9_switcher-xml"
+    },
+    {
+        "id": "denarapro-dbt-automax-00",
+        "name": "dbt automax 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-automax-00-xml"
+    },
+    {
+        "id": "denarapro-dbt-even-odd-01",
+        "name": "dbt even odd 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-even-odd-01-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_candle_mine_version_3_1_1",
+        "name": "dbt flossin candle mine version 3 1 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_candle_mine_version_3_1_1-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_digit_hyper",
+        "name": "dbt flossin digit hyper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_digit_hyper-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_dollar_bot",
+        "name": "dbt flossin dollar bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_dollar_bot-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_falcon_bot",
+        "name": "dbt flossin falcon bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_falcon_bot-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_gibu_v8_pro_2024",
+        "name": "dbt flossin gibu v8 pro 2024",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_gibu_v8_pro_2024-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_malix_ke_trading_bots",
+        "name": "dbt flossin malix ke trading bots",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_malix_ke_trading_bots-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_matches_and_differs_bot",
+        "name": "dbt flossin matches and differs bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_matches_and_differs_bot-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_matches_over_all_day",
+        "name": "dbt flossin matches over all day",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_matches_over_all_day-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_meta_switch",
+        "name": "dbt flossin meta switch",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_meta_switch-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_test_rise_fall_5tick",
+        "name": "dbt flossin test rise fall 5tick",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_test_rise_fall_5tick-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_the_dollar_pro",
+        "name": "dbt flossin the dollar pro",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_the_dollar_pro-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_the_even_odd_bot_1",
+        "name": "dbt flossin the even odd bot 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_the_even_odd_bot_1-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_trade_city_bot_version_2_0",
+        "name": "dbt flossin trade city bot version 2 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_trade_city_bot_version_2_0-xml"
+    },
+    {
+        "id": "denarapro-dbt-flossin_ultra_ai_2025",
+        "name": "dbt flossin ultra ai 2025",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-flossin_ultra_ai_2025-xml"
+    },
+    {
+        "id": "denarapro-dbt-kuinama-02",
+        "name": "dbt kuinama 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-kuinama-02-xml"
+    },
+    {
+        "id": "denarapro-dbt-mini-deriv-killer-03",
+        "name": "dbt mini deriv killer 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-mini-deriv-killer-03-xml"
+    },
+    {
+        "id": "denarapro-dbt-un-manipulatable-04",
+        "name": "dbt un manipulatable 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbt-un-manipulatable-04-xml"
+    },
+    {
+        "id": "denarapro-dbw-autoswitcher-v1-00",
+        "name": "dbw autoswitcher v1 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-autoswitcher-v1-00-xml"
+    },
+    {
+        "id": "denarapro-dbw-dbot-hunter-bot-02",
+        "name": "dbw dbot hunter bot 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-dbot-hunter-bot-02-xml"
+    },
+    {
+        "id": "denarapro-dbw-differs-hunter-bot-05",
+        "name": "dbw differs hunter bot 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-differs-hunter-bot-05-xml"
+    },
+    {
+        "id": "denarapro-dbw-digits-hunter-04",
+        "name": "dbw digits hunter 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-digits-hunter-04-xml"
+    },
+    {
+        "id": "denarapro-dbw-entrypoint-hunter-bot-01",
+        "name": "dbw entrypoint hunter bot 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-entrypoint-hunter-bot-01-xml"
+    },
+    {
+        "id": "denarapro-dbw-even-odd-hunter-06",
+        "name": "dbw even odd hunter 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-even-odd-hunter-06-xml"
+    },
+    {
+        "id": "denarapro-dbw-over-hunter-bot-03",
+        "name": "dbw over hunter bot 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-over-hunter-bot-03-xml"
+    },
+    {
+        "id": "denarapro-dbw-sv-switcher-07",
+        "name": "dbw sv switcher 07",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dbw-sv-switcher-07-xml"
+    },
+    {
+        "id": "denarapro-ddb-ai-bot-1-01",
+        "name": "ddb ai bot 1 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-ai-bot-1-01-xml"
+    },
+    {
+        "id": "denarapro-ddb-alpha-version-2025-03",
+        "name": "ddb alpha version 2025 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-alpha-version-2025-03-xml"
+    },
+    {
+        "id": "denarapro-ddb-auto-c4-pro-1-02",
+        "name": "ddb auto c4 pro 1 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-auto-c4-pro-1-02-xml"
+    },
+    {
+        "id": "denarapro-ddb-best-bot-for-digits-06",
+        "name": "ddb best bot for digits 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-best-bot-for-digits-06-xml"
+    },
+    {
+        "id": "denarapro-ddb-best-for-differs-market-04",
+        "name": "ddb best for differs market 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-best-for-differs-market-04-xml"
+    },
+    {
+        "id": "denarapro-ddb-best-for-over-5-05",
+        "name": "ddb best for over 5 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-best-for-over-5-05-xml"
+    },
+    {
+        "id": "denarapro-ddb-db-best-bot-07",
+        "name": "ddb db best bot 07",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-db-best-bot-07-xml"
+    },
+    {
+        "id": "denarapro-ddb-dollarprinterbotorignal-00",
+        "name": "ddb dollarprinterbotorignal 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-dollarprinterbotorignal-00-xml"
+    },
+    {
+        "id": "denarapro-ddb-erickbenson-speedbot-11",
+        "name": "ddb erickbenson speedbot 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-erickbenson-speedbot-11-xml"
+    },
+    {
+        "id": "denarapro-ddb-even-odd-speedbot-08",
+        "name": "ddb even odd speedbot 08",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-even-odd-speedbot-08-xml"
+    },
+    {
+        "id": "denarapro-ddb-experts-e-o-bot-1-09",
+        "name": "ddb experts e o bot 1 09",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-experts-e-o-bot-1-09-xml"
+    },
+    {
+        "id": "denarapro-ddb-experts-e-o-bot-10",
+        "name": "ddb experts e o bot 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-experts-e-o-bot-10-xml"
+    },
+    {
+        "id": "denarapro-ddb-over-under-bot-1-12",
+        "name": "ddb over under bot 1 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-over-under-bot-1-12-xml"
+    },
+    {
+        "id": "denarapro-ddb-over-under-bot-13",
+        "name": "ddb over under bot 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-over-under-bot-13-xml"
+    },
+    {
+        "id": "denarapro-ddb-over-under-signal-14",
+        "name": "ddb over under signal 14",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-over-under-signal-14-xml"
+    },
+    {
+        "id": "denarapro-ddb-rise-and-fall-bor-15",
+        "name": "ddb rise and fall bor 15",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-rise-and-fall-bor-15-xml"
+    },
+    {
+        "id": "denarapro-ddb-speedbot-version-2-16",
+        "name": "ddb speedbot version 2 16",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-speedbot-version-2-16-xml"
+    },
+    {
+        "id": "denarapro-ddb-vva-5-with-entry-17",
+        "name": "ddb vva 5 with entry 17",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-vva-5-with-entry-17-xml"
+    },
+    {
+        "id": "denarapro-ddb-wall-perfect-entry-bot-18",
+        "name": "ddb wall perfect entry bot 18",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-ddb-wall-perfect-entry-bot-18-xml"
+    },
+    {
+        "id": "denarapro-df-free-big-bang-rise-fall-auto-switch-by-prof-20",
+        "name": "df free big bang rise fall auto switch by prof 20",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-big-bang-rise-fall-auto-switch-by-prof-20-xml"
+    },
+    {
+        "id": "denarapro-df-free-candle-hunter-rise-fall-rsi-by-prof-19",
+        "name": "df free candle hunter rise fall rsi by prof 19",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-candle-hunter-rise-fall-rsi-by-prof-19-xml"
+    },
+    {
+        "id": "denarapro-df-free-cash-money-by-prof-with-entry-02",
+        "name": "df free cash money by prof with entry 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-cash-money-by-prof-with-entry-02-xml"
+    },
+    {
+        "id": "denarapro-df-free-defen-ticker-2-prediction-with-entry-01",
+        "name": "df free defen ticker 2 prediction with entry 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-defen-ticker-2-prediction-with-entry-01-xml"
+    },
+    {
+        "id": "denarapro-df-free-digit-algo-by-prof-18",
+        "name": "df free digit algo by prof 18",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-digit-algo-by-prof-18-xml"
+    },
+    {
+        "id": "denarapro-df-free-digit-master-ai-under-8-under-5-by-prof-11",
+        "name": "df free digit master ai under 8 under 5 by prof 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-digit-master-ai-under-8-under-5-by-prof-11-xml"
+    },
+    {
+        "id": "denarapro-df-free-digit-match-speed-bot-by-prof-24",
+        "name": "df free digit match speed bot by prof 24",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-digit-match-speed-bot-by-prof-24-xml"
+    },
+    {
+        "id": "denarapro-df-free-dollar-sniper-ai-under-9-under-6-by-prof-10",
+        "name": "df free dollar sniper ai under 9 under 6 by prof 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-dollar-sniper-ai-under-9-under-6-by-prof-10-xml"
+    },
+    {
+        "id": "denarapro-df-free-dollar-wave-even-odd-speed-bot-by-prof-03",
+        "name": "df free dollar wave even odd speed bot by prof 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-dollar-wave-even-odd-speed-bot-by-prof-03-xml"
+    },
+    {
+        "id": "denarapro-df-free-entry-finder-ai-over-2-over-5-by-prof-22",
+        "name": "df free entry finder ai over 2 over 5 by prof 22",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-entry-finder-ai-over-2-over-5-by-prof-22-xml"
+    },
+    {
+        "id": "denarapro-df-free-entry-finder-ai-under-7-under-5-by-prof-23",
+        "name": "df free entry finder ai under 7 under 5 by prof 23",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-entry-finder-ai-under-7-under-5-by-prof-23-xml"
+    },
+    {
+        "id": "denarapro-df-free-g-money-ai-by-prof-original-12",
+        "name": "df free g money ai by prof original 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-g-money-ai-by-prof-original-12-xml"
+    },
+    {
+        "id": "denarapro-df-free-make-money-over-0-ai-by-prof-21",
+        "name": "df free make money over 0 ai by prof 21",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-make-money-over-0-ai-by-prof-21-xml"
+    },
+    {
+        "id": "denarapro-df-free-market-chaser-2-even-recovery-by-prof-16",
+        "name": "df free market chaser 2 even recovery by prof 16",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-market-chaser-2-even-recovery-by-prof-16-xml"
+    },
+    {
+        "id": "denarapro-df-free-market-chaser-odd-recovery-by-prof-15",
+        "name": "df free market chaser odd recovery by prof 15",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-market-chaser-odd-recovery-by-prof-15-xml"
+    },
+    {
+        "id": "denarapro-df-free-market-terror-bot-under-7-under-6-by-prof-09",
+        "name": "df free market terror bot under 7 under 6 by prof 09",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-market-terror-bot-under-7-under-6-by-prof-09-xml"
+    },
+    {
+        "id": "denarapro-df-free-master-c4-over-3-over-4-over-5-by-prof-06",
+        "name": "df free master c4 over 3 over 4 over 5 by prof 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-master-c4-over-3-over-4-over-5-by-prof-06-xml"
+    },
+    {
+        "id": "denarapro-df-free-missile-speed-ai-under-7-under-5-by-prof-13",
+        "name": "df free missile speed ai under 7 under 5 by prof 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-missile-speed-ai-under-7-under-5-by-prof-13-xml"
+    },
+    {
+        "id": "denarapro-df-free-prof-even-odd-auto-switch-bot-17",
+        "name": "df free prof even odd auto switch bot 17",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-prof-even-odd-auto-switch-bot-17-xml"
+    },
+    {
+        "id": "denarapro-df-free-prof-v1-speed-bot-updated-version-00",
+        "name": "df free prof v1 speed bot updated version 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-prof-v1-speed-bot-updated-version-00-xml"
+    },
+    {
+        "id": "denarapro-df-free-self-analyzer-differs-last-2-digit-by-prof-25",
+        "name": "df free self analyzer differs last 2 digit by prof 25",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-self-analyzer-differs-last-2-digit-by-prof-25-xml"
+    },
+    {
+        "id": "denarapro-df-free-terminator-speed-bot-by-prof-08",
+        "name": "df free terminator speed bot by prof 08",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-terminator-speed-bot-by-prof-08-xml"
+    },
+    {
+        "id": "denarapro-df-free-the-bullet-over-3-over-4-recovery-by-prof-04",
+        "name": "df free the bullet over 3 over 4 recovery by prof 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-the-bullet-over-3-over-4-recovery-by-prof-04-xml"
+    },
+    {
+        "id": "denarapro-df-free-the-dollar-king-over-2-over-3-by-prof-14",
+        "name": "df free the dollar king over 2 over 3 by prof 14",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-the-dollar-king-over-2-over-3-by-prof-14-xml"
+    },
+    {
+        "id": "denarapro-df-free-the-dollar-sponsor-over-2-under-7-recovery-by-prof-05",
+        "name": "df free the dollar sponsor over 2 under 7 recovery by prof 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-the-dollar-sponsor-over-2-under-7-recovery-by-prof-05-xml"
+    },
+    {
+        "id": "denarapro-df-free-the-epic-even-odd-with-entry-point-by-prof-26",
+        "name": "df free the epic even odd with entry point by prof 26",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-the-epic-even-odd-with-entry-point-by-prof-26-xml"
+    },
+    {
+        "id": "denarapro-df-free-the-rebel-ai-rise-fall-by-prof-07",
+        "name": "df free the rebel ai rise fall by prof 07",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-free-the-rebel-ai-rise-fall-by-prof-07-xml"
+    },
+    {
+        "id": "denarapro-df-killer-accumulator-bot-by-prof-08",
+        "name": "df killer accumulator bot by prof 08",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-accumulator-bot-by-prof-08-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-008-ai-under-8-over-3-by-prof-07",
+        "name": "df killer kasongo 008 ai under 8 over 3 by prof 07",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-008-ai-under-8-over-3-by-prof-07-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-2-under-7-over-5-by-prof-02",
+        "name": "df killer kasongo 2 under 7 over 5 by prof 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-2-under-7-over-5-by-prof-02-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-3-under-7-under-5-by-prof-03",
+        "name": "df killer kasongo 3 under 7 under 5 by prof 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-3-under-7-under-5-by-prof-03-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-4-over-1-over-5-by-prof-01",
+        "name": "df killer kasongo 4 over 1 over 5 by prof 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-4-over-1-over-5-by-prof-01-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-5-under-8-under-4-by-prof-04",
+        "name": "df killer kasongo 5 under 8 under 4 by prof 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-5-under-8-under-4-by-prof-04-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-finest-under-8-over-4-by-prof-05",
+        "name": "df killer kasongo finest under 8 over 4 by prof 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-finest-under-8-over-4-by-prof-05-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-market-sniff-over-1-under-5-by-prof-00",
+        "name": "df killer kasongo market sniff over 1 under 5 by prof 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-market-sniff-over-1-under-5-by-prof-00-xml"
+    },
+    {
+        "id": "denarapro-df-killer-kasongo-original-ai-under-6-over-3-by-prof-06",
+        "name": "df killer kasongo original ai under 6 over 3 by prof 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-kasongo-original-ai-under-6-over-3-by-prof-06-xml"
+    },
+    {
+        "id": "denarapro-df-killer-phantom-1-over-3-under-5-over-4-switch-bot-by-prof-09",
+        "name": "df killer phantom 1 over 3 under 5 over 4 switch bot by prof 09",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-phantom-1-over-3-under-5-over-4-switch-bot-by-prof-09-xml"
+    },
+    {
+        "id": "denarapro-df-killer-phantom-2-matches-most-appearing-by-prof-11",
+        "name": "df killer phantom 2 matches most appearing by prof 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-phantom-2-matches-most-appearing-by-prof-11-xml"
+    },
+    {
+        "id": "denarapro-df-killer-phantom-2-over-under-auto-space-by-prof-10",
+        "name": "df killer phantom 2 over under auto space by prof 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-df-killer-phantom-2-over-under-auto-space-by-prof-10-xml"
+    },
+    {
+        "id": "denarapro-dh-free-master-plug-bot-v1-00",
+        "name": "dh free master plug bot v1 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-free-master-plug-bot-v1-00-xml"
+    },
+    {
+        "id": "denarapro-dh-free-master-plug-bot-v2-1-7-02",
+        "name": "dh free master plug bot v2 1 7 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-free-master-plug-bot-v2-1-7-02-xml"
+    },
+    {
+        "id": "denarapro-dh-free-mind-trade-03",
+        "name": "dh free mind trade 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-free-mind-trade-03-xml"
+    },
+    {
+        "id": "denarapro-dh-free-raziel-over-under-01",
+        "name": "dh free raziel over under 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-free-raziel-over-under-01-xml"
+    },
+    {
+        "id": "denarapro-dh-prem-candlechart-ai-v2-00",
+        "name": "dh prem candlechart ai v2 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-prem-candlechart-ai-v2-00-xml"
+    },
+    {
+        "id": "denarapro-dh-prem-volt-trade-ai-01",
+        "name": "dh prem volt trade ai 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dh-prem-volt-trade-ai-01-xml"
+    },
+    {
+        "id": "denarapro-dp-ai-signal-scanner",
+        "name": "dp ai signal scanner",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-ai-signal-scanner-xml"
+    },
+    {
+        "id": "denarapro-dp-alpha-2026",
+        "name": "dp alpha 2026",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-alpha-2026-xml"
+    },
+    {
+        "id": "denarapro-dp-binary-expert-v6",
+        "name": "dp binary expert v6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-binary-expert-v6-xml"
+    },
+    {
+        "id": "denarapro-dp-dollar-print-ai-2026",
+        "name": "dp dollar print ai 2026",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-dollar-print-ai-2026-xml"
+    },
+    {
+        "id": "denarapro-dp-dollar-printer-bot11",
+        "name": "dp dollar printer bot11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-dollar-printer-bot11-xml"
+    },
+    {
+        "id": "denarapro-dp-entry-point-v1",
+        "name": "dp entry point v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-entry-point-v1-xml"
+    },
+    {
+        "id": "denarapro-dp-even-multiple-scalper",
+        "name": "dp even multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-even-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-even-scalper",
+        "name": "dp even scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-even-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-expert-speed-2026",
+        "name": "dp expert speed 2026",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-expert-speed-2026-xml"
+    },
+    {
+        "id": "denarapro-dp-fall-scalper",
+        "name": "dp fall scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-fall-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-maziwa-2026",
+        "name": "dp maziwa 2026",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-maziwa-2026-xml"
+    },
+    {
+        "id": "denarapro-dp-odd-multiple-scalper",
+        "name": "dp odd multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-odd-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-odd-scalper",
+        "name": "dp odd scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-odd-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-over-2-scalper",
+        "name": "dp over 2 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-over-2-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-over-4-scalper",
+        "name": "dp over 4 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-over-4-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-rise-scalper",
+        "name": "dp rise scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-rise-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-signal-sniper",
+        "name": "dp signal sniper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-signal-sniper-xml"
+    },
+    {
+        "id": "denarapro-dp-under-5-scalper",
+        "name": "dp under 5 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-under-5-scalper-xml"
+    },
+    {
+        "id": "denarapro-dp-under-7-scalper",
+        "name": "dp under 7 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-dp-under-7-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-2026-multipurpose-markets",
+        "name": "et adv 2026 multipurpose markets",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-2026-multipurpose-markets-xml"
+    },
+    {
+        "id": "denarapro-et-adv-advanced-even",
+        "name": "et adv advanced even",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-advanced-even-xml"
+    },
+    {
+        "id": "denarapro-et-adv-advanced-odd",
+        "name": "et adv advanced odd",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-advanced-odd-xml"
+    },
+    {
+        "id": "denarapro-et-adv-auto-dream",
+        "name": "et adv auto dream",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-auto-dream-xml"
+    },
+    {
+        "id": "denarapro-et-adv-elite-storm-shadow",
+        "name": "et adv elite storm shadow",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-elite-storm-shadow-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-hunter",
+        "name": "et adv even hunter",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-hunter-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-multiple-scalper",
+        "name": "et adv even multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-odd-striking-eagle",
+        "name": "et adv even odd striking eagle",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-odd-striking-eagle-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-odd-switcher",
+        "name": "et adv even odd switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-odd-switcher-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-scalper",
+        "name": "et adv even scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-even-virtual-hook-monster",
+        "name": "et adv even virtual hook monster",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-even-virtual-hook-monster-xml"
+    },
+    {
+        "id": "denarapro-et-adv-fall-scalper",
+        "name": "et adv fall scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-fall-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-market-terror",
+        "name": "et adv market terror",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-market-terror-xml"
+    },
+    {
+        "id": "denarapro-et-adv-odd-hunter",
+        "name": "et adv odd hunter",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-odd-hunter-xml"
+    },
+    {
+        "id": "denarapro-et-adv-odd-multiple-scalper",
+        "name": "et adv odd multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-odd-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-odd-scalper",
+        "name": "et adv odd scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-odd-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-odd-virtual-hook-monster",
+        "name": "et adv odd virtual hook monster",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-odd-virtual-hook-monster-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-2-scalper",
+        "name": "et adv over 2 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-2-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-3-multiple-scalper",
+        "name": "et adv over 3 multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-3-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-4-multiple-scalper",
+        "name": "et adv over 4 multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-4-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-4-scalper",
+        "name": "et adv over 4 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-4-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-4-under-5-switcher",
+        "name": "et adv over 4 under 5 switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-4-under-5-switcher-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-5-masterpeace",
+        "name": "et adv over 5 masterpeace",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-5-masterpeace-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-virtual-hook--monster",
+        "name": "et adv over virtual hook monster",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-virtual-hook--monster-xml"
+    },
+    {
+        "id": "denarapro-et-adv-over-virtual-masterpeace",
+        "name": "et adv over virtual masterpeace",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-over-virtual-masterpeace-xml"
+    },
+    {
+        "id": "denarapro-et-adv-rise---fall-switcher",
+        "name": "et adv rise fall switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-rise---fall-switcher-xml"
+    },
+    {
+        "id": "denarapro-et-adv-rise-scalper",
+        "name": "et adv rise scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-rise-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-speed-hedge",
+        "name": "et adv speed hedge",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-speed-hedge-xml"
+    },
+    {
+        "id": "denarapro-et-adv-the_striker-even-odd-striking-eagle",
+        "name": "et adv the striker even odd striking eagle",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-the_striker-even-odd-striking-eagle-xml"
+    },
+    {
+        "id": "denarapro-et-adv-the-bullet",
+        "name": "et adv the bullet",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-the-bullet-xml"
+    },
+    {
+        "id": "denarapro-et-adv-the-elite-bullet",
+        "name": "et adv the elite bullet",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-the-elite-bullet-xml"
+    },
+    {
+        "id": "denarapro-et-adv-the-elite",
+        "name": "et adv the elite",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-the-elite-xml"
+    },
+    {
+        "id": "denarapro-et-adv-the-striking-eagle",
+        "name": "et adv the striking eagle",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-the-striking-eagle-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-4-masterpeace",
+        "name": "et adv under 4 masterpeace",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-4-masterpeace-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-5-multiple-scalper",
+        "name": "et adv under 5 multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-5-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-5-scalper",
+        "name": "et adv under 5 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-5-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-6-multiple-scalper",
+        "name": "et adv under 6 multiple scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-6-multiple-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-7-scalper",
+        "name": "et adv under 7 scalper",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-7-scalper-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-virtual-hook-monster",
+        "name": "et adv under virtual hook monster",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-virtual-hook-monster-xml"
+    },
+    {
+        "id": "denarapro-et-adv-under-virtual-masterpiece",
+        "name": "et adv under virtual masterpiece",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-under-virtual-masterpiece-xml"
+    },
+    {
+        "id": "denarapro-et-adv-wild-hedge",
+        "name": "et adv wild hedge",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-adv-wild-hedge-xml"
+    },
+    {
+        "id": "denarapro-et-auto-dream-v1",
+        "name": "et auto dream v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-auto-dream-v1-xml"
+    },
+    {
+        "id": "denarapro-et-auto-dream-v2",
+        "name": "et auto dream v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-auto-dream-v2-xml"
+    },
+    {
+        "id": "denarapro-et-auto-dream-v3",
+        "name": "et auto dream v3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-auto-dream-v3-xml"
+    },
+    {
+        "id": "denarapro-et-even-odd-elite-dragon",
+        "name": "et even odd elite dragon",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-even-odd-elite-dragon-xml"
+    },
+    {
+        "id": "denarapro-et-market-terror-v1",
+        "name": "et market terror v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-market-terror-v1-xml"
+    },
+    {
+        "id": "denarapro-et-market-terror-v2",
+        "name": "et market terror v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-market-terror-v2-xml"
+    },
+    {
+        "id": "denarapro-et-market-terror-v3",
+        "name": "et market terror v3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-market-terror-v3-xml"
+    },
+    {
+        "id": "denarapro-et-market-terror-v4",
+        "name": "et market terror v4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-market-terror-v4-xml"
+    },
+    {
+        "id": "denarapro-et-smooth-poverty",
+        "name": "et smooth poverty",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-smooth-poverty-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-even-odd-ai",
+        "name": "et the elite even odd ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-even-odd-ai-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-havoc",
+        "name": "et the elite havoc",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-havoc-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-hunter-ai",
+        "name": "et the elite hunter ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-hunter-ai-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-raptor",
+        "name": "et the elite raptor",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-raptor-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-runner",
+        "name": "et the elite runner",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-runner-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite-squad",
+        "name": "et the elite squad",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-squad-xml"
+    },
+    {
+        "id": "denarapro-et-the-elite",
+        "name": "et the elite",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-elite-xml"
+    },
+    {
+        "id": "denarapro-et-the-havoc",
+        "name": "et the havoc",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-havoc-xml"
+    },
+    {
+        "id": "denarapro-et-the-market-bandit",
+        "name": "et the market bandit",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-market-bandit-xml"
+    },
+    {
+        "id": "denarapro-et-the-market-hunter",
+        "name": "et the market hunter",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-market-hunter-xml"
+    },
+    {
+        "id": "denarapro-et-the-night-runner",
+        "name": "et the night runner",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-night-runner-xml"
+    },
+    {
+        "id": "denarapro-et-the-ultimate-elite-2025",
+        "name": "et the ultimate elite 2025",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-ultimate-elite-2025-xml"
+    },
+    {
+        "id": "denarapro-et-the-ultimate-elite",
+        "name": "et the ultimate elite",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-ultimate-elite-xml"
+    },
+    {
+        "id": "denarapro-et-the-undisputed-githurai-punisher-v1",
+        "name": "et the undisputed githurai punisher v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-undisputed-githurai-punisher-v1-xml"
+    },
+    {
+        "id": "denarapro-et-the-undisputed-githurai-punisher-v2",
+        "name": "et the undisputed githurai punisher v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-undisputed-githurai-punisher-v2-xml"
+    },
+    {
+        "id": "denarapro-et-the-undisputed-githurai-punisher-v3",
+        "name": "et the undisputed githurai punisher v3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-the-undisputed-githurai-punisher-v3-xml"
+    },
+    {
+        "id": "denarapro-et-wantam-elite-even-ai",
+        "name": "et wantam elite even ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-wantam-elite-even-ai-xml"
+    },
+    {
+        "id": "denarapro-et-wantam-elite-odd-ai",
+        "name": "et wantam elite odd ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-wantam-elite-odd-ai-xml"
+    },
+    {
+        "id": "denarapro-et-wantam-elite-over-ai",
+        "name": "et wantam elite over ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-wantam-elite-over-ai-xml"
+    },
+    {
+        "id": "denarapro-et-wantam-elite-under-ai",
+        "name": "et wantam elite under ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-et-wantam-elite-under-ai-xml"
+    },
+    {
+        "id": "denarapro-exw-2_by_1_over_2_under_7-20",
+        "name": "exw 2 by 1 over 2 under 7 20",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-2_by_1_over_2_under_7-20-xml"
+    },
+    {
+        "id": "denarapro-exw-ai_over_1_bot-36",
+        "name": "exw ai over 1 bot 36",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-ai_over_1_bot-36-xml"
+    },
+    {
+        "id": "denarapro-exw-beginner_bot-28",
+        "name": "exw beginner bot 28",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-beginner_bot-28-xml"
+    },
+    {
+        "id": "denarapro-exw-christmas_even_odd_bot-47",
+        "name": "exw christmas even odd bot 47",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-christmas_even_odd_bot-47-xml"
+    },
+    {
+        "id": "denarapro-exw-deriv_heist_bot-48",
+        "name": "exw deriv heist bot 48",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-deriv_heist_bot-48-xml"
+    },
+    {
+        "id": "denarapro-exw-differs_bot-35",
+        "name": "exw differs bot 35",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-differs_bot-35-xml"
+    },
+    {
+        "id": "denarapro-exw-double_differs_exclude_red_and_green-46",
+        "name": "exw double differs exclude red and green 46",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-double_differs_exclude_red_and_green-46-xml"
+    },
+    {
+        "id": "denarapro-exw-double_entry_over_under_selection_bot-27",
+        "name": "exw double entry over under selection bot 27",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-double_entry_over_under_selection_bot-27-xml"
+    },
+    {
+        "id": "denarapro-exw-equal_rise_fall_switcher_bot-4",
+        "name": "exw equal rise fall switcher bot 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-equal_rise_fall_switcher_bot-4-xml"
+    },
+    {
+        "id": "denarapro-exw-even_odd_bot-38",
+        "name": "exw even odd bot 38",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-even_odd_bot-38-xml"
+    },
+    {
+        "id": "denarapro-exw-expert_even_odd_switcher_bot-40",
+        "name": "exw expert even odd switcher bot 40",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-expert_even_odd_switcher_bot-40-xml"
+    },
+    {
+        "id": "denarapro-exw-expert_wager_version_3-43",
+        "name": "exw expert wager version 3 43",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-expert_wager_version_3-43-xml"
+    },
+    {
+        "id": "denarapro-exw-inverse_rise_fall_bot-19",
+        "name": "exw inverse rise fall bot 19",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-inverse_rise_fall_bot-19-xml"
+    },
+    {
+        "id": "denarapro-exw-magic_differs_bot-44",
+        "name": "exw magic differs bot 44",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-magic_differs_bot-44-xml"
+    },
+    {
+        "id": "denarapro-exw-matches_bot-5",
+        "name": "exw matches bot 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-matches_bot-5-xml"
+    },
+    {
+        "id": "denarapro-exw-money_spanker_bot-7",
+        "name": "exw money spanker bot 7",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-money_spanker_bot-7-xml"
+    },
+    {
+        "id": "denarapro-exw-over_1_recovery_over_2_bot-22",
+        "name": "exw over 1 recovery over 2 bot 22",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_1_recovery_over_2_bot-22-xml"
+    },
+    {
+        "id": "denarapro-exw-over_1_recovery_under_6_bot-11",
+        "name": "exw over 1 recovery under 6 bot 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_1_recovery_under_6_bot-11-xml"
+    },
+    {
+        "id": "denarapro-exw-over_1_recovery_under_7_bot-23",
+        "name": "exw over 1 recovery under 7 bot 23",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_1_recovery_under_7_bot-23-xml"
+    },
+    {
+        "id": "denarapro-exw-over_1_under_8_analyzer_bot_no_analysis-24",
+        "name": "exw over 1 under 8 analyzer bot no analysis 24",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_1_under_8_analyzer_bot_no_analysis-24-xml"
+    },
+    {
+        "id": "denarapro-exw-over_2_over_3_recovery_bot-12",
+        "name": "exw over 2 over 3 recovery bot 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_2_over_3_recovery_bot-12-xml"
+    },
+    {
+        "id": "denarapro-exw-over_2_recovery_under_6_bot-13",
+        "name": "exw over 2 recovery under 6 bot 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_2_recovery_under_6_bot-13-xml"
+    },
+    {
+        "id": "denarapro-exw-over_3_bot_version_3-18",
+        "name": "exw over 3 bot version 3 18",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_3_bot_version_3-18-xml"
+    },
+    {
+        "id": "denarapro-exw-over_edge_money_bot-45",
+        "name": "exw over edge money bot 45",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_edge_money_bot-45-xml"
+    },
+    {
+        "id": "denarapro-exw-over_recovery_customizable_bot-29",
+        "name": "exw over recovery customizable bot 29",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_recovery_customizable_bot-29-xml"
+    },
+    {
+        "id": "denarapro-exw-over_single_side-33",
+        "name": "exw over single side 33",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_single_side-33-xml"
+    },
+    {
+        "id": "denarapro-exw-over_under_bot-39",
+        "name": "exw over under bot 39",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_under_bot-39-xml"
+    },
+    {
+        "id": "denarapro-exw-over_under_opposite_recovery_customizable_bot-31",
+        "name": "exw over under opposite recovery customizable bot 31",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-over_under_opposite_recovery_customizable_bot-31-xml"
+    },
+    {
+        "id": "denarapro-exw-percentage_auto_even_odd-10",
+        "name": "exw percentage auto even odd 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-percentage_auto_even_odd-10-xml"
+    },
+    {
+        "id": "denarapro-exw-recover_over_bandwagon-3",
+        "name": "exw recover over bandwagon 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-recover_over_bandwagon-3-xml"
+    },
+    {
+        "id": "denarapro-exw-recover_under_bandwagon-2",
+        "name": "exw recover under bandwagon 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-recover_under_bandwagon-2-xml"
+    },
+    {
+        "id": "denarapro-exw-rise_and_fall_simple_bot-8",
+        "name": "exw rise and fall simple bot 8",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-rise_and_fall_simple_bot-8-xml"
+    },
+    {
+        "id": "denarapro-exw-same_side_over_under-32",
+        "name": "exw same side over under 32",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-same_side_over_under-32-xml"
+    },
+    {
+        "id": "denarapro-exw-under_6_recovery_under_5_bot-6",
+        "name": "exw under 6 recovery under 5 bot 6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_6_recovery_under_5_bot-6-xml"
+    },
+    {
+        "id": "denarapro-exw-under_7_bulk-9",
+        "name": "exw under 7 bulk 9",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_7_bulk-9-xml"
+    },
+    {
+        "id": "denarapro-exw-under_7_over_3_recovery_bot-17",
+        "name": "exw under 7 over 3 recovery bot 17",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_7_over_3_recovery_bot-17-xml"
+    },
+    {
+        "id": "denarapro-exw-under_7_over_recovery_bot_3_bot-14",
+        "name": "exw under 7 over recovery bot 3 bot 14",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_7_over_recovery_bot_3_bot-14-xml"
+    },
+    {
+        "id": "denarapro-exw-under_7_recovery_under_6_bot-16",
+        "name": "exw under 7 recovery under 6 bot 16",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_7_recovery_under_6_bot-16-xml"
+    },
+    {
+        "id": "denarapro-exw-under_7_under_6_over_2_bot-21",
+        "name": "exw under 7 under 6 over 2 bot 21",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_7_under_6_over_2_bot-21-xml"
+    },
+    {
+        "id": "denarapro-exw-under_8_bot_recovery_over_2-42",
+        "name": "exw under 8 bot recovery over 2 42",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_8_bot_recovery_over_2-42-xml"
+    },
+    {
+        "id": "denarapro-exw-under_8_bot_recovery_under_7-41",
+        "name": "exw under 8 bot recovery under 7 41",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_8_bot_recovery_under_7-41-xml"
+    },
+    {
+        "id": "denarapro-exw-under_8_recovery_under_6_bot-15",
+        "name": "exw under 8 recovery under 6 bot 15",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_8_recovery_under_6_bot-15-xml"
+    },
+    {
+        "id": "denarapro-exw-under_8_strategy-37",
+        "name": "exw under 8 strategy 37",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_8_strategy-37-xml"
+    },
+    {
+        "id": "denarapro-exw-under_recovery_customizable_bot-25",
+        "name": "exw under recovery customizable bot 25",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_recovery_customizable_bot-25-xml"
+    },
+    {
+        "id": "denarapro-exw-under_single_side-34",
+        "name": "exw under single side 34",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-under_single_side-34-xml"
+    },
+    {
+        "id": "denarapro-exw-updated_bandwagon_bot_with_entry_point-1",
+        "name": "exw updated bandwagon bot with entry point 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-updated_bandwagon_bot_with_entry_point-1-xml"
+    },
+    {
+        "id": "denarapro-exw-updated_bandwagon_bot-0",
+        "name": "exw updated bandwagon bot 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-updated_bandwagon_bot-0-xml"
+    },
+    {
+        "id": "denarapro-exw-updated_bandwagon_even_odd-30",
+        "name": "exw updated bandwagon even odd 30",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-updated_bandwagon_even_odd-30-xml"
+    },
+    {
+        "id": "denarapro-exw-v3_even_odd_entry_checker-26",
+        "name": "exw v3 even odd entry checker 26",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-exw-v3_even_odd_entry_checker-26-xml"
+    },
+    {
+        "id": "denarapro-gt-concept-ai-00",
+        "name": "gt concept ai 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-gt-concept-ai-00-xml"
+    },
+    {
+        "id": "denarapro-gt-gt-digit-switcher-02",
+        "name": "gt gt digit switcher 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-gt-gt-digit-switcher-02-xml"
+    },
+    {
+        "id": "denarapro-gt-gt-hnr-01",
+        "name": "gt gt hnr 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-gt-gt-hnr-01-xml"
+    },
+    {
+        "id": "denarapro-gt-gt-sequence-rotator-03",
+        "name": "gt gt sequence rotator 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-gt-gt-sequence-rotator-03-xml"
+    },
+    {
+        "id": "denarapro-lfx-ai_bot-0",
+        "name": "lfx ai bot 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-ai_bot-0-xml"
+    },
+    {
+        "id": "denarapro-lfx-auto_c4_volt_ai_premium_v2-1",
+        "name": "lfx auto c4 volt ai premium v2 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-auto_c4_volt_ai_premium_v2-1-xml"
+    },
+    {
+        "id": "denarapro-lfx-bram_even_odd-2",
+        "name": "lfx bram even odd 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-bram_even_odd-2-xml"
+    },
+    {
+        "id": "denarapro-lfx-entry_point_demo-3",
+        "name": "lfx entry point demo 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-entry_point_demo-3-xml"
+    },
+    {
+        "id": "denarapro-lfx-even_odd_recovery_bot-4",
+        "name": "lfx even odd recovery bot 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-even_odd_recovery_bot-4-xml"
+    },
+    {
+        "id": "denarapro-lfx-matches_master-premium",
+        "name": "lfx matches master premium",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-matches_master-premium-xml"
+    },
+    {
+        "id": "denarapro-lfx-patel_with_entry-5",
+        "name": "lfx patel with entry 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-patel_with_entry-5-xml"
+    },
+    {
+        "id": "denarapro-lfx-profit_pilot-6",
+        "name": "lfx profit pilot 6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-profit_pilot-6-xml"
+    },
+    {
+        "id": "denarapro-lfx-raziel_over_under-7",
+        "name": "lfx raziel over under 7",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-raziel_over_under-7-xml"
+    },
+    {
+        "id": "denarapro-lfx-raziel_scaling-8",
+        "name": "lfx raziel scaling 8",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-raziel_scaling-8-xml"
+    },
+    {
+        "id": "denarapro-lfx-states_digit_switcher_even_odd-9",
+        "name": "lfx states digit switcher even odd 9",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-states_digit_switcher_even_odd-9-xml"
+    },
+    {
+        "id": "denarapro-lfx-states_digit_switcher-10",
+        "name": "lfx states digit switcher 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-states_digit_switcher-10-xml"
+    },
+    {
+        "id": "denarapro-lfx-states_evenodd_under4_recovery-11",
+        "name": "lfx states evenodd under4 recovery 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-states_evenodd_under4_recovery-11-xml"
+    },
+    {
+        "id": "denarapro-lfx-tick_hunter_bot-12",
+        "name": "lfx tick hunter bot 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-tick_hunter_bot-12-xml"
+    },
+    {
+        "id": "denarapro-lfx-under_8_recovery_even_odd-13",
+        "name": "lfx under 8 recovery even odd 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lfx-under_8_recovery_even_odd-13-xml"
+    },
+    {
+        "id": "denarapro-lp-apex-ai-2026",
+        "name": "lp apex ai 2026",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-apex-ai-2026-xml"
+    },
+    {
+        "id": "denarapro-lp-apex-ai-v2",
+        "name": "lp apex ai v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-apex-ai-v2-xml"
+    },
+    {
+        "id": "denarapro-lp-auto-c4-volt-ai-premium",
+        "name": "lp auto c4 volt ai premium",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-auto-c4-volt-ai-premium-xml"
+    },
+    {
+        "id": "denarapro-lp-even-auto-bot-v2",
+        "name": "lp even auto bot v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-even-auto-bot-v2-xml"
+    },
+    {
+        "id": "denarapro-lp-legacy-prime-bot",
+        "name": "lp legacy prime bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-legacy-prime-bot-xml"
+    },
+    {
+        "id": "denarapro-lp-odd-auto-bot-v3",
+        "name": "lp odd auto bot v3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-odd-auto-bot-v3-xml"
+    },
+    {
+        "id": "denarapro-lp-over-pro-bot",
+        "name": "lp over pro bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-over-pro-bot-xml"
+    },
+    {
+        "id": "denarapro-lp-raziel-over-under",
+        "name": "lp raziel over under",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-raziel-over-under-xml"
+    },
+    {
+        "id": "denarapro-lp-rise-fall-apex-ai",
+        "name": "lp rise fall apex ai",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-rise-fall-apex-ai-xml"
+    },
+    {
+        "id": "denarapro-lp-the-anex",
+        "name": "lp the anex",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-the-anex-xml"
+    },
+    {
+        "id": "denarapro-lp-the-binotek-5-2025",
+        "name": "lp the binotek 5 2025",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-the-binotek-5-2025-xml"
+    },
+    {
+        "id": "denarapro-lp-under-pro-bot",
+        "name": "lp under pro bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-lp-under-pro-bot-xml"
+    },
+    {
+        "id": "denarapro-m8gg-accumulators-barrier-bot-32",
+        "name": "m8gg accumulators barrier bot 32",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-accumulators-barrier-bot-32-xml"
+    },
+    {
+        "id": "denarapro-m8gg-accumulators-bot-31",
+        "name": "m8gg accumulators bot 31",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-accumulators-bot-31-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-over-1-bot-6",
+        "name": "m8gg ai over 1 bot 6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-over-1-bot-6-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-trading-bot-3",
+        "name": "m8gg ai trading bot 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-trading-bot-3-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-under-7-bot-5",
+        "name": "m8gg ai under 7 bot 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-under-7-bot-5-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-under-8-bot-7",
+        "name": "m8gg ai under 8 bot 7",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-under-8-bot-7-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-under-8-single-9",
+        "name": "m8gg ai under 8 single 9",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-under-8-single-9-xml"
+    },
+    {
+        "id": "denarapro-m8gg-ai-with-entry-point-30",
+        "name": "m8gg ai with entry point 30",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-ai-with-entry-point-30-xml"
+    },
+    {
+        "id": "denarapro-m8gg-best-over-under-switcher-20",
+        "name": "m8gg best over under switcher 20",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-best-over-under-switcher-20-xml"
+    },
+    {
+        "id": "denarapro-m8gg-christmas-2025-even-odd-bot-28",
+        "name": "m8gg christmas 2025 even odd bot 28",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-christmas-2025-even-odd-bot-28-xml"
+    },
+    {
+        "id": "denarapro-m8gg-consecutive-even-odd-bot-27",
+        "name": "m8gg consecutive even odd bot 27",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-consecutive-even-odd-bot-27-xml"
+    },
+    {
+        "id": "denarapro-m8gg-differs-bot-38",
+        "name": "m8gg differs bot 38",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-differs-bot-38-xml"
+    },
+    {
+        "id": "denarapro-m8gg-entry-bot-23",
+        "name": "m8gg entry bot 23",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-entry-bot-23-xml"
+    },
+    {
+        "id": "denarapro-m8gg-even-odd-bot-16",
+        "name": "m8gg even odd bot 16",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-even-odd-bot-16-xml"
+    },
+    {
+        "id": "denarapro-m8gg-martingale-bot-33",
+        "name": "m8gg martingale bot 33",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-martingale-bot-33-xml"
+    },
+    {
+        "id": "denarapro-m8gg-matches-bot-15",
+        "name": "m8gg matches bot 15",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-matches-bot-15-xml"
+    },
+    {
+        "id": "denarapro-m8gg-maziwaa-ai-21",
+        "name": "m8gg maziwaa ai 21",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-maziwaa-ai-21-xml"
+    },
+    {
+        "id": "denarapro-m8gg-money8gg-speed-bot-1",
+        "name": "m8gg money8gg speed bot 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-money8gg-speed-bot-1-xml"
+    },
+    {
+        "id": "denarapro-m8gg-multipurpose-25",
+        "name": "m8gg multipurpose 25",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-multipurpose-25-xml"
+    },
+    {
+        "id": "denarapro-m8gg-no-martingale-29",
+        "name": "m8gg no martingale 29",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-no-martingale-29-xml"
+    },
+    {
+        "id": "denarapro-m8gg-only-ups-only-downs-bot-0",
+        "name": "m8gg only ups only downs bot 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-only-ups-only-downs-bot-0-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-1-strategy-13",
+        "name": "m8gg over 1 strategy 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-1-strategy-13-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-2-ai-12",
+        "name": "m8gg over 2 ai 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-2-ai-12-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-3-ai-10",
+        "name": "m8gg over 3 ai 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-3-ai-10-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-3-strategy-14",
+        "name": "m8gg over 3 strategy 14",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-3-strategy-14-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-5-pyschology-4",
+        "name": "m8gg over 5 pyschology 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-5-pyschology-4-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-single-side-36",
+        "name": "m8gg over single side 36",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-single-side-36-xml"
+    },
+    {
+        "id": "denarapro-m8gg-over-under-bot-17",
+        "name": "m8gg over under bot 17",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-over-under-bot-17-xml"
+    },
+    {
+        "id": "denarapro-m8gg-percentage-auto-even-odd-26",
+        "name": "m8gg percentage auto even odd 26",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-percentage-auto-even-odd-26-xml"
+    },
+    {
+        "id": "denarapro-m8gg-rise-and-fall-simple-bot-18",
+        "name": "m8gg rise and fall simple bot 18",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-rise-and-fall-simple-bot-18-xml"
+    },
+    {
+        "id": "denarapro-m8gg-same-side-over-under-35",
+        "name": "m8gg same side over under 35",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-same-side-over-under-35-xml"
+    },
+    {
+        "id": "denarapro-m8gg-secret-strategy-24",
+        "name": "m8gg secret strategy 24",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-secret-strategy-24-xml"
+    },
+    {
+        "id": "denarapro-m8gg-step-indices-bot-19",
+        "name": "m8gg step indices bot 19",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-step-indices-bot-19-xml"
+    },
+    {
+        "id": "denarapro-m8gg-switching-bot-34",
+        "name": "m8gg switching bot 34",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-switching-bot-34-xml"
+    },
+    {
+        "id": "denarapro-m8gg-under-7-bulk-22",
+        "name": "m8gg under 7 bulk 22",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-under-7-bulk-22-xml"
+    },
+    {
+        "id": "denarapro-m8gg-under-8-ai-advanced-cont-8",
+        "name": "m8gg under 8 ai advanced cont 8",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-under-8-ai-advanced-cont-8-xml"
+    },
+    {
+        "id": "denarapro-m8gg-under-8-strategy-11",
+        "name": "m8gg under 8 strategy 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-under-8-strategy-11-xml"
+    },
+    {
+        "id": "denarapro-m8gg-under-8-under-5-2",
+        "name": "m8gg under 8 under 5 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-under-8-under-5-2-xml"
+    },
+    {
+        "id": "denarapro-m8gg-under-single-side-37",
+        "name": "m8gg under single side 37",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-m8gg-under-single-side-37-xml"
+    },
+    {
+        "id": "denarapro-mk-dtool-apex-range-ai-0",
+        "name": "mk dtool apex range ai 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtool-apex-range-ai-0-xml"
+    },
+    {
+        "id": "denarapro-mk-dtool-smartrange-ai-1",
+        "name": "mk dtool smartrange ai 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtool-smartrange-ai-1-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-differs-hunter-0",
+        "name": "mk dtrader differs hunter 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-differs-hunter-0-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-digits-changer-1",
+        "name": "mk dtrader digits changer 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-digits-changer-1-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-entry-point-hunter-2",
+        "name": "mk dtrader entry point hunter 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-entry-point-hunter-2-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-over-1-recovery-over-4-3",
+        "name": "mk dtrader over 1 recovery over 4 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-over-1-recovery-over-4-3-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-over-switcher-ai-4",
+        "name": "mk dtrader over switcher ai 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-over-switcher-ai-4-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-rise-fall-hunter-5",
+        "name": "mk dtrader rise fall hunter 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-rise-fall-hunter-5-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-sv-switcher-6",
+        "name": "mk dtrader sv switcher 6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-sv-switcher-6-xml"
+    },
+    {
+        "id": "denarapro-mk-dtrader-under-switcher-ai-7",
+        "name": "mk dtrader under switcher ai 7",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-dtrader-under-switcher-ai-7-xml"
+    },
+    {
+        "id": "denarapro-mk-free-even-odd-king-0",
+        "name": "mk free even odd king 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-free-even-odd-king-0-xml"
+    },
+    {
+        "id": "denarapro-mk-free-over-under-king-1",
+        "name": "mk free over under king 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-free-over-under-king-1-xml"
+    },
+    {
+        "id": "denarapro-mk-free-rise-fall-king-2",
+        "name": "mk free rise fall king 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-free-rise-fall-king-2-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-apex-ai-2",
+        "name": "mk kp apex ai 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-apex-ai-2-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-digit-nexus-ai-0",
+        "name": "mk kp digit nexus ai 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-digit-nexus-ai-0-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-neutrade-ai-3",
+        "name": "mk kp neutrade ai 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-neutrade-ai-3-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-pulsetrader-ai-5",
+        "name": "mk kp pulsetrader ai 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-pulsetrader-ai-5-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-straddle-edge-4",
+        "name": "mk kp straddle edge 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-straddle-edge-4-xml"
+    },
+    {
+        "id": "denarapro-mk-kp-volt-scalper-1",
+        "name": "mk kp volt scalper 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-kp-volt-scalper-1-xml"
+    },
+    {
+        "id": "denarapro-mk-mkorean-mkorean-sv7-2025-1",
+        "name": "mk mkorean mkorean sv7 2025 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-mkorean-mkorean-sv7-2025-1-xml"
+    },
+    {
+        "id": "denarapro-mk-mkorean-no-loss-bot-2",
+        "name": "mk mkorean no loss bot 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-mkorean-no-loss-bot-2-xml"
+    },
+    {
+        "id": "denarapro-mk-mkorean-profits-miner-bot-0",
+        "name": "mk mkorean profits miner bot 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-mkorean-profits-miner-bot-0-xml"
+    },
+    {
+        "id": "denarapro-mk-mkorean-ultimate-sv-8-bot-2025-3",
+        "name": "mk mkorean ultimate sv 8 bot 2025 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-mkorean-ultimate-sv-8-bot-2025-3-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-digits-sniper-0",
+        "name": "mk pai digits sniper 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-digits-sniper-0-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-entry-point-scanner-11",
+        "name": "mk pai entry point scanner 11",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-entry-point-scanner-11-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-even-odd-switcher-1",
+        "name": "mk pai even odd switcher 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-even-odd-switcher-1-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-githinji-7",
+        "name": "mk pai githinji 7",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-githinji-7-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-market-killer-12",
+        "name": "mk pai market killer 12",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-market-killer-12-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-new-2026-year-gift-8",
+        "name": "mk pai new 2026 year gift 8",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-new-2026-year-gift-8-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-no-analysis-bot-9",
+        "name": "mk pai no analysis bot 9",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-no-analysis-bot-9-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-over-destroyer-5",
+        "name": "mk pai over destroyer 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-over-destroyer-5-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-speedbot-updated-xm-13",
+        "name": "mk pai speedbot updated xm 13",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-speedbot-updated-xm-13-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-the-dgt-4",
+        "name": "mk pai the dgt 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-the-dgt-4-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-under-7-bot-14",
+        "name": "mk pai under 7 bot 14",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-under-7-bot-14-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-under-8-bot-15",
+        "name": "mk pai under 8 bot 15",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-under-8-bot-15-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-under-9-bot-16",
+        "name": "mk pai under 9 bot 16",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-under-9-bot-16-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-under-destroyer-6",
+        "name": "mk pai under destroyer 6",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-under-destroyer-6-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-updated-even-odd-ai-entry-scanner-10",
+        "name": "mk pai updated even odd ai entry scanner 10",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-updated-even-odd-ai-entry-scanner-10-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-updated-over-0-ai-bot-17",
+        "name": "mk pai updated over 0 ai bot 17",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-updated-over-0-ai-bot-17-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-updated-over-1-ai-bot-18",
+        "name": "mk pai updated over 1 ai bot 18",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-updated-over-1-ai-bot-18-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-updated-over-2-ai-bot-19",
+        "name": "mk pai updated over 2 ai bot 19",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-updated-over-2-ai-bot-19-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-world-roller-2-2",
+        "name": "mk pai world roller 2 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-world-roller-2-2-xml"
+    },
+    {
+        "id": "denarapro-mk-pai-world-roller-7-3",
+        "name": "mk pai world roller 7 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-pai-world-roller-7-3-xml"
+    },
+    {
+        "id": "denarapro-mk-tai-githinji-by-paigey-official-0",
+        "name": "mk tai githinji by paigey official 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tai-githinji-by-paigey-official-0-xml"
+    },
+    {
+        "id": "denarapro-mk-tai-new-2026-year-gift-by-paigey-official-1",
+        "name": "mk tai new 2026 year gift by paigey official 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tai-new-2026-year-gift-by-paigey-official-1-xml"
+    },
+    {
+        "id": "denarapro-mk-tai-no-analysis-bot-by-paigey-official-2",
+        "name": "mk tai no analysis bot by paigey official 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tai-no-analysis-bot-by-paigey-official-2-xml"
+    },
+    {
+        "id": "denarapro-mk-tclas-nexus-ai-1",
+        "name": "mk tclas nexus ai 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tclas-nexus-ai-1-xml"
+    },
+    {
+        "id": "denarapro-mk-tclas-nova-ai-2",
+        "name": "mk tclas nova ai 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tclas-nova-ai-2-xml"
+    },
+    {
+        "id": "denarapro-mk-tclas-tradepilot-ai-0",
+        "name": "mk tclas tradepilot ai 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tclas-tradepilot-ai-0-xml"
+    },
+    {
+        "id": "denarapro-mk-tclas-vortex-ai-3",
+        "name": "mk tclas vortex ai 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-tclas-vortex-ai-3-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-differs-hunter-bot-0",
+        "name": "mk zara differs hunter bot 0",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-differs-hunter-bot-0-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-evenodd-hunter-bot-1",
+        "name": "mk zara evenodd hunter bot 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-evenodd-hunter-bot-1-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-over-changer-v2-2",
+        "name": "mk zara over changer v2 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-over-changer-v2-2-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-raziel-over-under-3",
+        "name": "mk zara raziel over under 3",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-raziel-over-under-3-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-sv-switcher-4",
+        "name": "mk zara sv switcher 4",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-sv-switcher-4-xml"
+    },
+    {
+        "id": "denarapro-mk-zara-under-changer-5",
+        "name": "mk zara under changer 5",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-mk-zara-under-changer-5-xml"
+    },
+    {
+        "id": "denarapro-osam-even_autobot-1",
+        "name": "osam even autobot 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-even_autobot-1-xml"
+    },
+    {
+        "id": "denarapro-osam-even_myth-v20",
+        "name": "osam even myth v20",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-even_myth-v20-xml"
+    },
+    {
+        "id": "denarapro-osam-even_odd-myth-v1",
+        "name": "osam even odd myth v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-even_odd-myth-v1-xml"
+    },
+    {
+        "id": "denarapro-osam-h_l-auto-vault",
+        "name": "osam h l auto vault",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-h_l-auto-vault-xml"
+    },
+    {
+        "id": "denarapro-osam-mega_mind-v1",
+        "name": "osam mega mind v1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-mega_mind-v1-xml"
+    },
+    {
+        "id": "denarapro-osam-mentorship_2-1",
+        "name": "osam mentorship 2 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-mentorship_2-1-xml"
+    },
+    {
+        "id": "denarapro-osam-odd_autobot-1-1",
+        "name": "osam odd autobot 1 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-odd_autobot-1-1-xml"
+    },
+    {
+        "id": "denarapro-osam-odd_myth-v30",
+        "name": "osam odd myth v30",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-odd_myth-v30-xml"
+    },
+    {
+        "id": "denarapro-osam-osam_digit_switcher",
+        "name": "osam osam digit switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-osam_digit_switcher-xml"
+    },
+    {
+        "id": "denarapro-osam-osam_digit_ticker",
+        "name": "osam osam digit ticker",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-osam_digit_ticker-xml"
+    },
+    {
+        "id": "denarapro-osam-osam-digit_switcher",
+        "name": "osam osam digit switcher",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-osam-digit_switcher-xml"
+    },
+    {
+        "id": "denarapro-osam-osam-hnr",
+        "name": "osam osam hnr",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-osam-hnr-xml"
+    },
+    {
+        "id": "denarapro-osam-over_destroyer-v2",
+        "name": "osam over destroyer v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over_destroyer-v2-xml"
+    },
+    {
+        "id": "denarapro-osam-over_hitnrun",
+        "name": "osam over hitnrun",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over_hitnrun-xml"
+    },
+    {
+        "id": "denarapro-osam-over_under-autobot",
+        "name": "osam over under autobot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over_under-autobot-xml"
+    },
+    {
+        "id": "denarapro-osam-over-destroyer",
+        "name": "osam over destroyer",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over-destroyer-xml"
+    },
+    {
+        "id": "denarapro-osam-over-hitnrun",
+        "name": "osam over hitnrun",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over-hitnrun-xml"
+    },
+    {
+        "id": "denarapro-osam-over-pro-bot",
+        "name": "osam over pro bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over-pro-bot-xml"
+    },
+    {
+        "id": "denarapro-osam-over-super-bot",
+        "name": "osam over super bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-over-super-bot-xml"
+    },
+    {
+        "id": "denarapro-osam-patel-with-entry-2",
+        "name": "osam patel with entry 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-patel-with-entry-2-xml"
+    },
+    {
+        "id": "denarapro-osam-patel-with-entry",
+        "name": "osam patel with entry",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-patel-with-entry-xml"
+    },
+    {
+        "id": "denarapro-osam-raziel-over-under-2",
+        "name": "osam raziel over under 2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-raziel-over-under-2-xml"
+    },
+    {
+        "id": "denarapro-osam-raziel-over-under",
+        "name": "osam raziel over under",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-raziel-over-under-xml"
+    },
+    {
+        "id": "denarapro-osam-raziel-scaling",
+        "name": "osam raziel scaling",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-raziel-scaling-xml"
+    },
+    {
+        "id": "denarapro-osam-reborn-hnr-1",
+        "name": "osam reborn hnr 1",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-reborn-hnr-1-xml"
+    },
+    {
+        "id": "denarapro-osam-the-astro-e_o",
+        "name": "osam the astro e o",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-the-astro-e_o-xml"
+    },
+    {
+        "id": "denarapro-osam-tradescript",
+        "name": "osam tradescript",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-tradescript-xml"
+    },
+    {
+        "id": "denarapro-osam-under_destroyer-v2",
+        "name": "osam under destroyer v2",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under_destroyer-v2-xml"
+    },
+    {
+        "id": "denarapro-osam-under_hitnrun",
+        "name": "osam under hitnrun",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under_hitnrun-xml"
+    },
+    {
+        "id": "denarapro-osam-under-8-pro-bot",
+        "name": "osam under 8 pro bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under-8-pro-bot-xml"
+    },
+    {
+        "id": "denarapro-osam-under-destroyer",
+        "name": "osam under destroyer",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under-destroyer-xml"
+    },
+    {
+        "id": "denarapro-osam-under-pro-bot",
+        "name": "osam under pro bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under-pro-bot-xml"
+    },
+    {
+        "id": "denarapro-osam-under-super-bot",
+        "name": "osam under super bot",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-osam-under-super-bot-xml"
+    },
+    {
+        "id": "denarapro-pb-ai-under-gvt-9-05",
+        "name": "pb ai under gvt 9 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-ai-under-gvt-9-05-xml"
+    },
+    {
+        "id": "denarapro-pb-blue-print-00",
+        "name": "pb blue print 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-blue-print-00-xml"
+    },
+    {
+        "id": "denarapro-pb-dollarprinterbotorignal-1-04",
+        "name": "pb dollarprinterbotorignal 1 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-dollarprinterbotorignal-1-04-xml"
+    },
+    {
+        "id": "denarapro-pb-golminer-vs-2-03",
+        "name": "pb golminer vs 2 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-golminer-vs-2-03-xml"
+    },
+    {
+        "id": "denarapro-pb-matches-pro-bot-01",
+        "name": "pb matches pro bot 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-matches-pro-bot-01-xml"
+    },
+    {
+        "id": "denarapro-pb-v6-striker-bot-3-1-02",
+        "name": "pb v6 striker bot 3 1 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-pb-v6-striker-bot-3-1-02-xml"
+    },
+    {
+        "id": "denarapro-th-advanced-goldmine-m1-02",
+        "name": "th advanced goldmine m1 02",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-advanced-goldmine-m1-02-xml"
+    },
+    {
+        "id": "denarapro-th-auto-switch-rise-fall-00",
+        "name": "th auto switch rise fall 00",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-auto-switch-rise-fall-00-xml"
+    },
+    {
+        "id": "denarapro-th-best-digit-bot-03",
+        "name": "th best digit bot 03",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-best-digit-bot-03-xml"
+    },
+    {
+        "id": "denarapro-th-even-odd-switch-v1-04",
+        "name": "th even odd switch v1 04",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-even-odd-switch-v1-04-xml"
+    },
+    {
+        "id": "denarapro-th-golminer-xvt-05",
+        "name": "th golminer xvt 05",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-golminer-xvt-05-xml"
+    },
+    {
+        "id": "denarapro-th-profit-1-bot-06",
+        "name": "th profit 1 bot 06",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-profit-1-bot-06-xml"
+    },
+    {
+        "id": "denarapro-th-speed-bot-ceo-sami-v2-01",
+        "name": "th speed bot ceo sami v2 01",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-speed-bot-ceo-sami-v2-01-xml"
+    },
+    {
+        "id": "denarapro-th-speed-bot-ceo-sami-v3-07",
+        "name": "th speed bot ceo sami v3 07",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-speed-bot-ceo-sami-v3-07-xml"
+    },
+    {
+        "id": "denarapro-th-texas-even-bot-08",
+        "name": "th texas even bot 08",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-th-texas-even-bot-08-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-babaking2-xml",
+        "name": "tk arena babaking2 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-babaking2-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-enhancedautoswitchover2bot-xml",
+        "name": "tk arena enhancedautoswitchover2bot xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-enhancedautoswitchover2bot-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-hitnrunpro-xml",
+        "name": "tk arena hitnrunpro xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-hitnrunpro-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-hurmyautobotbyhurmyfxke-xml",
+        "name": "tk arena hurmyautobotbyhurmyfxke xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-hurmyautobotbyhurmyfxke-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-hurmyspeedbotprov2-xml",
+        "name": "tk arena hurmyspeedbotprov2 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-hurmyspeedbotprov2-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-m27autoswitchbot2024-xml",
+        "name": "tk arena m27autoswitchbot2024 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-m27autoswitchbot2024-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-miketheg-xml",
+        "name": "tk arena miketheg xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-miketheg-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-statesdigitswitcher-xml",
+        "name": "tk arena statesdigitswitcher xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-statesdigitswitcher-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-underoverautoswitch-xml",
+        "name": "tk arena underoverautoswitch xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-underoverautoswitch-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-arena-vx-xml",
+        "name": "tk arena vx xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-arena-vx-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-henry-alphaversion2026edition-xml",
+        "name": "tk henry alphaversion2026edition xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-henry-alphaversion2026edition-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-henry-expertspeedbotbychosendollarprinterfx-xml",
+        "name": "tk henry expertspeedbotbychosendollarprinterfx xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-henry-expertspeedbotbychosendollarprinterfx-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-henry-signalsniperautobot-xml",
+        "name": "tk henry signalsniperautobot xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-henry-signalsniperautobot-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-aibot-xml",
+        "name": "tk hunter aibot xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-aibot-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-autodifferbylegoo-xml",
+        "name": "tk hunter autodifferbylegoo xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-autodifferbylegoo-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-dollarprinterbotorignal-xml",
+        "name": "tk hunter dollarprinterbotorignal xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-dollarprinterbotorignal-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-killermarketaiv22024new-xml",
+        "name": "tk hunter killermarketaiv22024new xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-killermarketaiv22024new-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-maiunder3new-xml",
+        "name": "tk hunter maiunder3new xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-maiunder3new-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-marketkillerbot-xml",
+        "name": "tk hunter marketkillerbot xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-marketkillerbot-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-hunter-martingale-matches-differs-xml",
+        "name": "tk hunter martingale matches differs xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-hunter-martingale-matches-differs-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-dstrike2-xml",
+        "name": "tk novaprime dstrike2 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-dstrike2-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-magicrecovery-xml",
+        "name": "tk novaprime magicrecovery xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-magicrecovery-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-novagrid2026-xml",
+        "name": "tk novaprime novagrid2026 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-novagrid2026-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-over2recover4-xml",
+        "name": "tk novaprime over2recover4 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-over2recover4-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-under7under5-xml",
+        "name": "tk novaprime under7under5 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-under7under5-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-novaprime-under8under6-xml",
+        "name": "tk novaprime under8under6 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-novaprime-under8under6-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-autovolt5probot1-xml",
+        "name": "tk wizard autovolt5probot1 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-autovolt5probot1-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-derivwizard1-xml",
+        "name": "tk wizard derivwizard1 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-derivwizard1-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-derivwizard2-xml",
+        "name": "tk wizard derivwizard2 xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-derivwizard2-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-dollarflipper-xml",
+        "name": "tk wizard dollarflipper xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-dollarflipper-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-dollarminer-xml",
+        "name": "tk wizard dollarminer xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-dollarminer-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-evenoddautoswitcher-xml",
+        "name": "tk wizard evenoddautoswitcher xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-evenoddautoswitcher-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-risefallswitcherbot-xml",
+        "name": "tk wizard risefallswitcherbot xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-risefallswitcherbot-xml-xml"
+    },
+    {
+        "id": "denarapro-tk-wizard-underoverautoswitch-xml",
+        "name": "tk wizard underoverautoswitch xml",
+        "creator": "denarapro",
+        "file": "denarapro/denarapro-tk-wizard-underoverautoswitch-xml-xml"
+    },
+    {
         "id": "dollarprinter-free-AI-SIGNAL-SCANNER",
         "name": "free AI SIGNAL SCANNER",
         "creator": "dollarprinter",
@@ -2321,6 +5243,11 @@ export const FREE_BOTS: TFreeBot[] = [
 ];
 
 export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
+    {
+        "id": "denarapro",
+        "label": "denarapro",
+        "count": 487
+    },
     {
         "id": "money8gg",
         "label": "money8gg",
