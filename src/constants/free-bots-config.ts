@@ -351,6 +351,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbotspace-free-UNDER8_R67-PRO-xml"
     },
     {
+        "id": "dbotzone-Auto-O5-U4",
+        "name": "Auto O5 U4",
+        "creator": "dbotzone",
+        "file": "dbotzone/dbotzone-Auto-O5-U4-xml"
+    },
+    {
         "id": "dbtraders-automatedbots-Differ-Switcher-Smart-Cycle",
         "name": "automatedbots Differ Switcher Smart Cycle",
         "creator": "dbtraders",
@@ -5346,6 +5352,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "ai",
         "label": "ai",
+        "count": 1
+    },
+    {
+        "id": "dbotzone",
+        "label": "dbotzone",
         "count": 1
     },
     {
