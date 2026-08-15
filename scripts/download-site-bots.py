@@ -126,6 +126,11 @@ SITES = {
             "Over-Under-Auto-Space-BY-chichi": 19611,
             "STEP-INDICES-AUTO-SWITCH-AI-BOT": 4098,
             "STEP-INDICES-QUANTUM-AI-(by-chichi)-(1)": 35580,
+            # Added in the current store (23 bots total):
+            "EVEN-ODD-FLIPPER-AI-with-entry": 2696,
+            "1$-TRADER-AI-BOT[by-chichi]": 37302,
+            "OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]": 38050,
+            "RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)": 14458,
         },
     },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads

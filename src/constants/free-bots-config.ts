@@ -297,6 +297,30 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/chichitraders-UNDER-8-RECOVERY-OVER-4-(1)-xml"
     },
     {
+        "id": "chichitraders-1$-TRADER-AI-BOT[by-chichi]",
+        "name": "1$ TRADER AI BOT[by chichi]",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-1$-TRADER-AI-BOT[by-chichi]-xml"
+    },
+    {
+        "id": "chichitraders-EVEN-ODD-FLIPPER-AI-with-entry",
+        "name": "EVEN ODD FLIPPER AI with entry",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-EVEN-ODD-FLIPPER-AI-with-entry-xml"
+    },
+    {
+        "id": "chichitraders-OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]",
+        "name": "OVER 3 MATRIX AI 3digits entry[BY CHICHI]",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]-xml"
+    },
+    {
+        "id": "chichitraders-RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)",
+        "name": "RISE FALL AUTOSRIKE AI[by chichi] (1)",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)-xml"
+    },
+    {
         "id": "dalembert_max-stake",
         "name": "dalembert max stake",
         "creator": "Official",
@@ -5296,14 +5320,14 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 24
     },
     {
+        "id": "chichitraders",
+        "label": "chichitraders",
+        "count": 23
+    },
+    {
         "id": "githinji",
         "label": "githinji",
         "count": 20
-    },
-    {
-        "id": "chichitraders",
-        "label": "chichitraders",
-        "count": 19
     },
     {
         "id": "dollarprinter",
