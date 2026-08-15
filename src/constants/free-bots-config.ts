@@ -4965,6 +4965,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "oscars_grind-xml"
     },
     {
+        "id": "prodbot-MATCHES-PRO-BOT",
+        "name": "MATCHES PRO BOT",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-MATCHES-PRO-BOT-xml"
+    },
+    {
         "id": "reverse_dalembert",
         "name": "reverse dalembert",
         "creator": "Official",
@@ -5357,6 +5363,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbotzone",
         "label": "dbotzone",
+        "count": 1
+    },
+    {
+        "id": "prodbot",
+        "label": "prodbot",
         "count": 1
     },
     {

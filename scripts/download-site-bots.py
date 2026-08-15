@@ -136,6 +136,15 @@ SITES = {
         "catalog": "/api/public/denarabot/catalog",
         "xml_template": "/api/public/denarabot/bots/{id}/xml",
     },
+    # prodbot.site free-bots tab: the bot library (async chunk 541) serves each
+    # XML as a plain file at /xml/<Bot Name>.xml (only the Matches Pro bot is
+    # kept, per the request).
+    "prodbot": {
+        "base": "https://prodbot.site/xml",
+        "chunks": {
+            "MATCHES PRO BOT.xml": None,
+        },
+    },
 }
 
 

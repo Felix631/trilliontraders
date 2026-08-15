@@ -31,6 +31,7 @@ const KNOWN_CREATORS = new Set([
     'dbtraders', 'dollarprinter', 'dbotspace', 'signal', 'ai',
     'newlyadded', 'tradepro', 'dbx', 'dtraderdbot', 'globaltrades', 'githinji', 'binaryentry',
     'jmtraders', 'chichitraders', 'isaacmrdollars', 'denarapro', 'dbotzone',
+    'prodbot',
 ]);
 
 const toDisplay = raw =>
