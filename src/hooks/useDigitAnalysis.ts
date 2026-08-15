@@ -12,13 +12,17 @@ export interface SideStat {
     percentage: number;
 }
 
+/**
+ * One explicit over/under digit contract side:
+ *  - Over N  (N in 0..8): wins when last digit > N
+ *  - Under N (N in 1..9): wins when last digit < N
+ */
 export interface OverUnderStat {
+    type: 'over' | 'under';
     threshold: number;
-    over: SideStat;
-    under: SideStat;
-    signal: 'over' | 'under';
-    signal_count: number;
-    signal_percentage: number;
+    count: number;
+    percentage: number;
+    /** Absolute advantage of this side over its opposite (0 = perfectly split). */
     edge: number;
 }
 
@@ -39,6 +43,8 @@ export interface DigitAnalysisState {
     sample_size: number;
     /** Digit of the most recent tick. */
     last_digit: number | null;
+    /** Exact quote of the most recent tick (for a precise last-tick readout). */
+    last_quote: number | null;
     /** Chronological last digits, oldest first, newest last. */
     history: number[];
     /** Per-digit stats for digits 0-9. */
@@ -51,22 +57,29 @@ export interface DigitAnalysisState {
     top_digits: number[];
     top_count: number;
     average_count: number;
-    /** Over/Under stats for every barrier 0-8 (digit strictly above vs at-or-below). */
+    /** Every tradable barrier side: Over 0-8 and Under 9-1. */
     over_under: OverUnderStat[];
-    /** The barrier with the strongest over/under edge. */
+    /** The barrier side with the strongest edge. */
     best_over_under: OverUnderStat | null;
     /** Even vs odd last-digit stats. */
     even_odd: EvenOddStat;
 }
 
 const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-const THRESHOLDS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const OVER_THRESHOLDS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const UNDER_THRESHOLDS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const emptyOverUnder = (): OverUnderStat[] => [
+    ...OVER_THRESHOLDS.map(threshold => ({ type: 'over' as const, threshold, count: 0, percentage: 0, edge: 0 })),
+    ...UNDER_THRESHOLDS.map(threshold => ({ type: 'under' as const, threshold, count: 0, percentage: 0, edge: 0 })),
+];
 
 const INITIAL_STATE: DigitAnalysisState = {
     status: 'connecting',
     error: null,
     sample_size: 0,
     last_digit: null,
+    last_quote: null,
     history: [],
     stats: DIGITS.map(digit => ({ digit, count: 0, percentage: 0 })),
     hot_digits: [],
@@ -74,15 +87,7 @@ const INITIAL_STATE: DigitAnalysisState = {
     top_digits: [],
     top_count: 0,
     average_count: 0,
-    over_under: THRESHOLDS.map(threshold => ({
-        threshold,
-        over: { count: 0, percentage: 0 },
-        under: { count: 0, percentage: 0 },
-        signal: 'over',
-        signal_count: 0,
-        signal_percentage: 0,
-        edge: 0,
-    })),
+    over_under: emptyOverUnder(),
     best_over_under: null,
     even_odd: {
         even: { count: 0, percentage: 0 },
@@ -114,7 +119,7 @@ const ticksFromHistory = (history: any): Array<{ quote: number; epoch: number }>
     return [];
 };
 
-const computeStats = (digits: number[], lookback: number): DigitAnalysisState => {
+const computeStats = (digits: number[], lookback: number, last_quote: number | null = null): DigitAnalysisState => {
     const sample = digits.slice(-lookback);
     const sample_size = sample.length;
 
@@ -126,22 +131,31 @@ const computeStats = (digits: number[], lookback: number): DigitAnalysisState =>
 
     const percentageOf = (count: number) => (sample_size ? Math.round((count / sample_size) * 1000) / 10 : 0);
 
-    // Over / Under — for each barrier 0-8, count digits strictly above it vs at-or-below it.
-    const over_under: OverUnderStat[] = THRESHOLDS.map(threshold => {
-        const over_count = sample.filter(d => d > threshold).length;
-        const under_count = sample_size - over_count;
-        const signal: 'over' | 'under' = over_count >= under_count ? 'over' : 'under';
-        const signal_count = signal === 'over' ? over_count : under_count;
-        return {
-            threshold,
-            over: { count: over_count, percentage: percentageOf(over_count) },
-            under: { count: under_count, percentage: percentageOf(under_count) },
-            signal,
-            signal_count,
-            signal_percentage: percentageOf(signal_count),
-            edge: Math.abs(over_count - under_count),
-        };
-    });
+    // Over / Under — every tradable barrier side:
+    //   Over N  (0..8): digits strictly above N
+    //   Under N (1..9): digits strictly below N
+    const over_under: OverUnderStat[] = [
+        ...OVER_THRESHOLDS.map(threshold => {
+            const count = sample.filter(d => d > threshold).length;
+            return {
+                type: 'over' as const,
+                threshold,
+                count,
+                percentage: percentageOf(count),
+                edge: Math.abs(count - (sample_size - count)),
+            };
+        }),
+        ...UNDER_THRESHOLDS.map(threshold => {
+            const count = sample.filter(d => d < threshold).length;
+            return {
+                type: 'under' as const,
+                threshold,
+                count,
+                percentage: percentageOf(count),
+                edge: Math.abs(count - (sample_size - count)),
+            };
+        }),
+    ];
     const best_over_under = sample_size > 0 ? over_under.reduce((best, entry) => (entry.edge > best.edge ? entry : best)) : null;
 
     // Even / Odd
@@ -155,6 +169,7 @@ const computeStats = (digits: number[], lookback: number): DigitAnalysisState =>
         error: null,
         sample_size,
         last_digit: sample.length ? sample[sample.length - 1] : null,
+        last_quote,
         history: sample,
         stats: counts.map(c => ({
             digit: c.digit,
@@ -183,12 +198,13 @@ const computeStats = (digits: number[], lookback: number): DigitAnalysisState =>
  *
  * Streams ticks through the app's existing Deriv WebSocket connection
  * (`api_base.api`) and maintains a rolling window of last digits, computing
- * digit-match frequency (hot / cold), over/under barrier edges, and even/odd
- * parity for digit-contract trading decisions.
+ * digit-match frequency (hot / cold), every Over 0-8 / Under 9-1 barrier side,
+ * and even/odd parity for digit-contract trading decisions.
  */
 export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysisState => {
     const [state, setState] = useState<DigitAnalysisState>(INITIAL_STATE);
     const digits_ref = useRef<number[]>([]);
+    const last_quote_ref = useRef<number | null>(null);
     const subscription_ref = useRef<{ unsubscribe: () => void } | null>(null);
     const sub_id_ref = useRef<string | null>(null);
     const last_epoch_ref = useRef<number>(0);
@@ -196,6 +212,7 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
     useEffect(() => {
         let disposed = false;
         digits_ref.current = [];
+        last_quote_ref.current = null;
         last_epoch_ref.current = 0;
         setState(INITIAL_STATE);
 
@@ -222,8 +239,9 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
                 if (tick.epoch && tick.epoch <= last_epoch_ref.current) return;
                 last_epoch_ref.current = tick.epoch || 0;
 
+                last_quote_ref.current = Number(tick.quote);
                 digits_ref.current = [...digits_ref.current, lastDigitOf(tick.quote)].slice(-lookback);
-                setState(computeStats(digits_ref.current, lookback));
+                setState(computeStats(digits_ref.current, lookback, last_quote_ref.current));
             });
             subscription_ref.current = message_subscription;
 
@@ -244,8 +262,9 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
                 const seeded_ticks = ticksFromHistory(response?.history).slice(-lookback);
                 if (seeded_ticks.length) {
                     digits_ref.current = seeded_ticks.map(tick => lastDigitOf(tick.quote));
+                    last_quote_ref.current = seeded_ticks[seeded_ticks.length - 1].quote;
                     last_epoch_ref.current = seeded_ticks[seeded_ticks.length - 1].epoch;
-                    setState(computeStats(digits_ref.current, lookback));
+                    setState(computeStats(digits_ref.current, lookback, last_quote_ref.current));
                 }
                 if (with_subscription && response?.subscription?.id) {
                     sub_id_ref.current = response.subscription.id;

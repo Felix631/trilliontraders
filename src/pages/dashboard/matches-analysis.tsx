@@ -19,6 +19,16 @@ const SYMBOLS = [
 
 const LOOKBACKS = [50, 100, 250, 500];
 
+// Intensity = the minimum winning percentage a signal must reach to be
+// classified STRONG. Below that it is a WEAK signal.
+const INTENSITY_LEVELS = [
+    { id: 'low', label: 'Low (≥50%)', threshold: 50 },
+    { id: 'medium', label: 'Medium (≥60%)', threshold: 60 },
+    { id: 'high', label: 'High (≥70%)', threshold: 70 },
+] as const;
+
+type IntensityId = (typeof INTENSITY_LEVELS)[number]['id'];
+
 type AnalysisMode = 'match' | 'overunder' | 'evenodd';
 
 const MODES: Array<{ id: AnalysisMode; label: string }> = [
@@ -31,6 +41,7 @@ const MatchesAnalysis = () => {
     const [symbol, setSymbol] = useState('R_100');
     const [lookback, setLookback] = useState(100);
     const [mode, setMode] = useState<AnalysisMode>('match');
+    const [intensity, setIntensity] = useState<IntensityId>('medium');
 
     const analysis = useDigitAnalysis(symbol, lookback);
 
@@ -39,6 +50,7 @@ const MatchesAnalysis = () => {
         error,
         sample_size,
         last_digit,
+        last_quote,
         history,
         stats,
         hot_digits,
@@ -50,6 +62,8 @@ const MatchesAnalysis = () => {
         even_odd,
     } = analysis;
 
+    const intensity_threshold = INTENSITY_LEVELS.find(level => level.id === intensity)!.threshold;
+
     const top_digit = top_digits.length ? top_digits[0] : null;
     const top_percentage = sample_size ? Math.round((top_count / sample_size) * 1000) / 10 : 0;
     const last_digit_matched = top_digit !== null && last_digit === top_digit;
@@ -59,12 +73,19 @@ const MatchesAnalysis = () => {
     const best = best_over_under;
     const best_hit =
         best !== null && last_digit !== null
-            ? best.signal === 'over'
+            ? best.type === 'over'
                 ? last_digit > best.threshold
-                : last_digit <= best.threshold
-            : false;
+                : last_digit < best.threshold
+            : null;
 
     const parity_hit = last_digit !== null && even_odd.signal === (last_digit % 2 === 0 ? 'even' : 'odd');
+
+    const over_entries = over_under.filter(entry => entry.type === 'over');
+    const under_entries = over_under.filter(entry => entry.type === 'under');
+    const strongest_over =
+        sample_size > 0 ? over_entries.reduce((a, b) => (b.percentage > a.percentage ? b : a)) : null;
+    const strongest_under =
+        sample_size > 0 ? under_entries.reduce((a, b) => (b.percentage > a.percentage ? b : a)) : null;
 
     const status_label =
         status === 'live'
@@ -78,12 +99,53 @@ const MatchesAnalysis = () => {
             ? `${count} / ${sample_size} (${sample_size ? Math.round((count / sample_size) * 1000) / 10 : 0}%)`
             : localize('collecting ticks…');
 
+    const is_strong = (percentage: number) => percentage >= intensity_threshold;
+
+    const render_signal_chip = (percentage: number) => (
+        <span
+            className={classNames('matches-analysis__signal-chip', {
+                'matches-analysis__signal-chip--strong': is_strong(percentage),
+                'matches-analysis__signal-chip--weak': !is_strong(percentage),
+            })}
+        >
+            {is_strong(percentage) ? localize('Strong signal') : localize('Weak signal')}
+        </span>
+    );
+
+    /** Precise last-tick readout — big digit, exact quote and hit/missed badge. */
+    const render_last_tick = (hit: boolean | null, hit_label: string) => (
+        <div className='matches-analysis__lasttick'>
+            <span className='matches-analysis__lasttick-label'>{localize('Last tick')}</span>
+            <span className='matches-analysis__lasttick-digit'>{last_digit === null ? '—' : last_digit}</span>
+            <span className='matches-analysis__lasttick-quote'>
+                {last_quote === null ? '' : localize('tick {{quote}}', { quote: String(last_quote) })}
+            </span>
+            {last_digit !== null && hit !== null && (
+                <span
+                    className={classNames('matches-analysis__match-badge', {
+                        'matches-analysis__match-badge--win': hit,
+                        'matches-analysis__match-badge--loss': !hit,
+                    })}
+                >
+                    {hit ? hit_label : localize('missed')}
+                </span>
+            )}
+        </div>
+    );
+
     const render_match = () => (
         <>
             <div className='matches-analysis__signal'>
+                {render_last_tick(
+                    top_digit !== null ? last_digit_matched : null,
+                    localize('matched signal')
+                )}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Match signal')}</span>
-                    <span className='matches-analysis__signal-digit'>{top_digit === null ? '—' : top_digit}</span>
+                    <div className='matches-analysis__signal-head'>
+                        <span className='matches-analysis__signal-digit'>{top_digit === null ? '—' : top_digit}</span>
+                        {sample_size > 0 && top_digit !== null && render_signal_chip(top_percentage)}
+                    </div>
                     <span className='matches-analysis__signal-meta'>{signal_meta(top_count)}</span>
                     {sample_size > 0 && top_digit !== null && (
                         <div className='matches-analysis__signal-bar'>
@@ -105,27 +167,11 @@ const MatchesAnalysis = () => {
                         </span>
                     </div>
                     <div className='matches-analysis__signal-row'>
-                        <span className='matches-analysis__signal-row-label'>{localize('Last tick')}</span>
+                        <span className='matches-analysis__signal-row-label'>{localize('Intensity applied')}</span>
                         <span className='matches-analysis__signal-row-value'>
-                            {last_digit === null ? (
-                                '—'
-                            ) : (
-                                <>
-                                    {last_digit}
-                                    {top_digit !== null && (
-                                        <span
-                                            className={classNames('matches-analysis__match-badge', {
-                                                'matches-analysis__match-badge--win': last_digit_matched,
-                                                'matches-analysis__match-badge--loss': !last_digit_matched,
-                                            })}
-                                        >
-                                            {last_digit_matched
-                                                ? localize('matched signal')
-                                                : localize('missed')}
-                                        </span>
-                                    )}
-                                </>
-                            )}
+                            {localize('≥{{threshold}}% = strong', {
+                                threshold: String(intensity_threshold),
+                            })}
                         </span>
                     </div>
                 </div>
@@ -136,18 +182,31 @@ const MatchesAnalysis = () => {
                     const is_hot = hot_digits.includes(digit);
                     const is_cold = cold_digits.includes(digit);
                     const is_top = top_digits.includes(digit);
+                    const strong = is_hot && is_strong(percentage);
+                    const weak = is_hot && !is_strong(percentage);
                     return (
                         <div
                             key={digit}
                             className={classNames('matches-analysis__tile', {
-                                'matches-analysis__tile--hot': is_hot && !is_top,
+                                'matches-analysis__tile--hot': is_hot && !is_top && !strong,
                                 'matches-analysis__tile--cold': is_cold && !is_top,
                                 'matches-analysis__tile--top': is_top,
+                                'matches-analysis__tile--strong': strong && !is_top,
                             })}
                         >
                             <span className='matches-analysis__tile-digit'>{digit}</span>
                             <span className='matches-analysis__tile-count'>{count}</span>
                             <span className='matches-analysis__tile-percent'>{percentage}%</span>
+                            {(strong || weak) && (
+                                <span
+                                    className={classNames('matches-analysis__tile-strength', {
+                                        'matches-analysis__tile-strength--strong': strong,
+                                        'matches-analysis__tile-strength--weak': weak,
+                                    })}
+                                >
+                                    {strong ? localize('S') : localize('W')}
+                                </span>
+                            )}
                             <div className='matches-analysis__tile-bar'>
                                 <span style={{ width: `${Math.round((count / max_count) * 100)}%` }} />
                             </div>
@@ -158,24 +217,65 @@ const MatchesAnalysis = () => {
         </>
     );
 
+    const render_barrier_tile = (entry: (typeof over_under)[number], is_best: boolean) => {
+        const strong = is_strong(entry.percentage);
+        const label =
+            entry.type === 'over'
+                ? localize('Over {{n}}', { n: String(entry.threshold) })
+                : localize('Under {{n}}', { n: String(entry.threshold) });
+        return (
+            <div
+                key={`${entry.type}-${entry.threshold}`}
+                className={classNames('matches-analysis__barrier', {
+                    'matches-analysis__barrier--best': is_best,
+                })}
+            >
+                <span className='matches-analysis__barrier-label'>{label}</span>
+                <span className='matches-analysis__barrier-pct'>{entry.percentage}%</span>
+                <span
+                    className={classNames('matches-analysis__signal-chip', {
+                        'matches-analysis__signal-chip--strong': strong,
+                        'matches-analysis__signal-chip--weak': !strong,
+                    })}
+                >
+                    {strong ? localize('Strong') : localize('Weak')}
+                </span>
+                <div className='matches-analysis__barrier-bar'>
+                    <span
+                        className={classNames('matches-analysis__barrier-bar-fill', {
+                            'matches-analysis__barrier-bar-fill--over': entry.type === 'over',
+                            'matches-analysis__barrier-bar-fill--under': entry.type === 'under',
+                        })}
+                        style={{ width: `${Math.min(entry.percentage, 100)}%` }}
+                    />
+                </div>
+                <span className='matches-analysis__barrier-meta'>{entry.count} / {sample_size}</span>
+            </div>
+        );
+    };
+
     const render_over_under = () => (
         <>
             <div className='matches-analysis__signal'>
+                {render_last_tick(best_hit, localize('hit signal'))}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Over / Under signal')}</span>
-                    <span className='matches-analysis__signal-digit matches-analysis__signal-digit--label'>
-                        {best === null || sample_size === 0
-                            ? '—'
-                            : best.signal === 'over'
-                              ? `Over ${best.threshold}`
-                              : `Under ${best.threshold}`}
-                    </span>
+                    <div className='matches-analysis__signal-head'>
+                        <span className='matches-analysis__signal-digit matches-analysis__signal-digit--label'>
+                            {best === null || sample_size === 0
+                                ? '—'
+                                : best.type === 'over'
+                                  ? localize('Over {{n}}', { n: String(best.threshold) })
+                                  : localize('Under {{n}}', { n: String(best.threshold) })}
+                        </span>
+                        {best !== null && sample_size > 0 && render_signal_chip(best.percentage)}
+                    </div>
                     <span className='matches-analysis__signal-meta'>
-                        {best === null ? '' : signal_meta(best.signal_count)}
+                        {best === null ? '' : signal_meta(best.count)}
                     </span>
                     {best !== null && sample_size > 0 && (
                         <div className='matches-analysis__signal-bar'>
-                            <span style={{ width: `${Math.min(best.signal_percentage, 100)}%` }} />
+                            <span style={{ width: `${Math.min(best.percentage, 100)}%` }} />
                         </div>
                     )}
                 </div>
@@ -183,101 +283,51 @@ const MatchesAnalysis = () => {
                     <div className='matches-analysis__signal-row'>
                         <span className='matches-analysis__signal-row-label'>{localize('Best barrier')}</span>
                         <span className='matches-analysis__signal-row-value'>
-                            {best === null || sample_size === 0 ? '—' : `${best.threshold} (${best.signal_percentage}%)`}
+                            {best === null || sample_size === 0
+                                ? '—'
+                                : `${best.type === 'over' ? 'Over' : 'Under'} ${best.threshold} (${best.percentage}%)`}
                         </span>
                     </div>
                     <div className='matches-analysis__signal-row'>
-                        <span className='matches-analysis__signal-row-label'>{localize('Over')}</span>
-                        <span
-                            className={classNames('matches-analysis__signal-row-value', {
-                                'matches-analysis__signal-row-value--hot':
-                                    best !== null && best.signal === 'over',
-                                'matches-analysis__signal-row-value--cold':
-                                    best !== null && best.signal === 'under',
-                            })}
-                        >
-                            {best === null ? '—' : `${best.over.percentage}% (${best.over.count})`}
+                        <span className='matches-analysis__signal-row-label'>{localize('Strongest Over')}</span>
+                        <span className='matches-analysis__signal-row-value matches-analysis__signal-row-value--hot'>
+                            {strongest_over === null ? '—' : `Over ${strongest_over.threshold} (${strongest_over.percentage}%)`}
                         </span>
                     </div>
                     <div className='matches-analysis__signal-row'>
-                        <span className='matches-analysis__signal-row-label'>{localize('Under')}</span>
-                        <span
-                            className={classNames('matches-analysis__signal-row-value', {
-                                'matches-analysis__signal-row-value--hot':
-                                    best !== null && best.signal === 'under',
-                                'matches-analysis__signal-row-value--cold':
-                                    best !== null && best.signal === 'over',
-                            })}
-                        >
-                            {best === null ? '—' : `${best.under.percentage}% (${best.under.count})`}
+                        <span className='matches-analysis__signal-row-label'>{localize('Strongest Under')}</span>
+                        <span className='matches-analysis__signal-row-value matches-analysis__signal-row-value--cold'>
+                            {strongest_under === null ? '—' : `Under ${strongest_under.threshold} (${strongest_under.percentage}%)`}
                         </span>
                     </div>
                     <div className='matches-analysis__signal-row'>
-                        <span className='matches-analysis__signal-row-label'>{localize('Last tick')}</span>
+                        <span className='matches-analysis__signal-row-label'>{localize('Intensity applied')}</span>
                         <span className='matches-analysis__signal-row-value'>
-                            {last_digit === null ? (
-                                '—'
-                            ) : (
-                                <>
-                                    {last_digit}
-                                    {best !== null && sample_size > 0 && (
-                                        <span
-                                            className={classNames('matches-analysis__match-badge', {
-                                                'matches-analysis__match-badge--win': best_hit,
-                                                'matches-analysis__match-badge--loss': !best_hit,
-                                            })}
-                                        >
-                                            {best_hit ? localize('hit signal') : localize('missed')}
-                                        </span>
-                                    )}
-                                </>
-                            )}
+                            {localize('≥{{threshold}}% = strong', {
+                                threshold: String(intensity_threshold),
+                            })}
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className='matches-analysis__grid matches-analysis__grid--barriers'>
-                {over_under.map(entry => {
-                    const is_best = best !== null && entry.threshold === best.threshold && sample_size > 0;
-                    const is_over_signal = entry.signal === 'over';
-                    return (
-                        <div
-                            key={entry.threshold}
-                            className={classNames('matches-analysis__barrier', {
-                                'matches-analysis__barrier--best': is_best,
-                            })}
-                        >
-                            <span className='matches-analysis__barrier-threshold'>{entry.threshold}</span>
-                            <span
-                                className={classNames('matches-analysis__barrier-side', {
-                                    'matches-analysis__barrier-side--hot': is_over_signal,
-                                    'matches-analysis__barrier-side--cold': !is_over_signal,
-                                })}
-                            >
-                                O {entry.over.percentage}%
-                            </span>
-                            <span
-                                className={classNames('matches-analysis__barrier-side', {
-                                    'matches-analysis__barrier-side--hot': !is_over_signal,
-                                    'matches-analysis__barrier-side--cold': is_over_signal,
-                                })}
-                            >
-                                U {entry.under.percentage}%
-                            </span>
-                            <div className='matches-analysis__barrier-bar'>
-                                <span
-                                    className='matches-analysis__barrier-bar-over'
-                                    style={{ width: `${Math.min(entry.over.percentage, 100)}%` }}
-                                />
-                                <span
-                                    className='matches-analysis__barrier-bar-under'
-                                    style={{ width: `${Math.min(entry.under.percentage, 100)}%` }}
-                                />
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className='matches-analysis__barrier-groups'>
+                <div className='matches-analysis__barrier-group'>
+                    <div className='matches-analysis__barrier-group-title'>{localize('Over 0 – 8')}</div>
+                    <div className='matches-analysis__grid matches-analysis__grid--barriers'>
+                        {over_entries.map(entry =>
+                            render_barrier_tile(entry, best !== null && best.type === 'over' && best.threshold === entry.threshold)
+                        )}
+                    </div>
+                </div>
+                <div className='matches-analysis__barrier-group'>
+                    <div className='matches-analysis__barrier-group-title'>{localize('Under 9 – 1')}</div>
+                    <div className='matches-analysis__grid matches-analysis__grid--barriers'>
+                        {under_entries.map(entry =>
+                            render_barrier_tile(entry, best !== null && best.type === 'under' && best.threshold === entry.threshold)
+                        )}
+                    </div>
+                </div>
             </div>
         </>
     );
@@ -285,11 +335,15 @@ const MatchesAnalysis = () => {
     const render_even_odd = () => (
         <>
             <div className='matches-analysis__signal'>
+                {render_last_tick(parity_hit, localize('hit signal'))}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Even / Odd signal')}</span>
-                    <span className='matches-analysis__signal-digit matches-analysis__signal-digit--label'>
-                        {sample_size === 0 ? '—' : even_odd.signal === 'even' ? localize('Even') : localize('Odd')}
-                    </span>
+                    <div className='matches-analysis__signal-head'>
+                        <span className='matches-analysis__signal-digit matches-analysis__signal-digit--label'>
+                            {sample_size === 0 ? '—' : even_odd.signal === 'even' ? localize('Even') : localize('Odd')}
+                        </span>
+                        {sample_size > 0 && render_signal_chip(even_odd.signal_percentage)}
+                    </div>
                     <span className='matches-analysis__signal-meta'>
                         {sample_size === 0 ? '' : signal_meta(even_odd.signal_count)}
                     </span>
@@ -323,25 +377,11 @@ const MatchesAnalysis = () => {
                         </span>
                     </div>
                     <div className='matches-analysis__signal-row'>
-                        <span className='matches-analysis__signal-row-label'>{localize('Last tick')}</span>
+                        <span className='matches-analysis__signal-row-label'>{localize('Intensity applied')}</span>
                         <span className='matches-analysis__signal-row-value'>
-                            {last_digit === null ? (
-                                '—'
-                            ) : (
-                                <>
-                                    {last_digit}
-                                    {sample_size > 0 && (
-                                        <span
-                                            className={classNames('matches-analysis__match-badge', {
-                                                'matches-analysis__match-badge--win': parity_hit,
-                                                'matches-analysis__match-badge--loss': !parity_hit,
-                                            })}
-                                        >
-                                            {parity_hit ? localize('hit signal') : localize('missed')}
-                                        </span>
-                                    )}
-                                </>
-                            )}
+                            {localize('≥{{threshold}}% = strong', {
+                                threshold: String(intensity_threshold),
+                            })}
                         </span>
                     </div>
                 </div>
@@ -379,7 +419,7 @@ const MatchesAnalysis = () => {
     const recent_class_for = (digit: number): string => {
         if (mode === 'overunder') {
             if (best === null || sample_size === 0) return '';
-            const on_signal_side = best.signal === 'over' ? digit > best.threshold : digit <= best.threshold;
+            const on_signal_side = best.type === 'over' ? digit > best.threshold : digit < best.threshold;
             return on_signal_side ? 'matches-analysis__recent-digit--hot' : 'matches-analysis__recent-digit--cold';
         }
         if (mode === 'evenodd') {
@@ -397,14 +437,14 @@ const MatchesAnalysis = () => {
     const note_text =
         mode === 'match'
             ? localize(
-                  'How to read it: the match signal is the digit that appears most often in the selected window. Hot digits are over-represented (above the uniform average), cold digits are under-represented. Trade matches only when the signal is clear, and remember past digits never guarantee the next one.'
+                  'How to read it: the match signal is the digit that appears most often in the selected window. The intensity setting decides the boundary — a digit at or above the threshold is a STRONG signal, below it is WEAK. S/W marks on the grid show which hot digits pass the intensity bar. Hot digits are over-represented, cold digits are under-represented; past digits never guarantee the next one.'
               )
             : mode === 'overunder'
               ? localize(
-                    'How to read it: for each barrier, Over counts digits strictly above it and Under counts digits at or below it. The best barrier is the one with the largest edge between the two sides — e.g. “Over 6” wins when the last digit is 7, 8 or 9. Stronger percentages mean a clearer signal, but past digits never guarantee the next one.'
+                    'How to read it: every tradable barrier is shown — Over 0 to Over 8 (wins when the digit is above) and Under 9 to Under 1 (wins when the digit is below). The best barrier has the largest edge between winning and losing ticks. Barriers at or above your intensity threshold are STRONG signals, the rest are WEAK — a stronger percentage means a clearer edge, but past digits never guarantee the next one.'
                 )
               : localize(
-                    'How to read it: Even/Odd counts how often the last digit is even (0, 2, 4, 6, 8) versus odd (1, 3, 5, 7, 9). The signal is whichever side is more frequent in the window. A lopsided split is a clearer signal, but past digits never guarantee the next one.'
+                    'How to read it: Even/Odd counts how often the last digit is even (0, 2, 4, 6, 8) versus odd (1, 3, 5, 7, 9). The signal is whichever side is more frequent in the window. If its share meets your intensity threshold it is a STRONG signal, otherwise it is WEAK — a lopsided split is clearer, but past digits never guarantee the next one.'
                 );
 
     return (
@@ -414,7 +454,7 @@ const MatchesAnalysis = () => {
                     <h2 className='matches-analysis__title'>{localize('Digits Analyzer')}</h2>
                     <p className='matches-analysis__subtitle'>
                         {localize(
-                            'Live last-digit frequency for match, over/under and even/odd trading. Tracks every tick and ranks the hot side in the selected window.'
+                            'Live last-digit frequency for match, over/under and even/odd trading. Tracks every tick, ranks the hot side in the selected window, and labels STRONG vs WEAK signals by the intensity you choose.'
                         )}
                     </p>
                 </div>
@@ -451,6 +491,16 @@ const MatchesAnalysis = () => {
                             {LOOKBACKS.map(size => (
                                 <option key={size} value={size}>
                                     {size} {localize('ticks')}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label className='matches-analysis__control'>
+                        <span>{localize('Intensity')}</span>
+                        <select value={intensity} onChange={e => setIntensity(e.target.value as IntensityId)}>
+                            {INTENSITY_LEVELS.map(level => (
+                                <option key={level.id} value={level.id}>
+                                    {level.label}
                                 </option>
                             ))}
                         </select>
