@@ -173,7 +173,8 @@
             height: var(--tab-content-height);
             flex-grow: 1;
             background: var(--general-main-1);
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
 
             @include mobile-or-tablet-screen {
@@ -181,7 +182,7 @@
             }
 
             @include desktop-screen {
-                padding: 80px 216px 0;
+                padding: 80px 216px 1.6rem;
             }
 
             @include mobile-or-tablet-screen {
@@ -197,10 +198,8 @@
             .tab__dashboard__columns {
                 display: flex;
                 align-items: flex-start;
-                flex: 1;
-                min-height: 0;
+                flex: 0 0 auto;
                 width: 100%;
-                overflow: hidden;
 
                 @include mobile-or-tablet-screen {
                     display: unset;
