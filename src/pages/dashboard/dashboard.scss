@@ -168,6 +168,7 @@
 
         &__content {
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
             height: var(--tab-content-height);
             flex-grow: 1;
@@ -191,6 +192,19 @@
 
             .quick-panel {
                 flex: 1 1 44%;
+            }
+
+            .tab__dashboard__columns {
+                display: flex;
+                align-items: flex-start;
+                flex: 1;
+                min-height: 0;
+                width: 100%;
+                overflow: hidden;
+
+                @include mobile-or-tablet-screen {
+                    display: unset;
+                }
             }
 
             .preview-panel {
