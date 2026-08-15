@@ -128,6 +128,39 @@
         }
     }
 
+    &__close {
+        align-self: flex-end;
+        border: 1px solid var(--border-normal);
+        background: var(--general-main-1);
+        color: var(--text-prominent);
+        border-radius: 2rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        line-height: 1.4;
+        cursor: pointer;
+        transition:
+            border-color 0.2s ease,
+            color 0.2s ease,
+            box-shadow 0.2s ease;
+
+        &:hover {
+            border-color: var(--button-primary-default);
+            color: var(--button-primary-default);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-primary-default) 18%, transparent);
+        }
+    }
+
+    &--open {
+        flex: 1;
+        min-height: 0;
+
+        .matches-analysis__body {
+            max-height: none;
+            flex: 1;
+        }
+    }
+
     &__error {
         padding: 1.6rem;
         border: 1px solid color-mix(in srgb, var(--text-loss-danger) 35%, transparent);

@@ -19,7 +19,7 @@ const SYMBOLS = [
 
 const LOOKBACKS = [50, 100, 250, 500];
 
-const MatchesAnalysis = () => {
+const MatchesAnalysis = ({ is_open, onClose }: { is_open?: boolean; onClose?: () => void }) => {
     const [symbol, setSymbol] = useState('R_100');
     const [lookback, setLookback] = useState(100);
 
@@ -42,7 +42,11 @@ const MatchesAnalysis = () => {
               : localize('Connecting…');
 
     return (
-        <section className='matches-analysis'>
+        <section
+            className={classNames('matches-analysis', {
+                'matches-analysis--open': is_open,
+            })}
+        >
             <div className='matches-analysis__header'>
                 <div className='matches-analysis__heading'>
                     <h2 className='matches-analysis__title'>{localize('Digit Matches Analysis')}</h2>
@@ -85,6 +89,11 @@ const MatchesAnalysis = () => {
                         <span className='matches-analysis__status-dot' />
                         {status_label}
                     </span>
+                    {is_open && onClose && (
+                        <button type='button' className='matches-analysis__close' onClick={onClose}>
+                            {localize('Back to bots')}
+                        </button>
+                    )}
                 </div>
             </div>
 

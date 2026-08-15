@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Digit Matches Analyzer</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>" />
+        <meta
+            name="description"
+            content="Live last-digit frequency analysis for Deriv volatility indices — match trading made visible."
+        />
+    </head>
+    <body>
+        <div id="app">
+            <header class="app-header">
+                <div class="app-brand">
+                    <span class="app-brand-mark">#</span>
+                    <div>
+                        <h1>Digit Matches Analyzer</h1>
+                        <p>Live last-digit frequency for Deriv volatility indices</p>
+                    </div>
+                </div>
+                <div class="app-controls">
+                    <label>
+                        <span>Symbol</span>
+                        <select id="symbol"></select>
+                    </label>
+                    <label>
+                        <span>Window</span>
+                        <select id="lookback"></select>
+                    </label>
+                    <span id="status" class="status status--connecting">
+                        <span class="status-dot"></span>
+                        <span id="status-text">Connecting…</span>
+                    </span>
+                </div>
+            </header>
+
+            <main>
+                <section id="signal" class="signal">
+                    <div class="signal-main">
+                        <span class="signal-label">Match signal</span>
+                        <span id="signal-digit" class="signal-digit">—</span>
+                        <span id="signal-meta" class="signal-meta">collecting ticks…</span>
+                        <div class="signal-bar"><span id="signal-bar-fill"></span></div>
+                    </div>
+                    <div class="signal-side">
+                        <div class="signal-row">
+                            <span class="signal-row-label">Hot digits</span>
+                            <span id="hot-digits" class="signal-row-value signal-row-value--hot">—</span>
+                        </div>
+                        <div class="signal-row">
+                            <span class="signal-row-label">Cold digits</span>
+                            <span id="cold-digits" class="signal-row-value signal-row-value--cold">—</span>
+                        </div>
+                        <div class="signal-row">
+                            <span class="signal-row-label">Last tick</span>
+                            <span id="last-tick" class="signal-row-value">—</span>
+                        </div>
+                        <div class="signal-row">
+                            <span class="signal-row-label">Sample</span>
+                            <span id="sample" class="signal-row-value">0 ticks</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="grid" class="grid"></section>
+
+                <section class="recent">
+                    <div class="recent-header">
+                        <span>Recent digits</span>
+                        <span id="recent-count" class="recent-count">0 ticks</span>
+                    </div>
+                    <div id="recent-strip" class="recent-strip"></div>
+                </section>
+
+                <p class="note">
+                    How to read it: the match signal is the digit that appears most often in the selected window. Hot
+                    digits are over-represented (above the uniform average), cold digits are under-represented. Trade
+                    matches only when the signal is clear — past digits never guarantee the next one.
+                </p>
+            </main>
+
+            <footer class="app-footer">
+                <span id="connection-state">Disconnected</span>
+                <span>No login required — data streams from Deriv's public WebSocket.</span>
+            </footer>
+        </div>
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>
