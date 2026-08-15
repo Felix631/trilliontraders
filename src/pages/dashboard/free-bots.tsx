@@ -11,7 +11,7 @@ import './free-bots.scss';
 
 const ALL_CREATORS = 'All';
 
-const FreeBots = observer(({ onOpenAnalyzer }: { onOpenAnalyzer?: () => void }) => {
+const FreeBots = observer(() => {
     const { free_bots } = useStore();
     const { is_loading, loading_bot_id, loadFreeBot } = free_bots;
     const [search_value, setSearchValue] = React.useState('');
@@ -75,29 +75,6 @@ const FreeBots = observer(({ onOpenAnalyzer }: { onOpenAnalyzer?: () => void }) 
             </div>
             <div className='free-bots__body'>
                 <div className='free-bots__grid'>
-                    {onOpenAnalyzer && (
-                        <div className='free-bots__card free-bots__card--analyzer'>
-                            <div className='free-bots__card-creator'>{localize('Trillion Trades')}</div>
-                            <Text
-                                as='p'
-                                color='prominent'
-                                size='xs'
-                                lineHeight='xl'
-                                weight='bold'
-                                className='free-bots__card-name'
-                            >
-                                {localize('Digit Matches Analyzer')}
-                            </Text>
-                            <Button
-                                text={localize('Open analyzer')}
-                                onClick={onOpenAnalyzer}
-                                primary
-                                small
-                                has_effect
-                                className='free-bots__card-button'
-                            />
-                        </div>
-                    )}
                     {filtered_bots.map(bot => {
                         const is_bot_loading = loading_bot_id === bot.id;
                         return (

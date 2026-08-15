@@ -187,11 +187,6 @@
         &-button {
             align-self: flex-start;
         }
-
-        &--analyzer {
-            border-color: color-mix(in srgb, var(--button-primary-default) 45%, transparent);
-            background: color-mix(in srgb, var(--button-primary-default) 7%, var(--general-section-1));
-        }
     }
 
     &__empty {

@@ -10,7 +10,6 @@ import Announcements from './announcements';
 import Cards from './cards';
 import FreeBots from './free-bots';
 import InfoPanel from './info-panel';
-import MatchesAnalysis from './matches-analysis';
 
 type TMobileIconGuide = {
     handleTabChange: (active_number: number) => void;
@@ -23,7 +22,6 @@ const DashboardComponent = observer(({ handleTabChange }: TMobileIconGuide) => {
     const { active_tab, active_tour } = dashboard;
     const has_dashboard_strategies = !!dashboard_strategies?.length;
     const { isDesktop, isTablet } = useDevice();
-    const [is_analyzer_open, setIsAnalyzerOpen] = React.useState(false);
 
     return (
         <React.Fragment>
@@ -33,57 +31,54 @@ const DashboardComponent = observer(({ handleTabChange }: TMobileIconGuide) => {
                 })}
             >
                 <div className='tab__dashboard__content'>
-                    <MatchesAnalysis is_open={is_analyzer_open} onClose={() => setIsAnalyzerOpen(false)} />
-                    {!is_analyzer_open && (
-                        <div className='tab__dashboard__columns'>
-                            {client.is_logged_in && (
-                                <Announcements
-                                    is_mobile={!isDesktop}
-                                    is_tablet={isTablet}
-                                    handleTabChange={handleTabChange}
-                                />
-                            )}
-                            <div className='quick-panel'>
-                                <div
-                                    className={classNames('tab__dashboard__header', {
-                                        'tab__dashboard__header--listed': isDesktop && has_dashboard_strategies,
+                    <div className='tab__dashboard__columns'>
+                        {client.is_logged_in && (
+                            <Announcements
+                                is_mobile={!isDesktop}
+                                is_tablet={isTablet}
+                                handleTabChange={handleTabChange}
+                            />
+                        )}
+                        <div className='quick-panel'>
+                            <div
+                                className={classNames('tab__dashboard__header', {
+                                    'tab__dashboard__header--listed': isDesktop && has_dashboard_strategies,
+                                })}
+                            >
+                                {!has_dashboard_strategies && (
+                                    <Text
+                                        className='title'
+                                        as='h2'
+                                        color='prominent'
+                                        size={isDesktop ? 'sm' : 's'}
+                                        lineHeight='xxl'
+                                        weight='bold'
+                                    >
+                                        {localize('Load or build your bot')}
+                                    </Text>
+                                )}
+                                <Text
+                                    as='p'
+                                    color='prominent'
+                                    lineHeight='s'
+                                    size={isDesktop ? 's' : 'xxs'}
+                                    className={classNames('subtitle', {
+                                        'subtitle__has-list': has_dashboard_strategies,
                                     })}
                                 >
-                                    {!has_dashboard_strategies && (
-                                        <Text
-                                            className='title'
-                                            as='h2'
-                                            color='prominent'
-                                            size={isDesktop ? 'sm' : 's'}
-                                            lineHeight='xxl'
-                                            weight='bold'
-                                        >
-                                            {localize('Load or build your bot')}
-                                        </Text>
-                                    )}
-                                    <Text
-                                        as='p'
-                                        color='prominent'
-                                        lineHeight='s'
-                                        size={isDesktop ? 's' : 'xxs'}
-                                        className={classNames('subtitle', {
-                                            'subtitle__has-list': has_dashboard_strategies,
-                                        })}
-                                    >
-                                        {is_google_drive_configured
-                                            ? localize(
-                                                  'Import a bot from your computer or Google Drive, build it from scratch, or start with a quick strategy.'
-                                              )
-                                            : localize(
-                                                  'Import a bot from your computer, build it from scratch, or start with a quick strategy.'
-                                              )}
-                                    </Text>
-                                </div>
-                                <Cards has_dashboard_strategies={has_dashboard_strategies} is_mobile={!isDesktop} />
+                                    {is_google_drive_configured
+                                        ? localize(
+                                              'Import a bot from your computer or Google Drive, build it from scratch, or start with a quick strategy.'
+                                          )
+                                        : localize(
+                                              'Import a bot from your computer, build it from scratch, or start with a quick strategy.'
+                                          )}
+                                </Text>
                             </div>
-                            <FreeBots onOpenAnalyzer={() => setIsAnalyzerOpen(true)} />
+                            <Cards has_dashboard_strategies={has_dashboard_strategies} is_mobile={!isDesktop} />
                         </div>
-                    )}
+                        <FreeBots />
+                    </div>
                 </div>
             </div>
             <InfoPanel />

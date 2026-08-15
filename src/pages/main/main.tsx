@@ -32,6 +32,7 @@ import {
 } from '@/utils/trade-type-modal-handler';
 import {
     LabelPairedChartLineCaptionRegularIcon,
+    LabelPairedChartTrendUpCaptionRegularIcon,
     LabelPairedObjectsColumnCaptionRegularIcon,
     LabelPairedPuzzlePieceTwoCaptionBoldIcon,
 } from '@deriv/quill-icons/LabelPaired';
@@ -41,6 +42,7 @@ import { useDevice } from '@deriv-com/ui';
 import RunPanel from '../../components/run-panel';
 import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
+import MatchesAnalysis from '../dashboard/matches-analysis';
 import RunStrategy from '../dashboard/run-strategy';
 import './main.scss';
 
@@ -78,7 +80,7 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial'];
+    const hash = ['dashboard', 'analyzer', 'bot_builder', 'chart', 'tutorial'];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -391,6 +393,23 @@ const AppWrapper = observer(() => {
                                 id='id-dbot-dashboard'
                             >
                                 <Dashboard handleTabChange={handleTabChange} />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedChartTrendUpCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Analyzer' />
+                                    </>
+                                }
+                                id='id-analyzer'
+                            >
+                                <div className='analyzer-tab'>
+                                    <MatchesAnalysis />
+                                </div>
                             </div>
                             <div
                                 label={
