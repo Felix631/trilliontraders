@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import ProgressBarTracker from '@/components/shared_ui/progress-bar-tracker';
 import Text from '@/components/shared_ui/text';
 import { useStore } from '@/hooks/useStore';
+import { DBOT_TABS } from '@/constants/bot-contents';
 import { isPreviewMode } from '@/utils/is-preview-mode';
 import { getSetting } from '@/utils/settings';
 import { localize } from '@deriv-com/translations';
@@ -39,7 +40,7 @@ const BotBuilderTourMobile = observer(() => {
         if (tour_step === 2) toggleTourLoadModal(true);
         else if (active_tour !== '') toggleTourLoadModal(false);
         const token = getSetting('bot_builder_token');
-        if (!token && active_tab === 1) {
+        if (!token && active_tab === DBOT_TABS.BOT_BUILDER) {
             if (is_open) {
                 setTourDialogVisibility(false);
             } else {
