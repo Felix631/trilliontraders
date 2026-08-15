@@ -521,45 +521,49 @@ const MatchesAnalysis = () => {
                 <div className='matches-analysis__error'>{error}</div>
             ) : (
                 <div className='matches-analysis__body'>
-                    {mode === 'match' && render_match()}
-                    {mode === 'overunder' && render_over_under()}
-                    {mode === 'evenodd' && render_even_odd()}
-
-                    <div className='matches-analysis__recent'>
-                        <div className='matches-analysis__recent-header'>
-                            <span>{localize('Recent digits')}</span>
-                            <span className='matches-analysis__recent-count'>
-                                {history.length} {localize('ticks')}
-                            </span>
-                        </div>
-                        <div className='matches-analysis__recent-strip'>
-                            {recent_digits.length ? (
-                                recent_digits.map((digit, index) => {
-                                    const is_last = index === recent_digits.length - 1;
-                                    return (
-                                        <span
-                                            key={`${digit}-${index}`}
-                                            className={classNames(
-                                                'matches-analysis__recent-digit',
-                                                recent_class_for(digit),
-                                                {
-                                                    'matches-analysis__recent-digit--latest': is_last,
-                                                }
-                                            )}
-                                        >
-                                            {digit}
-                                        </span>
-                                    );
-                                })
-                            ) : (
-                                <span className='matches-analysis__recent-empty'>
-                                    {localize('Waiting for ticks…')}
-                                </span>
-                            )}
-                        </div>
+                    <div className='matches-analysis__main'>
+                        {mode === 'match' && render_match()}
+                        {mode === 'overunder' && render_over_under()}
+                        {mode === 'evenodd' && render_even_odd()}
                     </div>
 
-                    <p className='matches-analysis__note'>{note_text}</p>
+                    <div className='matches-analysis__aside'>
+                        <div className='matches-analysis__recent'>
+                            <div className='matches-analysis__recent-header'>
+                                <span>{localize('Recent digits')}</span>
+                                <span className='matches-analysis__recent-count'>
+                                    {history.length} {localize('ticks')}
+                                </span>
+                            </div>
+                            <div className='matches-analysis__recent-strip'>
+                                {recent_digits.length ? (
+                                    recent_digits.map((digit, index) => {
+                                        const is_last = index === recent_digits.length - 1;
+                                        return (
+                                            <span
+                                                key={`${digit}-${index}`}
+                                                className={classNames(
+                                                    'matches-analysis__recent-digit',
+                                                    recent_class_for(digit),
+                                                    {
+                                                        'matches-analysis__recent-digit--latest': is_last,
+                                                    }
+                                                )}
+                                            >
+                                                {digit}
+                                            </span>
+                                        );
+                                    })
+                                ) : (
+                                    <span className='matches-analysis__recent-empty'>
+                                        {localize('Waiting for ticks…')}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        <p className='matches-analysis__note'>{note_text}</p>
+                    </div>
                 </div>
             )}
         </section>
