@@ -147,12 +147,18 @@ SITES = {
         "xml_template": "/api/public/denarabot/bots/{id}/xml",
     },
     # prodbot.site free-bots tab: the bot library (async chunk 541) serves each
-    # XML as a plain file at /xml/<Bot Name>.xml (only the Matches Pro bot is
-    # kept, per the request).
+    # XML as a plain file at /xml/<Bot Name>.xml. The chunk lists 13 bots but 7
+    # of them 404 on the site itself (the UI silently skips failed fetches), so
+    # only the 6 working ones are configured.
     "prodbot": {
         "base": "https://prodbot.site/xml",
         "chunks": {
             "MATCHES PRO BOT.xml": None,
+            "BLUE PRINT.xml": None,
+            "V6 striker bot (3) (1).xml": None,
+            "GOLMINER VS 2 \U0001F1F0\U0001F1EA.xml": None,
+            "$$DollarprinterbotOrignal (1).xml": None,
+            "AI UNDER GVT 9.xml": None,
         },
     },
 }

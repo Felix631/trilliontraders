@@ -5013,10 +5013,40 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "oscars_grind-xml"
     },
     {
+        "id": "prodbot-$$DollarprinterbotOrignal-(1)",
+        "name": "$$DollarprinterbotOrignal (1)",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-$$DollarprinterbotOrignal-(1)-xml"
+    },
+    {
+        "id": "prodbot-AI-UNDER-GVT-9",
+        "name": "AI UNDER GVT 9",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-AI-UNDER-GVT-9-xml"
+    },
+    {
+        "id": "prodbot-BLUE-PRINT",
+        "name": "BLUE PRINT",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-BLUE-PRINT-xml"
+    },
+    {
+        "id": "prodbot-GOLMINER-VS-2-(KE)",
+        "name": "GOLMINER VS 2 (KE)",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-GOLMINER-VS-2-(KE)-xml"
+    },
+    {
         "id": "prodbot-MATCHES-PRO-BOT",
         "name": "MATCHES PRO BOT",
         "creator": "prodbot",
         "file": "prodbot/prodbot-MATCHES-PRO-BOT-xml"
+    },
+    {
+        "id": "prodbot-V6-striker-bot-(3)-(1)",
+        "name": "V6 striker bot (3) (1)",
+        "creator": "prodbot",
+        "file": "prodbot/prodbot-V6-striker-bot-(3)-(1)-xml"
     },
     {
         "id": "reverse_dalembert",
@@ -5389,6 +5419,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 7
     },
     {
+        "id": "prodbot",
+        "label": "prodbot",
+        "count": 6
+    },
+    {
         "id": "dbx",
         "label": "dbx",
         "count": 5
@@ -5411,11 +5446,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbotzone",
         "label": "dbotzone",
-        "count": 1
-    },
-    {
-        "id": "prodbot",
-        "label": "prodbot",
         "count": 1
     },
     {
