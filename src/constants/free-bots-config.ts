@@ -303,10 +303,34 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/newly-added/chichitraders-1$-TRADER-AI-BOT[by-chichi]-xml"
     },
     {
+        "id": "chichitraders-AI-HIGH-LOW-TICK-VERSION-2-BY-CHICHI",
+        "name": "AI HIGH LOW TICK VERSION 2 BY CHICHI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-AI-HIGH-LOW-TICK-VERSION-2-BY-CHICHI-xml"
+    },
+    {
+        "id": "chichitraders-AI-ONLY-UP-DOWNS-VERSION-2-3TICKS-2TICKS",
+        "name": "AI ONLY UP DOWNS VERSION 2 3TICKS 2TICKS",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-AI-ONLY-UP-DOWNS-VERSION-2-3TICKS-2TICKS-xml"
+    },
+    {
+        "id": "chichitraders-EVEN-ODD-APEX-AI",
+        "name": "EVEN ODD APEX AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-EVEN-ODD-APEX-AI-xml"
+    },
+    {
         "id": "chichitraders-EVEN-ODD-FLIPPER-AI-with-entry",
         "name": "EVEN ODD FLIPPER AI with entry",
         "creator": "chichitraders",
         "file": "chichitraders/newly-added/chichitraders-EVEN-ODD-FLIPPER-AI-with-entry-xml"
+    },
+    {
+        "id": "chichitraders-NEW-GOLD-MINER-VERSION-2-3entries",
+        "name": "NEW GOLD MINER VERSION 2 3entries",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-NEW-GOLD-MINER-VERSION-2-3entries-xml"
     },
     {
         "id": "chichitraders-OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]",
@@ -5310,6 +5334,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 33
     },
     {
+        "id": "chichitraders",
+        "label": "chichitraders",
+        "count": 27
+    },
+    {
         "id": "dbtraders",
         "label": "dbtraders",
         "count": 25
@@ -5318,11 +5347,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "newlyadded",
         "label": "newlyadded",
         "count": 24
-    },
-    {
-        "id": "chichitraders",
-        "label": "chichitraders",
-        "count": 23
     },
     {
         "id": "githinji",

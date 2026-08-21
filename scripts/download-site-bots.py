@@ -105,7 +105,7 @@ SITES = {
     # require.context pattern as githinji, newer module header format).
     "chichitraders": {
         "base": "https://chichitraders.site",
-        "bundle": "/static/js/index.d359683a.js",
+        "bundle": "/static/js/index.58b71b3f.js",
         "inline_chunks": {
             "AI-HIGH-LOW-TICK(by-chichitrades)": 81426,
             "AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)": 38882,
@@ -131,6 +131,11 @@ SITES = {
             "1$-TRADER-AI-BOT[by-chichi]": 37302,
             "OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]": 38050,
             "RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)": 14458,
+            # Added in the current store (27 bots total):
+            "AI-HIGH_LOW-TICK-VERSION-2[BY-CHICHI]": 59801,
+            "AI-ONLY-UP_DOWNS-VERSION-2[3TICKS_2TICKS]": 12999,
+            "EVEN-ODD-APEX-AI": 5605,
+            "NEW-GOLD-MINER-VERSION-2[3entries]": 34627,
         },
     },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads
