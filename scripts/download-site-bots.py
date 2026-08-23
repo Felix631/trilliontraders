@@ -105,7 +105,7 @@ SITES = {
     # require.context pattern as githinji, newer module header format).
     "chichitraders": {
         "base": "https://chichitraders.site",
-        "bundle": "/static/js/index.58b71b3f.js",
+        "bundle": "/static/js/index.3bb59e08.js",
         "inline_chunks": {
             "AI-HIGH-LOW-TICK(by-chichitrades)": 81426,
             "AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)": 38882,
@@ -130,12 +130,25 @@ SITES = {
             "EVEN-ODD-FLIPPER-AI-with-entry": 2696,
             "1$-TRADER-AI-BOT[by-chichi]": 37302,
             "OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]": 38050,
-            "RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)": 14458,
+            "RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)": 93009,
             # Added in the current store (27 bots total):
             "AI-HIGH_LOW-TICK-VERSION-2[BY-CHICHI]": 59801,
             "AI-ONLY-UP_DOWNS-VERSION-2[3TICKS_2TICKS]": 12999,
             "EVEN-ODD-APEX-AI": 5605,
             "NEW-GOLD-MINER-VERSION-2[3entries]": 34627,
+            # Added in the current store (30 bots total). The store also rotated
+            # some entries out of the bundle (Over-Under-Auto-Space-BY-chichi,
+            # STEP-INDICES-AUTO-SWITCH-AI-BOT, STEP-INDICES-QUANTUM-AI-(by-chichi)-(1),
+            # 1$-TRADER-AI-BOT[by-chichi], OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]);
+            # their local copies are kept but they are no longer downloadable.
+            "DIFFERS-OVER-1-REC-OVER-5-AI-(1)": 26080,
+            "EVEN-ODD-KING\U0001F451": 72315,
+            "HIGH-LOW-TICK-AI\U0001F451": 60566,
+            "ONLY-UPS_DOWNS-AI\U0001F451": 8203,
+            "OVER-MASTER-AI\U0001F451": 7617,
+            "OVER_UNDER-AUTO-AI": 41341,
+            "RISE-_FALL-KING\U0001F451": 37539,
+            "_STEP-INDICES-QUANTUM-AI": 84190,
         },
     },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads

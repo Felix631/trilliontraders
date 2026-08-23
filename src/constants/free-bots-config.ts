@@ -315,6 +315,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/newly-added/chichitraders-AI-ONLY-UP-DOWNS-VERSION-2-3TICKS-2TICKS-xml"
     },
     {
+        "id": "chichitraders-DIFFERS-OVER-1-REC-OVER-5-AI-1",
+        "name": "DIFFERS OVER 1 REC OVER 5 AI 1",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-DIFFERS-OVER-1-REC-OVER-5-AI-1-xml"
+    },
+    {
         "id": "chichitraders-EVEN-ODD-APEX-AI",
         "name": "EVEN ODD APEX AI",
         "creator": "chichitraders",
@@ -327,10 +333,28 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/newly-added/chichitraders-EVEN-ODD-FLIPPER-AI-with-entry-xml"
     },
     {
+        "id": "chichitraders-EVEN-ODD-KING",
+        "name": "EVEN ODD KING",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-EVEN-ODD-KING-xml"
+    },
+    {
+        "id": "chichitraders-HIGH-LOW-TICK-AI",
+        "name": "HIGH LOW TICK AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-HIGH-LOW-TICK-AI-xml"
+    },
+    {
         "id": "chichitraders-NEW-GOLD-MINER-VERSION-2-3entries",
         "name": "NEW GOLD MINER VERSION 2 3entries",
         "creator": "chichitraders",
         "file": "chichitraders/newly-added/chichitraders-NEW-GOLD-MINER-VERSION-2-3entries-xml"
+    },
+    {
+        "id": "chichitraders-ONLY-UPS-DOWNS-AI",
+        "name": "ONLY UPS DOWNS AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-ONLY-UPS-DOWNS-AI-xml"
     },
     {
         "id": "chichitraders-OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]",
@@ -339,10 +363,34 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/newly-added/chichitraders-OVER_3-MATRIX-AI-3digits-entry[BY-CHICHI]-xml"
     },
     {
+        "id": "chichitraders-OVER-MASTER-AI",
+        "name": "OVER MASTER AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-OVER-MASTER-AI-xml"
+    },
+    {
+        "id": "chichitraders-OVER-UNDER-AUTO-AI",
+        "name": "OVER UNDER AUTO AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-OVER-UNDER-AUTO-AI-xml"
+    },
+    {
         "id": "chichitraders-RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)",
         "name": "RISE FALL AUTOSRIKE AI[by chichi] (1)",
         "creator": "chichitraders",
         "file": "chichitraders/newly-added/chichitraders-RISE_FALL-AUTOSRIKE-AI[by-chichi]-(1)-xml"
+    },
+    {
+        "id": "chichitraders-RISE-FALL-KING",
+        "name": "RISE FALL KING",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-RISE-FALL-KING-xml"
+    },
+    {
+        "id": "chichitraders-STEP-INDICES-QUANTUM-AI",
+        "name": "STEP INDICES QUANTUM AI",
+        "creator": "chichitraders",
+        "file": "chichitraders/newly-added/chichitraders-STEP-INDICES-QUANTUM-AI-xml"
     },
     {
         "id": "dalembert_max-stake",
@@ -5349,6 +5397,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 36
     },
     {
+        "id": "chichitraders",
+        "label": "chichitraders",
+        "count": 35
+    },
+    {
         "id": "osam",
         "label": "osam",
         "count": 34
@@ -5362,11 +5415,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "exwager",
         "label": "exwager",
         "count": 33
-    },
-    {
-        "id": "chichitraders",
-        "label": "chichitraders",
-        "count": 27
     },
     {
         "id": "dbtraders",
