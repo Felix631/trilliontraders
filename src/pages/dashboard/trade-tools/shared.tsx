@@ -273,4 +273,4 @@ export const describe_contract = (direction: string, digit: number): string => {
     }
 };
 
-export { isAuthorized, placeTrade, payout_multiplier };
+export { isAuthorized, placeTrade, payout_multiplier, accountCurrency };
