@@ -1,0 +1,155 @@
+// Scanner — chichitraders-style analysis, TrillionTraders theme.
+.scanner {
+    height: var(--tab-content-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background: var(--app-page-background);
+
+    &__inner {
+        max-width: 140rem;
+        margin: 0 auto;
+        padding: 1.6rem 2.4rem;
+    }
+
+    &__intro {
+        margin-bottom: 1.2rem;
+    }
+
+    &__title {
+        margin: 0 0 0.3rem;
+        font-size: var(--text-size-m);
+        color: var(--app-text-title);
+    }
+
+    &__subtitle {
+        margin: 0;
+        font-size: var(--text-size-xs);
+        color: var(--app-text-muted);
+        max-width: 80rem;
+    }
+
+    &__head,
+    &__row {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1.4fr 1.4fr 0.9fr 1.4fr;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    &__head {
+        padding: 0 1rem 0.5rem;
+        font-size: var(--text-size-xxxs);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--app-text-muted);
+    }
+
+    &__rows {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    &__row {
+        background: var(--app-card-background);
+        border: 1px solid var(--app-border-color);
+        border-radius: 0.9rem;
+        padding: 0.8rem 1rem;
+
+        &:hover {
+            border-color: var(--site-border);
+        }
+    }
+
+    &__symbol {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__symbol-name {
+        font-weight: bold;
+        color: var(--app-text-title);
+        font-size: var(--text-size-xxs);
+    }
+
+    &__live-dot {
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: var(--text-loss-danger);
+        opacity: 0.5;
+
+        &.is-live {
+            background: var(--brand-success);
+            opacity: 1;
+            box-shadow: 0 0 0.4rem rgba(16, 185, 129, 0.7);
+        }
+    }
+
+    &__cell--last {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+    }
+
+    &__quote {
+        font-size: var(--text-size-xxs);
+        color: var(--app-text-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__digit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 0.5rem;
+        background: var(--site-accent);
+        color: #1c1206;
+        font-weight: bolder;
+        font-size: var(--text-size-xs);
+    }
+
+    &__label {
+        display: block;
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+        margin-bottom: 0.15rem;
+    }
+
+    &__value {
+        font-size: var(--text-size-xxs);
+        color: var(--text-general);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__bar {
+        position: relative;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: rgba(239, 68, 68, 0.35);
+        overflow: hidden;
+        margin-bottom: 0.15rem;
+
+        .scanner__bar-even {
+            position: absolute;
+            inset: 0 auto 0 0;
+            background: var(--brand-success);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+    }
+
+    &__signal {
+        font-size: var(--text-size-xxs);
+        font-weight: bold;
+        color: var(--text-general);
+
+        &.is-strong {
+            color: var(--site-accent);
+        }
+    }
+}

@@ -33,20 +33,30 @@ import {
 import {
     LabelPairedChartLineCaptionRegularIcon,
     LabelPairedChartTrendUpCaptionRegularIcon,
+    LabelPairedCopyCaptionRegularIcon,
+    LabelPairedGaugeMaxCaptionRegularIcon,
     LabelPairedObjectsColumnCaptionRegularIcon,
     LabelPairedPuzzlePieceTwoCaptionBoldIcon,
+    LabelPairedSearchCaptionRegularIcon,
+    LabelPairedShieldCheckCaptionRegularIcon,
+    LabelPairedWalletSignalCaptionRegularIcon,
 } from '@deriv/quill-icons/LabelPaired';
 import { LegacyGuide1pxIcon } from '@deriv/quill-icons/Legacy';
 import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
 import RunPanel from '../../components/run-panel';
+import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import ChartModal from '../chart/chart-modal';
+import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
+import InstantFill from '../dashboard/trade-tools/instant-fill';
 import MatchesAnalysis from '../dashboard/matches-analysis';
+import RiskCalculator from '../dashboard/trade-tools/risk-calculator';
 import RunStrategy from '../dashboard/run-strategy';
+import Scanner from '../dashboard/scanner';
+import SpeedBot from '../dashboard/trade-tools/speed-bot';
 import './main.scss';
 
-const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
 
 const AppWrapper = observer(() => {
@@ -80,7 +90,18 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'analyzer', 'bot_builder', 'chart', 'tutorial'];
+    const hash = [
+        'dashboard',
+        'analyzer',
+        'scanner',
+        'instant_fill',
+        'speed_bot',
+        'bulk_trader',
+        'risk_calculator',
+        'bot_builder',
+        'chart',
+        'tutorial',
+    ];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -414,6 +435,81 @@ const AppWrapper = observer(() => {
                             <div
                                 label={
                                     <>
+                                        <LabelPairedSearchCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Scanner' />
+                                    </>
+                                }
+                                id='id-scanner'
+                            >
+                                <Scanner />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedWalletSignalCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Instant Fill' />
+                                    </>
+                                }
+                                id='id-instant-fill'
+                            >
+                                <InstantFill />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedGaugeMaxCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Speed Bot' />
+                                    </>
+                                }
+                                id='id-speed-bot'
+                            >
+                                <SpeedBot />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedCopyCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Bulk Trader' />
+                                    </>
+                                }
+                                id='id-bulk-trader'
+                            >
+                                <BulkTrader />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedShieldCheckCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Risk Calculator' />
+                                    </>
+                                }
+                                id='id-risk-calculator'
+                            >
+                                <RiskCalculator />
+                            </div>
+                            <div
+                                label={
+                                    <>
                                         <LabelPairedPuzzlePieceTwoCaptionBoldIcon
                                             height='24px'
                                             width='24px'
@@ -441,11 +537,7 @@ const AppWrapper = observer(() => {
                                         : 'id-charts'
                                 }
                             >
-                                <Suspense
-                                    fallback={<ChunkLoader message={localize('Please wait, loading chart...')} />}
-                                >
-                                    <ChartWrapper show_digits_stats={false} />
-                                </Suspense>
+                                <ChartsView show_digits_stats={false} />
                             </div>
                             <div
                                 label={

@@ -38,20 +38,20 @@
     /* Brand colors - dynamically generated from brand.config.json */
     --brand-white: #ffffff;
     --brand-dark-grey: #071225;
-    --brand-red-coral: #0047ab; /* legacy compatibility */
-    --brand-orange: #4f8cff; /* legacy compatibility */
+    --brand-red-coral: #f59e0b; /* legacy compatibility */
+    --brand-orange: #f59e0b; /* legacy compatibility */
 
     /* Dynamic brand colors (set by brand configuration) */
-    --brand-primary: #0047ab;
-    --brand-secondary: #071225;
-    --brand-tertiary: #4f8cff;
+    --brand-primary: #0f172a;
+    --brand-secondary: #1e293b;
+    --brand-tertiary: #f59e0b;
     --brand-success: #10b981;
     --brand-danger: #ef4444;
-    --brand-warning: #4f8cff;
-    --brand-info: #4f8cff;
-    --brand-neutral: #6b7280;
-    --brand-blue-coral: #1434a4; /* legacy compatibility */
-    --brand-purple-coral: #0047ab; /* legacy compatibility */
+    --brand-warning: #f59e0b;
+    --brand-info: #38bdf8;
+    --brand-neutral: #64748b;
+    --brand-blue-coral: #0f172a; /* legacy compatibility */
+    --brand-purple-coral: #0f172a; /* legacy compatibility */
 
     /* Brand typography - dynamically generated from brand.config.json */
     --brand-font-primary: Inter;
@@ -64,42 +64,41 @@
     --app-card-virtual-swap-free: #{constants.$gradient-virtual-swap-free};
 
     /*
-     * Premium brand palette — white-label twin of the reference site
-     * (undasitepremium.vercel.app). These --site-* tokens drive the navy
-     * header/tab chrome, the active-tab pill and the accent surfaces, and
-     * match the values baked into the reference deployment's CSS.
+     * TrillionTraders palette — deep-navy chrome with amber/gold accents.
+     * These --site-* tokens drive the header/tab chrome, the active-tab pill
+     * and the accent surfaces across the app.
      */
-    --site-primary: #0047ab;
-    --site-primary-rgb: 0, 71, 171;
-    --site-secondary: #071225;
-    --site-secondary-rgb: 7, 18, 37;
-    --site-accent: #4f8cff;
-    --site-accent-rgb: 79, 140, 255;
-    --site-accent-soft: #4f8cff;
-    --site-tab-active: #0047ab;
-    --site-surface: #0a1830;
-    --site-surface-elevated: #0d1d38;
-    --site-border: #4f8cff38;
-    --bot-studio-header-bg: #071225;
+    --site-primary: #0f172a;
+    --site-primary-rgb: 15, 23, 42;
+    --site-secondary: #020617;
+    --site-secondary-rgb: 2, 6, 23;
+    --site-accent: #f59e0b;
+    --site-accent-rgb: 245, 158, 11;
+    --site-accent-soft: #fbbf24;
+    --site-tab-active: #f59e0b;
+    --site-surface: #0f172a;
+    --site-surface-elevated: #1e293b;
+    --site-border: rgba(245, 158, 11, 0.25);
+    --bot-studio-header-bg: #0f172a;
 
     // Opacity
     --tw-border-opacity: 1;
 
     .theme--light {
         // Premium app surfaces (light)
-        --app-page-background: #f3f7fc;
+        --app-page-background: #f8fafc;
         --app-panel-background: #ffffff;
         --app-card-background: #ffffff;
-        --app-card-background-alt: #f8fbff;
-        --app-elevated-background: #eef5ff;
-        --app-hover-background: #eef5ff;
-        --app-border-color: #d9e5f2;
-        --app-border-strong-color: #b9cbe0;
-        --app-accent-color: #4f8cff;
-        --app-accent-soft: #4f8cff38;
-        --app-text-title: #0b1f3a;
-        --app-text-subtle: #b8cce2;
-        --app-text-muted: #8eabc9;
+        --app-card-background-alt: #fffdf5;
+        --app-elevated-background: #f1f5f9;
+        --app-hover-background: #f1f5f9;
+        --app-border-color: #e2e8f0;
+        --app-border-strong-color: #cbd5e1;
+        --app-accent-color: #d97706;
+        --app-accent-soft: rgba(217, 119, 6, 0.14);
+        --app-text-title: #0f172a;
+        --app-text-subtle: #b5c2d4;
+        --app-text-muted: #7c8ba1;
         --app-scroll-thumb: #b9cbe0;
         --app-scroll-track: #eef5ff;
 
@@ -150,7 +149,7 @@
         --purchase-disabled-section: #{constants.$color-grey-4};
 
         // Buttons
-        --button-primary-default: var(--brand-red-coral);
+        --button-primary-default: var(--brand-tertiary);
         --button-secondary-default: #{constants.$color-grey-1};
         --button-tertiary-default: transparent;
         --button-primary-light-default: #{constants.$alpha-color-red-2};
@@ -251,19 +250,19 @@
 
     .theme--dark {
         // Premium app surfaces (dark)
-        --app-page-background: #071225;
-        --app-panel-background: #0a1830;
-        --app-card-background: #0d1d38;
-        --app-card-background-alt: #10284d;
-        --app-elevated-background: #14305a;
-        --app-hover-background: #11294f;
-        --app-border-color: #17365f;
-        --app-border-strong-color: #28558e;
-        --app-accent-color: #1457d9;
-        --app-accent-soft: #1457d924;
-        --app-text-title: #f4f8ff;
-        --app-text-subtle: #334b68;
-        --app-text-muted: #5a6d84;
+        --app-page-background: #020617;
+        --app-panel-background: #0f172a;
+        --app-card-background: #1e293b;
+        --app-card-background-alt: #16213a;
+        --app-elevated-background: #26334a;
+        --app-hover-background: #223050;
+        --app-border-color: #2c3a52;
+        --app-border-strong-color: #3e5170;
+        --app-accent-color: #f59e0b;
+        --app-accent-soft: rgba(245, 158, 11, 0.16);
+        --app-text-title: #f8fafc;
+        --app-text-subtle: #475569;
+        --app-text-muted: #64748b;
         --app-scroll-thumb: #28558e;
         --app-scroll-track: #071225;
 
@@ -311,7 +310,7 @@
         --purchase-disabled-section: #{constants.$color-black};
 
         // Buttons
-        --button-primary-default: var(--brand-red-coral);
+        --button-primary-default: var(--brand-tertiary);
         --button-secondary-default: #{constants.$color-grey-7};
         --button-tertiary-default: transparent;
         --button-primary-light-default: #{constants.$alpha-color-red-2};

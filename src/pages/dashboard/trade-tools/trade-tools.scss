@@ -1,0 +1,409 @@
+// Quick Trade tools — TrillionTraders navy/amber theme.
+.qt-page {
+    height: var(--tab-content-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background: var(--app-page-background);
+    padding: 1.6rem 2.4rem;
+}
+
+.qt-panel {
+    max-width: 110rem;
+    margin: 0 auto;
+    background: var(--app-card-background);
+    border: 1px solid var(--app-border-color);
+    border-radius: 1rem;
+    padding: 1.2rem 1.4rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+
+    &__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: var(--text-size-sm);
+        color: var(--app-text-title);
+    }
+
+    &__badge {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        color: var(--app-text-muted);
+        background: var(--app-elevated-background);
+        border: 1px solid var(--app-border-color);
+        border-radius: 999px;
+        padding: 0.15rem 0.7rem;
+
+        &--live {
+            color: #1c1206;
+            background: var(--site-accent);
+            border-color: var(--site-accent);
+        }
+    }
+}
+
+.qt-mode-note {
+    margin: 0;
+    font-size: var(--text-size-xxxs);
+    color: var(--app-text-muted);
+}
+
+.qt-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.qt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+
+    &__label {
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+    }
+
+    select,
+    input {
+        width: 100%;
+        background: var(--app-panel-background);
+        color: var(--text-general);
+        border: 1px solid var(--app-border-strong-color);
+        border-radius: 0.5rem;
+        padding: 0.45rem 0.6rem;
+        font-size: var(--text-size-xxs);
+
+        &:focus {
+            outline: 2px solid var(--site-accent);
+            outline-offset: -1px;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+        }
+    }
+}
+
+.qt-fill-button {
+    width: 100%;
+    border: none;
+    border-radius: 0.7rem;
+    padding: 0.85rem;
+    font-size: var(--text-size-sm);
+    font-weight: bolder;
+    letter-spacing: 0.06em;
+    color: #1c1206;
+    background: linear-gradient(135deg, var(--site-accent), var(--site-accent-soft));
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.05s ease;
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.08);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.99);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: wait;
+    }
+}
+
+.qt-run-button {
+    width: 100%;
+    border: 1px solid var(--site-accent);
+    border-radius: 0.7rem;
+    padding: 0.75rem;
+    font-size: var(--text-size-xs);
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    color: var(--site-accent);
+    background: var(--app-accent-soft);
+    cursor: pointer;
+
+    &--stop {
+        color: #fff;
+        background: var(--brand-danger);
+        border-color: var(--brand-danger);
+    }
+}
+
+.qt-secondary-button,
+.qt-primary-button {
+    border-radius: 0.6rem;
+    padding: 0.55rem 1rem;
+    font-size: var(--text-size-xxs);
+    font-weight: bold;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: default;
+    }
+}
+
+.qt-secondary-button {
+    background: transparent;
+    color: var(--text-general);
+    border: 1px solid var(--app-border-strong-color);
+}
+
+.qt-primary-button {
+    background: var(--site-accent);
+    border: 1px solid var(--site-accent);
+    color: #1c1206;
+}
+
+.qt-hint,
+.qt-status {
+    margin: 0;
+    font-size: var(--text-size-xxxs);
+    color: var(--app-text-muted);
+}
+
+.qt-status {
+    font-size: var(--text-size-xxs);
+    font-weight: bold;
+    color: var(--site-accent);
+}
+
+.qt-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    font-size: var(--text-size-xs);
+
+    strong {
+        letter-spacing: 0.08em;
+    }
+
+    &--win {
+        background: rgba(16, 185, 129, 0.14);
+        color: var(--text-profit-success);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    &--loss {
+        background: rgba(239, 68, 68, 0.12);
+        color: var(--text-loss-danger);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+}
+
+.qt-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.qt-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    background: var(--app-panel-background);
+    border: 1px solid var(--app-border-color);
+    border-radius: 0.6rem;
+    padding: 0.5rem 0.7rem;
+
+    span {
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+    }
+
+    strong {
+        font-size: var(--text-size-xs);
+        color: var(--text-general);
+    }
+
+    &--win strong {
+        color: var(--text-profit-success);
+    }
+
+    &--loss strong {
+        color: var(--text-loss-danger);
+    }
+}
+
+.qt-fills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    li {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 0.8rem;
+        font-size: var(--text-size-xxs);
+        padding: 0.35rem 0.6rem;
+        border-radius: 0.45rem;
+        background: var(--app-panel-background);
+        border: 1px solid var(--app-border-color);
+
+        span:last-child {
+            font-weight: bold;
+        }
+
+        &.is-win span:last-child {
+            color: var(--text-profit-success);
+        }
+
+        &.is-loss span:last-child {
+            color: var(--text-loss-danger);
+        }
+    }
+}
+
+.qt-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.qt-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-size-xxs);
+    color: var(--text-general);
+    cursor: pointer;
+}
+
+.qt-factor {
+    width: 5.5rem !important;
+}
+
+.qt-legs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.qt-leg {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 0.8fr 0.6fr auto;
+    gap: 0.4rem;
+    align-items: center;
+
+    select,
+    input {
+        background: var(--app-panel-background);
+        color: var(--text-general);
+        border: 1px solid var(--app-border-strong-color);
+        border-radius: 0.45rem;
+        padding: 0.4rem 0.5rem;
+        font-size: var(--text-size-xxxs);
+        min-width: 0;
+    }
+
+    &-remove {
+        background: transparent;
+        border: 1px solid var(--app-border-strong-color);
+        color: var(--text-loss-danger);
+        border-radius: 0.45rem;
+        width: 2.2rem;
+        height: 2.2rem;
+        cursor: pointer;
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+    }
+}
+
+.qt-actions {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+}
+
+.qt-progress {
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--app-elevated-background);
+    overflow: hidden;
+
+    &__bar {
+        height: 100%;
+        background: var(--site-accent);
+        border-radius: 999px;
+        transition: width 0.3s ease;
+    }
+}
+
+.qt-risk-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.qt-risk-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    background: var(--app-panel-background);
+    border: 1px solid var(--app-border-color);
+    border-radius: 0.6rem;
+    padding: 0.6rem 0.8rem;
+
+    span {
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+    }
+
+    strong {
+        font-size: var(--text-size-xs);
+        color: var(--text-general);
+    }
+
+    &.is-win strong {
+        color: var(--text-profit-success);
+    }
+
+    &.is-loss strong {
+        color: var(--text-loss-danger);
+    }
+}
+
+.qt-ladder {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-size-xxxs);
+
+    th,
+    td {
+        text-align: left;
+        padding: 0.4rem 0.5rem;
+        border-bottom: 1px solid var(--app-border-color);
+        color: var(--text-general);
+    }
+
+    th {
+        color: var(--app-text-muted);
+        font-weight: normal;
+    }
+
+    td {
+        font-variant-numeric: tabular-nums;
+    }
+}
