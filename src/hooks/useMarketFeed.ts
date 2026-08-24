@@ -16,6 +16,8 @@ export interface MarketFeedState {
     history: Record<string, number[]>;
     /** Exact latest quote per symbol. */
     quotes: Record<string, number | null>;
+    /** Recent quotes per symbol (oldest first) for sparkline charts. */
+    quote_history: Record<string, number[]>;
 }
 
 export const MARKET_SYMBOLS: Array<{ value: string; label: string; short: string }> = [
@@ -31,7 +33,13 @@ export const MARKET_SYMBOLS: Array<{ value: string; label: string; short: string
     { value: '1HZ100V', label: 'Volatility 100 (1s) Index', short: 'V100s' },
 ];
 
-const EMPTY_STATE: MarketFeedState = { status: 'connecting', error: null, history: {}, quotes: {} };
+const EMPTY_STATE: MarketFeedState = {
+    status: 'connecting',
+    error: null,
+    history: {},
+    quotes: {},
+    quote_history: {},
+};
 
 /** Last decimal digit of a quote — matches digit-contract settlement. */
 export const lastDigitOf = (quote: number): number => {
@@ -44,6 +52,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
     const [scan_nonce, setScanNonce] = useState(0);
     const history_ref = useRef<Record<string, number[]>>({});
     const quotes_ref = useRef<Record<string, number | null>>({});
+    const quote_history_ref = useRef<Record<string, number[]>>({});
     const epochs_ref = useRef<Record<string, number>>({});
     const sub_ids_ref = useRef<Record<string, string | null>>({});
     const subscription_ref = useRef<{ unsubscribe: () => void } | null>(null);
@@ -52,9 +61,10 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
         let disposed = false;
         history_ref.current = {};
         quotes_ref.current = {};
+        quote_history_ref.current = {};
         epochs_ref.current = {};
         sub_ids_ref.current = {};
-        setState({ status: 'connecting', error: null, history: {}, quotes: {} });
+        setState({ status: 'connecting', error: null, history: {}, quotes: {}, quote_history: {} });
 
         const start = async () => {
             let api = api_base.api;
@@ -86,11 +96,16 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                     ...(history_ref.current[tick.symbol] || []),
                     lastDigitOf(Number(tick.quote)),
                 ].slice(-window_size);
+                quote_history_ref.current[tick.symbol] = [
+                    ...(quote_history_ref.current[tick.symbol] || []),
+                    Number(tick.quote),
+                ].slice(-120);
                 setState({
                     status: 'live',
                     error: null,
                     history: { ...history_ref.current },
                     quotes: { ...quotes_ref.current },
+                    quote_history: { ...quote_history_ref.current },
                 });
             });
             subscription_ref.current = message_subscription;
@@ -123,6 +138,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                     }
                     history_ref.current[market.value] = ticks.slice(-window_size).map(t => lastDigitOf(t.quote));
                     quotes_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].quote : null;
+                    quote_history_ref.current[market.value] = ticks.slice(-120).map(t => t.quote);
                     epochs_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].epoch : 0;
                     sub_ids_ref.current[market.value] = response?.subscription?.id || null;
                 } catch (error: any) {
@@ -160,6 +176,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                     error: null,
                     history: { ...history_ref.current },
                     quotes: { ...quotes_ref.current },
+                    quote_history: { ...quote_history_ref.current },
                 });
             }
             if (!disposed) setState(prev => ({ ...prev, status: 'live' }));

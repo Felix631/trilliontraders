@@ -13,6 +13,7 @@ import {
     type StrategyEval,
 } from '@/constants/scanner-strategies';
 import { signalBotXml } from '@/utils/signal-bot-xml';
+import DigitShares from '@/components/shared_ui/digit-shares';
 import './scanner.scss';
 
 /**
@@ -178,6 +179,19 @@ const AnalysisTool = () => {
         const ts = recent_live_at[`${strategy.id}:${symbol}`];
         return ts && Date.now() - ts < RECENT_SIGNAL_MS ? Math.round((Date.now() - ts) / 1000) : null;
     };
+
+    // Live digit shares (0-9 circles) for the featured market, as on the
+    // reference scanner. Hooks stay unconditional — the stats derive from the
+    // feed history directly.
+    const featured_history = featured ? feed.history[featured.symbol] || [] : [];
+    const featured_digit_stats = React.useMemo(() => {
+        const sample = featured_history.slice(-100);
+        return Array.from({ length: 10 }, (_, digit) => ({
+            digit,
+            count: sample.filter(d => d === digit).length,
+            percentage: sample.length ? Math.round((sample.filter(d => d === digit).length / sample.length) * 1000) / 10 : 0,
+        }));
+    }, [featured_history]);
 
     return (
         <div className='scanner'>
@@ -366,6 +380,14 @@ const AnalysisTool = () => {
                                     {free_bots.is_loading ? localize('Loading') : localize('Load Bot')}
                                 </button>
                             </div>
+                        </div>
+                        <div className='scanner__featured-digits'>
+                            <span className='scanner__featured-kicker'>{localize('Digit shares')}</span>
+                            <DigitShares
+                                stats={featured_digit_stats}
+                                last_digit={featured.last_digit}
+                                size='sm'
+                            />
                         </div>
                         {trade_state.message && (
                             <div

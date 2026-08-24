@@ -437,6 +437,24 @@
             transform 0.2s ease,
             border-color 0.2s ease;
 
+        // Live pointer marking the tile of the most recent digit.
+        &--last {
+            border-color: var(--site-accent);
+            box-shadow: 0 0 0.6rem rgba(245, 158, 11, 0.45);
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -0.7rem;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 0.5rem solid transparent;
+                border-right: 0.5rem solid transparent;
+                border-top: 0.6rem solid var(--site-accent);
+                animation: analyzer-pointer-bob 1s ease-in-out infinite alternate;
+            }
+        }
+
         &--hot {
             border-color: color-mix(in srgb, var(--text-profit-success) 45%, transparent);
         }
@@ -762,5 +780,14 @@
 
     50% {
         opacity: 0.35;
+    }
+}
+
+@keyframes analyzer-pointer-bob {
+    from {
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        transform: translateX(-50%) translateY(0.2rem);
     }
 }

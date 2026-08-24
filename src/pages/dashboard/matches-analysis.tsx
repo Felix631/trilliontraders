@@ -192,6 +192,7 @@ const MatchesAnalysis = () => {
                                 'matches-analysis__tile--cold': is_cold && !is_top,
                                 'matches-analysis__tile--top': is_top,
                                 'matches-analysis__tile--strong': strong && !is_top,
+                                'matches-analysis__tile--last': last_digit === digit,
                             })}
                         >
                             <span className='matches-analysis__tile-digit'>{digit}</span>

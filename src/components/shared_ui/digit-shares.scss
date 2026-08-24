@@ -1,0 +1,97 @@
+// Digits 0-9 percentage circles with a triangular last-digit pointer.
+.digit-shares {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+
+    &__item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__circle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 3.6rem;
+        height: 3.6rem;
+        border-radius: 50%;
+        background:
+            conic-gradient(var(--site-accent) var(--share-angle, 36deg), rgba(148, 163, 184, 0.22) 0);
+        padding: 0.25rem;
+        transition: box-shadow 0.2s ease;
+
+        // Inner face of the circle.
+        > * {
+            position: relative;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0.28rem;
+            border-radius: 50%;
+            background: var(--app-card-background, #fff);
+        }
+
+        &.is-last {
+            box-shadow: 0 0 0.6rem rgba(245, 158, 11, 0.65);
+
+            &::before {
+                background: var(--site-accent-soft, rgba(245, 158, 11, 0.12));
+            }
+
+            .digit-shares__digit {
+                color: var(--site-accent);
+            }
+        }
+    }
+
+    &__digit {
+        font-size: var(--text-size-xxs);
+        font-weight: bolder;
+        color: var(--text-general);
+        line-height: 1.1;
+    }
+
+    &__pct {
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Triangular pointer under the last digit's circle.
+    &__pointer {
+        margin-top: 0.2rem;
+        width: 0;
+        height: 0;
+        border-left: 0.5rem solid transparent;
+        border-right: 0.5rem solid transparent;
+        border-top: 0.6rem solid var(--site-accent);
+        animation: digit-shares-bob 1s ease-in-out infinite alternate;
+    }
+
+    &--sm &__circle {
+        width: 2.9rem;
+        height: 2.9rem;
+    }
+
+    &--sm &__pct {
+        font-size: 0.85rem;
+    }
+}
+
+@keyframes digit-shares-bob {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(0.2rem);
+    }
+}

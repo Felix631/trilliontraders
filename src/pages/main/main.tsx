@@ -35,6 +35,7 @@ import {
     LabelPairedChartTrendUpCaptionRegularIcon,
     LabelPairedCopyCaptionRegularIcon,
     LabelPairedGaugeMaxCaptionRegularIcon,
+    LabelPairedMoneyBillCaptionRegularIcon,
     LabelPairedObjectsColumnCaptionRegularIcon,
     LabelPairedPuzzlePieceTwoCaptionBoldIcon,
     LabelPairedSearchCaptionRegularIcon,
@@ -46,6 +47,7 @@ import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
 import RunPanel from '../../components/run-panel';
 import BulkTrader from '../dashboard/trade-tools/bulk-trader';
+import DTrader from '../dashboard/dtrader';
 import ChartModal from '../chart/chart-modal';
 import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
@@ -562,6 +564,21 @@ const AppWrapper = observer(() => {
                                         <Tutorial handleTabChange={handleTabChange} />
                                     </Suspense>
                                 </div>
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedMoneyBillCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='DTrader' />
+                                    </>
+                                }
+                                id='id-dtrader'
+                            >
+                                <DTrader />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}

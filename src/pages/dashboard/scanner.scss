@@ -368,6 +368,14 @@
         flex-wrap: wrap;
     }
 
+    &__featured-digits {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-top: 0.4rem;
+        border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
     &__status {
         display: inline-flex;
         align-items: center;
