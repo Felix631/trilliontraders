@@ -41,8 +41,9 @@ const EMPTY_STATE: MarketFeedState = {
     quote_history: {},
 };
 
-/** Last decimal digit of a quote — matches digit-contract settlement. */
-export const lastDigitOf = (quote: number): number => {
+/** Last decimal digit of a quote — matches digit-contract settlement.
+ *  Accepts the raw string form: trailing zeros matter ("812.40" → digit 0). */
+export const lastDigitOf = (quote: number | string): number => {
     const s = String(quote);
     return Number(s[s.length - 1]);
 };
@@ -94,7 +95,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                 quotes_ref.current[tick.symbol] = Number(tick.quote);
                 history_ref.current[tick.symbol] = [
                     ...(history_ref.current[tick.symbol] || []),
-                    lastDigitOf(Number(tick.quote)),
+                    lastDigitOf(tick.quote),
                 ].slice(-window_size);
                 quote_history_ref.current[tick.symbol] = [
                     ...(quote_history_ref.current[tick.symbol] || []),
@@ -129,14 +130,15 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                 try {
                     const response = await send(request);
                     if (disposed) return;
-                    let ticks: Array<{ quote: number; epoch: number }> = [];
+                    let ticks: Array<{ quote: number; epoch: number; raw: string }> = [];
                     if (Array.isArray(response?.history?.prices)) {
                         ticks = response.history.prices.map((p: any, i: number) => ({
                             quote: Number(p),
                             epoch: Number(response.history.times[i]) || 0,
+                            raw: String(p),
                         }));
                     }
-                    history_ref.current[market.value] = ticks.slice(-window_size).map(t => lastDigitOf(t.quote));
+                    history_ref.current[market.value] = ticks.slice(-window_size).map(t => lastDigitOf(t.raw));
                     quotes_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].quote : null;
                     quote_history_ref.current[market.value] = ticks.slice(-120).map(t => t.quote);
                     epochs_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].epoch : 0;
@@ -156,9 +158,9 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                             const prices: any[] = response?.history?.prices || [];
                             const times: any[] = response?.history?.times || [];
                             history_ref.current[market.value] = prices
-                                .map((p, i) => ({ quote: Number(p), epoch: Number(times[i]) || 0 }))
+                                .map((p, i) => ({ quote: Number(p), epoch: Number(times[i]) || 0, raw: String(p) }))
                                 .slice(-window_size)
-                                .map(t => lastDigitOf(t.quote));
+                                .map(t => lastDigitOf(t.raw));
                             quotes_ref.current[market.value] = prices.length ? Number(prices[prices.length - 1]) : null;
                         } catch {
                             // leave the symbol empty — it will fill from live ticks

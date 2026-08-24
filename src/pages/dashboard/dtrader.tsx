@@ -5,6 +5,7 @@ import { localize } from '@deriv-com/translations';
 import { isAuthorized, placeTrade, payout_multiplier, accountCurrency, win_probability } from '@/hooks/useDerivTrade';
 import { useMarketFeed, MARKET_SYMBOLS } from '@/hooks/useMarketFeed';
 import DigitShares from '@/components/shared_ui/digit-shares';
+import TradingViewComponent from '@/components/trading-view-chart/trading-view';
 import './dtrader.scss';
 
 /**
@@ -62,53 +63,13 @@ const tvSymbolMap: Record<string, string> = {
     '1HZ100V': 'DERIV:1HZ100V',
 };
 
-/** TradingView Advanced Chart Widget for DTrader. */
-const DTraderChart = ({ symbol }: { symbol: string }) => {
-    const containerRef = React.useRef<HTMLDivElement>(null);
-
-    React.useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-        container.innerHTML = '';
-
-        const tvSymbol = tvSymbolMap[symbol] || 'DERIV:R_100';
-
-        const script = document.createElement('script');
-        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-        script.type = 'text/javascript';
-        script.async = true;
-        script.innerHTML = JSON.stringify({
-            autosize: true,
-            symbol: tvSymbol,
-            interval: '1',
-            timezone: 'Etc/UTC',
-            theme: 'dark',
-            style: '1',
-            locale: 'en',
-            backgroundColor: '#0f172a',
-            gridColor: '#1e293b',
-            allow_symbol_change: true,
-            calendar: false,
-            support_host: 'https://www.tradingview.com',
-            toolbar_bg: '#0f172a',
-            hide_top_toolbar: false,
-            hide_side_toolbar: false,
-            studies: ['MASimple@tv-basicstudies', 'RSI@tv-basicstudies', 'MACD@tv-basicstudies', 'BB@tv-basicstudies'],
-            save_image: true,
-            hide_volume: false,
-            withdateranges: true,
-            details: true,
-            hotlist: true,
-            news: ['headlines'],
-            timezone: 'Etc/UTC',
-        });
-
-        container.appendChild(script);
-        return () => { container.innerHTML = ''; };
-    }, [symbol]);
-
-    return <div className='dtrader__tv-chart' ref={containerRef} />;
-};
+/** TradingView Advanced Chart for DTrader — shared deterministic iframe embed. */
+const DTraderChart = ({ symbol }: { symbol: string }) => (
+    <TradingViewComponent
+        symbol={tvSymbolMap[symbol] || 'DERIV:R_100'}
+        className='dtrader__tv-chart'
+    />
+);
 
 const DTrader = () => {
     const feed = useMarketFeed(120);

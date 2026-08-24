@@ -99,21 +99,28 @@ const INITIAL_STATE: DigitAnalysisState = {
 };
 
 /** Last decimal digit of a quote — matches the digit that digit-match contracts settle on. */
-const lastDigitOf = (quote: number): number => {
+const lastDigitOf = (quote: number | string): number => {
     const string_value = String(quote);
     return Number(string_value[string_value.length - 1]);
 };
 
-/** Normalise a ticks-history response into an array of { quote, epoch } ticks. */
-const ticksFromHistory = (history: any): Array<{ quote: number; epoch: number }> => {
+/** Normalise a ticks-history response into an array of { quote, epoch, raw } ticks.
+ *  `raw` keeps the original string form so trailing zeros survive (a quote like
+ *  "812.40" settles on digit 0 — Number() would silently turn it into 812.4). */
+const ticksFromHistory = (history: any): Array<{ quote: number; epoch: number; raw: string }> => {
     if (!history) return [];
     if (Array.isArray(history.ticks)) {
-        return history.ticks.map((tick: any) => ({ quote: Number(tick.quote), epoch: Number(tick.epoch) || 0 }));
+        return history.ticks.map((tick: any) => ({
+            quote: Number(tick.quote),
+            epoch: Number(tick.epoch) || 0,
+            raw: String(tick.quote),
+        }));
     }
     if (Array.isArray(history.times) && Array.isArray(history.prices)) {
         return history.prices.map((price: any, index: number) => ({
             quote: Number(price),
             epoch: Number(history.times[index]) || 0,
+            raw: String(price),
         }));
     }
     return [];
@@ -261,7 +268,7 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
                 if (disposed) return;
                 const seeded_ticks = ticksFromHistory(response?.history).slice(-lookback);
                 if (seeded_ticks.length) {
-                    digits_ref.current = seeded_ticks.map(tick => lastDigitOf(tick.quote));
+                    digits_ref.current = seeded_ticks.map(tick => lastDigitOf(tick.raw));
                     last_quote_ref.current = seeded_ticks[seeded_ticks.length - 1].quote;
                     last_epoch_ref.current = seeded_ticks[seeded_ticks.length - 1].epoch;
                     setState(computeStats(digits_ref.current, lookback, last_quote_ref.current));

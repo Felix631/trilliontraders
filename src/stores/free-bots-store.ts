@@ -29,7 +29,7 @@ export default class FreeBotsStore {
      */
     loadFreeBot = async (bot: TFreeBot) => {
         if (this.is_loading) return;
-        await this.loadBotXml(`../xml/free-bots/${bot.file}.xml`, bot.name, true);
+        await this.loadBotXml(`../xml/free-bots/${bot.file}`, bot.name, true);
     };
 
     /**
