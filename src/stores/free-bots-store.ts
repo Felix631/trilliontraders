@@ -32,17 +32,29 @@ export default class FreeBotsStore {
     };
 
     /**
-     * Waits for the Blockly workspace to become available (up to 5 s).
-     * Called after switching to the Bot Builder tab so the workspace has
-     * time to mount.
+     * Waits for a LIVE Blockly workspace (up to 15 s).
+     *
+     * The Bot Builder mounts per tab: leaving the tab disposes the workspace
+     * (`app-store.onUnmount` calls `derivWorkspace.dispose()`) but leaves
+     * `window.Blockly.derivWorkspace` pointing at the dead instance. Returning
+     * that stale object made `load()` draw blocks into a ghost workspace while
+     * the real remount finished with the default strategy — the imported bot
+     * never appeared. So we wait for a fresh, non-disposed instance.
      */
     private waitForWorkspace = async (): Promise<any> => {
-        for (let i = 0; i < 20; i++) {
+        const previous = window.Blockly?.derivWorkspace || null;
+        const previous_is_usable = !!previous && !previous.disposed;
+        for (let i = 0; i < 60; i++) {
             const ws = window.Blockly?.derivWorkspace;
-            if (ws) return ws;
+            if (ws && !ws.disposed && (!previous || previous_is_usable || ws !== previous)) {
+                // Give dbot's mount sequence (default/recent strategy push) a
+                // beat to finish so our load cleanly replaces it.
+                await new Promise(r => setTimeout(r, 300));
+                return window.Blockly.derivWorkspace;
+            }
             await new Promise(r => setTimeout(r, 250));
         }
-        return window.Blockly?.derivWorkspace || null;
+        return null;
     };
 
     /**
@@ -100,6 +112,13 @@ export default class FreeBotsStore {
                 window.Blockly.derivWorkspace.strategy_to_load = xml_string;
             } catch {
                 // non-fatal — the blocks are already on the canvas
+            }
+
+            // Verify the blocks actually landed; `load()` can silently no-op
+            // if its internal preconditions are not met.
+            const block_count = workspace.getAllBlocks(false).length;
+            if (!block_count) {
+                console.error(`[TrillionTraders] "${name}" loaded but no blocks are on the canvas.`);
             }
         } catch (err) {
             console.error('[TrillionTraders] Failed to load bot into builder:', err);
