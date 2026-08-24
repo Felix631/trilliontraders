@@ -1,4 +1,18 @@
-// Digits 0-9 percentage circles with a triangular last-digit pointer.
+// Digits 0-9 percentage circles with a live triangular last-digit pointer.
+// Rank-based ring colours:
+//   green  = most appearing
+//   blue   = 2nd most
+//   silver = 2nd least
+//   red    = least appearing
+//   amber  = default (others)
+//   none   = the digit touched by the pointer (is-last)
+
+$digit-green: #22c55e;
+$digit-blue: #3b82f6;
+$digit-red: #ef4444;
+$digit-silver: #94a3b8;
+$digit-amber: var(--site-accent, #f59e0b);
+
 .digit-shares {
     display: flex;
     align-items: flex-start;
@@ -22,11 +36,14 @@
         height: 3.6rem;
         border-radius: 50%;
         background:
-            conic-gradient(var(--site-accent) var(--share-angle, 36deg), rgba(148, 163, 184, 0.22) 0);
+            conic-gradient(
+                $digit-amber var(--share-angle, 36deg),
+                rgba(148, 163, 184, 0.22) 0
+            );
         padding: 0.25rem;
-        transition: box-shadow 0.2s ease;
+        transition: box-shadow 0.2s ease, background 0.2s ease;
 
-        // Inner face of the circle.
+        // Inner face
         > * {
             position: relative;
         }
@@ -39,9 +56,40 @@
             background: var(--app-card-background, #fff);
         }
 
+        // ---- Rank colour variants ----------------------------------
+        &--green {
+            background: conic-gradient(
+                $digit-green var(--share-angle, 36deg),
+                rgba(148, 163, 184, 0.22) 0
+            );
+        }
+
+        &--blue {
+            background: conic-gradient(
+                $digit-blue var(--share-angle, 36deg),
+                rgba(148, 163, 184, 0.22) 0
+            );
+        }
+
+        &--red {
+            background: conic-gradient(
+                $digit-red var(--share-angle, 36deg),
+                rgba(148, 163, 184, 0.22) 0
+            );
+        }
+
+        &--silver {
+            background: conic-gradient(
+                $digit-silver var(--share-angle, 36deg),
+                rgba(148, 163, 184, 0.22) 0
+            );
+        }
+
+        // ---- Last digit: neutral (pointer touched) ----------------
         &.is-last {
             box-shadow: 0 0 0.6rem rgba(245, 158, 11, 0.65);
 
+            // Override any rank colour with neutral amber ring
             &::before {
                 background: var(--site-accent-soft, rgba(245, 158, 11, 0.12));
             }
@@ -66,14 +114,15 @@
         font-variant-numeric: tabular-nums;
     }
 
-    // Triangular pointer under the last digit's circle.
+    // Upward-pointing triangular pointer under the last digit's circle.
+    // border-bottom is the coloured triangle pointing UP; border-top is transparent.
     &__pointer {
-        margin-top: 0.2rem;
+        margin-top: 0.15rem;
         width: 0;
         height: 0;
-        border-left: 0.5rem solid transparent;
-        border-right: 0.5rem solid transparent;
-        border-top: 0.6rem solid var(--site-accent);
+        border-left: 0.45rem solid transparent;
+        border-right: 0.45rem solid transparent;
+        border-bottom: 0.55rem solid var(--site-accent);
         animation: digit-shares-bob 1s ease-in-out infinite alternate;
     }
 
@@ -92,6 +141,6 @@
         transform: translateY(0);
     }
     to {
-        transform: translateY(0.2rem);
+        transform: translateY(0.15rem);
     }
 }

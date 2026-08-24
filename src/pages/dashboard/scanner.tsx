@@ -211,13 +211,32 @@ const AnalysisTool = () => {
                         </span>
                         <label className='scanner__window'>
                             <span>{localize('Analyze Ticks')}</span>
-                            <select value={window_size} onChange={e => setWindowSize(Number(e.target.value))}>
-                                {WINDOW_OPTIONS.map(option => (
-                                    <option key={option} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className='scanner__ticks-input'>
+                                <input
+                                    type='number'
+                                    min='10'
+                                    max='10000'
+                                    step='10'
+                                    value={window_size}
+                                    onChange={e => {
+                                        const v = Math.max(10, Math.min(10000, Number(e.target.value) || 100));
+                                        setWindowSize(v);
+                                    }}
+                                    className='scanner__ticks-num'
+                                    aria-label={localize('Number of ticks to analyze')}
+                                />
+                                <select
+                                    value={WINDOW_OPTIONS.includes(window_size) ? window_size : ''}
+                                    onChange={e => setWindowSize(Number(e.target.value))}
+                                    className='scanner__ticks-select'
+                                >
+                                    {WINDOW_OPTIONS.map(option => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </label>
                         <button type='button' className='scanner__btn' onClick={() => feed.rescan()}>
                             {localize('Rescan Markets')}

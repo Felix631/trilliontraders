@@ -33,25 +33,53 @@ export default class FreeBotsStore {
     };
 
     /**
+     * Waits for the Blockly workspace to become available (up to 5 s).
+     * Called after switching to the Bot Builder tab so the workspace has
+     * time to mount.
+     */
+    private waitForWorkspace = async (): Promise<any> => {
+        const WB = (typeof window !== 'undefined' && window.Blockly) || (typeof Blockly !== 'undefined' ? Blockly : null);
+        for (let i = 0; i < 20; i++) {
+            const ws = WB?.derivWorkspace;
+            if (ws) return ws;
+            await new Promise(r => setTimeout(r, 250));
+        }
+        return null;
+    };
+
+    /**
      * Loads any bot XML (file module path or raw string) into the Blockly
      * workspace and switches to the Bot Builder tab. Used by the Free Bots
      * library and by the Analysis Tool's Load Bot action.
      */
     loadBotXml = async (source: string, name: string, is_module_path = false) => {
         if (this.is_loading) return;
-        const { derivWorkspace: workspace } = Blockly;
-        if (!workspace) return;
 
         this.is_loading = true;
         this.loading_bot_id = name;
         try {
-            const strategy_xml = is_module_path
-                ? await import(/* webpackChunkName: `[request]` */ `${source}.xml`)
-                : { default: source };
-            const strategy_dom = window.Blockly.utils.xml.textToDom(strategy_xml.default);
+            // Switch to Bot Builder tab first so the workspace mounts.
             this.root_store.dashboard.setActiveTab(DBOT_TABS.BOT_BUILDER);
+
+            // Wait for the Blockly workspace to be ready.
+            const workspace = await this.waitForWorkspace();
+            if (!workspace) {
+                console.error('[TrillionTraders] Bot Builder workspace not available after waiting.');
+                return;
+            }
+
+            const WB = (typeof window !== 'undefined' && window.Blockly) || (typeof Blockly !== 'undefined' ? Blockly : null);
+            let xml_string: string;
+            if (is_module_path) {
+                const strategy_mod = await import(/* webpackChunkName: `[request]` */ `${source}.xml`);
+                xml_string = strategy_mod.default;
+            } else {
+                xml_string = source;
+            }
+
+            const strategy_dom = WB.utils.xml.textToDom(xml_string);
             await load({
-                block_string: window.Blockly.Xml.domToText(strategy_dom),
+                block_string: WB.Xml.domToText(strategy_dom),
                 file_name: name,
                 workspace,
                 from: save_types.UNSAVED,
@@ -59,6 +87,8 @@ export default class FreeBotsStore {
                 strategy_id: null,
                 showIncompatibleStrategyDialog: null,
             });
+        } catch (err) {
+            console.error('[TrillionTraders] Failed to load bot into builder:', err);
         } finally {
             this.is_loading = false;
             this.loading_bot_id = null;
