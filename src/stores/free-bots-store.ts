@@ -32,29 +32,60 @@ export default class FreeBotsStore {
     };
 
     /**
-     * Waits for a LIVE Blockly workspace (up to 15 s).
+     * Waits for a SETTLED, LIVE Blockly workspace (up to 20 s).
      *
-     * The Bot Builder mounts per tab: leaving the tab disposes the workspace
-     * (`app-store.onUnmount` calls `derivWorkspace.dispose()`) but leaves
-     * `window.Blockly.derivWorkspace` pointing at the dead instance. Returning
-     * that stale object made `load()` draw blocks into a ghost workspace while
-     * the real remount finished with the default strategy — the imported bot
-     * never appeared. So we wait for a fresh, non-disposed instance.
+     * Two hazards when arriving from another tab:
+     * 1. Leaving the Bot Builder disposes the workspace but leaves
+     *    `window.Blockly.derivWorkspace` pointing at the dead instance.
+     * 2. The remount can run `initWorkspace` more than once concurrently
+     *    (double-mount cycles); each run injects a NEW workspace and draws
+     *    the default strategy into it. Accepting the first reference we see
+     *    meant drawing into a workspace that a still-running init then
+     *    replaced — the import appeared to never happen.
+     *
+     * So we only return a reference that is alive AND unchanged across
+     * several consecutive polls, which guarantees every init cycle has
+     * finished before we draw the bot.
      */
+    private static readonly POLL_MS = 250;
+    private static readonly STABLE_CHECKS_REQUIRED = 4;
+
     private waitForWorkspace = async (): Promise<any> => {
         const previous = window.Blockly?.derivWorkspace || null;
         const previous_is_usable = !!previous && !previous.disposed;
-        for (let i = 0; i < 60; i++) {
+        const max_polls = Math.ceil(20000 / FreeBotsStore.POLL_MS);
+
+        let candidate: any = null;
+        let stable_checks = 0;
+
+        for (let i = 0; i < max_polls; i++) {
             const ws = window.Blockly?.derivWorkspace;
-            if (ws && !ws.disposed && (!previous || previous_is_usable || ws !== previous)) {
-                // Give dbot's mount sequence (default/recent strategy push) a
-                // beat to finish so our load cleanly replaces it.
-                await new Promise(r => setTimeout(r, 300));
-                return window.Blockly.derivWorkspace;
+            const is_eligible = !!ws && !ws.disposed && (!previous || previous_is_usable || ws !== previous);
+
+            if (is_eligible) {
+                if (ws === candidate) {
+                    stable_checks++;
+                } else {
+                    candidate = ws;
+                    stable_checks = 1;
+                }
+                if (stable_checks >= FreeBotsStore.STABLE_CHECKS_REQUIRED) {
+                    // One last beat so dbot's post-inject steps (default
+                    // strategy push, cleanup, resize) are fully done.
+                    await new Promise(r => setTimeout(r, 300));
+                    if (!candidate.disposed) return candidate;
+                    candidate = null;
+                    stable_checks = 0;
+                }
+            } else {
+                candidate = null;
+                stable_checks = 0;
             }
-            await new Promise(r => setTimeout(r, 250));
+
+            await new Promise(r => setTimeout(r, FreeBotsStore.POLL_MS));
         }
-        return null;
+
+        return candidate && !candidate.disposed ? candidate : null;
     };
 
     /**
@@ -114,11 +145,43 @@ export default class FreeBotsStore {
                 // non-fatal — the blocks are already on the canvas
             }
 
-            // Verify the blocks actually landed; `load()` can silently no-op
-            // if its internal preconditions are not met.
-            const block_count = workspace.getAllBlocks(false).length;
+            // Verify the blocks actually landed AND SURVIVED. A late-running
+            // init cycle can clear the workspace right after our load; if the
+            // canvas ends up empty, draw the bot once more onto whatever the
+            // final workspace is.
+            const verify_and_retry = async () => {
+                await new Promise(r => setTimeout(r, 600));
+                let current_ws = window.Blockly?.derivWorkspace;
+                if (current_ws && !current_ws.disposed && current_ws.getAllBlocks(false).length > 0) return;
+
+                // Canvas was wiped — wait for it to settle again and redraw.
+                current_ws = await this.waitForWorkspace();
+                if (!current_ws) return;
+                await load({
+                    block_string: xml_string,
+                    file_name: name,
+                    workspace: current_ws,
+                    from: save_types.UNSAVED,
+                    drop_event: null,
+                    strategy_id: null,
+                    showIncompatibleStrategyDialog: null,
+                    show_snackbar: false,
+                });
+                try {
+                    window.Blockly.derivWorkspace.strategy_to_load = xml_string;
+                } catch {
+                    /* non-fatal */
+                }
+                console.info(`[TrillionTraders] "${name}" re-applied after a late workspace replacement.`);
+            };
+
+            await verify_and_retry();
+
+            const block_count = window.Blockly?.derivWorkspace?.getAllBlocks(false).length ?? 0;
             if (!block_count) {
                 console.error(`[TrillionTraders] "${name}" loaded but no blocks are on the canvas.`);
+            } else {
+                console.info(`[TrillionTraders] "${name}" loaded into Bot Builder (${block_count} blocks).`);
             }
         } catch (err) {
             console.error('[TrillionTraders] Failed to load bot into builder:', err);
