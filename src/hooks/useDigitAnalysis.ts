@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { api_base } from '@/external/bot-skeleton/services/api/api-base';
+import { decimalsFromPipStep, lastDigitOfQuote } from '@/utils/last-digit';
 
 export interface DigitStat {
     digit: number;
@@ -98,10 +99,30 @@ const INITIAL_STATE: DigitAnalysisState = {
     },
 };
 
-/** Last decimal digit of a quote — matches the digit that digit-match contracts settle on. */
-const lastDigitOf = (quote: number | string): number => {
-    const string_value = String(quote);
-    return Number(string_value[string_value.length - 1]);
+/** Pip size (decimal places) per symbol, cached module-wide — shared shape
+ *  with useMarketFeed. Quotes arrive as JSON numbers so trailing zeros are
+ *  lost on the wire; the settlement digit must be read from the price
+ *  formatted to the symbol's pip size (e.g. V100 pip 0.01: 812.4 → "812.40"
+ *  → digit 0). */
+const pip_sizes_cache: Record<string, number | null> = {};
+
+const ensurePipSize = async (
+    send: (request: unknown) => Promise<any>,
+    symbol: string
+): Promise<void> => {
+    if (symbol in pip_sizes_cache) return;
+    const processed = api_base.pip_sizes as Record<string, number> | undefined;
+    if (typeof processed?.[symbol] === 'number') {
+        pip_sizes_cache[symbol] = processed[symbol];
+        return;
+    }
+    try {
+        const response = await send({ active_symbols: 'brief' });
+        const entry: any = (response?.active_symbols || []).find((item: any) => item.symbol === symbol);
+        pip_sizes_cache[symbol] = entry ? decimalsFromPipStep(entry.pip ?? entry.pip_size) : null;
+    } catch {
+        pip_sizes_cache[symbol] = null; // unknown → raw-string fallback
+    }
 };
 
 /** Normalise a ticks-history response into an array of { quote, epoch, raw } ticks.
@@ -247,7 +268,7 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
                 last_epoch_ref.current = tick.epoch || 0;
 
                 last_quote_ref.current = Number(tick.quote);
-                digits_ref.current = [...digits_ref.current, lastDigitOf(tick.quote)].slice(-lookback);
+                digits_ref.current = [...digits_ref.current, lastDigitOfQuote(tick.quote, pip_sizes_cache[symbol])].slice(-lookback);
                 setState(computeStats(digits_ref.current, lookback, last_quote_ref.current));
             });
             subscription_ref.current = message_subscription;
@@ -256,6 +277,7 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
             // Note: the vendored API type declares `send` as void, but at runtime it
             // resolves with the request's response (DerivAPIBasic auto-matches req_id).
             const send = (request: unknown): Promise<any> => api.send(request) as unknown as Promise<any>;
+            await ensurePipSize(send, symbol);
             const subscribeToHistory = async (with_subscription: boolean) => {
                 const request = {
                     ticks_history: symbol,
@@ -268,7 +290,7 @@ export const useDigitAnalysis = (symbol: string, lookback: number): DigitAnalysi
                 if (disposed) return;
                 const seeded_ticks = ticksFromHistory(response?.history).slice(-lookback);
                 if (seeded_ticks.length) {
-                    digits_ref.current = seeded_ticks.map(tick => lastDigitOf(tick.raw));
+                    digits_ref.current = seeded_ticks.map(tick => lastDigitOfQuote(tick.raw, pip_sizes_cache[symbol]));
                     last_quote_ref.current = seeded_ticks[seeded_ticks.length - 1].quote;
                     last_epoch_ref.current = seeded_ticks[seeded_ticks.length - 1].epoch;
                     setState(computeStats(digits_ref.current, lookback, last_quote_ref.current));

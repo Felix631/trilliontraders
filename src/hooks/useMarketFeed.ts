@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { api_base } from '@/external/bot-skeleton/services/api/api-base';
+import { decimalsFromPipStep, lastDigitOfQuote } from '@/utils/last-digit';
 
 /**
  * Multi-symbol live tick feed for the Analysis Tool (AI Scanner).
@@ -48,6 +49,41 @@ export const lastDigitOf = (quote: number | string): number => {
     return Number(s[s.length - 1]);
 };
 
+/** Pip size (decimal places) per symbol, cached module-wide.
+ *  Quotes arrive as JSON numbers so trailing zeros are lost on the wire;
+ *  the settlement digit must be read from the price formatted to the
+ *  symbol's pip size (e.g. V100 pip 0.01: 812.4 → "812.40" → digit 0). */
+const pip_sizes_cache: Record<string, number | null> = {};
+
+const ensurePipSizes = async (
+    send: (request: unknown) => Promise<any>,
+    symbols: string[]
+): Promise<void> => {
+    const missing = symbols.filter(symbol => !(symbol in pip_sizes_cache));
+    if (!missing.length) return;
+
+    // The app's own active-symbol processing already exposes decimal counts.
+    const processed = api_base.pip_sizes as Record<string, number> | undefined;
+    for (const symbol of missing) {
+        if (typeof processed?.[symbol] === 'number') pip_sizes_cache[symbol] = processed[symbol];
+    }
+
+    const unresolved = missing.filter(symbol => !(symbol in pip_sizes_cache));
+    if (!unresolved.length) return;
+    try {
+        const response = await send({ active_symbols: 'brief' });
+        const entries: any[] = response?.active_symbols || [];
+        for (const symbol of unresolved) {
+            const entry = entries.find((item: any) => item.symbol === symbol);
+            pip_sizes_cache[symbol] = entry
+                ? decimalsFromPipStep(entry.pip ?? entry.pip_size)
+                : null; // null = unknown → raw-string fallback
+        }
+    } catch {
+        for (const symbol of unresolved) pip_sizes_cache[symbol] = null;
+    }
+};
+
 export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: () => void } => {
     const [state, setState] = useState<MarketFeedState>(EMPTY_STATE);
     const [scan_nonce, setScanNonce] = useState(0);
@@ -84,6 +120,10 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
 
             const send = (request: unknown): Promise<any> => api.send(request) as unknown as Promise<any>;
 
+            await ensurePipSizes(send, MARKET_SYMBOLS.map(market => market.value));
+            const digitFor = (symbol: string, quote: number | string): number =>
+                lastDigitOfQuote(quote, pip_sizes_cache[symbol]);
+
             // One shared listener routes streamed ticks to the right symbol.
             const message_subscription = api.onMessage().subscribe(({ data }: { data: any }) => {
                 if (disposed || !data || data.msg_type !== 'tick') return;
@@ -95,7 +135,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                 quotes_ref.current[tick.symbol] = Number(tick.quote);
                 history_ref.current[tick.symbol] = [
                     ...(history_ref.current[tick.symbol] || []),
-                    lastDigitOf(tick.quote),
+                    digitFor(tick.symbol, tick.quote),
                 ].slice(-window_size);
                 quote_history_ref.current[tick.symbol] = [
                     ...(quote_history_ref.current[tick.symbol] || []),
@@ -138,7 +178,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                             raw: String(p),
                         }));
                     }
-                    history_ref.current[market.value] = ticks.slice(-window_size).map(t => lastDigitOf(t.raw));
+                    history_ref.current[market.value] = ticks.slice(-window_size).map(t => digitFor(market.value, t.raw));
                     quotes_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].quote : null;
                     quote_history_ref.current[market.value] = ticks.slice(-120).map(t => t.quote);
                     epochs_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].epoch : 0;
@@ -160,7 +200,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                             history_ref.current[market.value] = prices
                                 .map((p, i) => ({ quote: Number(p), epoch: Number(times[i]) || 0, raw: String(p) }))
                                 .slice(-window_size)
-                                .map(t => lastDigitOf(t.raw));
+                                .map(t => digitFor(market.value, t.raw));
                             quotes_ref.current[market.value] = prices.length ? Number(prices[prices.length - 1]) : null;
                         } catch {
                             // leave the symbol empty — it will fill from live ticks
