@@ -29,18 +29,30 @@ export default class FreeBotsStore {
      */
     loadFreeBot = async (bot: TFreeBot) => {
         if (this.is_loading) return;
+        await this.loadBotXml(`../xml/free-bots/${bot.file}.xml`, bot.name, true);
+    };
+
+    /**
+     * Loads any bot XML (file module path or raw string) into the Blockly
+     * workspace and switches to the Bot Builder tab. Used by the Free Bots
+     * library and by the Analysis Tool's Load Bot action.
+     */
+    loadBotXml = async (source: string, name: string, is_module_path = false) => {
+        if (this.is_loading) return;
         const { derivWorkspace: workspace } = Blockly;
         if (!workspace) return;
 
         this.is_loading = true;
-        this.loading_bot_id = bot.id;
+        this.loading_bot_id = name;
         try {
-            const strategy_xml = await import(/* webpackChunkName: `[request]` */ `../xml/free-bots/${bot.file}.xml`);
+            const strategy_xml = is_module_path
+                ? await import(/* webpackChunkName: `[request]` */ `${source}.xml`)
+                : { default: source };
             const strategy_dom = window.Blockly.utils.xml.textToDom(strategy_xml.default);
             this.root_store.dashboard.setActiveTab(DBOT_TABS.BOT_BUILDER);
             await load({
                 block_string: window.Blockly.Xml.domToText(strategy_dom),
-                file_name: bot.name,
+                file_name: name,
                 workspace,
                 from: save_types.UNSAVED,
                 drop_event: null,
