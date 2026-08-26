@@ -105,7 +105,7 @@ SITES = {
     # require.context pattern as githinji, newer module header format).
     "chichitraders": {
         "base": "https://chichitraders.site",
-        "bundle": "/static/js/index.3bb59e08.js",
+        "bundle": "/static/js/index.ff748ddc.js",
         "inline_chunks": {
             "AI-HIGH-LOW-TICK(by-chichitrades)": 81426,
             "AI-ONLY-UPS-DOWNS-BOT(by-chichitrades)-(1)": 38882,

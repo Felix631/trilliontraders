@@ -393,6 +393,198 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders/newly-added/chichitraders-STEP-INDICES-QUANTUM-AI-xml"
     },
     {
+        "id": "chichitraders2-AI-HIGH-LOW-TICK-by-chichitrades",
+        "name": "AI HIGH LOW TICK by chichitrades",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-AI-HIGH-LOW-TICK-by-chichitrades-xml"
+    },
+    {
+        "id": "chichitraders2-AI-HIGH-LOW-TICK-VERSION-2-BY-CHICHI",
+        "name": "AI HIGH LOW TICK VERSION 2 BY CHICHI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-AI-HIGH-LOW-TICK-VERSION-2-BY-CHICHI-xml"
+    },
+    {
+        "id": "chichitraders2-AI-ONLY-UP-DOWNS-VERSION-2-3TICKS-2TICKS",
+        "name": "AI ONLY UP DOWNS VERSION 2 3TICKS 2TICKS",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-AI-ONLY-UP-DOWNS-VERSION-2-3TICKS-2TICKS-xml"
+    },
+    {
+        "id": "chichitraders2-AI-ONLY-UPS-DOWNS-BOT-by-chichitrades-1",
+        "name": "AI ONLY UPS DOWNS BOT by chichitrades 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-AI-ONLY-UPS-DOWNS-BOT-by-chichitrades-1-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-APEX-AI",
+        "name": "EVEN ODD APEX AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-EVEN-ODD-APEX-AI-xml"
+    },
+    {
+        "id": "chichitraders2-Even-Odd-Auto-Scanner",
+        "name": "Even Odd Auto Scanner",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-Even-Odd-Auto-Scanner-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-FALL-AUTOSRIKE-AI-by-chichi-1",
+        "name": "RISE FALL AUTOSRIKE AI by chichi 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/ai/chichitraders2-RISE-FALL-AUTOSRIKE-AI-by-chichi-1-xml"
+    },
+    {
+        "id": "chichitraders2-2-PREDICTIONS-BOT-with-no-entry-1",
+        "name": "2 PREDICTIONS BOT with no entry 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-2-PREDICTIONS-BOT-with-no-entry-1-xml"
+    },
+    {
+        "id": "chichitraders2-ADVANCED-GOLD-MINER-2-Prediction-With-Entry-1",
+        "name": "ADVANCED GOLD MINER 2 Prediction With Entry 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-ADVANCED-GOLD-MINER-2-Prediction-With-Entry-1-xml"
+    },
+    {
+        "id": "chichitraders2-ASIANS-SPEED-BOT-updated-version-1",
+        "name": "ASIANS SPEED BOT updated version 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-ASIANS-SPEED-BOT-updated-version-1-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-FLIPPER-AI-with-entry",
+        "name": "EVEN ODD FLIPPER AI with entry",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-EVEN-ODD-FLIPPER-AI-with-entry-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-SPEED-BOT-By-CHICHI-1",
+        "name": "EVEN ODD SPEED BOT By CHICHI 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-EVEN-ODD-SPEED-BOT-By-CHICHI-1-xml"
+    },
+    {
+        "id": "chichitraders2-NEW-GOLD-MINER-VERSION-2-3entries",
+        "name": "NEW GOLD MINER VERSION 2 3entries",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-NEW-GOLD-MINER-VERSION-2-3entries-xml"
+    },
+    {
+        "id": "chichitraders2-ONLY-UPS-ONLY-DOWNS-BOT-updated-version-1",
+        "name": "ONLY UPS ONLY DOWNS BOT updated version 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-ONLY-UPS-ONLY-DOWNS-BOT-updated-version-1-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-1-RECOVERY-UNDER-5-BOT-1",
+        "name": "OVER 1 RECOVERY UNDER 5 BOT 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-OVER-1-RECOVERY-UNDER-5-BOT-1-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-3-RECOVERY-OVER-4-BOT-1",
+        "name": "OVER 3 RECOVERY OVER 4 BOT 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-OVER-3-RECOVERY-OVER-4-BOT-1-xml"
+    },
+    {
+        "id": "chichitraders2-PHANTOM-OVER-3-UNDER-5-OVER-4-Switch-Bot-2",
+        "name": "PHANTOM OVER 3 UNDER 5 OVER 4 Switch Bot 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-PHANTOM-OVER-3-UNDER-5-OVER-4-Switch-Bot-2-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-FALL-AUTO-SWITCH-BOT-1",
+        "name": "RISE FALL AUTO SWITCH BOT 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-RISE-FALL-AUTO-SWITCH-BOT-1-xml"
+    },
+    {
+        "id": "chichitraders2-SPEED-BOT-by-chichitrades-1",
+        "name": "SPEED BOT by chichitrades 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-SPEED-BOT-by-chichitrades-1-xml"
+    },
+    {
+        "id": "chichitraders2-STEP-INDICES-SPEED-BOT-updated-version-1",
+        "name": "STEP INDICES SPEED BOT updated version 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-STEP-INDICES-SPEED-BOT-updated-version-1-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-6-WITH-RECOVERY-OVER-3-1",
+        "name": "UNDER 6 WITH RECOVERY OVER 3 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-UNDER-6-WITH-RECOVERY-OVER-3-1-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-8-RECOVERY-OVER-4-1",
+        "name": "UNDER 8 RECOVERY OVER 4 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/normal/chichitraders2-UNDER-8-RECOVERY-OVER-4-1-xml"
+    },
+    {
+        "id": "chichitraders2-1-TRADER-AI-BOT-by-chichi",
+        "name": "1 TRADER AI BOT by chichi",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-1-TRADER-AI-BOT-by-chichi-xml"
+    },
+    {
+        "id": "chichitraders2-DIFFERS-OVER-1-REC-OVER-5-AI-1",
+        "name": "DIFFERS OVER 1 REC OVER 5 AI 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-DIFFERS-OVER-1-REC-OVER-5-AI-1-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-KING",
+        "name": "EVEN ODD KING",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-EVEN-ODD-KING-xml"
+    },
+    {
+        "id": "chichitraders2-HIGH-LOW-TICK-AI",
+        "name": "HIGH LOW TICK AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-HIGH-LOW-TICK-AI-xml"
+    },
+    {
+        "id": "chichitraders2-NO-EXECUSES-AI-BOT-Chichitrades",
+        "name": "NO EXECUSES AI BOT Chichitrades",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-NO-EXECUSES-AI-BOT-Chichitrades-xml"
+    },
+    {
+        "id": "chichitraders2-ONLY-UPS-DOWNS-AI",
+        "name": "ONLY UPS DOWNS AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-ONLY-UPS-DOWNS-AI-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-MASTER-AI",
+        "name": "OVER MASTER AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-OVER-MASTER-AI-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-UNDER-AUTO-AI",
+        "name": "OVER UNDER AUTO AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-OVER-UNDER-AUTO-AI-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-FALL-KING",
+        "name": "RISE FALL KING",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-RISE-FALL-KING-xml"
+    },
+    {
+        "id": "chichitraders2-STEP-INDICES-QUANTUM-AI",
+        "name": "STEP INDICES QUANTUM AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-STEP-INDICES-QUANTUM-AI-xml"
+    },
+    {
         "id": "dalembert_max-stake",
         "name": "dalembert max stake",
         "creator": "Official",
@@ -5415,6 +5607,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "exwager",
         "label": "exwager",
         "count": 33
+    },
+    {
+        "id": "chichitraders2",
+        "label": "chichitraders2",
+        "count": 32
     },
     {
         "id": "dbtraders",

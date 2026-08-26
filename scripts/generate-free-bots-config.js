@@ -26,12 +26,10 @@ const collectXml = dirPath => {
 const files = collectXml(dir);
 
 // Creators that group community bots; anything else is an "Official" built-in.
-const KNOWN_CREATORS = new Set([
-    'mkorean', 'money8gg', 'traderkit', 'osam', 'exwager',
+const KNOWN_CREATORS = new Set([    'mkorean', 'money8gg', 'traderkit', 'osam', 'exwager',
     'dbtraders', 'dollarprinter', 'dbotspace', 'signal', 'ai',
     'newlyadded', 'tradepro', 'dbx', 'dtraderdbot', 'globaltrades', 'githinji', 'binaryentry',
-    'jmtraders', 'chichitraders', 'isaacmrdollars', 'denarapro', 'dbotzone',
-    'prodbot',
+    'jmtraders', 'chichitraders', 'chichitraders2', 'isaacmrdollars', 'denarapro', 'dbotzone', 'prodbot',
 ]);
 
 const toDisplay = raw =>
