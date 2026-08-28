@@ -639,6 +639,66 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "dbotspace-free-UNDER8_R67-PRO-xml"
     },
     {
+        "id": "dbotweb-ADVANCED-DIFFERS-2-2",
+        "name": "ADVANCED DIFFERS 2 2",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-ADVANCED-DIFFERS-2-2-xml"
+    },
+    {
+        "id": "dbotweb-ADVANCED-O-U-J2-1",
+        "name": "ADVANCED O U J2 1",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-ADVANCED-O-U-J2-1-xml"
+    },
+    {
+        "id": "dbotweb-EVEN-Autobot-1",
+        "name": "EVEN Autobot 1",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-EVEN-Autobot-1-xml"
+    },
+    {
+        "id": "dbotweb-MENTORSHIP-2-1",
+        "name": "MENTORSHIP 2 1",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-MENTORSHIP-2-1-xml"
+    },
+    {
+        "id": "dbotweb-ODD-Autobot-1-1",
+        "name": "ODD Autobot 1 1",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-ODD-Autobot-1-1-xml"
+    },
+    {
+        "id": "dbotweb-OVER-UNDER-AUTOBOT",
+        "name": "OVER UNDER AUTOBOT",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-OVER-UNDER-AUTOBOT-xml"
+    },
+    {
+        "id": "dbotweb-PATEL-with-Entry",
+        "name": "PATEL with Entry",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-PATEL-with-Entry-xml"
+    },
+    {
+        "id": "dbotweb-Raziel-Over-Under",
+        "name": "Raziel Over Under",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-Raziel-Over-Under-xml"
+    },
+    {
+        "id": "dbotweb-Reborn-HnR-1",
+        "name": "Reborn HnR 1",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-Reborn-HnR-1-xml"
+    },
+    {
+        "id": "dbotweb-SV-Switcher",
+        "name": "SV Switcher",
+        "creator": "dbotweb",
+        "file": "dbotweb/dbotweb-SV-Switcher-xml"
+    },
+    {
         "id": "dbotzone-Auto-O5-U4",
         "name": "Auto O5 U4",
         "creator": "dbotzone",
@@ -5652,6 +5712,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "jmtraders",
         "label": "jmtraders",
         "count": 16
+    },
+    {
+        "id": "dbotweb",
+        "label": "dbotweb",
+        "count": 10
     },
     {
         "id": "tradepro",
