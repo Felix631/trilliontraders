@@ -29,8 +29,10 @@ const files = collectXml(dir);
 const KNOWN_CREATORS = new Set([    'mkorean', 'money8gg', 'traderkit', 'osam', 'exwager',
     'dbtraders', 'dollarprinter', 'dbotspace', 'signal', 'ai',
     'newlyadded', 'tradepro', 'dbx', 'dtraderdbot', 'globaltrades', 'githinji', 'binaryentry',
-    'jmtraders', 'chichitraders', 'chichitraders2', 'isaacmrdollars', 'denarapro', 'dbotzone', 'prodbot',
+    'jmtraders',    'chichitraders', 'chichitraders2', 'isaacmrdollars', 'denarapro', 'dbotzone', 'prodbot',
     'dbotweb',
+    'binarypro', 'derivbots', 'superfree', 'orstac',
+    'new-bots',
 ]);
 
 const toDisplay = raw =>
@@ -47,10 +49,33 @@ const bots = files.map(file => {
     const rel = path.relative(dir, file);
     const fileBase = rel.replace(/\.xml$/, '');
     const chunk = path.basename(fileBase).replace(/-xml$/, '');
-    const first = chunk.split('-')[0];
-    const isKnown = KNOWN_CREATORS.has(first);
-    const creator = isKnown ? first : 'Official';
-    const rest = isKnown ? chunk.slice(first.length + 1) : chunk;
+
+    // Creator detection: check directory segments first (for new-bots/ subfolders)
+    const parts = rel.split(path.sep);
+    let creator = 'Official';
+    let rest = chunk;
+    if (parts.length > 1) {
+        // Check the immediate parent folder as creator
+        const parentDir = parts[parts.length - 2];
+        const parentFirst = parentDir.split(/[_-]/)[0];
+        if (KNOWN_CREATORS.has(parentDir) || KNOWN_CREATORS.has(parentFirst)) {
+            creator = KNOWN_CREATORS.has(parentDir) ? parentDir : parentFirst;
+            rest = chunk;
+        } else {
+            // Fall back to filename-based detection
+            const first = chunk.split('-')[0];
+            if (KNOWN_CREATORS.has(first)) {
+                creator = first;
+                rest = chunk.slice(first.length + 1);
+            }
+        }
+    } else {
+        const first = chunk.split('-')[0];
+        if (KNOWN_CREATORS.has(first)) {
+            creator = first;
+            rest = chunk.slice(first.length + 1);
+        }
+    }
     return {
         id: chunk,
         name: toDisplay(rest),
