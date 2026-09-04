@@ -453,6 +453,18 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/no-analysis/chichitraders2-DIGIT-PRO-V1-xml"
     },
     {
+        "id": "chichitraders2-digit-sniper",
+        "name": "digit sniper",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-digit-sniper-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-SWITCHER",
+        "name": "EVEN ODD SWITCHER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-SWITCHER-xml"
+    },
+    {
         "id": "chichitraders2-EVEN-PAARTERN-ANALYSIIS",
         "name": "EVEN PAARTERN ANALYSIIS",
         "creator": "chichitraders2",
@@ -8818,7 +8830,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "chichitraders2",
         "label": "chichitraders2",
-        "count": 36
+        "count": 38
     },
     {
         "id": "mkorean",
