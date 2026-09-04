@@ -48,6 +48,7 @@ import { useDevice } from '@deriv-com/ui';
 import RunPanel from '../../components/run-panel';
 import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import DTrader from '../dashboard/dtrader';
+import DigitKiller from '../dashboard/digit-killer';
 import ChartModal from '../chart/chart-modal';
 import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
@@ -103,6 +104,8 @@ const AppWrapper = observer(() => {
         'bot_builder',
         'chart',
         'tutorial',
+        'dtrader',
+        'analysis-2',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -579,6 +582,21 @@ const AppWrapper = observer(() => {
                                 id='id-dtrader'
                             >
                                 <DTrader />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedSearchCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Analysis 2' />
+                                    </>
+                                }
+                                id='id-analysis-2'
+                            >
+                                <DigitKiller />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}
