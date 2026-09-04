@@ -8581,6 +8581,150 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "WIZARD UnderoverAutoswitch",
         "creator": "traderkit",
         "file": "traderkit-WIZARD-UnderoverAutoswitch-xml"
+    },
+    {
+        "id": "tradesclub-7-2025",
+        "name": "tradesclub 7 2025",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-7-2025-xml"
+    },
+    {
+        "id": "tradesclub-Derivwizard-2",
+        "name": "tradesclub Derivwizard 2",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Derivwizard-2-xml"
+    },
+    {
+        "id": "tradesclub-Dollarflipper-(1)",
+        "name": "tradesclub Dollarflipper (1)",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Dollarflipper-(1)-xml"
+    },
+    {
+        "id": "tradesclub-Dstrike-2",
+        "name": "tradesclub Dstrike 2",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Dstrike-2-xml"
+    },
+    {
+        "id": "tradesclub-EVEN-ODD-MYTH-V1",
+        "name": "tradesclub EVEN ODD MYTH V1",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-EVEN-ODD-MYTH-V1-xml"
+    },
+    {
+        "id": "tradesclub-Hu-Rm-YSPEEDBOTPROv-2",
+        "name": "tradesclub Hu Rm YSPEEDBOTPROv 2",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Hu-Rm-YSPEEDBOTPROv-2-xml"
+    },
+    {
+        "id": "tradesclub-Martingale-Matches-Differs",
+        "name": "tradesclub Martingale Matches Differs",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Martingale-Matches-Differs-xml"
+    },
+    {
+        "id": "tradesclub-Masterbinary-V10",
+        "name": "tradesclub Masterbinary V10",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Masterbinary-V10-xml"
+    },
+    {
+        "id": "tradesclub-MATCHES-PRO-BOT",
+        "name": "tradesclub MATCHES PRO BOT",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-MATCHES-PRO-BOT-xml"
+    },
+    {
+        "id": "tradesclub-MIKethe-G",
+        "name": "tradesclub MIKethe G",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-MIKethe-G-xml"
+    },
+    {
+        "id": "tradesclub-NOVAGRID-2026",
+        "name": "tradesclub NOVAGRID 2026",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-NOVAGRID-2026-xml"
+    },
+    {
+        "id": "tradesclub-Over-2-Rec-Over-4",
+        "name": "tradesclub Over 2 Rec Over 4",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Over-2-Rec-Over-4-xml"
+    },
+    {
+        "id": "tradesclub-Over-Destroyer-v2",
+        "name": "tradesclub Over Destroyer v2",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Over-Destroyer-v2-xml"
+    },
+    {
+        "id": "tradesclub-Over-Destroyer",
+        "name": "tradesclub Over Destroyer",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Over-Destroyer-xml"
+    },
+    {
+        "id": "tradesclub-PATEL-With-Entry-(v2)-(1)",
+        "name": "tradesclub PATEL With Entry (v2) (1)",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-PATEL-With-Entry-(v2)-(1)-xml"
+    },
+    {
+        "id": "tradesclub-Poverty-destroyer",
+        "name": "tradesclub Poverty destroyer",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Poverty-destroyer-xml"
+    },
+    {
+        "id": "tradesclub-Rise-Fallswitcher-Bot",
+        "name": "tradesclub Rise Fallswitcher Bot",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Rise-Fallswitcher-Bot-xml"
+    },
+    {
+        "id": "tradesclub-STATESDigit-Switcher",
+        "name": "tradesclub STATESDigit Switcher",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-STATESDigit-Switcher-xml"
+    },
+    {
+        "id": "tradesclub-UNDER-7-UNDER-5",
+        "name": "tradesclub UNDER 7 UNDER 5",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-UNDER-7-UNDER-5-xml"
+    },
+    {
+        "id": "tradesclub-UNDER-8-UNDER-6",
+        "name": "tradesclub UNDER 8 UNDER 6",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-UNDER-8-UNDER-6-xml"
+    },
+    {
+        "id": "tradesclub-Under-Destroyer-(1)",
+        "name": "tradesclub Under Destroyer (1)",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Under-Destroyer-(1)-xml"
+    },
+    {
+        "id": "tradesclub-Under-Destroyer-v2",
+        "name": "tradesclub Under Destroyer v2",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Under-Destroyer-v2-xml"
+    },
+    {
+        "id": "tradesclub-Under-Over-Auto-Switch",
+        "name": "tradesclub Under Over Auto Switch",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Under-Over-Auto-Switch-xml"
+    },
+    {
+        "id": "tradesclub-Vx-(1)",
+        "name": "tradesclub Vx (1)",
+        "creator": "tradesclub",
+        "file": "tradesclub/tradesclub-Vx-(1)-xml"
     }
 ];
 
@@ -8648,6 +8792,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "newlyadded",
         "label": "newlyadded",
+        "count": 24
+    },
+    {
+        "id": "tradesclub",
+        "label": "tradesclub",
         "count": 24
     },
     {

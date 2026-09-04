@@ -1,0 +1,400 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="EU`dNCgb$,=R_9u9+!Yn">initial stake</variable>
+    <variable id="]x78_%%IA#5.8_R1A=S,">first_contract</variable>
+    <variable id="B2PY]T0NxFNOg}*+O%gy">Take profit</variable>
+    <variable id="C?nsCTg]F5~N6hNRg:.+">Stop loss</variable>
+    <variable id="wP6U3]k[CjU]q~s.u2~h">martingale stake</variable>
+    <variable id="Qya`xHj}{*[-ME7:,/5s">prediction</variable>
+    <variable id="4NFN,u.]mb+@:3SMU+U0">martingale size</variable>
+    <variable id="i.g:VOEQdnT`,eD)bq+K">prediction_1</variable>
+    <variable id="o`2t7YBge|lOXuW0ThB6">prediction 2</variable>
+    <variable id="zXlP21zi,Tans4PWlf[%">entry_point</variable>
+  </variables>
+  <block type="trade_definition" id="P?l-K.%[P3zbeL!1H#%(" deletable="false" x="0" y="110">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="y]n({obi|W:PbM6=MoO[" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ25V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="s%Q=w,o$1D2)}k@@u{;]" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="ge^L!XX{z#P?7.9;#Y0S" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="+|6Yj~6;8hS5Vg{naBMk" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="[dc~X`po15:HNYm^$?Q5" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="$sZW*@c#7a6f`P]WH@{z" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="L)b1p#dJCd1cqzIs.)2X">
+        <field name="VAR" id="EU`dNCgb$,=R_9u9+!Yn">initial stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="k#hzmigayS3pgbDz=Xg-">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="EV*5VeUBO+DIenak_zf@">
+            <field name="VAR" id="B2PY]T0NxFNOg}*+O%gy">Take profit</field>
+            <value name="VALUE">
+              <block type="math_number" id="LSWa/q{v2-vLwo3?[26F">
+                <field name="NUM">10</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="7|-4F/}vGIi_V*AmW;K_">
+                <field name="VAR" id="C?nsCTg]F5~N6hNRg:.+">Stop loss</field>
+                <value name="VALUE">
+                  <block type="math_number" id="9k5[30zcjXFnf.w/)Ooo">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="#tl%z7QxmrTid!p7N{Uc">
+                    <field name="VAR" id="wP6U3]k[CjU]q~s.u2~h">martingale stake</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="gMEZf6i)}K=~_^8/;epy">
+                        <field name="VAR" id="EU`dNCgb$,=R_9u9+!Yn">initial stake</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="j#|W5nFxJ}`~i;#`1W`k">
+                        <field name="VAR" id="4NFN,u.]mb+@:3SMU+U0">martingale size</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="dh1{`g*?r@Frnne(lJGY">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="ydQ}8(seQpdNF5?dmYOm">
+                            <field name="VAR" id="i.g:VOEQdnT`,eD)bq+K">prediction_1</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="%o-6s]=#l2qmKb=E7Bow">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="rUJw=7A=OYm;RlO4hE;:">
+                                <field name="VAR" id="o`2t7YBge|lOXuW0ThB6">prediction 2</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="2sq/L)i+m~LtFD1w3hGC">
+                                    <field name="NUM">3</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="nrFRr*DTyf0BDnq*1LI;">
+                                    <field name="VAR" id="Qya`xHj}{*[-ME7:,/5s">prediction</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id=")Y21o[.oWru*H{5U),:K">
+                                        <field name="VAR" id="i.g:VOEQdnT`,eD)bq+K">prediction_1</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="variables_set" id=".G(,M*^hs;qk4LY3G.4L">
+                                        <field name="VAR" id="zXlP21zi,Tans4PWlf[%">entry_point</field>
+                                        <value name="VALUE">
+                                          <block type="math_number" id="(gq=e@d0q1hz}#rZ2QLg">
+                                            <field name="NUM">2</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" id="^T)e8%|H8y:c[S5%Xa`/">
+                                            <field name="VAR" id="]x78_%%IA#5.8_R1A=S,">first_contract</field>
+                                            <value name="VALUE">
+                                              <block type="logic_null" id="[xUziot-}q4.toonSb7n"></block>
+                                            </value>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="controls_if" id="1Ae!XNg}*TihL~x-0a9V" collapsed="true">
+        <value name="IF0">
+          <block type="logic_compare" id="x?SB[9TO{MH2FmMwyqfx">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="N=jX7k;rFuA7,+m@Uh]|">
+                <field name="VAR" id="]x78_%%IA#5.8_R1A=S,">first_contract</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_null" id="09%d(5*%[%PfhIjQdktg"></block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="controls_repeat_ext" id="Bu#!XC1Q-(7AwU[{j9FF">
+            <value name="TIMES">
+              <block type="math_constant" id="b,QnS$iJSz[EJau:g8D{">
+                <field name="CONSTANT">INFINITY</field>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="timeout" id="Q{U.H[MVkU`aCaV6hyF^">
+                <statement name="TIMEOUTSTACK">
+                  <block type="notify" id=".LhtJ,:joI|Au[C9-$Cc">
+                    <field name="NOTIFICATION_TYPE">info</field>
+                    <field name="NOTIFICATION_SOUND">silent</field>
+                    <value name="MESSAGE">
+                      <shadow type="text" id="4~;,?^-bj%,+A[l;hYbP">
+                        <field name="TEXT">abc</field>
+                      </shadow>
+                      <block type="last_digit" id="y71R$K?%_m]ANl)Zof4X"></block>
+                    </value>
+                    <next>
+                      <block type="controls_if" id="(=UTEZJ~$[]FlZ8TNyd^">
+                        <value name="IF0">
+                          <block type="logic_compare" id="LW[wVrPdVP:k1?n0:CKu">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="last_digit" id="rOoH`_MH;E@U7~aT1j76"></block>
+                            </value>
+                            <value name="B">
+                              <block type="variables_get" id="Sl$(fJdXtV+0zaKvfOnj">
+                                <field name="VAR" id="zXlP21zi,Tans4PWlf[%">entry_point</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="controls_flow_statements" id="SH:?n,R0rKAPfPt;qw2A">
+                            <field name="FLOW">BREAK</field>
+                          </block>
+                        </statement>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <value name="SECONDS">
+                  <block type="math_number" id="SYsY_ylaCk(m3znVj4H(">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_definition_tradeoptions" id="LhHPY-^D0vMN{M%N`W3q">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+            <field name="DURATIONTYPE_LIST">t</field>
+            <value name="DURATION">
+              <shadow type="math_number_positive" id="%aEb%85o@v$Ll/fwZ)|]">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="AMOUNT">
+              <shadow type="math_number_positive" id="e6qD{].jT^yw@(%*n790">
+                <field name="NUM">0.35</field>
+              </shadow>
+              <block type="variables_get" id="v/=|82L]gx(rQS~WmG+e">
+                <field name="VAR" id="wP6U3]k[CjU]q~s.u2~h">martingale stake</field>
+              </block>
+            </value>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="pmm=eaUI*9f/,VTD]17L" inline="true">
+                <field name="NUM">0.35</field>
+              </shadow>
+              <block type="variables_get" id="vj}K9O2P,+PJVCY=w_dQ">
+                <field name="VAR" id="Qya`xHj}{*[-ME7:,/5s">prediction</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="during_purchase" id="E3*=@|zloP]4I7Rj/QOe" x="781" y="110">
+    <statement name="DURING_PURCHASE_STACK">
+      <block type="controls_if" id="X,3qr{+A~AXm2RHrrAsV">
+        <value name="IF0">
+          <block type="check_sell" id="lf|%#c#X-NjVc9MPjdEK"></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="m}zFb9_|pcat}y1VQ{j~" collapsed="true" x="781" y="392">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="variables_set" id="+5S-2y31PyHQ,P`D;ivP">
+        <field name="VAR" id="]x78_%%IA#5.8_R1A=S,">first_contract</field>
+        <value name="VALUE">
+          <block type="logic_boolean" id="i0bZnCVL/1aD1%@wWkkn">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id="UCUjVt[H=[caH/E,x*kM" collapsed="true">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="contract_check_result" id="=_;[:g6_e]l-{e9Yxh;G">
+                <field name="CHECK_RESULT">win</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="?2Z0M}.]%]~1W#b2XS3N">
+                <field name="VAR" id="wP6U3]k[CjU]q~s.u2~h">martingale stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="V9Qm)x5r35:dA[dLkL,w">
+                    <field name="VAR" id="EU`dNCgb$,=R_9u9+!Yn">initial stake</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="@nMw^.aO.Q*}Pu9TVsJ0">
+                    <field name="VAR" id="Qya`xHj}{*[-ME7:,/5s">prediction</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="hPu[jZ~BQ3Y|NK8CG2MJ">
+                        <field name="VAR" id="i.g:VOEQdnT`,eD)bq+K">prediction_1</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="variables_set" id="pVCYZ28!z*34~7I!R8gn">
+                <field name="VAR" id="wP6U3]k[CjU]q~s.u2~h">martingale stake</field>
+                <value name="VALUE">
+                  <block type="math_arithmetic" id="g6Gwr2G7U|[T2h[aJE_v">
+                    <field name="OP">MULTIPLY</field>
+                    <value name="A">
+                      <shadow type="math_number" id="o(30if{ra/4%pNwfZN67">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="m4VMS5sbkwQ|f/L^e8.M">
+                        <field name="VAR" id="wP6U3]k[CjU]q~s.u2~h">martingale stake</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <shadow type="math_number" id=")Gy=/V$,=546fOZkjel[">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="[uT^4|o^P%W=epk5NvXs">
+                        <field name="VAR" id="4NFN,u.]mb+@:3SMU+U0">martingale size</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="3v8Xv8eCmv9%=2[/O)TE">
+                    <field name="VAR" id="Qya`xHj}{*[-ME7:,/5s">prediction</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="w_(zmu^]_IA:.iw6{uM$">
+                        <field name="VAR" id="o`2t7YBge|lOXuW0ThB6">prediction 2</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="}][Z$B*lJ3mMc+X:l(}C">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="IJvc5@0PgbRVi}Kb^HUp">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="xcFepCrI%jZM8pV@:,/-"></block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="D3(?mo6{o7q5cpQn-8rm">
+                        <field name="VAR" id="B2PY]T0NxFNOg}*+O%gy">Take profit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_print" id="|8,PW1n)mzy0H,^Oy`{3">
+                    <value name="TEXT">
+                      <shadow type="text" id="5I(0,EkCp#1.IG[Bj*[:">
+                        <field name="TEXT">✅ TP locked in 📈💵 Very nais 🔥🚀</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="logic_compare" id="3^.s*;P8/l/!@$lo|POw">
+                    <field name="OP">LTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="]kZ=AE9jd*0`9P:0%sE^"></block>
+                    </value>
+                    <value name="B">
+                      <block type="math_single" id="SHy7F^Yj!OJ.#o]8u8#n">
+                        <field name="OP">NEG</field>
+                        <value name="NUM">
+                          <shadow type="math_number" id="MJjVjO`Rr6fR#hH$zSj}">
+                            <field name="NUM">9</field>
+                          </shadow>
+                          <block type="variables_get" id="!dAN-lVT)bu?(,!YP]qo">
+                            <field name="VAR" id="C?nsCTg]F5~N6hNRg:.+">Stop loss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="text_print" id="-L^C4h55;;LYYI+dLWdt">
+                    <value name="TEXT">
+                      <shadow type="text" id="(J`AY=%cL|ORTFj5C]:n">
+                        <field name="TEXT">❌ SL HITTED 💔📉 We Try again💪</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="trade_again" id="9o0+Q|NGd*FV2:r=Z@|q"></block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="8bwN[FRn]B,tSLh_N}@)" deletable="false" x="0" y="1256">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="purchase" id="txh5kAgD@L0]ikEuFKxu">
+        <field name="PURCHASE_LIST">DIGITOVER</field>
+      </block>
+    </statement>
+  </block>
+  <block type="math_number" id=",OwCo_Nit^,`Jv4H+lZO" disabled="true" x="0" y="1432">
+    <field name="NUM">1</field>
+  </block>
+</xml>
