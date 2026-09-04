@@ -435,6 +435,72 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/ai/chichitraders2-RISE-FALL-AUTOSRIKE-AI-by-chichi-1-xml"
     },
     {
+        "id": "chichitraders2-APEX-SWITCHER",
+        "name": "APEX SWITCHER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-APEX-SWITCHER-xml"
+    },
+    {
+        "id": "chichitraders2-BINARY-MATRIX-AI",
+        "name": "BINARY MATRIX AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-BINARY-MATRIX-AI-xml"
+    },
+    {
+        "id": "chichitraders2-DIGIT-PRO-V1",
+        "name": "DIGIT PRO V1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-DIGIT-PRO-V1-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-PAARTERN-ANALYSIIS",
+        "name": "EVEN PAARTERN ANALYSIIS",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-PAARTERN-ANALYSIIS-xml"
+    },
+    {
+        "id": "chichitraders2-INFINITY-ALGO",
+        "name": "INFINITY ALGO",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-INFINITY-ALGO-xml"
+    },
+    {
+        "id": "chichitraders2-NDER-DESTROYER",
+        "name": "NDER DESTROYER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-NDER-DESTROYER-xml"
+    },
+    {
+        "id": "chichitraders2-NO-ANALYSIS",
+        "name": "NO ANALYSIS",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-NO-ANALYSIS-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-DESTROYER",
+        "name": "OVER DESTROYER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-OVER-DESTROYER-xml"
+    },
+    {
+        "id": "chichitraders2-THE-DGT",
+        "name": "THE DGT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-THE-DGT-xml"
+    },
+    {
+        "id": "chichitraders2-WORLD-ROLLER-2",
+        "name": "WORLD ROLLER 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-WORLD-ROLLER-2-xml"
+    },
+    {
+        "id": "chichitraders2-WORLD-ROLLER-7",
+        "name": "WORLD ROLLER 7",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-WORLD-ROLLER-7-xml"
+    },
+    {
         "id": "chichitraders2-2-PREDICTIONS-BOT-with-no-entry-1",
         "name": "2 PREDICTIONS BOT with no entry 1",
         "creator": "chichitraders2",
@@ -8750,6 +8816,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 39
     },
     {
+        "id": "chichitraders2",
+        "label": "chichitraders2",
+        "count": 36
+    },
+    {
         "id": "mkorean",
         "label": "mkorean",
         "count": 36
@@ -8778,11 +8849,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "orstac",
         "label": "orstac",
         "count": 31
-    },
-    {
-        "id": "chichitraders2",
-        "label": "chichitraders2",
-        "count": 25
     },
     {
         "id": "dbtraders",
