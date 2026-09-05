@@ -1,4 +1,6 @@
-.dk {
+// Digit Killer palette — shared with the `.dk-theme` overlay applied to the
+// Analyzer / Analysis Tool tabs so all analysis pages share one look.
+%dk-palette {
     --dk-bg: #0f1923;
     --dk-card: #1a2634;
     --dk-card-hover: #1e2d3d;
@@ -9,12 +11,21 @@
     --dk-accent-glow: rgba(0, 212, 170, 0.15);
     --dk-danger: #ef4444;
     --dk-warning: #f59e0b;
+    --dk-info: #3b82f6;
+    --dk-silver: #94a3b8;
     --dk-ready: #10b981;
     --dk-watching: #3b82f6;
     --dk-idle: #64748b;
     --dk-radius: 10px;
     --dk-radius-sm: 6px;
+}
 
+.dk,
+.dk-theme {
+    @extend %dk-palette;
+}
+
+.dk {
     background: var(--dk-bg);
     color: var(--dk-text);
     min-height: 100%;
@@ -22,14 +33,16 @@
     overflow-x: hidden;
     padding: 16px;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
 
+    // ---- Header -----------------------------------------------------------
     &__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 12px;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
     }
 
     &__title {
@@ -63,6 +76,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        color: var(--dk-text-dim);
 
         &--live .dk__status-dot {
             background: var(--dk-ready);
@@ -82,18 +96,45 @@
         animation: dk-pulse 2s infinite;
     }
 
-    &__select {
-        background: var(--dk-card);
-        border: 1px solid var(--dk-border);
-        color: var(--dk-text);
-        padding: 5px 10px;
-        border-radius: var(--dk-radius-sm);
-        font-size: 12px;
-        cursor: pointer;
-        outline: none;
+    &__window {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--dk-text-dim);
+    }
 
-        &:focus {
-            border-color: var(--dk-accent);
+    &__ticks-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        input[type='number'] {
+            width: 64px;
+            background: var(--dk-card);
+            color: var(--dk-text);
+            border: 1px solid var(--dk-border);
+            border-radius: var(--dk-radius-sm);
+            padding: 5px 8px;
+            font-size: 12px;
+            font-variant-numeric: tabular-nums;
+            text-align: center;
+            outline: none;
+
+            &:focus {
+                border-color: var(--dk-accent);
+            }
+        }
+
+        select {
+            background: var(--dk-card);
+            color: var(--dk-text);
+            border: 1px solid var(--dk-border);
+            border-radius: var(--dk-radius-sm);
+            padding: 5px 8px;
+            font-size: 12px;
+            outline: none;
+            cursor: pointer;
         }
     }
 
@@ -114,13 +155,47 @@
         }
     }
 
-    // Strategy tabs
+    // ---- Settings ---------------------------------------------------------
+    &__settings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px 16px;
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        border-radius: var(--dk-radius);
+        padding: 12px 16px;
+        margin-bottom: 16px;
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--dk-text-dim);
+
+            input[type='number'] {
+                background: var(--dk-bg);
+                border: 1px solid var(--dk-border);
+                color: var(--dk-text);
+                padding: 5px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                outline: none;
+
+                &:focus {
+                    border-color: var(--dk-accent);
+                }
+            }
+        }
+    }
+
+    // ---- Strategy tabs ----------------------------------------------------
     &__tabs {
         display: flex;
         gap: 6px;
         overflow-x: auto;
         padding-bottom: 4px;
-        margin-bottom: 16px;
+        margin-bottom: 12px;
 
         &::-webkit-scrollbar {
             height: 4px;
@@ -167,97 +242,58 @@
         }
     }
 
-    // Digit circles row
-    &__digits {
-        display: flex;
-        gap: 6px;
-        justify-content: center;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-    }
-
-    &__digit-circle {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3px;
-        min-width: 48px;
-    }
-
-    &__digit-num {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: 700;
-        background: var(--dk-card);
-        border: 2px solid var(--dk-border);
-        transition: all 0.3s;
-        position: relative;
-
-        &--hot {
-            border-color: var(--dk-danger);
-            color: var(--dk-danger);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        &--cold {
-            border-color: var(--dk-idle);
-            color: var(--dk-idle);
-        }
-
-        &--last {
-            border-color: var(--dk-accent);
-            color: var(--dk-accent);
-            background: var(--dk-accent-glow);
-            box-shadow: 0 0 12px rgba(0, 212, 170, 0.3);
-        }
-    }
-
-    &__digit-pct {
-        font-size: 10px;
-        color: var(--dk-text-dim);
-        font-weight: 500;
-    }
-
-    // Strategy description
+    // ---- Strategy description ---------------------------------------------
     &__desc {
         background: var(--dk-card);
         border: 1px solid var(--dk-border);
         border-radius: var(--dk-radius);
-        padding: 12px 16px;
-        margin-bottom: 16px;
+        padding: 10px 14px;
+        margin-bottom: 14px;
         font-size: 12px;
         color: var(--dk-text-dim);
         line-height: 1.5;
-    }
-
-    // Main signal panel
-    &__signal {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        align-items: center;
         gap: 12px;
-        margin-bottom: 16px;
+        flex-wrap: wrap;
 
-        @media (max-width: 640px) {
-            grid-template-columns: 1fr;
+        strong {
+            color: var(--dk-text);
         }
     }
 
-    &__signal-card {
+    &__desc-ready {
+        font-style: normal;
+        margin-left: auto;
+        color: var(--dk-ready);
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    // ---- Volatility market boxes ------------------------------------------
+    &__markets {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+        gap: 14px;
+        padding-bottom: 8px;
+    }
+
+    &__market {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         background: var(--dk-card);
         border: 1px solid var(--dk-border);
-        border-radius: var(--dk-radius);
-        padding: 16px;
-        position: relative;
-        overflow: hidden;
+        border-radius: 14px;
+        padding: 14px;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
         &--ready {
             border-color: var(--dk-ready);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.14);
         }
 
         &--watching {
@@ -265,28 +301,280 @@
         }
     }
 
-    &__signal-label {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: var(--dk-text-dim);
-        margin-bottom: 8px;
-    }
-
-    &__confidence {
+    &__market-head {
         display: flex;
-        align-items: baseline;
-        gap: 6px;
-        margin-bottom: 8px;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
     }
 
-    &__confidence-value {
-        font-size: 36px;
-        font-weight: 800;
-        line-height: 1;
-        color: var(--dk-accent);
+    &__market-id {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
 
+        strong {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dk-text);
+        }
+
+        span {
+            font-size: 10.5px;
+            color: var(--dk-text-dim);
+        }
+    }
+
+    &__market-last {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        position: relative;
+        padding: 2px 10px;
+    }
+
+    &__market-digit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        font-weight: 800;
+        background: var(--dk-accent-glow);
+        color: var(--dk-accent);
+        border: 2px solid var(--dk-accent);
+        box-shadow: 0 0 12px rgba(0, 212, 170, 0.25);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Upward-pointing triangular pointer under the last digit.
+    &__market-pointer {
+        width: 0;
+        height: 0;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 9px solid var(--dk-accent);
+        animation: dk-pointer-bob 1s ease-in-out infinite alternate;
+    }
+
+    &__market-quote {
+        font-size: 10px;
+        color: var(--dk-text-dim);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // ---- DigitShares theming inside the dark box ---------------------------
+    .digit-shares {
+        gap: 0.35rem;
+
+        &--sm &__circle {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        &--sm &__pct {
+            font-size: 0.7rem;
+        }
+
+        &__circle {
+            &::before {
+                background: var(--dk-card);
+            }
+
+            &.is-last {
+                box-shadow: 0 0 0.55rem rgba(0, 212, 170, 0.7);
+
+                &::before {
+                    background: var(--dk-accent-glow);
+                }
+
+                .digit-shares__digit {
+                    color: var(--dk-accent);
+                }
+            }
+        }
+
+        &__digit {
+            color: var(--dk-text);
+            font-size: 0.78rem;
+        }
+
+        &__pct {
+            color: var(--dk-text-dim);
+            font-size: 0.62rem;
+        }
+
+        &__pointer {
+            border-bottom-color: var(--dk-accent);
+        }
+    }
+
+    // ---- Probability entries ----------------------------------------------
+    &__entries {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex: 1 1 auto;
+    }
+
+    &__entries-empty {
+        font-size: 11px;
+        color: var(--dk-text-dim);
+        padding: 8px 2px;
+    }
+
+    &__entry {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &-label {
+            flex: 0 0 58px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--dk-text);
+        }
+
+        &-bar {
+            flex: 1 1 auto;
+            height: 7px;
+            border-radius: 4px;
+            background: rgba(148, 163, 184, 0.16);
+            overflow: hidden;
+        }
+
+        &-fill {
+            display: block;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.45s ease, background 0.3s ease;
+
+            &--low {
+                background: var(--dk-idle);
+            }
+
+            &--mid {
+                background: linear-gradient(90deg, var(--dk-warning), #f97316);
+            }
+
+            &--mid-high {
+                background: linear-gradient(90deg, var(--dk-accent), #22d3ee);
+            }
+
+            &--high {
+                background: linear-gradient(90deg, var(--dk-ready), var(--dk-accent));
+            }
+        }
+
+        &-prob {
+            flex: 0 0 40px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+
+            &--low {
+                color: var(--dk-idle);
+            }
+
+            &--mid {
+                color: var(--dk-warning);
+            }
+
+            &--mid-high {
+                color: #22d3ee;
+            }
+
+            &--high {
+                color: var(--dk-ready);
+            }
+        }
+
+        &-target {
+            flex: 0 0 auto;
+            font-size: 8.5px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 2px 6px;
+            border-radius: 9px;
+            background: rgba(148, 163, 184, 0.14);
+            color: var(--dk-text-dim);
+        }
+
+        &--ready .dk__entry-target {
+            background: rgba(16, 185, 129, 0.16);
+            color: var(--dk-ready);
+            animation: dk-glow 1.5s infinite;
+        }
+
+        &--watching {
+            .dk__entry-label {
+                color: var(--dk-info);
+            }
+        }
+    }
+
+    // ---- Market footer: confidence + time-to-trade ------------------------
+    &__market-foot {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        align-items: end;
+        padding-top: 2px;
+    }
+
+    &__market-conf {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        > span {
+            font-size: 9.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dk-text-dim);
+        }
+
+        strong {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &__market-time {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+
+        > span {
+            font-size: 9.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dk-text-dim);
+        }
+
+        strong {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dk-text);
+
+            &.dk__market-time--ready {
+                color: var(--dk-ready);
+                animation: dk-pulse 1s infinite;
+            }
+        }
+    }
+
+    // ---- Shared confidence styles -----------------------------------------
+    &__confidence-value {
         &--low {
             color: var(--dk-idle);
         }
@@ -295,119 +583,61 @@
             color: var(--dk-warning);
         }
 
+        &--mid-high {
+            color: #22d3ee;
+        }
+
         &--high {
             color: var(--dk-ready);
         }
     }
 
-    &__confidence-unit {
-        font-size: 14px;
-        color: var(--dk-text-dim);
-        font-weight: 500;
-    }
-
     &__conf-bar {
         height: 4px;
-        background: var(--dk-border);
+        background: rgba(148, 163, 184, 0.16);
         border-radius: 2px;
         overflow: hidden;
-        margin-bottom: 12px;
+        width: 100%;
 
         span {
             display: block;
             height: 100%;
             border-radius: 2px;
-            transition: width 0.5s ease;
+            transition: width 0.5s ease, background 0.3s ease;
 
-            &.dk__conf-fill--high {
-                background: linear-gradient(90deg, var(--dk-ready), var(--dk-accent));
+            &.dk__conf-fill--low {
+                background: var(--dk-idle);
             }
 
             &.dk__conf-fill--mid {
                 background: linear-gradient(90deg, var(--dk-warning), #f97316);
             }
 
-            &.dk__conf-fill--low {
-                background: var(--dk-idle);
+            &.dk__conf-fill--mid-high {
+                background: linear-gradient(90deg, var(--dk-accent), #22d3ee);
+            }
+
+            &.dk__conf-fill--high {
+                background: linear-gradient(90deg, var(--dk-ready), var(--dk-accent));
             }
         }
     }
 
-    &__winrate {
-        font-size: 12px;
-        color: var(--dk-text-dim);
-        margin-bottom: 4px;
-
-        strong {
-            color: var(--dk-text);
-        }
-    }
-
-    &__reason {
-        font-size: 12px;
-        color: var(--dk-text-dim);
-        line-height: 1.4;
-        padding: 8px 10px;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: var(--dk-radius-sm);
-    }
-
-    // Time to trade panel
-    &__timing {
-        background: var(--dk-card);
-        border: 1px solid var(--dk-border);
-        border-radius: var(--dk-radius);
-        padding: 16px;
-        text-align: center;
-
-        &--ready {
-            border-color: var(--dk-ready);
-            background: rgba(16, 185, 129, 0.05);
-        }
-    }
-
-    &__timing-label {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: var(--dk-text-dim);
-        margin-bottom: 6px;
-    }
-
-    &__timing-value {
-        font-size: 28px;
-        font-weight: 800;
-        color: var(--dk-text);
-        margin-bottom: 4px;
-
-        &--ready {
-            color: var(--dk-ready);
-            animation: dk-pulse 1s infinite;
-        }
-    }
-
-    &__timing-sub {
-        font-size: 11px;
-        color: var(--dk-text-dim);
-    }
-
-    // Trade Now button
+    // ---- Trade Now --------------------------------------------------------
     &__trade-now {
         display: block;
         width: 100%;
-        padding: 14px;
+        padding: 12px;
         background: linear-gradient(135deg, var(--dk-ready), #059669);
         color: #fff;
         border: none;
-        border-radius: var(--dk-radius);
-        font-size: 16px;
+        border-radius: 10px;
+        font-size: 13px;
         font-weight: 700;
         cursor: pointer;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.6px;
         transition: all 0.2s;
-        margin-top: 12px;
 
         &:hover:not(:disabled) {
             transform: translateY(-1px);
@@ -415,17 +645,17 @@
         }
 
         &:disabled {
-            opacity: 0.4;
+            opacity: 0.45;
             cursor: not-allowed;
             background: var(--dk-idle);
         }
     }
 
     &__trade-result {
-        margin-top: 10px;
-        padding: 10px;
+        margin-top: 2px;
+        padding: 9px;
         border-radius: var(--dk-radius-sm);
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
         text-align: center;
 
@@ -448,118 +678,74 @@
         }
     }
 
-    // Strategy cards grid
-    &__cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 12px;
-        margin-bottom: 16px;
-    }
-
-    &__card {
-        background: var(--dk-card);
-        border: 1px solid var(--dk-border);
-        border-radius: var(--dk-radius);
-        padding: 14px;
-        transition: all 0.2s;
-
-        &:hover {
-            border-color: var(--dk-accent);
-        }
-
-        &--ready {
-            border-color: var(--dk-ready);
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.1);
-        }
-
-        &--watching {
-            border-color: var(--dk-watching);
-        }
-    }
-
-    &__card-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-
-    &__card-name {
-        font-size: 13px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    &__card-state {
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 2px 8px;
-        border-radius: 10px;
-
-        &--ready {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--dk-ready);
-        }
-
-        &--watching {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--dk-watching);
-        }
-
-        &--idle {
-            background: rgba(100, 116, 139, 0.15);
-            color: var(--dk-idle);
-        }
-    }
-
-    &__card-conf {
-        display: flex;
-        align-items: baseline;
-        gap: 4px;
-        margin-bottom: 4px;
-    }
-
-    &__card-conf-value {
-        font-size: 22px;
-        font-weight: 800;
-    }
-
-    &__card-conf-unit {
-        font-size: 11px;
-        color: var(--dk-text-dim);
-    }
-
-    &__card-bar {
-        height: 3px;
-        background: var(--dk-border);
-        border-radius: 2px;
-        overflow: hidden;
-        margin-bottom: 6px;
-
-        span {
-            display: block;
-            height: 100%;
-            border-radius: 2px;
-        }
-    }
-
-    &__card-reason {
-        font-size: 11px;
-        color: var(--dk-text-dim);
-        line-height: 1.3;
-    }
-
     @keyframes dk-pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
     }
 
     @keyframes dk-glow {
-        0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.2); }
-        50% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        0%,
+        100% {
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 13px rgba(16, 185, 129, 0.45);
+        }
+    }
+
+    @keyframes dk-pointer-bob {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(2.5px);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Shared Analysis theme overlay (`.dk-theme`) — applied on the Analyzer and
+// Analysis Tool tab wrappers so every analysis page shares the Digit Killer
+// look: dark navy panels, teal accents, consistent text.
+// ---------------------------------------------------------------------------
+.dk-theme {
+    --general-main-1: var(--dk-bg);
+    --general-section-1: var(--dk-card);
+    --general-section-6: var(--dk-border);
+    --general-main-2: var(--dk-card);
+    --text-prominent: var(--dk-text);
+    --text-general: var(--dk-text);
+    --text-less-prominent: var(--dk-text-dim);
+    --border-normal: var(--dk-border);
+    --border-hover: var(--dk-accent);
+    --button-primary-default: var(--dk-accent);
+    --button-primary-hover: var(--dk-accent);
+    --text-profit-success: var(--dk-ready);
+    --text-loss-danger: var(--dk-danger);
+    --site-accent: var(--dk-accent);
+    --site-accent-hover: #0abf9c;
+    --site-accent-soft: rgba(0, 212, 170, 0.12);
+    --site-border: var(--dk-border);
+    --site-info: #38bdf8;
+    --app-page-background: var(--dk-bg);
+    --app-card-background: var(--dk-card);
+    --app-border-color: var(--dk-border);
+    --app-text-title: var(--dk-text);
+    --app-text-muted: var(--dk-text-dim);
+    --brand-success: var(--dk-ready);
+    --brand-warning: var(--dk-warning);
+
+    background: var(--dk-bg);
+    color: var(--dk-text);
+    height: 100%;
+    min-height: 0;
+
+    .digit-shares__circle::before {
+        background: var(--app-card-background);
     }
 }

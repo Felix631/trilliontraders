@@ -433,7 +433,7 @@ const AppWrapper = observer(() => {
                                 }
                                 id='id-analyzer'
                             >
-                                <div className='analyzer-tab'>
+                                <div className='analyzer-tab dk-theme'>
                                     <MatchesAnalysis />
                                 </div>
                             </div>
@@ -450,7 +450,9 @@ const AppWrapper = observer(() => {
                                 }
                                 id='id-scanner'
                             >
-                                <Scanner />
+                                <div className='dk-theme'>
+                                    <Scanner />
+                                </div>
                             </div>
                             <div
                                 label={

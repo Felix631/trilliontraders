@@ -2,6 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import { useDigitAnalysis } from '@/hooks/useDigitAnalysis';
 import { localize } from '@deriv-com/translations';
+import DigitShares from '@/components/shared_ui/digit-shares';
 import './matches-analysis.scss';
 
 const SYMBOLS = [
@@ -177,43 +178,11 @@ const MatchesAnalysis = () => {
                 </div>
             </div>
 
-            <div className='matches-analysis__grid'>
-                {stats.map(({ digit, count, percentage }) => {
-                    const is_hot = hot_digits.includes(digit);
-                    const is_cold = cold_digits.includes(digit);
-                    const is_top = top_digits.includes(digit);
-                    const strong = is_hot && is_strong(percentage);
-                    const weak = is_hot && !is_strong(percentage);
-                    return (
-                        <div
-                            key={digit}
-                            className={classNames('matches-analysis__tile', {
-                                'matches-analysis__tile--hot': is_hot && !is_top && !strong,
-                                'matches-analysis__tile--cold': is_cold && !is_top,
-                                'matches-analysis__tile--top': is_top,
-                                'matches-analysis__tile--strong': strong && !is_top,
-                                'matches-analysis__tile--last': last_digit === digit,
-                            })}
-                        >
-                            <span className='matches-analysis__tile-digit'>{digit}</span>
-                            <span className='matches-analysis__tile-count'>{count}</span>
-                            <span className='matches-analysis__tile-percent'>{percentage}%</span>
-                            {(strong || weak) && (
-                                <span
-                                    className={classNames('matches-analysis__tile-strength', {
-                                        'matches-analysis__tile-strength--strong': strong,
-                                        'matches-analysis__tile-strength--weak': weak,
-                                    })}
-                                >
-                                    {strong ? localize('S') : localize('W')}
-                                </span>
-                            )}
-                            <div className='matches-analysis__tile-bar'>
-                                <span style={{ width: `${Math.round((count / max_count) * 100)}%` }} />
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className='matches-analysis__shares'>
+                <DigitShares stats={stats} last_digit={last_digit} size='md' />
+                <span className='matches-analysis__shares-legend'>
+                    {localize('Rank colours: green = most appearing → blue → amber → silver → red = least appearing. The triangle marks the live last digit.')}
+                </span>
             </div>
         </>
     );
