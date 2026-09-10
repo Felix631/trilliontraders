@@ -3885,6 +3885,444 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "denarapro/denarapro-tk-wizard-underoverautoswitch-xml-xml"
     },
     {
+        "id": "dollarprinter-dollarflow-over1-bot-with-over3-revovery",
+        "name": "dollarflow over1 bot with over3 revovery",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dollarflow/dollarprinter-dollarflow-over1-bot-with-over3-revovery-xml"
+    },
+    {
+        "id": "dollarprinter-dp-dollar-print-ai",
+        "name": "dp dollar print ai",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dp/dollarprinter-dp-dollar-print-ai-xml"
+    },
+    {
+        "id": "dollarprinter-dp-dollar-printer-bot11",
+        "name": "dp dollar printer bot11",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dp/dollarprinter-dp-dollar-printer-bot11-xml"
+    },
+    {
+        "id": "dollarprinter-dp-dp-entry-point-bot-v1",
+        "name": "dp dp entry point bot v1",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dp/dollarprinter-dp-dp-entry-point-bot-v1-xml"
+    },
+    {
+        "id": "dollarprinter-dp-expert-speed-bot-by-chosen-dollar-printer-fx",
+        "name": "dp expert speed bot by chosen dollar printer fx",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dp/dollarprinter-dp-expert-speed-bot-by-chosen-dollar-printer-fx-xml"
+    },
+    {
+        "id": "dollarprinter-dp-signalsniper-autobot",
+        "name": "dp signalsniper autobot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/dp/dollarprinter-dp-signalsniper-autobot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-1-bi-trading-even-odd-bot",
+        "name": "exw 1 bi trading even odd bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-1-bi-trading-even-odd-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-1-updated-bandwagon-bot-without-entry",
+        "name": "exw 1 updated bandwagon bot without entry",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-1-updated-bandwagon-bot-without-entry-xml"
+    },
+    {
+        "id": "dollarprinter-exw-10-over-3-under-6-recovery-bot",
+        "name": "exw 10 over 3 under 6 recovery bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-10-over-3-under-6-recovery-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-11-over-under-switcher-bot",
+        "name": "exw 11 over under switcher bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-11-over-under-switcher-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-2-2-by-1-even-odd-bot",
+        "name": "exw 2 2 by 1 even odd bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-2-2-by-1-even-odd-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-2-updated-bandwagon-bot-with-entry-point",
+        "name": "exw 2 updated bandwagon bot with entry point",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-2-updated-bandwagon-bot-with-entry-point-xml"
+    },
+    {
+        "id": "dollarprinter-exw-3-2-by-1-over-under-bot",
+        "name": "exw 3 2 by 1 over under bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-3-2-by-1-over-under-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-3-updated-bandwagon-even-odd-market-only",
+        "name": "exw 3 updated bandwagon even odd market only",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-3-updated-bandwagon-even-odd-market-only-xml"
+    },
+    {
+        "id": "dollarprinter-exw-4-even-odd-switcher-bot",
+        "name": "exw 4 even odd switcher bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-4-even-odd-switcher-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-4-recover-under-bandwagon-bot",
+        "name": "exw 4 recover under bandwagon bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-4-recover-under-bandwagon-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-5-even-odd-trend-bot",
+        "name": "exw 5 even odd trend bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-5-even-odd-trend-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-5-recover-over-bandwagon",
+        "name": "exw 5 recover over bandwagon",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-5-recover-over-bandwagon-xml"
+    },
+    {
+        "id": "dollarprinter-exw-6-expert-wager-v3-odd-market",
+        "name": "exw 6 expert wager v3 odd market",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-6-expert-wager-v3-odd-market-xml"
+    },
+    {
+        "id": "dollarprinter-exw-6-recovery-with-odd-bot-version-3",
+        "name": "exw 6 recovery with odd bot version 3",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-6-recovery-with-odd-bot-version-3-xml"
+    },
+    {
+        "id": "dollarprinter-exw-7-over-1-under-8-bot",
+        "name": "exw 7 over 1 under 8 bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-7-over-1-under-8-bot-xml"
+    },
+    {
+        "id": "dollarprinter-exw-7-recovery-with-even-bot-version-3",
+        "name": "exw 7 recovery with even bot version 3",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-7-recovery-with-even-bot-version-3-xml"
+    },
+    {
+        "id": "dollarprinter-exw-8-over-1-under-8-recovery-over-4",
+        "name": "exw 8 over 1 under 8 recovery over 4",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-8-over-1-under-8-recovery-over-4-xml"
+    },
+    {
+        "id": "dollarprinter-exw-8-recovery-with-over-under-switcher",
+        "name": "exw 8 recovery with over under switcher",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-8-recovery-with-over-under-switcher-xml"
+    },
+    {
+        "id": "dollarprinter-exw-9-over-2-under-7-bot",
+        "name": "exw 9 over 2 under 7 bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/exw/dollarprinter-exw-9-over-2-under-7-bot-xml"
+    },
+    {
+        "id": "dollarprinter-free-ai-signal-scanner",
+        "name": "free ai signal scanner",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-ai-signal-scanner-xml"
+    },
+    {
+        "id": "dollarprinter-free-binary-expert-v6-pro",
+        "name": "free binary expert v6 pro",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-binary-expert-v6-pro-xml"
+    },
+    {
+        "id": "dollarprinter-free-dollar-print-ai-version-2026",
+        "name": "free dollar print ai version 2026",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-dollar-print-ai-version-2026-xml"
+    },
+    {
+        "id": "dollarprinter-free-dollar-printer-bot11",
+        "name": "free dollar printer bot11",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-dollar-printer-bot11-xml"
+    },
+    {
+        "id": "dollarprinter-free-dp-entry-point-bot-v1",
+        "name": "free dp entry point bot v1",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-dp-entry-point-bot-v1-xml"
+    },
+    {
+        "id": "dollarprinter-free-expert-speed-bot-v1-2026",
+        "name": "free expert speed bot v1 2026",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-expert-speed-bot-v1-2026-xml"
+    },
+    {
+        "id": "dollarprinter-free-maziwa-bot-2026-version",
+        "name": "free maziwa bot 2026 version",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-maziwa-bot-2026-version-xml"
+    },
+    {
+        "id": "dollarprinter-free-signalsniper-autobot-1",
+        "name": "free signalsniper autobot 1",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/free/dollarprinter-free-signalsniper-autobot-1-xml"
+    },
+    {
+        "id": "dollarprinter-guru-algo-trend-auto",
+        "name": "guru algo trend auto",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/guru/dollarprinter-guru-algo-trend-auto-xml"
+    },
+    {
+        "id": "dollarprinter-guru-apex-differs",
+        "name": "guru apex differs",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/guru/dollarprinter-guru-apex-differs-xml"
+    },
+    {
+        "id": "dollarprinter-guru-candlestick-master",
+        "name": "guru candlestick master",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/guru/dollarprinter-guru-candlestick-master-xml"
+    },
+    {
+        "id": "dollarprinter-guru-even-odd-pattern",
+        "name": "guru even odd pattern",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/guru/dollarprinter-guru-even-odd-pattern-xml"
+    },
+    {
+        "id": "dollarprinter-insider-deriv-insider-speed-bot",
+        "name": "insider deriv insider speed bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-deriv-insider-speed-bot-xml"
+    },
+    {
+        "id": "dollarprinter-insider-digit-switcher-1-8",
+        "name": "insider digit switcher 1 8",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-digit-switcher-1-8-xml"
+    },
+    {
+        "id": "dollarprinter-insider-digit-switcher-2-7",
+        "name": "insider digit switcher 2 7",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-digit-switcher-2-7-xml"
+    },
+    {
+        "id": "dollarprinter-insider-even-odd-switcher",
+        "name": "insider even odd switcher",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-even-odd-switcher-xml"
+    },
+    {
+        "id": "dollarprinter-insider-insider-m12",
+        "name": "insider insider m12",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-insider-m12-xml"
+    },
+    {
+        "id": "dollarprinter-insider-market-wizard-deriv-insider",
+        "name": "insider market wizard deriv insider",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-market-wizard-deriv-insider-xml"
+    },
+    {
+        "id": "dollarprinter-insider-must-win-beginner-differ-bot",
+        "name": "insider must win beginner differ bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-must-win-beginner-differ-bot-xml"
+    },
+    {
+        "id": "dollarprinter-insider-over-printer",
+        "name": "insider over printer",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-over-printer-xml"
+    },
+    {
+        "id": "dollarprinter-insider-rise-and-fall-autobot",
+        "name": "insider rise and fall autobot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-rise-and-fall-autobot-xml"
+    },
+    {
+        "id": "dollarprinter-insider-same-recovery-bot",
+        "name": "insider same recovery bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-same-recovery-bot-xml"
+    },
+    {
+        "id": "dollarprinter-insider-under-printer",
+        "name": "insider under printer",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/insider/dollarprinter-insider-under-printer-xml"
+    },
+    {
+        "id": "dollarprinter-kikuyu-differ-recovery-over-4-under-5",
+        "name": "kikuyu differ recovery over 4 under 5",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/kikuyu/dollarprinter-kikuyu-differ-recovery-over-4-under-5-xml"
+    },
+    {
+        "id": "dollarprinter-kikuyu-new-under-8-special-bot-2026",
+        "name": "kikuyu new under 8 special bot 2026",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/kikuyu/dollarprinter-kikuyu-new-under-8-special-bot-2026-xml"
+    },
+    {
+        "id": "dollarprinter-kikuyu-v-over-1-under-8-recovery-even-odd-2026-2",
+        "name": "kikuyu v over 1 under 8 recovery even odd 2026 2",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/kikuyu/dollarprinter-kikuyu-v-over-1-under-8-recovery-even-odd-2026-2-xml"
+    },
+    {
+        "id": "dollarprinter-osam-auto-bot-by-osam",
+        "name": "dollarprinter osam auto bot by osam",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-auto-bot-by-osam-xml"
+    },
+    {
+        "id": "dollarprinter-osam-dec-entry-point",
+        "name": "dollarprinter osam dec entry point",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-dec-entry-point-xml"
+    },
+    {
+        "id": "dollarprinter-osam-mega-mind-v1",
+        "name": "dollarprinter osam mega mind v1",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-mega-mind-v1-xml"
+    },
+    {
+        "id": "dollarprinter-osam-osam-digit-switcher",
+        "name": "dollarprinter osam osam digit switcher",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-osam-digit-switcher-xml"
+    },
+    {
+        "id": "dollarprinter-osam-osam-hnr",
+        "name": "dollarprinter osam osam hnr",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-osam-hnr-xml"
+    },
+    {
+        "id": "dollarprinter-osam-over-destroyer",
+        "name": "dollarprinter osam over destroyer",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-over-destroyer-xml"
+    },
+    {
+        "id": "dollarprinter-osam-over-pro-bot",
+        "name": "dollarprinter osam over pro bot",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-over-pro-bot-xml"
+    },
+    {
+        "id": "dollarprinter-osam-the-astro-e-o",
+        "name": "dollarprinter osam the astro e o",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-the-astro-e-o-xml"
+    },
+    {
+        "id": "dollarprinter-osam-under-destroyer-v2",
+        "name": "dollarprinter osam under destroyer v2",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-under-destroyer-v2-xml"
+    },
+    {
+        "id": "dollarprinter-osam-under-destroyer",
+        "name": "dollarprinter osam under destroyer",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-under-destroyer-xml"
+    },
+    {
+        "id": "dollarprinter-osam-under-pro-bot",
+        "name": "dollarprinter osam under pro bot",
+        "creator": "osam",
+        "file": "dollarprinter/osam/dollarprinter-osam-under-pro-bot-xml"
+    },
+    {
+        "id": "dollarprinter-scalper-even-multiple-scalper",
+        "name": "scalper even multiple scalper",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/scalper/dollarprinter-scalper-even-multiple-scalper-xml"
+    },
+    {
+        "id": "dollarprinter-titan-auto-c4-volt-2",
+        "name": "titan auto c4 volt 2",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/titan/dollarprinter-titan-auto-c4-volt-2-xml"
+    },
+    {
+        "id": "dollarprinter-titan-expert-speed-match-bot",
+        "name": "titan expert speed match bot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/titan/dollarprinter-titan-expert-speed-match-bot-xml"
+    },
+    {
+        "id": "dollarprinter-titan-matrix-v5-speedbot",
+        "name": "titan matrix v5 speedbot",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/titan/dollarprinter-titan-matrix-v5-speedbot-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-b-u-b-under-6-vh-custom-dbot-v1-02",
+        "name": "ultd b u b under 6 vh custom dbot v1 02",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-b-u-b-under-6-vh-custom-dbot-v1-02-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-frequency-switch-digit-differ-strategy",
+        "name": "ultd frequency switch digit differ strategy",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-frequency-switch-digit-differ-strategy-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-over-by-design-c-s-p-r-n-g-algo-dbot-v1-02",
+        "name": "ultd over by design c s p r n g algo dbot v1 02",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-over-by-design-c-s-p-r-n-g-algo-dbot-v1-02-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-pure-signal-dbot-higher-setups-only-v1-01",
+        "name": "ultd pure signal dbot higher setups only v1 01",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-pure-signal-dbot-higher-setups-only-v1-01-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-pure-signal-dbot-lower-setups-only-v1-01",
+        "name": "ultd pure signal dbot lower setups only v1 01",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-pure-signal-dbot-lower-setups-only-v1-01-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-r-o-b-over-3-vh-custom-dbot-v1-02",
+        "name": "ultd r o b over 3 vh custom dbot v1 02",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-r-o-b-over-3-vh-custom-dbot-v1-02-xml"
+    },
+    {
+        "id": "dollarprinter-ultd-under-by-design-c-s-p-r-n-g-algo-dbot-v1-02",
+        "name": "ultd under by design c s p r n g algo dbot v1 02",
+        "creator": "dollarprinter",
+        "file": "dollarprinter/ultd/dollarprinter-ultd-under-by-design-c-s-p-r-n-g-algo-dbot-v1-02-xml"
+    },
+    {
         "id": "dollarprinter-free-AI-SIGNAL-SCANNER",
         "name": "free AI SIGNAL SCANNER",
         "creator": "dollarprinter",
@@ -8823,6 +9261,16 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 84
     },
     {
+        "id": "dollarprinter",
+        "label": "dollarprinter",
+        "count": 81
+    },
+    {
+        "id": "osam",
+        "label": "osam",
+        "count": 45
+    },
+    {
         "id": "money8gg",
         "label": "money8gg",
         "count": 39
@@ -8841,11 +9289,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "chichitraders",
         "label": "chichitraders",
         "count": 35
-    },
-    {
-        "id": "osam",
-        "label": "osam",
-        "count": 34
     },
     {
         "id": "traderkit",
@@ -8881,11 +9324,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "githinji",
         "label": "githinji",
         "count": 20
-    },
-    {
-        "id": "dollarprinter",
-        "label": "dollarprinter",
-        "count": 19
     },
     {
         "id": "dtraderdbot",
