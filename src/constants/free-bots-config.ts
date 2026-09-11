@@ -639,6 +639,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/premium/chichitraders2-ONLY-UPS-DOWNS-AI-xml"
     },
     {
+        "id": "chichitraders2-OVER-2-SNIPER-AI-BOT",
+        "name": "OVER 2 SNIPER AI BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-OVER-2-SNIPER-AI-BOT-xml"
+    },
+    {
         "id": "chichitraders2-OVER-MASTER-AI",
         "name": "OVER MASTER AI",
         "creator": "chichitraders2",
@@ -9271,14 +9277,14 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 45
     },
     {
-        "id": "money8gg",
-        "label": "money8gg",
+        "id": "chichitraders2",
+        "label": "chichitraders2",
         "count": 39
     },
     {
-        "id": "chichitraders2",
-        "label": "chichitraders2",
-        "count": 38
+        "id": "money8gg",
+        "label": "money8gg",
+        "count": 39
     },
     {
         "id": "mkorean",
