@@ -183,6 +183,102 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "binaryentry/binaryentry-Switch-Bot-Pro-xml"
     },
     {
+        "id": "binarylab-Auto-Bot-by-Osam",
+        "name": "Auto Bot by Osam",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Auto-Bot-by-Osam-xml"
+    },
+    {
+        "id": "binarylab-Digit-Phantom",
+        "name": "Digit Phantom",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Digit-Phantom-xml"
+    },
+    {
+        "id": "binarylab-Digit-Strike",
+        "name": "Digit Strike",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Digit-Strike-xml"
+    },
+    {
+        "id": "binarylab-EVEN-ODD-MYTH-V1",
+        "name": "EVEN ODD MYTH V1",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-EVEN-ODD-MYTH-V1-xml"
+    },
+    {
+        "id": "binarylab-EVEN-ODD-MYTH-V2",
+        "name": "EVEN ODD MYTH V2",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-EVEN-ODD-MYTH-V2-xml"
+    },
+    {
+        "id": "binarylab-Even-Odd-Pro",
+        "name": "Even Odd Pro",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Even-Odd-Pro-xml"
+    },
+    {
+        "id": "binarylab-Even-Odd-Switcher-II",
+        "name": "Even Odd Switcher II",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Even-Odd-Switcher-II-xml"
+    },
+    {
+        "id": "binarylab-Even-Odd-switcher",
+        "name": "Even Odd switcher",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Even-Odd-switcher-xml"
+    },
+    {
+        "id": "binarylab-Market-beast",
+        "name": "Market beast",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Market-beast-xml"
+    },
+    {
+        "id": "binarylab-market-hunter",
+        "name": "market hunter",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-market-hunter-xml"
+    },
+    {
+        "id": "binarylab-Mega-Mind-V1",
+        "name": "Mega Mind V1",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Mega-Mind-V1-xml"
+    },
+    {
+        "id": "binarylab-ODD-MYTH-V3-0",
+        "name": "ODD MYTH V3 0",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-ODD-MYTH-V3-0-xml"
+    },
+    {
+        "id": "binarylab-Profit-pro",
+        "name": "Profit pro",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Profit-pro-xml"
+    },
+    {
+        "id": "binarylab-Recovery-pro",
+        "name": "Recovery pro",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Recovery-pro-xml"
+    },
+    {
+        "id": "binarylab-Super-Recovery",
+        "name": "Super Recovery",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Super-Recovery-xml"
+    },
+    {
+        "id": "binarylab-Twin-Strike",
+        "name": "Twin Strike",
+        "creator": "binarylab",
+        "file": "binarylab/free/binarylab-Twin-Strike-xml"
+    },
+    {
         "id": "chichitraders-2-PREDICTIONS-BOT-with(-no-entry)-(1)",
         "name": "chichitraders 2 PREDICTIONS BOT with( no entry) (1)",
         "creator": "chichitraders",
@@ -9345,6 +9441,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "Official",
         "label": "Official",
         "count": 17
+    },
+    {
+        "id": "binarylab",
+        "label": "binarylab",
+        "count": 16
     },
     {
         "id": "jmtraders",
