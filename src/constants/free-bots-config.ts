@@ -8931,6 +8931,1908 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "reverse_martingale-xml"
     },
     {
+        "id": "3b3e",
+        "name": "3b3e",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/3b3e-xml"
+    },
+    {
+        "id": "Auto-C4-Volt",
+        "name": "Auto C4 Volt",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Auto-C4-Volt-xml"
+    },
+    {
+        "id": "Best-bot-2-odd-even",
+        "name": "Best bot 2 odd even",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Best-bot-2-odd-even-xml"
+    },
+    {
+        "id": "binary-botvv",
+        "name": "binary botvv",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/binary-botvv-xml"
+    },
+    {
+        "id": "BOT-MEGALODON-2",
+        "name": "BOT MEGALODON 2",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/BOT-MEGALODON-2-xml"
+    },
+    {
+        "id": "Bots-DigitMaxim-TOP-03-MAESTRO-EVEN-ODD-EN",
+        "name": "Bots DigitMaxim TOP 03 MAESTRO EVEN ODD EN",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Bots-DigitMaxim-TOP-03-MAESTRO-EVEN-ODD-EN-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-Bot-Even-Versus-Odd",
+        "name": "Bots Testing Bots Bot Even Versus Odd",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Bots-Testing-Bots-Bot-Even-Versus-Odd-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-EVEN-DIGITS-TECHNIQUE-TICK-ANALYZER-BOT-101",
+        "name": "Bots Testing Bots EVEN DIGITS TECHNIQUE TICK ANALYZER BOT 101",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Bots-Testing-Bots-EVEN-DIGITS-TECHNIQUE-TICK-ANALYZER-BOT-101-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-ODD-DIGITS-TICK-ANALYZER-TECHNIQUE-BOT101",
+        "name": "Bots Testing Bots ODD DIGITS TICK ANALYZER TECHNIQUE BOT101",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Bots-Testing-Bots-ODD-DIGITS-TICK-ANALYZER-TECHNIQUE-BOT101-xml"
+    },
+    {
+        "id": "Bots-TOP1-TOP-03-MAESTRO-EVEN-ODD-EN",
+        "name": "Bots TOP1 TOP 03 MAESTRO EVEN ODD EN",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Bots-TOP1-TOP-03-MAESTRO-EVEN-ODD-EN-xml"
+    },
+    {
+        "id": "Candle-mine-22-1-1-1-1",
+        "name": "Candle mine 22 1 1 1 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Candle-mine-22-1-1-1-1-xml"
+    },
+    {
+        "id": "Candle-mine-version-2",
+        "name": "Candle mine version 2",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Candle-mine-version-2-xml"
+    },
+    {
+        "id": "Cosmos01",
+        "name": "Cosmos01",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Cosmos01-xml"
+    },
+    {
+        "id": "Deleon-Chart-Analysis-Binary-bot",
+        "name": "Deleon Chart Analysis Binary bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Deleon-Chart-Analysis-Binary-bot-xml"
+    },
+    {
+        "id": "Deleon-Chart-Analysis-Binary-D-Bot",
+        "name": "Deleon Chart Analysis Binary D Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Deleon-Chart-Analysis-Binary-D-Bot-xml"
+    },
+    {
+        "id": "Deriv-killer-version-2-0-1",
+        "name": "Deriv killer version 2 0 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Deriv-killer-version-2-0-1-xml"
+    },
+    {
+        "id": "Digit-Odd-Z-DBOT-1",
+        "name": "Digit Odd Z DBOT 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Digit-Odd-Z-DBOT-1-xml"
+    },
+    {
+        "id": "Dollar-path-elite",
+        "name": "Dollar path elite",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Dollar-path-elite-xml"
+    },
+    {
+        "id": "Dollar-printer-binary-bot-1-1",
+        "name": "Dollar printer binary bot 1 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Dollar-printer-binary-bot-1-1-xml"
+    },
+    {
+        "id": "EVEN-AUTO-ANALYSIS-99-2",
+        "name": "EVEN AUTO ANALYSIS 99 2",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-AUTO-ANALYSIS-99-2-xml"
+    },
+    {
+        "id": "Even-Odd-Adaptativo-Edu-Binary-Bot",
+        "name": "Even Odd Adaptativo Edu Binary Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-Odd-Adaptativo-Edu-Binary-Bot-xml"
+    },
+    {
+        "id": "EVEN-ODD-ANALYZER-KILLER-BOT-BY-TRICKSTER",
+        "name": "EVEN ODD ANALYZER KILLER BOT BY TRICKSTER",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-ANALYZER-KILLER-BOT-BY-TRICKSTER-xml"
+    },
+    {
+        "id": "Even-Odd-Anchor-Technic-Bot",
+        "name": "Even Odd Anchor Technic Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-Odd-Anchor-Technic-Bot-xml"
+    },
+    {
+        "id": "EVEN-ODD-BINARY-CODE-111222-1",
+        "name": "EVEN ODD BINARY CODE 111222 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-BINARY-CODE-111222-1-xml"
+    },
+    {
+        "id": "EVEN-ODD-DIGIT-Bot",
+        "name": "EVEN ODD DIGIT Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-DIGIT-Bot-xml"
+    },
+    {
+        "id": "EVEN-ODD-HILLMAN-jr-pro",
+        "name": "EVEN ODD HILLMAN jr pro",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-HILLMAN-jr-pro-xml"
+    },
+    {
+        "id": "Even-Odd-Mid-Night-Run-Ai-DBot",
+        "name": "Even Odd Mid Night Run Ai DBot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-Odd-Mid-Night-Run-Ai-DBot-xml"
+    },
+    {
+        "id": "Even-Odd-Patern-Bot",
+        "name": "Even Odd Patern Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-Odd-Patern-Bot-xml"
+    },
+    {
+        "id": "Even-Odd-Pro-Binary-Bot",
+        "name": "Even Odd Pro Binary Bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-Odd-Pro-Binary-Bot-xml"
+    },
+    {
+        "id": "EVEN-ODD-V-AUTO",
+        "name": "EVEN ODD V AUTO",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-V-AUTO-xml"
+    },
+    {
+        "id": "EVEN-ODD",
+        "name": "EVEN ODD",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/EVEN-ODD-xml"
+    },
+    {
+        "id": "Even-vs-Odd-Statistics-Version-2-0-1",
+        "name": "Even vs Odd Statistics Version 2 0 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Even-vs-Odd-Statistics-Version-2-0-1-xml"
+    },
+    {
+        "id": "Evenodd",
+        "name": "Evenodd",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Evenodd-xml"
+    },
+    {
+        "id": "FIRE-ENTRY-001",
+        "name": "FIRE ENTRY 001",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/FIRE-ENTRY-001-xml"
+    },
+    {
+        "id": "M27-Original-version",
+        "name": "M27 Original version",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/M27-Original-version-xml"
+    },
+    {
+        "id": "MaestroEvenOddBot-1",
+        "name": "MaestroEvenOddBot 1",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/MaestroEvenOddBot-1-xml"
+    },
+    {
+        "id": "MessiahStrikes-BBA-Even-Odd-Binary-bot",
+        "name": "MessiahStrikes BBA Even Odd Binary bot",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/MessiahStrikes-BBA-Even-Odd-Binary-bot-xml"
+    },
+    {
+        "id": "Profit-Test345lOddEven",
+        "name": "Profit Test345lOddEven",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Profit-Test345lOddEven-xml"
+    },
+    {
+        "id": "SOPHIA-TRADER-meta-Premium-Deriv-Bot-2",
+        "name": "SOPHIA TRADER meta Premium Deriv Bot 2",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/SOPHIA-TRADER-meta-Premium-Deriv-Bot-2-xml"
+    },
+    {
+        "id": "Sunday26th",
+        "name": "Sunday26th",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/Sunday26th-xml"
+    },
+    {
+        "id": "wealthy",
+        "name": "wealthy",
+        "creator": "even-odd",
+        "file": "selfanalyzing/even-odd/wealthy-xml"
+    },
+    {
+        "id": "1-profit-only-2",
+        "name": "1 profit only 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/1-profit-only-2-xml"
+    },
+    {
+        "id": "100-probabilidade-VERONEZ-8",
+        "name": "100 probabilidade VERONEZ 8",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/100-probabilidade-VERONEZ-8-xml"
+    },
+    {
+        "id": "100",
+        "name": "100",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/100-xml"
+    },
+    {
+        "id": "3-Differ-D-Bot",
+        "name": "3 Differ D Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/3-Differ-D-Bot-xml"
+    },
+    {
+        "id": "7th-Estate-Ai-Deriv-D-Bot-V1-01",
+        "name": "7th Estate Ai Deriv D Bot V1 01",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/7th-Estate-Ai-Deriv-D-Bot-V1-01-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-LastDigit-Desert-Boy-1-30",
+        "name": "Apollo 1 Copies Dry Desert Boy Desert Land LastDigit Desert Boy 1 30",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-LastDigit-Desert-Boy-1-30-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-LastDigit-Desert-Boy",
+        "name": "Apollo 1 Copies Dry Desert Boy Desert Land LastDigit Desert Boy",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-LastDigit-Desert-Boy-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-CandleMine-Version-2-for-Smaller-Markets",
+        "name": "Apollo 1 Copies MainStream CandleMine Version 2 for Smaller Markets",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-MainStream-CandleMine-Version-2-for-Smaller-Markets-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-Digit-Differ-3-free-Bot",
+        "name": "Apollo 1 Copies MainStream Digit Differ 3 free Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-MainStream-Digit-Differ-3-free-Bot-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-Digit-Mathces-extended-Fibonacci0",
+        "name": "Apollo 1 Copies MainStream Digit Mathces extended Fibonacci0",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-MainStream-Digit-Mathces-extended-Fibonacci0-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-True-Candle-Mine-Version-2",
+        "name": "Apollo 1 Copies MainStream True Candle Mine Version 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-MainStream-True-Candle-Mine-Version-2-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-TOP-01-SMA-Daily-t0",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 TOP 01 SMA Daily t0",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-SMA-AVERAGES-AT-C90-TOP-01-SMA-Daily-t0-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-TOP-01-SMA-Daily",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 TOP 01 SMA Daily",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Apollo-1-Copies-SMA-AVERAGES-AT-C90-TOP-01-SMA-Daily-xml"
+    },
+    {
+        "id": "Asphalt-BinaryDBot",
+        "name": "Asphalt BinaryDBot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Asphalt-BinaryDBot-xml"
+    },
+    {
+        "id": "Binary-1X-King-pro",
+        "name": "Binary 1X King pro",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Binary-1X-King-pro-xml"
+    },
+    {
+        "id": "binary-bot-1",
+        "name": "binary bot 1",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/binary-bot-1-xml"
+    },
+    {
+        "id": "binary-bot-2",
+        "name": "binary bot 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/binary-bot-2-xml"
+    },
+    {
+        "id": "binary-bot-3",
+        "name": "binary bot 3",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/binary-bot-3-xml"
+    },
+    {
+        "id": "BINARY-BOT-THE-DOLLAR-PATH-PRO-BY-LEWIS-LUSEKA-GITHUB-254111421356",
+        "name": "BINARY BOT THE DOLLAR PATH PRO BY LEWIS LUSEKA GITHUB 254111421356",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/BINARY-BOT-THE-DOLLAR-PATH-PRO-BY-LEWIS-LUSEKA-GITHUB-254111421356-xml"
+    },
+    {
+        "id": "Bot-2-NVX",
+        "name": "Bot 2 NVX",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bot-2-NVX-xml"
+    },
+    {
+        "id": "Bots-digits-24hrs-bot-pr",
+        "name": "Bots digits 24hrs bot pr",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-digits-24hrs-bot-pr-xml"
+    },
+    {
+        "id": "Bots-digits-DD-paling-banyak-Nongol-versi-IKA",
+        "name": "Bots digits DD paling banyak Nongol versi IKA",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-digits-DD-paling-banyak-Nongol-versi-IKA-xml"
+    },
+    {
+        "id": "Bots-digits-Salinan-Digit-Differ-3-Ticks",
+        "name": "Bots digits Salinan Digit Differ 3 Ticks",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-digits-Salinan-Digit-Differ-3-Ticks-xml"
+    },
+    {
+        "id": "Bots-digits-super-bull",
+        "name": "Bots digits super bull",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-digits-super-bull-xml"
+    },
+    {
+        "id": "Bots-digits-UNSTOPPABLE-DIFFER-BOT",
+        "name": "Bots digits UNSTOPPABLE DIFFER BOT",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-digits-UNSTOPPABLE-DIFFER-BOT-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-4-Chaser-Amazing-Bot-Digit-Diff-1-0-09-Loss-x11-Rate-High-Win-Name",
+        "name": "Bots Testing Bots 4 Chaser Amazing Bot Digit Diff 1 0 09 Loss x11 Rate High Win Name",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bots-Testing-Bots-4-Chaser-Amazing-Bot-Digit-Diff-1-0-09-Loss-x11-Rate-High-Win-Name-xml"
+    },
+    {
+        "id": "Bravo-Digits-Bbot-V1-01-2",
+        "name": "Bravo Digits Bbot V1 01 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bravo-Digits-Bbot-V1-01-2-xml"
+    },
+    {
+        "id": "Bullishkidd-Money-generator",
+        "name": "Bullishkidd Money generator",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Bullishkidd-Money-generator-xml"
+    },
+    {
+        "id": "Chronic-Digit-Matcher-Binary-Bot",
+        "name": "Chronic Digit Matcher Binary Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Chronic-Digit-Matcher-Binary-Bot-xml"
+    },
+    {
+        "id": "Corona-Differ-Bot",
+        "name": "Corona Differ Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Corona-Differ-Bot-xml"
+    },
+    {
+        "id": "CyborgMaxDbot-1",
+        "name": "CyborgMaxDbot 1",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/CyborgMaxDbot-1-xml"
+    },
+    {
+        "id": "DIFF-SMART-BOT",
+        "name": "DIFF SMART BOT",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIFF-SMART-BOT-xml"
+    },
+    {
+        "id": "Differ-Speccial-PPKM-Level-4-2",
+        "name": "Differ Speccial PPKM Level 4 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Differ-Speccial-PPKM-Level-4-2-xml"
+    },
+    {
+        "id": "Differs-Digits-1-Stop",
+        "name": "Differs Digits 1 Stop",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Differs-Digits-1-Stop-xml"
+    },
+    {
+        "id": "Differs-Split-Martingale-Digit-Differ-Split-martingale-Strategy-4nd-July-2022",
+        "name": "Differs Split Martingale Digit Differ Split martingale Strategy 4nd July 2022",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Differs-Split-Martingale-Digit-Differ-Split-martingale-Strategy-4nd-July-2022-xml"
+    },
+    {
+        "id": "DIGDIF-2019",
+        "name": "DIGDIF 2019",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGDIF-2019-xml"
+    },
+    {
+        "id": "DIGIT-DIFFER-AABA",
+        "name": "DIGIT DIFFER AABA",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGIT-DIFFER-AABA-xml"
+    },
+    {
+        "id": "DIGIT-DIFFER-ENERGIZER-X",
+        "name": "DIGIT DIFFER ENERGIZER X",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGIT-DIFFER-ENERGIZER-X-xml"
+    },
+    {
+        "id": "Digit-Differ-Loop-2-0",
+        "name": "Digit Differ Loop 2 0",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Digit-Differ-Loop-2-0-xml"
+    },
+    {
+        "id": "Digit-Differ-with-Stats-filter",
+        "name": "Digit Differ with Stats filter",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Digit-Differ-with-Stats-filter-xml"
+    },
+    {
+        "id": "Digit-Match-bot-25-PRO",
+        "name": "Digit Match bot 25 PRO",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Digit-Match-bot-25-PRO-xml"
+    },
+    {
+        "id": "DIGIT-MATCH-RADAR-MARTI-42-LEVEL-BALANCE-152-3",
+        "name": "DIGIT MATCH RADAR MARTI 42 LEVEL BALANCE 152 3",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGIT-MATCH-RADAR-MARTI-42-LEVEL-BALANCE-152-3-xml"
+    },
+    {
+        "id": "Digit-Pairing-Premium-Digit-Pairing",
+        "name": "Digit Pairing Premium Digit Pairing",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Digit-Pairing-Premium-Digit-Pairing-xml"
+    },
+    {
+        "id": "DigitDiff-NO-M-V1",
+        "name": "DigitDiff NO M V1",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DigitDiff-NO-M-V1-xml"
+    },
+    {
+        "id": "DIGITMATCH-PREMIUM-NO-LOSS-BOT-1-1-1-1-1",
+        "name": "DIGITMATCH PREMIUM NO LOSS BOT 1 1 1 1 1",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGITMATCH-PREMIUM-NO-LOSS-BOT-1-1-1-1-1-xml"
+    },
+    {
+        "id": "DIGITO-DIFFER-100-FREE-BBF",
+        "name": "DIGITO DIFFER 100 FREE BBF",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DIGITO-DIFFER-100-FREE-BBF-xml"
+    },
+    {
+        "id": "DMATCH-BOT-002-1-2",
+        "name": "DMATCH BOT 002 1 2",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/DMATCH-BOT-002-1-2-xml"
+    },
+    {
+        "id": "Dollar-Hack",
+        "name": "Dollar Hack",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Dollar-Hack-xml"
+    },
+    {
+        "id": "EBRU-Differs-Bbot",
+        "name": "EBRU Differs Bbot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/EBRU-Differs-Bbot-xml"
+    },
+    {
+        "id": "EXPERT-SPEED-MATCH-BOT",
+        "name": "EXPERT SPEED MATCH BOT",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/EXPERT-SPEED-MATCH-BOT-xml"
+    },
+    {
+        "id": "First-Trades-SlowManKiller2-5to0-25",
+        "name": "First Trades SlowManKiller2 5to0 25",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/First-Trades-SlowManKiller2-5to0-25-xml"
+    },
+    {
+        "id": "FreeSourceBots-Super-Digit-Differ-Bot",
+        "name": "FreeSourceBots Super Digit Differ Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/FreeSourceBots-Super-Digit-Differ-Bot-xml"
+    },
+    {
+        "id": "FreeSourceV2-TestApproved-Premium-Digit-Pairing",
+        "name": "FreeSourceV2 TestApproved Premium Digit Pairing",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/FreeSourceV2-TestApproved-Premium-Digit-Pairing-xml"
+    },
+    {
+        "id": "INFO-1",
+        "name": "INFO 1",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/INFO-1-xml"
+    },
+    {
+        "id": "Last-Digit-Difference-Trailer-Last-Digit-11-Scaler",
+        "name": "Last Digit Difference Trailer Last Digit 11 Scaler",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Last-Digit-Difference-Trailer-Last-Digit-11-Scaler-xml"
+    },
+    {
+        "id": "Market-Miner-Free-Version",
+        "name": "Market Miner Free Version",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Market-Miner-Free-Version-xml"
+    },
+    {
+        "id": "Martingle-Split-Into-3-Martingale-split-into-3",
+        "name": "Martingle Split Into 3 Martingale split into 3",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Martingle-Split-Into-3-Martingale-split-into-3-xml"
+    },
+    {
+        "id": "Matchbox",
+        "name": "Matchbox",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Matchbox-xml"
+    },
+    {
+        "id": "MessiahStrikes-CandleMine-Stake-10",
+        "name": "MessiahStrikes CandleMine Stake 10",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/MessiahStrikes-CandleMine-Stake-10-xml"
+    },
+    {
+        "id": "MessiahStrikes-TestCandleMine3",
+        "name": "MessiahStrikes TestCandleMine3",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/MessiahStrikes-TestCandleMine3-xml"
+    },
+    {
+        "id": "Nato-Pro-Bot",
+        "name": "Nato Pro Bot",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Nato-Pro-Bot-xml"
+    },
+    {
+        "id": "No-Limitz-V1-0",
+        "name": "No Limitz V1 0",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/No-Limitz-V1-0-xml"
+    },
+    {
+        "id": "Premium-Digit-Differ-Premium-Digit-Differ-2st-JUNE-2022",
+        "name": "Premium Digit Differ Premium Digit Differ 2st JUNE 2022",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Premium-Digit-Differ-Premium-Digit-Differ-2st-JUNE-2022-xml"
+    },
+    {
+        "id": "Profit-Retest-Last-Digit-Maker",
+        "name": "Profit Retest Last Digit Maker",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Profit-Retest-Last-Digit-Maker-xml"
+    },
+    {
+        "id": "Tick-Analyzing-PRO-BOT-3",
+        "name": "Tick Analyzing PRO BOT 3",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Tick-Analyzing-PRO-BOT-3-xml"
+    },
+    {
+        "id": "Tradehub-orginal",
+        "name": "Tradehub orginal",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Tradehub-orginal-xml"
+    },
+    {
+        "id": "U-binary-digit-script-V2-01",
+        "name": "U binary digit script V2 01",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/U-binary-digit-script-V2-01-xml"
+    },
+    {
+        "id": "Ultimos-2-Difits-Differ-Ok-Ok",
+        "name": "Ultimos 2 Difits Differ Ok Ok",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/Ultimos-2-Difits-Differ-Ok-Ok-xml"
+    },
+    {
+        "id": "X-5-DIGITS-BOT",
+        "name": "X 5 DIGITS BOT",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/X-5-DIGITS-BOT-xml"
+    },
+    {
+        "id": "04-Up-Pro",
+        "name": "04 Up Pro",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/04-Up-Pro-xml"
+    },
+    {
+        "id": "1-TICK-1-PREDICTION-1",
+        "name": "1 TICK 1 PREDICTION 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/1-TICK-1-PREDICTION-1-xml"
+    },
+    {
+        "id": "1",
+        "name": "1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/1-xml"
+    },
+    {
+        "id": "2025-Dp-Printer-Version1",
+        "name": "2025 Dp Printer Version1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/2025-Dp-Printer-Version1-xml"
+    },
+    {
+        "id": "360-Printer-Bot-Original",
+        "name": "360 Printer Bot Original",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/360-Printer-Bot-Original-xml"
+    },
+    {
+        "id": "360-PRINTER-BOT-Version-2-2-1",
+        "name": "360 PRINTER BOT Version 2 2 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/360-PRINTER-BOT-Version-2-2-1-xml"
+    },
+    {
+        "id": "4-5812127286010319365",
+        "name": "4 5812127286010319365",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/4-5812127286010319365-xml"
+    },
+    {
+        "id": "82-Free-1-4-Digit-Bot",
+        "name": "82 Free 1 4 Digit Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/82-Free-1-4-Digit-Bot-xml"
+    },
+    {
+        "id": "American-Dream-2",
+        "name": "American Dream 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/American-Dream-2-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-Dry-Desert-Boy",
+        "name": "Apollo 1 Copies Dry Desert Boy Desert Land Dry Desert Boy",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Apollo-1-Copies-Dry-Desert-Boy-Desert-Land-Dry-Desert-Boy-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Gecko-Lite-v22-06-14-Commercial-Bot",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 Binogator Gecko Lite v22 06 14 Commercial Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Gecko-Lite-v22-06-14-Commercial-Bot-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Gecko-Pro-v22-07-18-Commercial-Version",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 Binogator Gecko Pro v22 07 18 Commercial Version",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Gecko-Pro-v22-07-18-Commercial-Version-xml"
+    },
+    {
+        "id": "Auto-Bot-by-Osam-update-1-2",
+        "name": "Auto Bot by Osam update 1 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Auto-Bot-by-Osam-update-1-2-xml"
+    },
+    {
+        "id": "AUTO-C4-PRO-1-1-BY-C-E-O-GILL",
+        "name": "AUTO C4 PRO 1 1 BY C E O GILL",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-C4-PRO-1-1-BY-C-E-O-GILL-xml"
+    },
+    {
+        "id": "AUTO-C4-PRO-1-BY-C-E-O-FREDDY-2-2-1",
+        "name": "AUTO C4 PRO 1 BY C E O FREDDY 2 2 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-C4-PRO-1-BY-C-E-O-FREDDY-2-2-1-xml"
+    },
+    {
+        "id": "AUTO-C4-PRO-1-BY-C-E-O-FREDDY-2-2-2",
+        "name": "AUTO C4 PRO 1 BY C E O FREDDY 2 2 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-C4-PRO-1-BY-C-E-O-FREDDY-2-2-2-xml"
+    },
+    {
+        "id": "AUTO-C4-Under-9-D-Bot",
+        "name": "AUTO C4 Under 9 D Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-C4-Under-9-D-Bot-xml"
+    },
+    {
+        "id": "AUTO-C4-VOLT-2-AI-PREMIUM-ROBOT-2-1",
+        "name": "AUTO C4 VOLT 2 AI PREMIUM ROBOT 2 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-C4-VOLT-2-AI-PREMIUM-ROBOT-2-1-xml"
+    },
+    {
+        "id": "AUTO-DREAM-V5-BY-PK-1",
+        "name": "AUTO DREAM V5 BY PK 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/AUTO-DREAM-V5-BY-PK-1-xml"
+    },
+    {
+        "id": "BBC-7",
+        "name": "BBC 7",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BBC-7-xml"
+    },
+    {
+        "id": "Big-Boyz-Auto-Original-1-3",
+        "name": "Big Boyz Auto Original 1 3",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Big-Boyz-Auto-Original-1-3-xml"
+    },
+    {
+        "id": "binary-botf1-1",
+        "name": "binary botf1 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/binary-botf1-1-xml"
+    },
+    {
+        "id": "Binary-Digit-Bot-Unofficial-1",
+        "name": "Binary Digit Bot Unofficial 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binary-Digit-Bot-Unofficial-1-xml"
+    },
+    {
+        "id": "BINARY-DIGITUDE",
+        "name": "BINARY DIGITUDE",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BINARY-DIGITUDE-xml"
+    },
+    {
+        "id": "BINARY-DOLLAR-daily-money",
+        "name": "BINARY DOLLAR daily money",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BINARY-DOLLAR-daily-money-xml"
+    },
+    {
+        "id": "Binary-king-bot",
+        "name": "Binary king bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binary-king-bot-xml"
+    },
+    {
+        "id": "Binary-V5-Expert-pro-1-1-2",
+        "name": "Binary V5 Expert pro 1 1 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binary-V5-Expert-pro-1-1-2-xml"
+    },
+    {
+        "id": "BinaryKillerBot-PV2-5-Digit-SetUp-1",
+        "name": "BinaryKillerBot PV2 5 Digit SetUp 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BinaryKillerBot-PV2-5-Digit-SetUp-1-xml"
+    },
+    {
+        "id": "Binogator-0-35-Gecko-Auto-22-05-30-Released",
+        "name": "Binogator 0 35 Gecko Auto 22 05 30 Released",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binogator-0-35-Gecko-Auto-22-05-30-Released-xml"
+    },
+    {
+        "id": "Binogator-Gecko-Auto-v22-06-05",
+        "name": "Binogator Gecko Auto v22 06 05",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binogator-Gecko-Auto-v22-06-05-xml"
+    },
+    {
+        "id": "Binogator-Gecko-Lite-v22-06-14",
+        "name": "Binogator Gecko Lite v22 06 14",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binogator-Gecko-Lite-v22-06-14-xml"
+    },
+    {
+        "id": "Binogator-Gecko-Pro-v22-07-18",
+        "name": "Binogator Gecko Pro v22 07 18",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Binogator-Gecko-Pro-v22-07-18-xml"
+    },
+    {
+        "id": "BLACK-DEVIL-v2-By-MR-DUKE-2",
+        "name": "BLACK DEVIL v2 By MR DUKE 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BLACK-DEVIL-v2-By-MR-DUKE-2-xml"
+    },
+    {
+        "id": "Blast-Digits-Vix-50",
+        "name": "Blast Digits Vix 50",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Blast-Digits-Vix-50-xml"
+    },
+    {
+        "id": "BOGAT-PRO-BY-SAMMYBOY-KENYA-2022-1-2",
+        "name": "BOGAT PRO BY SAMMYBOY KENYA 2022 1 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BOGAT-PRO-BY-SAMMYBOY-KENYA-2022-1-2-xml"
+    },
+    {
+        "id": "Bonus-Bot-XML",
+        "name": "Bonus Bot XML",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bonus-Bot-XML-xml"
+    },
+    {
+        "id": "Bot-3-OVIN",
+        "name": "Bot 3 OVIN",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bot-3-OVIN-xml"
+    },
+    {
+        "id": "BOT-ULTIMATE-PREMIUM-1",
+        "name": "BOT ULTIMATE PREMIUM 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/BOT-ULTIMATE-PREMIUM-1-xml"
+    },
+    {
+        "id": "Bots-digits-Best-Digit-Bot",
+        "name": "Bots digits Best Digit Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bots-digits-Best-Digit-Bot-xml"
+    },
+    {
+        "id": "Bots-digits-Bot-Over-de-1-23-dobra-4-5",
+        "name": "Bots digits Bot Over de 1 23 dobra 4 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bots-digits-Bot-Over-de-1-23-dobra-4-5-xml"
+    },
+    {
+        "id": "Bots-digits-digitover",
+        "name": "Bots digits digitover",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bots-digits-digitover-xml"
+    },
+    {
+        "id": "Bots-digits-DOV2",
+        "name": "Bots digits DOV2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Bots-digits-DOV2-xml"
+    },
+    {
+        "id": "btk",
+        "name": "btk",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/btk-xml"
+    },
+    {
+        "id": "C4-AUTOMATED-PRO-BOT",
+        "name": "C4 AUTOMATED PRO BOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/C4-AUTOMATED-PRO-BOT-xml"
+    },
+    {
+        "id": "Candle-mine-version-3-pro-1",
+        "name": "Candle mine version 3 pro 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Candle-mine-version-3-pro-1-xml"
+    },
+    {
+        "id": "Comfort-zone-3-digits-above-6-4-1",
+        "name": "Comfort zone 3 digits above 6 4 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Comfort-zone-3-digits-above-6-4-1-xml"
+    },
+    {
+        "id": "D2-BY-MR-DUKE",
+        "name": "D2 BY MR DUKE",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/D2-BY-MR-DUKE-xml"
+    },
+    {
+        "id": "D2-updated-version-BY-MR-DUKE-254702490526-2",
+        "name": "D2 updated version BY MR DUKE 254702490526 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/D2-updated-version-BY-MR-DUKE-254702490526-2-xml"
+    },
+    {
+        "id": "D3-pro-bot-254702490526-2",
+        "name": "D3 pro bot 254702490526 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/D3-pro-bot-254702490526-2-xml"
+    },
+    {
+        "id": "D7-Over-2-bot",
+        "name": "D7 Over 2 bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/D7-Over-2-bot-xml"
+    },
+    {
+        "id": "Dandelion-Over-Under-Digits",
+        "name": "Dandelion Over Under Digits",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dandelion-Over-Under-Digits-xml"
+    },
+    {
+        "id": "Digit-master-Ai-2025-under-8-under-5",
+        "name": "Digit master Ai 2025 under 8 under 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-master-Ai-2025-under-8-under-5-xml"
+    },
+    {
+        "id": "Digit-Over-2-by-Dileep-Neuronal-trade-2",
+        "name": "Digit Over 2 by Dileep Neuronal trade 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Over-2-by-Dileep-Neuronal-trade-2-xml"
+    },
+    {
+        "id": "DIGIT-OVER-COMPOUNDER-STRATEGY-BOT",
+        "name": "DIGIT OVER COMPOUNDER STRATEGY BOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/DIGIT-OVER-COMPOUNDER-STRATEGY-BOT-xml"
+    },
+    {
+        "id": "Digit-Over-Under-BADGER-DBOT-2",
+        "name": "Digit Over Under BADGER DBOT 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Over-Under-BADGER-DBOT-2-xml"
+    },
+    {
+        "id": "DIGIT-OVER-UNDER-SUPERBOT",
+        "name": "DIGIT OVER UNDER SUPERBOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/DIGIT-OVER-UNDER-SUPERBOT-xml"
+    },
+    {
+        "id": "Digit-Penghancur-Corona-V-1-0-7",
+        "name": "Digit Penghancur Corona V 1 0 7",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Penghancur-Corona-V-1-0-7-xml"
+    },
+    {
+        "id": "Digit-Prime-Strategy-Digit-Prime-Strategy-2nd-June-2022",
+        "name": "Digit Prime Strategy Digit Prime Strategy 2nd June 2022",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Prime-Strategy-Digit-Prime-Strategy-2nd-June-2022-xml"
+    },
+    {
+        "id": "Digit-Prime-Strategy-Digit-Prime-Strategy-count-1-15th-Sep-2022",
+        "name": "Digit Prime Strategy Digit Prime Strategy count 1 15th Sep 2022",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Prime-Strategy-Digit-Prime-Strategy-count-1-15th-Sep-2022-xml"
+    },
+    {
+        "id": "Digit-Pro-Expert-V1-0-1",
+        "name": "Digit Pro Expert V1 0 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Digit-Pro-Expert-V1-0-1-xml"
+    },
+    {
+        "id": "Dollar-100-Volatility",
+        "name": "Dollar 100 Volatility",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dollar-100-Volatility-xml"
+    },
+    {
+        "id": "Dollar-Generator-Doji-by-MR-DUKE-1",
+        "name": "Dollar Generator Doji by MR DUKE 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dollar-Generator-Doji-by-MR-DUKE-1-xml"
+    },
+    {
+        "id": "Dollar-Sniper-Ai-under-9-under-6-by-PROF",
+        "name": "Dollar Sniper Ai under 9 under 6 by PROF",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dollar-Sniper-Ai-under-9-under-6-by-PROF-xml"
+    },
+    {
+        "id": "Dp-Entry-point-Bot-V1",
+        "name": "Dp Entry point Bot V1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dp-Entry-point-Bot-V1-xml"
+    },
+    {
+        "id": "Drag-Race-Digits-Ai-D-Bot",
+        "name": "Drag Race Digits Ai D Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Drag-Race-Digits-Ai-D-Bot-xml"
+    },
+    {
+        "id": "Dragon-Version-4-2",
+        "name": "Dragon Version 4 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Dragon-Version-4-2-xml"
+    },
+    {
+        "id": "Enhanced-AUTO-AI-PREMIUM-ROBOT",
+        "name": "Enhanced AUTO AI PREMIUM ROBOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Enhanced-AUTO-AI-PREMIUM-ROBOT-xml"
+    },
+    {
+        "id": "ENHANCED-AUTO-C4-VOLT-3-AI-PREMIUM-1",
+        "name": "ENHANCED AUTO C4 VOLT 3 AI PREMIUM 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/ENHANCED-AUTO-C4-VOLT-3-AI-PREMIUM-1-xml"
+    },
+    {
+        "id": "Enoque-ke-bot",
+        "name": "Enoque ke bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Enoque-ke-bot-xml"
+    },
+    {
+        "id": "Fortune-Version-bot-el-fabi",
+        "name": "Fortune Version bot el fabi",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Fortune-Version-bot-el-fabi-xml"
+    },
+    {
+        "id": "FreeSourceBots-Digit-Over-3",
+        "name": "FreeSourceBots Digit Over 3",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/FreeSourceBots-Digit-Over-3-xml"
+    },
+    {
+        "id": "FreeSourceBots-Free-Digit-Socail-Bot",
+        "name": "FreeSourceBots Free Digit Socail Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/FreeSourceBots-Free-Digit-Socail-Bot-xml"
+    },
+    {
+        "id": "Fully-Automated-Over-Under-Bot-10-1s-Index",
+        "name": "Fully Automated Over Under Bot 10 1s Index",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Fully-Automated-Over-Under-Bot-10-1s-Index-xml"
+    },
+    {
+        "id": "G-money-AI-by-prof",
+        "name": "G money AI by prof",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/G-money-AI-by-prof-xml"
+    },
+    {
+        "id": "G57-pro-volt-bot",
+        "name": "G57 pro volt bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/G57-pro-volt-bot-xml"
+    },
+    {
+        "id": "Genesis-Version-Two-prediction-bot",
+        "name": "Genesis Version Two prediction bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Genesis-Version-Two-prediction-bot-xml"
+    },
+    {
+        "id": "GOD-DID",
+        "name": "GOD DID",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/GOD-DID-xml"
+    },
+    {
+        "id": "grffy",
+        "name": "grffy",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/grffy-xml"
+    },
+    {
+        "id": "HIGH-PROFIT-BOT",
+        "name": "HIGH PROFIT BOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/HIGH-PROFIT-BOT-xml"
+    },
+    {
+        "id": "Hussein-V3",
+        "name": "Hussein V3",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Hussein-V3-xml"
+    },
+    {
+        "id": "Husseinfx-v1",
+        "name": "Husseinfx v1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Husseinfx-v1-xml"
+    },
+    {
+        "id": "IBOT-XX",
+        "name": "IBOT XX",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/IBOT-XX-xml"
+    },
+    {
+        "id": "Infinity-Algo-1",
+        "name": "Infinity Algo 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Infinity-Algo-1-xml"
+    },
+    {
+        "id": "King-Wise-Modified-Under-7-Auto-2024",
+        "name": "King Wise Modified Under 7 Auto 2024",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/King-Wise-Modified-Under-7-Auto-2024-xml"
+    },
+    {
+        "id": "MAGO-DIGITS-UNDER-BOT-io",
+        "name": "MAGO DIGITS UNDER BOT io",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/MAGO-DIGITS-UNDER-BOT-io-xml"
+    },
+    {
+        "id": "MessiahStrikes-7-Digits-Up",
+        "name": "MessiahStrikes 7 Digits Up",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/MessiahStrikes-7-Digits-Up-xml"
+    },
+    {
+        "id": "MessiahStrikes-Martingale5",
+        "name": "MessiahStrikes Martingale5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/MessiahStrikes-Martingale5-xml"
+    },
+    {
+        "id": "Mrzetuzetu-sv1",
+        "name": "Mrzetuzetu sv1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Mrzetuzetu-sv1-xml"
+    },
+    {
+        "id": "OVER-2-SMART-EXECUTOR-AI-V7",
+        "name": "OVER 2 SMART EXECUTOR AI V7",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/OVER-2-SMART-EXECUTOR-AI-V7-xml"
+    },
+    {
+        "id": "Over-2-Under-7-X3-5",
+        "name": "Over 2 Under 7 X3 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Over-2-Under-7-X3-5-xml"
+    },
+    {
+        "id": "Over-2-Vs-Over-4-Duke",
+        "name": "Over 2 Vs Over 4 Duke",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Over-2-Vs-Over-4-Duke-xml"
+    },
+    {
+        "id": "Over-Destroyer",
+        "name": "Over Destroyer",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Over-Destroyer-xml"
+    },
+    {
+        "id": "Over5under4-Custom-By-Alan",
+        "name": "Over5under4 Custom By Alan",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Over5under4-Custom-By-Alan-xml"
+    },
+    {
+        "id": "Over5under4",
+        "name": "Over5under4",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Over5under4-xml"
+    },
+    {
+        "id": "Prof-v21-AI-OVER-3-OVER-5",
+        "name": "Prof v21 AI OVER 3 OVER 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Prof-v21-AI-OVER-3-OVER-5-xml"
+    },
+    {
+        "id": "Profit-Retest-Under-Minimum-1",
+        "name": "Profit Retest Under Minimum 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Profit-Retest-Under-Minimum-1-xml"
+    },
+    {
+        "id": "Reverse-switch-bot",
+        "name": "Reverse switch bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Reverse-switch-bot-xml"
+    },
+    {
+        "id": "small-acc-5",
+        "name": "small acc 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/small-acc-5-xml"
+    },
+    {
+        "id": "Sniper-bot-V-2-2",
+        "name": "Sniper bot V 2 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Sniper-bot-V-2-2-xml"
+    },
+    {
+        "id": "Solitary-Digits-Over-1-D-Bot",
+        "name": "Solitary Digits Over 1 D Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Solitary-Digits-Over-1-D-Bot-xml"
+    },
+    {
+        "id": "Speed-Bot",
+        "name": "Speed Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Speed-Bot-xml"
+    },
+    {
+        "id": "States-Digit-Switcher",
+        "name": "States Digit Switcher",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/States-Digit-Switcher-xml"
+    },
+    {
+        "id": "Switcher",
+        "name": "Switcher",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Switcher-xml"
+    },
+    {
+        "id": "The-Elites",
+        "name": "The Elites",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/The-Elites-xml"
+    },
+    {
+        "id": "The-Masika-Apex-Range-Under-Bot",
+        "name": "The Masika Apex Range Under Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/The-Masika-Apex-Range-Under-Bot-xml"
+    },
+    {
+        "id": "The-Masika-Strike-Over-Bot",
+        "name": "The Masika Strike Over Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/The-Masika-Strike-Over-Bot-xml"
+    },
+    {
+        "id": "The-Masika-Strike-Under-Bot",
+        "name": "The Masika Strike Under Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/The-Masika-Strike-Under-Bot-xml"
+    },
+    {
+        "id": "TRADE-CITY-BOT-Version-1-2-2",
+        "name": "TRADE CITY BOT Version 1 2 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/TRADE-CITY-BOT-Version-1-2-2-xml"
+    },
+    {
+        "id": "under-6-7-8-9-swicher",
+        "name": "under 6 7 8 9 swicher",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/under-6-7-8-9-swicher-xml"
+    },
+    {
+        "id": "Under-7-Expert-Analyser",
+        "name": "Under 7 Expert Analyser",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Under-7-Expert-Analyser-xml"
+    },
+    {
+        "id": "UNDER-7-KILLER-AI-BOT",
+        "name": "UNDER 7 KILLER AI BOT",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/UNDER-7-KILLER-AI-BOT-xml"
+    },
+    {
+        "id": "UNDER-8",
+        "name": "UNDER 8",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/UNDER-8-xml"
+    },
+    {
+        "id": "Under-9-recovery-under-6-1",
+        "name": "Under 9 recovery under 6 1",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Under-9-recovery-under-6-1-xml"
+    },
+    {
+        "id": "Under-Destroyer-Pro-Bot",
+        "name": "Under Destroyer Pro Bot",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Under-Destroyer-Pro-Bot-xml"
+    },
+    {
+        "id": "Under-Destroyer",
+        "name": "Under Destroyer",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Under-Destroyer-xml"
+    },
+    {
+        "id": "V30-ELITE-SNIPER-3",
+        "name": "V30 ELITE SNIPER 3",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/V30-ELITE-SNIPER-3-xml"
+    },
+    {
+        "id": "VAMPIRE",
+        "name": "VAMPIRE",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/VAMPIRE-xml"
+    },
+    {
+        "id": "WALLSTREET",
+        "name": "WALLSTREET",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/WALLSTREET-xml"
+    },
+    {
+        "id": "Warriors-Over-5",
+        "name": "Warriors Over 5",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Warriors-Over-5-xml"
+    },
+    {
+        "id": "Warriors-Over-7",
+        "name": "Warriors Over 7",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Warriors-Over-7-xml"
+    },
+    {
+        "id": "Warriors-Under-8",
+        "name": "Warriors Under 8",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Warriors-Under-8-xml"
+    },
+    {
+        "id": "Wealth-Generator-2",
+        "name": "Wealth Generator 2",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Wealth-Generator-2-xml"
+    },
+    {
+        "id": "Wealth-Generator",
+        "name": "Wealth Generator",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Wealth-Generator-xml"
+    },
+    {
+        "id": "1-tik",
+        "name": "1 tik",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/1-tik-xml"
+    },
+    {
+        "id": "100usd-CAPITAL-BOT-2",
+        "name": "100usd CAPITAL BOT 2",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/100usd-CAPITAL-BOT-2-xml"
+    },
+    {
+        "id": "1691179275141-MASTER-SET-VERSION-2-by-Flossin",
+        "name": "1691179275141 MASTER SET VERSION 2 by Flossin",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/1691179275141-MASTER-SET-VERSION-2-by-Flossin-xml"
+    },
+    {
+        "id": "2-bot-best-1-1",
+        "name": "2 bot best 1 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/2-bot-best-1-1-xml"
+    },
+    {
+        "id": "3-fox-martilevel-1",
+        "name": "3 fox martilevel 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/3-fox-martilevel-1-xml"
+    },
+    {
+        "id": "60-Sec-RSI",
+        "name": "60 Sec RSI",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/60-Sec-RSI-xml"
+    },
+    {
+        "id": "60m-best-2-1",
+        "name": "60m best 2 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/60m-best-2-1-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-Dry-Desert-Boy-Aggregator-Rise-Aggregator",
+        "name": "Apollo 1 Copies Dry Desert Boy Aggregator Rise Aggregator",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-Dry-Desert-Boy-Aggregator-Rise-Aggregator-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-Dry-Desert-Boy-Aggregator-TOP-07-BOT-0002-Rise-Fall-Candle-Close-Open-MG",
+        "name": "Apollo 1 Copies Dry Desert Boy Aggregator TOP 07 BOT 0002 Rise Fall Candle Close Open MG",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-Dry-Desert-Boy-Aggregator-TOP-07-BOT-0002-Rise-Fall-Candle-Close-Open-MG-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-Big-Boyz-Rise-and-Fall",
+        "name": "Apollo 1 Copies MainStream Big Boyz Rise and Fall",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-MainStream-Big-Boyz-Rise-and-Fall-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-MainStream-Trade-City-Bot-Version-34",
+        "name": "Apollo 1 Copies MainStream Trade City Bot Version 34",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-MainStream-Trade-City-Bot-Version-34-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-10-stake-Milk-Man-10",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 10 stake Milk Man 10",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-SMA-AVERAGES-AT-C90-10-stake-Milk-Man-10-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-10-stake-Milk-Man",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 10 stake Milk Man",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-SMA-AVERAGES-AT-C90-10-stake-Milk-Man-xml"
+    },
+    {
+        "id": "Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Scuba-v22-0-29",
+        "name": "Apollo 1 Copies SMA AVERAGES AT C90 Binogator Scuba v22 0 29",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Apollo-1-Copies-SMA-AVERAGES-AT-C90-Binogator-Scuba-v22-0-29-xml"
+    },
+    {
+        "id": "BEAR-MARKET-AUTO-BOT-TRADER-XML",
+        "name": "BEAR MARKET AUTO BOT TRADER XML",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/BEAR-MARKET-AUTO-BOT-TRADER-XML-xml"
+    },
+    {
+        "id": "binary-bot-3-1",
+        "name": "binary bot 3 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/binary-bot-3-1-xml"
+    },
+    {
+        "id": "binary-bot-4",
+        "name": "binary bot 4",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/binary-bot-4-xml"
+    },
+    {
+        "id": "binary-bot-5",
+        "name": "binary bot 5",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/binary-bot-5-xml"
+    },
+    {
+        "id": "binary-bot-6",
+        "name": "binary bot 6",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/binary-bot-6-xml"
+    },
+    {
+        "id": "BINARY-WAVE-VIP-AUTO-TRADER-XML",
+        "name": "BINARY WAVE VIP AUTO TRADER XML",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/BINARY-WAVE-VIP-AUTO-TRADER-XML-xml"
+    },
+    {
+        "id": "Binogator-Scuba-v22-0-29",
+        "name": "Binogator Scuba v22 0 29",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Binogator-Scuba-v22-0-29-xml"
+    },
+    {
+        "id": "Bollinger-und-RSI-change-by-loss-1-3-Ver-1-0-4",
+        "name": "Bollinger und RSI change by loss 1 3 Ver 1 0 4",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bollinger-und-RSI-change-by-loss-1-3-Ver-1-0-4-xml"
+    },
+    {
+        "id": "Bots-DigitMaxim-TOP-01-SMA-Daily",
+        "name": "Bots DigitMaxim TOP 01 SMA Daily",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-DigitMaxim-TOP-01-SMA-Daily-xml"
+    },
+    {
+        "id": "Bots-DigitMaxim-TOP-02-0012-B-BOLINGER",
+        "name": "Bots DigitMaxim TOP 02 0012 B BOLINGER",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-DigitMaxim-TOP-02-0012-B-BOLINGER-xml"
+    },
+    {
+        "id": "Bots-DigitMaxim-TOP-07-BOT-0002-Rise-Fall-Candle-Close-Open-MG",
+        "name": "Bots DigitMaxim TOP 07 BOT 0002 Rise Fall Candle Close Open MG",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-DigitMaxim-TOP-07-BOT-0002-Rise-Fall-Candle-Close-Open-MG-xml"
+    },
+    {
+        "id": "Bots-risefall-12-smartbotV1",
+        "name": "Bots risefall 12 smartbotV1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-12-smartbotV1-xml"
+    },
+    {
+        "id": "Bots-risefall-5-Best-Rsi-90-10-Profit-7-diario",
+        "name": "Bots risefall 5 Best Rsi 90 10 Profit 7 diario",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-5-Best-Rsi-90-10-Profit-7-diario-xml"
+    },
+    {
+        "id": "Bots-risefall-Big-Boyz-Rise-N-fall",
+        "name": "Bots risefall Big Boyz Rise N fall",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-Big-Boyz-Rise-N-fall-xml"
+    },
+    {
+        "id": "Bots-risefall-binary-bot-BOB-EMA-RF-v-3",
+        "name": "Bots risefall binary bot BOB EMA RF v 3",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-binary-bot-BOB-EMA-RF-v-3-xml"
+    },
+    {
+        "id": "Bots-risefall-BOT-REVERSE-SIGNAL-FOX-TRADER-1",
+        "name": "Bots risefall BOT REVERSE SIGNAL FOX TRADER 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-BOT-REVERSE-SIGNAL-FOX-TRADER-1-xml"
+    },
+    {
+        "id": "Bots-risefall-MACD-BOLLINGER-Bands-NO-MARTIANGLE",
+        "name": "Bots risefall MACD BOLLINGER Bands NO MARTIANGLE",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-MACD-BOLLINGER-Bands-NO-MARTIANGLE-xml"
+    },
+    {
+        "id": "Bots-risefall-Reverse-Martingale-with-upward-tick",
+        "name": "Bots risefall Reverse Martingale with upward tick",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-Reverse-Martingale-with-upward-tick-xml"
+    },
+    {
+        "id": "Bots-risefall-RF-TICK-PAUSE",
+        "name": "Bots risefall RF TICK PAUSE",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-RF-TICK-PAUSE-xml"
+    },
+    {
+        "id": "Bots-risefall-RSI-and-MACD",
+        "name": "Bots risefall RSI and MACD",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-RSI-and-MACD-xml"
+    },
+    {
+        "id": "Bots-risefall-safeprofitpro-2",
+        "name": "Bots risefall safeprofitpro 2",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-safeprofitpro-2-xml"
+    },
+    {
+        "id": "Bots-risefall-saferbot",
+        "name": "Bots risefall saferbot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-saferbot-xml"
+    },
+    {
+        "id": "Bots-risefall-sup-res",
+        "name": "Bots risefall sup res",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-sup-res-xml"
+    },
+    {
+        "id": "Bots-risefall-Tick-Worm-RF-Versi-XML",
+        "name": "Bots risefall Tick Worm RF Versi XML",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-risefall-Tick-Worm-RF-Versi-XML-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-4-MyBot-RSI-MACD-SMART-Trend-V4",
+        "name": "Bots Testing Bots 4 MyBot RSI MACD SMART Trend V4",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-4-MyBot-RSI-MACD-SMART-Trend-V4-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-Bollinger-Bands-and-RSI-Default",
+        "name": "Bots Testing Bots Bollinger Bands and RSI Default",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-Bollinger-Bands-and-RSI-Default-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-Bollinger-Bands-and-RSI-Easy-Inputs",
+        "name": "Bots Testing Bots Bollinger Bands and RSI Easy Inputs",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-Bollinger-Bands-and-RSI-Easy-Inputs-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-1",
+        "name": "Bots Testing Bots POWERBOT FOREX 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-1-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-10",
+        "name": "Bots Testing Bots POWERBOT FOREX 10",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-10-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-11",
+        "name": "Bots Testing Bots POWERBOT FOREX 11",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-11-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-12",
+        "name": "Bots Testing Bots POWERBOT FOREX 12",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-12-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-13",
+        "name": "Bots Testing Bots POWERBOT FOREX 13",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-13-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-2",
+        "name": "Bots Testing Bots POWERBOT FOREX 2",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-2-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-3",
+        "name": "Bots Testing Bots POWERBOT FOREX 3",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-3-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-4",
+        "name": "Bots Testing Bots POWERBOT FOREX 4",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-4-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-5",
+        "name": "Bots Testing Bots POWERBOT FOREX 5",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-5-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-6",
+        "name": "Bots Testing Bots POWERBOT FOREX 6",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-6-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-7",
+        "name": "Bots Testing Bots POWERBOT FOREX 7",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-7-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-8",
+        "name": "Bots Testing Bots POWERBOT FOREX 8",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-8-xml"
+    },
+    {
+        "id": "Bots-Testing-Bots-POWERBOT-FOREX-9",
+        "name": "Bots Testing Bots POWERBOT FOREX 9",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-Testing-Bots-POWERBOT-FOREX-9-xml"
+    },
+    {
+        "id": "Bots-TOP1-TOP-05-SMA-Daily",
+        "name": "Bots TOP1 TOP 05 SMA Daily",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Bots-TOP1-TOP-05-SMA-Daily-xml"
+    },
+    {
+        "id": "bull-candle-Bot",
+        "name": "bull candle Bot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/bull-candle-Bot-xml"
+    },
+    {
+        "id": "BULL-MARKET-AUTO-BOT-TRADER-XML",
+        "name": "BULL MARKET AUTO BOT TRADER XML",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/BULL-MARKET-AUTO-BOT-TRADER-XML-xml"
+    },
+    {
+        "id": "Candle-Looper-DBot",
+        "name": "Candle Looper DBot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Candle-Looper-DBot-xml"
+    },
+    {
+        "id": "Complejo",
+        "name": "Complejo",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Complejo-xml"
+    },
+    {
+        "id": "ContinuousProfitBot",
+        "name": "ContinuousProfitBot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/ContinuousProfitBot-xml"
+    },
+    {
+        "id": "Deriv-killer-3-0",
+        "name": "Deriv killer 3 0",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Deriv-killer-3-0-xml"
+    },
+    {
+        "id": "Deriv-wizard-1",
+        "name": "Deriv wizard 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Deriv-wizard-1-xml"
+    },
+    {
+        "id": "First-Trades-0-35KillerSlowMan",
+        "name": "First Trades 0 35KillerSlowMan",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/First-Trades-0-35KillerSlowMan-xml"
+    },
+    {
+        "id": "First-Trades-SilentKiller",
+        "name": "First Trades SilentKiller",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/First-Trades-SilentKiller-xml"
+    },
+    {
+        "id": "For-you-guys2024",
+        "name": "For you guys2024",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/For-you-guys2024-xml"
+    },
+    {
+        "id": "FreeSourceBots-binary-bot-Premium-Rise-Fall",
+        "name": "FreeSourceBots binary bot Premium Rise Fall",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/FreeSourceBots-binary-bot-Premium-Rise-Fall-xml"
+    },
+    {
+        "id": "FreeSourceBots-Stoch-and-RSI-Bot",
+        "name": "FreeSourceBots Stoch and RSI Bot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/FreeSourceBots-Stoch-and-RSI-Bot-xml"
+    },
+    {
+        "id": "G3-Massive-Bot-Vers-1-5-By-360-Trading-Hub-2-2",
+        "name": "G3 Massive Bot Vers 1 5 By 360 Trading Hub 2 2",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/G3-Massive-Bot-Vers-1-5-By-360-Trading-Hub-2-2-xml"
+    },
+    {
+        "id": "MA-Cross-Over-DerivBot-1",
+        "name": "MA Cross Over DerivBot 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/MA-Cross-Over-DerivBot-1-xml"
+    },
+    {
+        "id": "Martingale-EMA",
+        "name": "Martingale EMA",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Martingale-EMA-xml"
+    },
+    {
+        "id": "MessiahStrikes-David-1",
+        "name": "MessiahStrikes David 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/MessiahStrikes-David-1-xml"
+    },
+    {
+        "id": "Profit-Test345",
+        "name": "Profit Test345",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Profit-Test345-xml"
+    },
+    {
+        "id": "Profit-Tick-Power-Flow-Auto-Bot-KillerMarket-2",
+        "name": "Profit Tick Power Flow Auto Bot KillerMarket 2",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Profit-Tick-Power-Flow-Auto-Bot-KillerMarket-2-xml"
+    },
+    {
+        "id": "Rise-And-Fall-Automatic-X",
+        "name": "Rise And Fall Automatic X",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Rise-And-Fall-Automatic-X-xml"
+    },
+    {
+        "id": "Rise-and-Fall-By-MR-DUKE",
+        "name": "Rise and Fall By MR DUKE",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Rise-and-Fall-By-MR-DUKE-xml"
+    },
+    {
+        "id": "RiseFallCandleBot",
+        "name": "RiseFallCandleBot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/RiseFallCandleBot-xml"
+    },
+    {
+        "id": "Russian-Candle-Expiry-Our",
+        "name": "Russian Candle Expiry Our",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Russian-Candle-Expiry-Our-xml"
+    },
+    {
+        "id": "SMA-Daily",
+        "name": "SMA Daily",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/SMA-Daily-xml"
+    },
+    {
+        "id": "SMADailyBot",
+        "name": "SMADailyBot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/SMADailyBot-xml"
+    },
+    {
+        "id": "SMART-fx-Bot",
+        "name": "SMART fx Bot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/SMART-fx-Bot-xml"
+    },
+    {
+        "id": "Solid-25v-bot",
+        "name": "Solid 25v bot",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Solid-25v-bot-xml"
+    },
+    {
+        "id": "The-D3-Rise-And-Fall",
+        "name": "The D3 Rise And Fall",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/The-D3-Rise-And-Fall-xml"
+    },
+    {
+        "id": "Trade-city-Bot-1-1-1",
+        "name": "Trade city Bot 1 1 1",
+        "creator": "rise-fall",
+        "file": "selfanalyzing/rise-fall/Trade-city-Bot-1-1-1-xml"
+    },
+    {
+        "id": "binary-bot-GOEST-OUT-H4-H1-15M-V100",
+        "name": "binary bot GOEST OUT H4 H1 15M V100",
+        "creator": "stays-in-outside",
+        "file": "selfanalyzing/stays-in-outside/binary-bot-GOEST-OUT-H4-H1-15M-V100-xml"
+    },
+    {
         "id": "signal-ai-Risk-Management-Bot",
         "name": "ai Risk Management Bot",
         "creator": "signal",
@@ -9358,9 +11260,19 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 367
     },
     {
+        "id": "over-under",
+        "label": "over-under",
+        "count": 123
+    },
+    {
         "id": "derivbots",
         "label": "derivbots",
         "count": 84
+    },
+    {
+        "id": "rise-fall",
+        "label": "rise-fall",
+        "count": 83
     },
     {
         "id": "dollarprinter",
@@ -9368,9 +11280,19 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 81
     },
     {
+        "id": "matches-differs",
+        "label": "matches-differs",
+        "count": 69
+    },
+    {
         "id": "osam",
         "label": "osam",
         "count": 45
+    },
+    {
+        "id": "even-odd",
+        "label": "even-odd",
+        "count": 41
     },
     {
         "id": "chichitraders2",
@@ -9500,6 +11422,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbotzone",
         "label": "dbotzone",
+        "count": 1
+    },
+    {
+        "id": "stays-in-outside",
+        "label": "stays-in-outside",
         "count": 1
     },
     {

@@ -1,0 +1,803 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="B{S(Y5-*fOE*x4$@$G#}">text</variable>
+    <variable id="v1">InitialStake</variable>
+    <variable id="v12">LastDigit</variable>
+    <variable id="v2">Stake</variable>
+    <variable id="v13">CurrentBarrier</variable>
+    <variable id="v11">TotalProfit</variable>
+    <variable id="v3">MartingaleMultiplier</variable>
+    <variable id="v6">Stage</variable>
+    <variable id="v8">RecoveryDigit</variable>
+    <variable id="v14">StopBot</variable>
+    <variable id="v4">LossCount</variable>
+    <variable id="v5">MaxLossCount</variable>
+    <variable id="v9">TakeProfit</variable>
+    <variable id="v7">EntryDigit</variable>
+    <variable id="v10">StopLoss</variable>
+  </variables>
+  <block type="trade_definition" id="b_td" deletable="false" x="0" y="110">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="b_market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">R_100</field>
+        <next>
+          <block type="trade_definition_tradetype" id="b_tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="b_contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="b_candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="b_restartbs" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="b_restarterr" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="i1">
+        <field name="VAR" id="v1">InitialStake</field>
+        <value name="VALUE">
+          <block type="math_number" id="i1n">
+            <field name="NUM">1.97</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="i2">
+            <field name="VAR" id="v2">Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="i2g">
+                <field name="VAR" id="v1">InitialStake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="i3">
+                <field name="VAR" id="v3">MartingaleMultiplier</field>
+                <value name="VALUE">
+                  <block type="math_number" id="i3n">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="i4">
+                    <field name="VAR" id="v4">LossCount</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="i4n">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="i5">
+                        <field name="VAR" id="v5">MaxLossCount</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="i5n">
+                            <field name="NUM">3</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="i6">
+                            <field name="VAR" id="v6">Stage</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="i6n">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="i7">
+                                <field name="VAR" id="v7">EntryDigit</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="i7n">
+                                    <field name="NUM">5</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="i8">
+                                    <field name="VAR" id="v8">RecoveryDigit</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="i8n">
+                                        <field name="NUM">6</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="variables_set" id="i9">
+                                        <field name="VAR" id="v9">TakeProfit</field>
+                                        <value name="VALUE">
+                                          <block type="math_number" id="i9n">
+                                            <field name="NUM">10</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" id="i10">
+                                            <field name="VAR" id="v10">StopLoss</field>
+                                            <value name="VALUE">
+                                              <block type="math_number" id="i10n">
+                                                <field name="NUM">10</field>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="variables_set" id="i11">
+                                                <field name="VAR" id="v11">TotalProfit</field>
+                                                <value name="VALUE">
+                                                  <block type="math_number" id="i11n">
+                                                    <field name="NUM">0</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="variables_set" id="i12">
+                                                    <field name="VAR" id="v14">StopBot</field>
+                                                    <value name="VALUE">
+                                                      <block type="math_number" id="i12n">
+                                                        <field name="NUM">0</field>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="notify" id="i13">
+                                                        <field name="NOTIFICATION_TYPE">info</field>
+                                                        <field name="NOTIFICATION_SOUND">silent</field>
+                                                        <value name="MESSAGE">
+                                                          <block type="text" id="i13t">
+                                                            <field name="TEXT">Over2/Over3/Under6-recovery bot started. Edit EntryDigit above per your analysis.</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="controls_if" id="s1" collapsed="true">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+        <value name="IF0">
+          <block type="logic_compare" id="s1c1">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="s1c1a">
+                <field name="VAR" id="v6">Stage</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="s1c1b">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="s1d0" collapsed="true">
+            <field name="VAR" id="v13">CurrentBarrier</field>
+            <value name="VALUE">
+              <block type="math_number" id="s1d0n">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_compare" id="s1c2">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="s1c2a">
+                <field name="VAR" id="v6">Stage</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="s1c2b">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="variables_set" id="s1d1" collapsed="true">
+            <field name="VAR" id="v13">CurrentBarrier</field>
+            <value name="VALUE">
+              <block type="math_number" id="s1d1n">
+                <field name="NUM">3</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="s1e" collapsed="true">
+            <field name="VAR" id="v13">CurrentBarrier</field>
+            <value name="VALUE">
+              <block type="variables_get" id="s1eg">
+                <field name="VAR" id="v8">RecoveryDigit</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_definition_tradeoptions" id="s2">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+            <field name="DURATIONTYPE_LIST">t</field>
+            <value name="DURATION">
+              <shadow type="math_number_positive" id="s2d">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="AMOUNT">
+              <shadow type="math_number_positive" id="s2a">
+                <field name="NUM">1</field>
+              </shadow>
+              <block type="variables_get" id="s2ag">
+                <field name="VAR" id="v2">Stake</field>
+              </block>
+            </value>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="s2p" inline="true">
+                <field name="NUM">1</field>
+              </shadow>
+              <block type="variables_get" id="s2pg">
+                <field name="VAR" id="v13">CurrentBarrier</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="during_purchase" id="b_dp" collapsed="true" x="792" y="110"></block>
+  <block type="after_purchase" id="b_ap" collapsed="true" deletable="false" x="792" y="256">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="ap1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="ap1if0">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="ap1d0">
+            <field name="VAR" id="v11">TotalProfit</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="ap1d0m">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <block type="variables_get" id="ap1d0a">
+                    <field name="VAR" id="v11">TotalProfit</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="read_details" id="ap1d0b">
+                    <field name="DETAIL_INDEX">4</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="notify" id="ap1d1">
+                <field name="NOTIFICATION_TYPE">success</field>
+                <field name="NOTIFICATION_SOUND">silent</field>
+                <value name="MESSAGE">
+                  <block type="text" id="!yK#.Fs,@.8Sv/:U+16l">
+                    <field name="TEXT">Take profit or stop loss reached. Bot stopped.</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="ap1d2">
+                    <field name="VAR" id="v4">LossCount</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="ap1d2n">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="ap1d3">
+                        <field name="VAR" id="v2">Stake</field>
+                        <value name="VALUE">
+                          <block type="variables_get" id="ap1d3g">
+                            <field name="VAR" id="v1">InitialStake</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="controls_if" id="ap1d4">
+                            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="2" else="1"></mutation>
+                            <value name="IF0">
+                              <block type="logic_compare" id="ap1d4if0">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                  <block type="variables_get" id="ap1d4if0a">
+                                    <field name="VAR" id="v6">Stage</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number" id="ap1d4if0b">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="variables_set" id="ap1d4d0">
+                                <field name="VAR" id="v6">Stage</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="ap1d4d0n">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                            <value name="IF1">
+                              <block type="logic_compare" id="ap1d4if1">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                  <block type="variables_get" id="ap1d4if1a">
+                                    <field name="VAR" id="v6">Stage</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number" id="ap1d4if1b">
+                                    <field name="NUM">3</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO1">
+                              <block type="variables_set" id="ap1d4d1">
+                                <field name="VAR" id="v6">Stage</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="ap1d4d1n">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                            <value name="IF2">
+                              <block type="logic_compare" id="ap1d4if2">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                  <block type="variables_get" id="ap1d4if2a">
+                                    <field name="VAR" id="v6">Stage</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number" id="ap1d4if2b">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO2">
+                              <block type="variables_set" id="ap1d4d2">
+                                <field name="VAR" id="v6">Stage</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="ap1d4d2n">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                            <statement name="ELSE">
+                              <block type="variables_set" id="ap1d4e0">
+                                <field name="VAR" id="v6">Stage</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="ap1d4e0n">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="ap1e0">
+            <field name="VAR" id="v11">TotalProfit</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="ap1e0m">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <block type="variables_get" id="ap1e0a">
+                    <field name="VAR" id="v11">TotalProfit</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="read_details" id="ap1e0b">
+                    <field name="DETAIL_INDEX">4</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="notify" id="ap1e1">
+                <field name="NOTIFICATION_TYPE">error</field>
+                <field name="NOTIFICATION_SOUND">silent</field>
+                <value name="MESSAGE">
+                  <block type="text" id="6K]`oLHJP$lCF/Xhf/H*">
+                    <field name="TEXT">Take profit or stop loss reached. Bot stopped.</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="math_change" id="ap1e2">
+                    <field name="VAR" id="v4">LossCount</field>
+                    <value name="DELTA">
+                      <shadow type="math_number" id="ap1e2s">
+                        <field name="NUM">1</field>
+                      </shadow>
+                    </value>
+                    <next>
+                      <block type="controls_if" id="ap1e3">
+                        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                        <value name="IF0">
+                          <block type="logic_compare" id="ap1e3if0">
+                            <field name="OP">GTE</field>
+                            <value name="A">
+                              <block type="variables_get" id="ap1e3a">
+                                <field name="VAR" id="v4">LossCount</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="variables_get" id="ap1e3b">
+                                <field name="VAR" id="v5">MaxLossCount</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="variables_set" id="ap1e3d0">
+                            <field name="VAR" id="v14">StopBot</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="ap1e3d0n">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="notify" id="ap1e3d1">
+                                <field name="NOTIFICATION_TYPE">error</field>
+                                <field name="NOTIFICATION_SOUND">silent</field>
+                                <value name="MESSAGE">
+                                  <block type="text" id="ap1e3d1t">
+                                    <field name="TEXT">Max consecutive losses (3) reached. Bot stopped.</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                        <statement name="ELSE">
+                          <block type="variables_set" id="ap1e3e0">
+                            <field name="VAR" id="v2">Stake</field>
+                            <value name="VALUE">
+                              <block type="math_arithmetic" id="ap1e3e0m">
+                                <field name="OP">MULTIPLY</field>
+                                <value name="A">
+                                  <block type="variables_get" id="ap1e3e0a">
+                                    <field name="VAR" id="v2">Stake</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="variables_get" id="ap1e3e0b">
+                                    <field name="VAR" id="v3">MartingaleMultiplier</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="controls_if" id="ap1e3e1">
+                                <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+                                <value name="IF0">
+                                  <block type="logic_compare" id="ap1e3e1if0">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="ap1e3e1a">
+                                        <field name="VAR" id="v6">Stage</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="math_number" id="ap1e3e1b">
+                                        <field name="NUM">1</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="variables_set" id="ap1e3e1d0">
+                                    <field name="VAR" id="v6">Stage</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="ap1e3e1d0n">
+                                        <field name="NUM">3</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                                <value name="IF1">
+                                  <block type="logic_compare" id="ap1e3e1if1">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="ap1e3e1a2">
+                                        <field name="VAR" id="v6">Stage</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="math_number" id="ap1e3e1b2">
+                                        <field name="NUM">2</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <statement name="DO1">
+                                  <block type="variables_set" id="ap1e3e1d1">
+                                    <field name="VAR" id="v6">Stage</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="ap1e3e1d1n">
+                                        <field name="NUM">4</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="controls_if" id="ap2">
+            <value name="IF0">
+              <block type="logic_operation" id="ap2if0">
+                <field name="OP">OR</field>
+                <value name="A">
+                  <block type="logic_compare" id="ap2a">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="variables_get" id="ap2aa">
+                        <field name="VAR" id="v11">TotalProfit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="ap2ab">
+                        <field name="VAR" id="v9">TakeProfit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_compare" id="ap2b">
+                    <field name="OP">LTE</field>
+                    <value name="A">
+                      <block type="variables_get" id="ap2ba">
+                        <field name="VAR" id="v11">TotalProfit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_arithmetic" id="ap2bb">
+                        <field name="OP">MINUS</field>
+                        <value name="A">
+                          <block type="math_number" id="ap2bb0">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="variables_get" id="ap2bb1">
+                            <field name="VAR" id="v10">StopLoss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="ap2d0">
+                <field name="VAR" id="v14">StopBot</field>
+                <value name="VALUE">
+                  <block type="math_number" id="ap2d0n">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="notify" id="ap2d1">
+                    <field name="NOTIFICATION_TYPE">success</field>
+                    <field name="NOTIFICATION_SOUND">silent</field>
+                    <value name="MESSAGE">
+                      <block type="text" id="ap2d1t">
+                        <field name="TEXT">Take profit or stop loss reached. Bot stopped.</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="ap3">
+                <value name="IF0">
+                  <block type="logic_compare" id="ap3if0">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="ap3a">
+                        <field name="VAR" id="v14">StopBot</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="ap3b">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="trade_again" id="ap3d0"></block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="b_bp" collapsed="true" deletable="false" x="0" y="1400">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="bp1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+        <value name="IF0">
+          <block type="logic_operation" id="bp1if0">
+            <field name="OP">OR</field>
+            <value name="A">
+              <block type="logic_operation" id="bp1a">
+                <field name="OP">AND</field>
+                <value name="A">
+                  <block type="logic_compare" id="bp1a1">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="bp1a1a">
+                        <field name="VAR" id="v6">Stage</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="bp1a1b">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_compare" id="bp1a2">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="bp1a2a">
+                        <field name="VAR" id="v12">LastDigit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="bp1a2b">
+                        <field name="VAR" id="v7">EntryDigit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_compare" id="bp1b">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="bp1ba">
+                    <field name="VAR" id="v6">Stage</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="bp1bb">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="purchase" id="bp1do0">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_operation" id="bp1if1">
+            <field name="OP">OR</field>
+            <value name="A">
+              <block type="logic_compare" id="bp1if1a">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="bp1if1aa">
+                    <field name="VAR" id="v6">Stage</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="bp1if1ab">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_compare" id="bp1if1b">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="bp1if1ba">
+                    <field name="VAR" id="v6">Stage</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="bp1if1bb">
+                    <field name="NUM">4</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="purchase" id="bp1do1">
+            <field name="PURCHASE_LIST">DIGITUNDER</field>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="text_join" id="ap1d1j" collapsed="true" disabled="true" x="0" y="1496">
+    <field name="VARIABLE" id="B{S(Y5-*fOE*x4$@$G#}">text</field>
+  </block>
+  <block type="text_join" id="ap1e1j" collapsed="true" disabled="true" x="0" y="1600">
+    <field name="VARIABLE" id="B{S(Y5-*fOE*x4$@$G#}">text</field>
+  </block>
+  <block type="tick_analysis" id="b_ta" collapsed="true" x="0" y="1704">
+    <statement name="TICKANALYSIS_STACK">
+      <block type="variables_set" id="ta1">
+        <field name="VAR" id="v12">LastDigit</field>
+        <value name="VALUE">
+          <block type="last_digit" id="ta1d"></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
