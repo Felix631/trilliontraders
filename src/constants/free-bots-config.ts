@@ -10839,6 +10839,36 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "signal-ai-Risk-Management-Bot-xml"
     },
     {
+        "id": "tradepool-AI-Premium-Under-7",
+        "name": "AI Premium Under 7",
+        "creator": "tradepool",
+        "file": "tradepool/free/tradepool-AI-Premium-Under-7-xml"
+    },
+    {
+        "id": "tradepool-Sync-BV4",
+        "name": "Sync BV4",
+        "creator": "tradepool",
+        "file": "tradepool/free/tradepool-Sync-BV4-xml"
+    },
+    {
+        "id": "tradepool-TradePool-Digit-Matches",
+        "name": "TradePool Digit Matches",
+        "creator": "tradepool",
+        "file": "tradepool/free/tradepool-TradePool-Digit-Matches-xml"
+    },
+    {
+        "id": "tradepool-TradePool-Even-Odd-111222",
+        "name": "TradePool Even Odd 111222",
+        "creator": "tradepool",
+        "file": "tradepool/free/tradepool-TradePool-Even-Odd-111222-xml"
+    },
+    {
+        "id": "tradepool-Undisputed",
+        "name": "Undisputed",
+        "creator": "tradepool",
+        "file": "tradepool/free/tradepool-Undisputed-xml"
+    },
+    {
         "id": "tradepro-M-M-Update-2026",
         "name": "tradepro M M Update 2026",
         "creator": "tradepro",
@@ -11407,6 +11437,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbx",
         "label": "dbx",
+        "count": 5
+    },
+    {
+        "id": "tradepool",
+        "label": "tradepool",
         "count": 5
     },
     {
