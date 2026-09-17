@@ -5187,22 +5187,82 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "globaltrades/globaltrades-GT-Sequence-Rotator-xml"
     },
     {
-        "id": "isaacmrdollars-Even-Odd-King",
-        "name": "isaacmrdollars Even Odd King",
+        "id": "isaacmrdollars-DigitPilot-AI",
+        "name": "DigitPilot AI",
         "creator": "isaacmrdollars",
-        "file": "isaacmrdollars/isaacmrdollars-Even-Odd-King-xml"
+        "file": "isaacmrdollars/dtool/isaacmrdollars-DigitPilot-AI-xml"
     },
     {
-        "id": "isaacmrdollars-Over-Under-King",
-        "name": "isaacmrdollars Over Under King",
+        "id": "isaacmrdollars-DigitPulse-AI",
+        "name": "DigitPulse AI",
         "creator": "isaacmrdollars",
-        "file": "isaacmrdollars/isaacmrdollars-Over-Under-King-xml"
+        "file": "isaacmrdollars/dtool/isaacmrdollars-DigitPulse-AI-xml"
     },
     {
-        "id": "isaacmrdollars-Rise-Fall-King",
-        "name": "isaacmrdollars Rise Fall King",
+        "id": "isaacmrdollars-main",
+        "name": "main",
         "creator": "isaacmrdollars",
-        "file": "isaacmrdollars/isaacmrdollars-Rise-Fall-King-xml"
+        "file": "isaacmrdollars/library/isaacmrdollars-main-xml"
+    },
+    {
+        "id": "isaacmrdollars-Over-Under-Signals",
+        "name": "Over Under Signals",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/library/isaacmrdollars-Over-Under-Signals-xml"
+    },
+    {
+        "id": "isaacmrdollars-Risk-Management-Bot",
+        "name": "Risk Management Bot",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/library/isaacmrdollars-Risk-Management-Bot-xml"
+    },
+    {
+        "id": "isaacmrdollars-Mathews-speed-bot",
+        "name": "Mathews speed bot",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/tradeprowiki/isaacmrdollars-Mathews-speed-bot-xml"
+    },
+    {
+        "id": "isaacmrdollars-Tradepro-wiki-Rise-and-Fall-by-T-Mathews",
+        "name": "Tradepro wiki Rise and Fall by T Mathews",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/tradeprowiki/isaacmrdollars-Tradepro-wiki-Rise-and-Fall-by-T-Mathews-xml"
+    },
+    {
+        "id": "isaacmrdollars-DEC-entry-Point",
+        "name": "DEC entry Point",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-DEC-entry-Point-xml"
+    },
+    {
+        "id": "isaacmrdollars-Over-1-Under-8-Recovery-Over-4",
+        "name": "Over 1 Under 8 Recovery Over 4",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-Over-1-Under-8-Recovery-Over-4-xml"
+    },
+    {
+        "id": "isaacmrdollars-Over-3-Under-6-Recovery-Bot",
+        "name": "Over 3 Under 6 Recovery Bot",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-Over-3-Under-6-Recovery-Bot-xml"
+    },
+    {
+        "id": "isaacmrdollars-Over-Changer-V2",
+        "name": "Over Changer V2",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-Over-Changer-V2-xml"
+    },
+    {
+        "id": "isaacmrdollars-OVER1-BOT-WITH-OVER3-REVOVERY",
+        "name": "OVER1 BOT WITH OVER3 REVOVERY",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-OVER1-BOT-WITH-OVER3-REVOVERY-xml"
+    },
+    {
+        "id": "isaacmrdollars-Under-Changer",
+        "name": "Under Changer",
+        "creator": "isaacmrdollars",
+        "file": "isaacmrdollars/zara/isaacmrdollars-Under-Changer-xml"
     },
     {
         "id": "jmtraders-2026-Killer-version-Bot🤑-(2)",
@@ -11597,6 +11657,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 16
     },
     {
+        "id": "isaacmrdollars",
+        "label": "isaacmrdollars",
+        "count": 13
+    },
+    {
         "id": "dbotweb",
         "label": "dbotweb",
         "count": 10
@@ -11640,11 +11705,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "globaltrades",
         "label": "globaltrades",
         "count": 4
-    },
-    {
-        "id": "isaacmrdollars",
-        "label": "isaacmrdollars",
-        "count": 3
     },
     {
         "id": "dbotzone",

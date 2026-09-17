@@ -2,6 +2,7 @@
   <variables>
     <variable id="L@/b)sz/N}%09a72BPX;">Stake</variable>
     <variable id="c5=hz$~!=]^.)CA:21Zd">Martangle</variable>
+    <variable id="*0h?w^zq*mY)O#,Y{c!,">Powered By AI</variable>
     <variable id="|Ag{[(Qw/K$g1v=k)zNh">Take Profit</variable>
     <variable id="is-FMy]az2Q0g8j+I|5%">Initial Stake</variable>
     <variable id="2]oO6`(1|9(H8I5QalfU">Stop Loss</variable>
@@ -16,15 +17,16 @@
         <field name="SYMBOL_LIST">1HZ25V</field>
         <field name="ALTERNATE_MARKETS">FALSE</field>
         <field name="ALTERNATE_EVERY">1</field>
+        <field name="MULTI_MARKET">FALSE</field>
         <field name="VH_ENABLED">FALSE</field>
         <field name="VH_SETTINGS_BTN">VH Settings</field>
         <next>
           <block type="trade_definition_tradetype" id="7XER:rs*DLM{4#?`]WL(" deletable="false" movable="false">
             <field name="TRADETYPECAT_LIST">digits</field>
-            <field name="TRADETYPE_LIST">evenodd</field>
+            <field name="TRADETYPE_LIST">overunder</field>
             <next>
               <block type="trade_definition_contracttype" id="M;#hw*QCtpdU/aI@JuW." deletable="false" movable="false">
-                <field name="TYPE_LIST">DIGITEVEN</field>
+                <field name="TYPE_LIST">both</field>
                 <next>
                   <block type="trade_definition_candleinterval" id="(zk[8HvV{m/E!b`4h.pI" deletable="false" movable="false">
                     <field name="CANDLEINTERVAL_LIST">60</field>
@@ -51,7 +53,7 @@
         <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
         <value name="VALUE">
           <block type="math_number" id="NXTESPL-dgp,uEC?MS{L">
-            <field name="NUM">0.5</field>
+            <field name="NUM">0.8</field>
           </block>
         </value>
         <next>
@@ -108,7 +110,7 @@
     </statement>
     <statement name="SUBMARKET">
       <block type="trade_definition_tradeoptions" id="ZX}~CNjTLNB`G}x2}_$8">
-        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="false"></mutation>
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
         <field name="DURATIONTYPE_LIST">t</field>
         <value name="DURATION">
           <shadow type="math_number_positive" id="cIkks,]*FLjcfZb2crUZ">
@@ -123,10 +125,18 @@
             <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
           </block>
         </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="Z^K7%uts8009XZy%3nRJ" inline="true">
+            <field name="NUM">4</field>
+          </shadow>
+          <block type="variables_get" id="v,g2!:!HTQv+_1L?!IO~">
+            <field name="VAR" id="*0h?w^zq*mY)O#,Y{c!,">Powered By AI</field>
+          </block>
+        </value>
       </block>
     </statement>
   </block>
-  <block type="after_purchase" id="(^qi7LaqxU`[;j[JOf%`" collapsed="true" x="718" y="60">
+  <block type="after_purchase" id="(^qi7LaqxU`[;j[JOf%`" collapsed="true" x="746" y="60">
     <statement name="AFTERPURCHASE_STACK">
       <block type="controls_if" id=",%V@C))a-7h$1iVQ3.]l">
         <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
@@ -264,10 +274,100 @@
       </block>
     </statement>
   </block>
-  <block type="before_purchase" id="licmPn={lrajX{,il-1Y" deletable="false" x="0" y="1012">
+  <block type="before_purchase" id="licmPn={lrajX{,il-1Y" collapsed="true" deletable="false" x="0" y="1054">
     <statement name="BEFOREPURCHASE_STACK">
-      <block type="apollo_purchase" id="g0$#P)s}l;60LDPCzx1`">
-        <field name="PURCHASE_LIST">DIGITEVEN</field>
+      <block type="controls_if" id="C=9?7yS4gr^-a0c9iIUx">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="3"></mutation>
+        <value name="IF0">
+          <block type="last_digits_condition" id="46O_(O:S[Ma$2Q@mor$`">
+            <field name="CONDITION">LESS_OR_EQUAL</field>
+            <value name="N">
+              <shadow type="math_number" id="JQa{q)LusKXAg~5b3RD8">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+            <value name="COMPARE_VALUE">
+              <shadow type="math_number" id="D=3nbYa(U+0?!c!dm812">
+                <field name="NUM">4</field>
+              </shadow>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="apollo_purchase2" id="F%u|Qu$jioD},Gu9#OE{">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="CqX?):X[A^l75S+HGdrn">
+                <field name="NUM">4</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="last_digits_condition" id="!sF6@_#Ubk`TxJS8k(Vw">
+            <field name="CONDITION">GREATER_OR_EQUAL</field>
+            <value name="N">
+              <shadow type="math_number" id="[10[%QHC$kYA.f}IU`AE">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+            <value name="COMPARE_VALUE">
+              <shadow type="math_number" id="BES!+__n@oD}y+TN`h0c">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="apollo_purchase2" id="*/eU0rg-zC#W-t;pr1qK">
+            <field name="PURCHASE_LIST">DIGITUNDER</field>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="fH1I[V1R:|JaAJZ`})J,">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <value name="IF2">
+          <block type="last_digits_condition" id="%YgH^D!?l*tYKCNUFKA.">
+            <field name="CONDITION">ALL_EVEN</field>
+            <value name="N">
+              <shadow type="math_number" id="?P`)v#zB_X]J1R)9;T5q">
+                <field name="NUM">3</field>
+              </shadow>
+            </value>
+          </block>
+        </value>
+        <statement name="DO2">
+          <block type="apollo_purchase2" id="I`yLx9%i|^c~Pl,*abU;">
+            <field name="PURCHASE_LIST">DIGITEVEN</field>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="rm7G*ivF@vgj#}BSX$6a">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+        <value name="IF3">
+          <block type="last_digits_condition" id="1zWc$Ii[CQpps)t{wl^d">
+            <field name="CONDITION">ALL_ODD</field>
+            <value name="N">
+              <shadow type="math_number" id="+:{rZYYLo4lj,jtaSj$|">
+                <field name="NUM">3</field>
+              </shadow>
+            </value>
+          </block>
+        </value>
+        <statement name="DO3">
+          <block type="apollo_purchase2" id="L#qss;|YJRxTZ[k~IGmW">
+            <field name="PURCHASE_LIST">DIGITODD</field>
+            <value name="PREDICTION">
+              <shadow type="math_number_positive" id="ex[+NJpQ8DyY.fH9vssT">
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
       </block>
     </statement>
   </block>
