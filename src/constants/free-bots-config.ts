@@ -9447,6 +9447,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "selfanalyzing/matches-differs/100-xml"
     },
     {
+        "id": "14-Bora",
+        "name": "14 Bora",
+        "creator": "matches-differs",
+        "file": "selfanalyzing/matches-differs/14-Bora-xml"
+    },
+    {
         "id": "3-Differ-D-Bot",
         "name": "3 Differ D Bot",
         "creator": "matches-differs",
@@ -9865,6 +9871,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "2025 Dp Printer Version1",
         "creator": "over-under",
         "file": "selfanalyzing/over-under/2025-Dp-Printer-Version1-xml"
+    },
+    {
+        "id": "2026-Hunter-Bot-by-Mr-Duke",
+        "name": "2026 Hunter Bot by Mr Duke",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/2026-Hunter-Bot-by-Mr-Duke-xml"
     },
     {
         "id": "360-Printer-Bot-Original",
@@ -10341,6 +10353,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "selfanalyzing/over-under/Infinity-Algo-1-xml"
     },
     {
+        "id": "Kiazala-v1-by-The-Risk-Manager-3",
+        "name": "Kiazala v1 by The Risk Manager 3",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Kiazala-v1-by-The-Risk-Manager-3-xml"
+    },
+    {
         "id": "King-Wise-Modified-Under-7-Auto-2024",
         "name": "King Wise Modified Under 7 Auto 2024",
         "creator": "over-under",
@@ -10573,6 +10591,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "Wealth Generator 2",
         "creator": "over-under",
         "file": "selfanalyzing/over-under/Wealth-Generator-2-xml"
+    },
+    {
+        "id": "Wealth-Generator-SWITCHER",
+        "name": "Wealth Generator SWITCHER",
+        "creator": "over-under",
+        "file": "selfanalyzing/over-under/Wealth-Generator-SWITCHER-xml"
     },
     {
         "id": "Wealth-Generator",
@@ -11544,7 +11568,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "over-under",
         "label": "over-under",
-        "count": 123
+        "count": 126
     },
     {
         "id": "derivbots",
@@ -11569,7 +11593,7 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "matches-differs",
         "label": "matches-differs",
-        "count": 69
+        "count": 70
     },
     {
         "id": "osam",
