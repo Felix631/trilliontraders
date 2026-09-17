@@ -531,10 +531,106 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/ai/chichitraders2-RISE-FALL-AUTOSRIKE-AI-by-chichi-1-xml"
     },
     {
+        "id": "chichitraders2-2-Prediction-O-U-M7-Bot",
+        "name": "2 Prediction O U M7 Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-2-Prediction-O-U-M7-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-smooth-KILLER",
+        "name": "EVEN ODD smooth KILLER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-EVEN-ODD-smooth-KILLER-xml"
+    },
+    {
+        "id": "chichitraders2-M6-Pro-speedbot",
+        "name": "M6 Pro speedbot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-M6-Pro-speedbot-xml"
+    },
+    {
+        "id": "chichitraders2-Market-DIGIT-Snipper-Bot",
+        "name": "Market DIGIT Snipper Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Market-DIGIT-Snipper-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-Money-Gram-V1-AUTO",
+        "name": "Money Gram V1 AUTO",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Money-Gram-V1-AUTO-xml"
+    },
+    {
+        "id": "chichitraders2-Money-GRAM-V2-XRAY-AUTO",
+        "name": "Money GRAM V2 XRAY AUTO",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Money-GRAM-V2-XRAY-AUTO-xml"
+    },
+    {
+        "id": "chichitraders2-Pip-speed-Dollar-OVER-TRADER",
+        "name": "Pip speed Dollar OVER TRADER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Pip-speed-Dollar-OVER-TRADER-xml"
+    },
+    {
+        "id": "chichitraders2-Rise-and-fall-BOT",
+        "name": "Rise and fall BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Rise-and-fall-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-SIGNAL-BOT-V3",
+        "name": "SIGNAL BOT V3",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-SIGNAL-BOT-V3-xml"
+    },
+    {
+        "id": "chichitraders2-Snipper-Havoc-Ai-1",
+        "name": "Snipper Havoc Ai 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Snipper-Havoc-Ai-1-xml"
+    },
+    {
+        "id": "chichitraders2-SNIPPER-KILLER-M4BOT-1-1",
+        "name": "SNIPPER KILLER M4BOT 1 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-SNIPPER-KILLER-M4BOT-1-1-xml"
+    },
+    {
+        "id": "chichitraders2-Snipper-Lite-Bot-1",
+        "name": "Snipper Lite Bot 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Snipper-Lite-Bot-1-xml"
+    },
+    {
+        "id": "chichitraders2-Trade-Ninja-Even-Odd-snipper",
+        "name": "Trade Ninja Even Odd snipper",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Trade-Ninja-Even-Odd-snipper-xml"
+    },
+    {
+        "id": "chichitraders2-2-5-STRATEGY-BOT",
+        "name": "2 5 STRATEGY BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-2-5-STRATEGY-BOT-xml"
+    },
+    {
         "id": "chichitraders2-APEX-SWITCHER",
         "name": "APEX SWITCHER",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-APEX-SWITCHER-xml"
+    },
+    {
+        "id": "chichitraders2-BEGGINERS-BEST-STRATEGY",
+        "name": "BEGGINERS BEST STRATEGY",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-BEGGINERS-BEST-STRATEGY-xml"
+    },
+    {
+        "id": "chichitraders2-BEST-WISHES-BY-CHICHITRADES",
+        "name": "BEST WISHES BY CHICHITRADES",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-BEST-WISHES-BY-CHICHITRADES-xml"
     },
     {
         "id": "chichitraders2-BINARY-MATRIX-AI",
@@ -555,16 +651,64 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/no-analysis/chichitraders2-digit-sniper-xml"
     },
     {
+        "id": "chichitraders2-ELITE-SCOPE-AI-BOT",
+        "name": "ELITE SCOPE AI BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-ELITE-SCOPE-AI-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-ANALYZER-1",
+        "name": "EVEN ODD ANALYZER 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-ANALYZER-1-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-AUTO-ANALYSIS",
+        "name": "EVEN ODD AUTO ANALYSIS",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-AUTO-ANALYSIS-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-MONEY-PRINTER-BOT",
+        "name": "EVEN ODD MONEY PRINTER BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-MONEY-PRINTER-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-PRO-PREDICTOR-BOT",
+        "name": "EVEN ODD PRO PREDICTOR BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-PRO-PREDICTOR-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-PUNISHER",
+        "name": "EVEN ODD PUNISHER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-PUNISHER-xml"
+    },
+    {
         "id": "chichitraders2-EVEN-ODD-SWITCHER",
         "name": "EVEN ODD SWITCHER",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-SWITCHER-xml"
     },
     {
+        "id": "chichitraders2-EVEN-ODD-TECHNIC-BOT",
+        "name": "EVEN ODD TECHNIC BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-EVEN-ODD-TECHNIC-BOT-xml"
+    },
+    {
         "id": "chichitraders2-EVEN-PAARTERN-ANALYSIIS",
         "name": "EVEN PAARTERN ANALYSIIS",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-EVEN-PAARTERN-ANALYSIIS-xml"
+    },
+    {
+        "id": "chichitraders2-HIGH-TICK-MASTER-PRINTER-ONLY",
+        "name": "HIGH TICK MASTER PRINTER ONLY",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-HIGH-TICK-MASTER-PRINTER-ONLY-xml"
     },
     {
         "id": "chichitraders2-INFINITY-ALGO",
@@ -585,16 +729,58 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/no-analysis/chichitraders2-NO-ANALYSIS-xml"
     },
     {
+        "id": "chichitraders2-ONLY-UPS-MATRIX-AI-ONLY",
+        "name": "ONLY UPS MATRIX AI ONLY",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-ONLY-UPS-MATRIX-AI-ONLY-xml"
+    },
+    {
+        "id": "chichitraders2-ONLY-UPS-ONLY-MATRIX-AI",
+        "name": "ONLY UPS ONLY MATRIX AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-ONLY-UPS-ONLY-MATRIX-AI-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-5-PUNISHER",
+        "name": "OVER 5 PUNISHER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-OVER-5-PUNISHER-xml"
+    },
+    {
         "id": "chichitraders2-OVER-DESTROYER",
         "name": "OVER DESTROYER",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-OVER-DESTROYER-xml"
     },
     {
+        "id": "chichitraders2-POVERTY-ESCAPE-MATRIX",
+        "name": "POVERTY ESCAPE MATRIX",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-POVERTY-ESCAPE-MATRIX-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-FALL-MATRIX-BOT",
+        "name": "RISE FALL MATRIX BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-RISE-FALL-MATRIX-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-STEP-INDICES-MATRIX-ANALYSER",
+        "name": "STEP INDICES MATRIX ANALYSER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-STEP-INDICES-MATRIX-ANALYSER-xml"
+    },
+    {
         "id": "chichitraders2-THE-DGT",
         "name": "THE DGT",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-THE-DGT-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-8-MATRIX-BOT",
+        "name": "UNDER 8 MATRIX BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-UNDER-8-MATRIX-BOT-xml"
     },
     {
         "id": "chichitraders2-WORLD-ROLLER-2",
@@ -751,6 +937,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "OVER UNDER AUTO AI",
         "creator": "chichitraders2",
         "file": "chichitraders2/premium/chichitraders2-OVER-UNDER-AUTO-AI-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-UNDER-MANUAL-ANALYSIS-BOT",
+        "name": "OVER UNDER MANUAL ANALYSIS BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/premium/chichitraders2-OVER-UNDER-MANUAL-ANALYSIS-BOT-xml"
     },
     {
         "id": "chichitraders2-RISE-FALL-KING",
@@ -11310,6 +11502,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 81
     },
     {
+        "id": "chichitraders2",
+        "label": "chichitraders2",
+        "count": 71
+    },
+    {
         "id": "matches-differs",
         "label": "matches-differs",
         "count": 69
@@ -11323,11 +11520,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "even-odd",
         "label": "even-odd",
         "count": 41
-    },
-    {
-        "id": "chichitraders2",
-        "label": "chichitraders2",
-        "count": 39
     },
     {
         "id": "money8gg",
