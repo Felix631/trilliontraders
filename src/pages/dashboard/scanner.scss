@@ -240,6 +240,25 @@
         font-weight: bold;
     }
 
+    &__bot-source {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid var(--site-border, var(--app-border-color));
+        border-radius: 999px;
+        padding: 0.2rem 0.8rem;
+        background: var(--app-card-background);
+        color: var(--text-general);
+        font-size: var(--text-size-xxxs);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    &__bot-tag {
+        color: var(--site-accent);
+        font-weight: bold;
+    }
+
     &__feed-state {
         margin-left: auto;
         display: inline-flex;

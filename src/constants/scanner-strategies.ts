@@ -18,6 +18,14 @@ export interface StrategyEval {
 
 export type SignalContract = { contract_type: string; prediction?: number };
 
+/** A real bot from the Free Bots library that a strategy is built on. */
+export interface StrategyBot {
+    /** Path inside src/xml/free-bots, without the .xml extension. */
+    file: string;
+    /** Name the bot shows up under in the Bot Builder. */
+    name: string;
+}
+
 export interface ScannerStrategy {
     id: string;
     label: string;
@@ -26,6 +34,11 @@ export interface ScannerStrategy {
     ai?: boolean;
     money_management?: string;
     empty_note?: string;
+    /**
+     * When set, "Load Bot" loads this community bot verbatim instead of
+     * synthesising a signal bot from the scanned market.
+     */
+    bot?: StrategyBot;
     evaluate: (history: number[]) => StrategyEval;
     contract: (history: number[]) => SignalContract | null;
 }
@@ -138,6 +151,21 @@ const evalOver4 = (h: number[]): StrategyEval => {
     return IDLE;
 };
 
+const evalOver5 = (h: number[]): StrategyEval => {
+    // chichitraders2 "OVER 5 PUNISHER": at least four of the last seven digits
+    // sit below 4, then one fresh digit above 4 flips the flow.
+    if (h.length < 8) return IDLE;
+    const cold_hits = h.slice(-8, -1).filter(d => d < 4).length;
+    const rate = share(h, d => d > 5);
+    if (cold_hits >= 4 && h[h.length - 1] > 4) {
+        return { state: 'live', confidence: conf(rate), winning_rate: rate };
+    }
+    if (cold_hits >= 3) {
+        return { state: 'watching', confidence: conf(rate) - 8, winning_rate: rate };
+    }
+    return IDLE;
+};
+
 const evalUnder5 = (h: number[]): StrategyEval => {
     if (h.length < 5) return IDLE;
     // "Two digits above 6, then two digits below 5"
@@ -213,6 +241,49 @@ const bestBarrier = (
 };
 
 // ---------------------------------------------------------------------------
+// chichitraders2 "BINARY MATRIX AI" — contrarian parity runs and cold-band
+// runs on the digit matrix.
+// ---------------------------------------------------------------------------
+
+/** The newest `n` digits of the window all match `pred`. */
+const tailsWith = (h: number[], n: number, pred: (d: number) => boolean): boolean =>
+    h.length >= n && h.slice(-n).every(pred);
+
+type MatrixPlan = { contract: SignalContract; confidence: number; winning_rate: number };
+
+/** Share, confidence and contract for a matrix leg. */
+const matrixLeg = (h: number[], contract_type: string, prediction?: number): MatrixPlan => {
+    const rate =
+        contract_type === 'DIGITEVEN'
+            ? share(h, isEven)
+            : contract_type === 'DIGITODD'
+              ? share(h, isOdd)
+              : contract_type === 'DIGITOVER'
+                ? share(h, d => d > 4)
+                : share(h, d => d < 5);
+    return {
+        contract: prediction == null ? { contract_type } : { contract_type, prediction },
+        confidence: conf(rate),
+        winning_rate: rate,
+    };
+};
+
+/**
+ * Matrix rules: four odd/even digits in a row flip to the other side, three
+ * digits below 4 buy Over 4, three digits above 5 buy Under 5. A shorter run
+ * (`run = 3`) is one digit short of a full pattern — the bot's warm-up state.
+ */
+const matrixPlan = (h: number[], run: number): MatrixPlan | null => {
+    if (h.length < 20) return null;
+    const band_run = Math.max(2, run - 1);
+    if (tailsWith(h, run, isOdd)) return matrixLeg(h, 'DIGITEVEN');
+    if (tailsWith(h, run, isEven)) return matrixLeg(h, 'DIGITODD');
+    if (tailsWith(h, band_run, d => d <= 3)) return matrixLeg(h, 'DIGITOVER', 4);
+    if (tailsWith(h, band_run, d => d >= 6)) return matrixLeg(h, 'DIGITUNDER', 5);
+    return null;
+};
+
+// ---------------------------------------------------------------------------
 
 export const SCANNER_STRATEGIES: ScannerStrategy[] = [
     {
@@ -262,6 +333,18 @@ export const SCANNER_STRATEGIES: ScannerStrategy[] = [
         evaluate: evalOver4,
         contract: () => ({ contract_type: 'DIGITOVER', prediction: 4 }),
         empty_note: localize('No AI Over markets qualify yet'),
+    },
+    {
+        id: 'over_5',
+        label: localize('Over 5'),
+        pattern: localize('Four of the last seven digits sit below 4, then a fresh digit above 4 prints'),
+        evaluate: evalOver5,
+        contract: () => ({ contract_type: 'DIGITOVER', prediction: 5 }),
+        bot: {
+            file: 'chichitraders2/no-analysis/chichitraders2-OVER-5-PUNISHER-xml',
+            name: 'OVER 5 PUNISHER',
+        },
+        empty_note: localize('No Over 5 markets qualify yet'),
     },
     {
         id: 'under_5',
@@ -418,6 +501,32 @@ export const SCANNER_STRATEGIES: ScannerStrategy[] = [
         },
         contract: () => ({ contract_type: 'DIGITODD' }),
         empty_note: localize('No AI Odd markets qualify yet'),
+    },
+    {
+        id: 'binary_matrix',
+        label: localize('Binary Matrix AI'),
+        ai: true,
+        money_management: localize('Martingale'),
+        pattern: localize('Four even/odd digits in a row flip to the other side, or three digits press one band'),
+        evaluate: h => {
+            const live_plan = matrixPlan(h, 4);
+            if (live_plan) return { state: 'live', confidence: live_plan.confidence, winning_rate: live_plan.winning_rate };
+            const warm_plan = matrixPlan(h, 3);
+            if (warm_plan) {
+                return {
+                    state: 'watching',
+                    confidence: Math.max(50, warm_plan.confidence - 8),
+                    winning_rate: warm_plan.winning_rate,
+                };
+            }
+            return IDLE;
+        },
+        contract: h => matrixPlan(h, 4)?.contract ?? null,
+        bot: {
+            file: 'chichitraders2/no-analysis/chichitraders2-BINARY-MATRIX-AI-xml',
+            name: 'BINARY MATRIX AI',
+        },
+        empty_note: localize('No Binary Matrix markets qualify yet'),
     },
 ];
 

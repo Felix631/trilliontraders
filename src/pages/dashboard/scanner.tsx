@@ -159,6 +159,12 @@ const AnalysisTool = () => {
     };
 
     const loadBot = (signal: MarketSignal) => {
+        // Strategies that are built on a community bot load that bot verbatim;
+        // the pure-signal strategies still get a synthesised signal bot.
+        if (strategy.bot) {
+            free_bots.loadBotXml(`../xml/free-bots/${strategy.bot.file}`, strategy.bot.name, true);
+            return;
+        }
         if (!signal.contract) return;
         try {
             free_bots.loadBotXml(
@@ -335,6 +341,12 @@ const AnalysisTool = () => {
                 <div className='scanner__pattern'>
                     <span className='scanner__pattern-label'>{localize('Entry pattern')}</span>
                     <span className='scanner__pattern-text'>{strategy.pattern}</span>
+                    {strategy.bot && (
+                        <span className='scanner__bot-source'>
+                            <span className='scanner__bot-tag'>{localize('Bot')}</span>
+                            {strategy.bot.name}
+                        </span>
+                    )}
                     <span className='scanner__feed-state'>
                         {feed.status === 'live'
                             ? localize('Scanning volatility markets')
@@ -393,7 +405,7 @@ const AnalysisTool = () => {
                                 <button
                                     type='button'
                                     className='scanner__btn scanner__btn--ghost'
-                                    disabled={free_bots.is_loading || !featured.contract}
+                                    disabled={free_bots.is_loading || (!strategy.bot && !featured.contract)}
                                     onClick={() => loadBot(featured)}
                                 >
                                     {free_bots.is_loading ? localize('Loading') : localize('Load Bot')}
@@ -484,7 +496,7 @@ const AnalysisTool = () => {
                                                 <button
                                                     type='button'
                                                     className='scanner__btn scanner__btn--small'
-                                                    disabled={trade_state.busy}
+                                                    disabled={trade_state.busy || !signal.contract}
                                                     onClick={() => startTrade(signal)}
                                                 >
                                                     {localize('Start')}
