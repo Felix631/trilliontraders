@@ -25,7 +25,7 @@ type TTabsProps = {
     has_active_line?: boolean;
     has_bottom_line?: boolean;
     header_fit_content?: boolean;
-    history: History;
+    history?: History;
     icon_color?: string;
     icon_size?: number;
     is_100vw?: boolean;
@@ -66,6 +66,7 @@ const Tabs = ({
     const active_tab_ref = React.useRef<HTMLLIElement>(null);
     const tabs_wrapper_ref = React.useRef<HTMLUListElement>(null);
     const pushHash = (hash: string) => {
+        if (!history) return;
         history.replace(`${history.location.pathname}${window.location.search}#${hash}`);
     };
 
@@ -119,6 +120,32 @@ const Tabs = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active_tab_index, setActiveLineStyle]);
 
+    // Keep the active underline aligned through window resizes, container
+    // resizes (e.g. the run panel drawer opening) and web-font swaps. Without
+    // this the underline can drift away from the tab it should highlight.
+    React.useEffect(() => {
+        const list_el = tabs_wrapper_ref.current;
+        const handle_resize = () => setActiveLineStyle();
+
+        window.addEventListener('resize', handle_resize);
+
+        let resize_observer: ResizeObserver | undefined;
+        if (list_el && typeof ResizeObserver !== 'undefined') {
+            resize_observer = new ResizeObserver(handle_resize);
+            resize_observer.observe(list_el);
+        }
+
+        // Fonts can finish loading after first paint and shift tab widths.
+        if (typeof document !== 'undefined' && (document as any).fonts?.ready) {
+            (document as any).fonts.ready.then(handle_resize);
+        }
+
+        return () => {
+            window.removeEventListener('resize', handle_resize);
+            resize_observer?.disconnect();
+        };
+    }, [setActiveLineStyle]);
+
     React.useEffect(() => {
         if (active_index >= 0 && active_index !== active_tab_index) {
             setActiveTabIndex(active_index);
@@ -135,7 +162,7 @@ const Tabs = ({
         setActiveLineStyle();
     };
 
-    const valid_children = children.filter(child => child);
+    const valid_children = React.Children.toArray(children).filter(Boolean) as React.ReactElement[];
 
     if (is_scrollable) {
         tab_width = 'unset';
@@ -186,8 +213,8 @@ const Tabs = ({
                                     icon_color={icon_color}
                                     icon_size={icon_size}
                                     is_active={index === active_tab_index}
-                                    key={label}
-                                    is_label_hidden={children.length === 1 && single_tab_has_no_label}
+                                    key={id || `dc-tabs__item-${index}`}
+                                    is_label_hidden={valid_children.length === 1 && single_tab_has_no_label}
                                     label={label}
                                     id={id}
                                     is_scrollable={is_scrollable}
@@ -208,7 +235,7 @@ const Tabs = ({
                                     'dc-tabs__active-line--bottom': bottom,
                                     'dc-tabs__active-line--fit-content': fit_content,
                                     'dc-tabs__active-line--header-fit-content': header_fit_content,
-                                    'dc-tabs__active-line--is-hidden': children.length === 1 && single_tab_has_no_label,
+                                    'dc-tabs__active-line--is-hidden': valid_children.length === 1 && single_tab_has_no_label,
                                 })}
                                 style={active_line_style}
                             />

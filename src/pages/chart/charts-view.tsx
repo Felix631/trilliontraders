@@ -2,6 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { localize } from '@deriv-com/translations';
+import TicksHistory from '@/components/ticks-history';
 import TradingViewComponent from '@/components/trading-view-chart/trading-view';
 import './charts-view.scss';
 
@@ -39,6 +40,7 @@ const ChartsView = ({ show_digits_stats }) => {
                     {localize('TradingView')}
                 </button>
             </div>
+            <TicksHistory />
             <div className='charts-view__body'>
                 {provider === 'deriv' ? (
                     <React.Suspense fallback={null}>

@@ -16,7 +16,7 @@ type TIcons = {
 
 //export const getRecentFileIcon = (save_type: string, class_name: string = ''): React.ReactElement => {
 export const getRecentFileIcon = (save_type: string): React.ReactElement => {
-    if (!save_type && typeof save_type !== 'string')
+    if (!save_type || typeof save_type !== 'string')
         return <LegacyReportsIcon iconSize='xs' fill='var(--text-general)' />;
 
     const icons: TIcons = {

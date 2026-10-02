@@ -109,16 +109,18 @@
             &__list {
                 background: var(--bot-studio-header-bg, var(--general-section-1));
                 justify-content: start;
+                flex-wrap: nowrap;
+                // The navigation has more tabs than fit on most viewports. Scroll
+                // them horizontally on every screen size (rather than clipping or
+                // wrapping), which keeps every tab reachable and the header tidy.
+                overflow-x: auto;
+                overflow-y: hidden;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+                scroll-behavior: smooth;
 
-                @include mobile-or-tablet-screen {
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
+                &::-webkit-scrollbar {
+                    display: none;
                 }
 
                 &--header {
@@ -189,9 +191,12 @@
             &__item {
                 border-top-left-radius: 1rem;
                 border-top-right-radius: 1rem;
-                height: 4.8rem;
+                height: 5.2rem;
                 padding: 0 2rem;
                 width: auto;
+                flex: 0 0 auto;
+                font-size: 1.4rem;
+                letter-spacing: 0.01em;
 
                 @include flex-center;
 

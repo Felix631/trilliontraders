@@ -150,7 +150,9 @@ const RecentWorkspace = observer(({ workspace, index }: TRecentWorkspace) => {
                 e.stopPropagation(); //stop event bubbling for child element
                 if (is_dropdown_visible) setDropdownVisibility(false);
                 getSelectedStrategyID(workspace.id);
-                viewRecentStrategy(STRATEGY.INIT);
+                // Clicking a bot opens (loads) it straight into the builder —
+                // previously a row click only selected it, so "load" felt dead.
+                viewRecentStrategy(STRATEGY.OPEN);
             }}
         >
             <div className='bot-list__item__label'>

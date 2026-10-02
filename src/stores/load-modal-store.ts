@@ -512,9 +512,11 @@ export default class LoadModalStore {
             (this.recent_workspace as any).RTL = isDbotRTL();
 
             const convertedDom = window.Blockly?.utils?.xml?.textToDom(this.selected_strategy?.xml);
-            const mainWorkspace = window.Blockly?.getMainWorkspace();
 
-            window.Blockly?.Xml?.clearWorkspaceAndLoadFromXml(convertedDom, mainWorkspace);
+            // Render the strategy into the modal's own preview workspace. Loading it
+            // into the main workspace (as before) left the preview blank while
+            // silently mutating the builder behind the modal.
+            window.Blockly?.Xml?.clearWorkspaceAndLoadFromXml(convertedDom, this.recent_workspace);
         }
         setLoading(false);
         this.setOpenButtonDisabled(false);

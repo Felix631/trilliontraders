@@ -832,10 +832,11 @@
     }
 
     &__track {
-        height: 1.8rem;
+        height: 2.6rem;
         background: var(--general-section-1);
         border-radius: #{$BORDER_RADIUS};
         position: relative;
+        overflow: hidden;
         margin-bottom: 0.8rem;
         width: 100%;
 
@@ -848,8 +849,21 @@
         }
     }
 
-    &__text {
+    &__fill {
         position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0;
+        background: var(--brand-secondary, var(--status-success));
+        opacity: 0.22;
+        transition: width 0.3s ease;
+    }
+
+    &__text {
+        position: relative;
+        z-index: 1;
         width: 100%;
+        line-height: 2.6rem;
+        font-size: 1.4rem;
+        letter-spacing: 0.02em;
     }
 }

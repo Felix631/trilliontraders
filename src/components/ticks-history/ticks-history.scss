@@ -1,0 +1,63 @@
+.ticks-history {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4rem;
+    padding: 0.4rem 1rem;
+    border-radius: 0.8rem;
+    background: var(--app-elevated-background, var(--general-section-1));
+    border: 1px solid var(--app-border-color, var(--general-section-1));
+    overflow: hidden;
+
+    &__label {
+        flex: 0 0 auto;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-less-prominent);
+    }
+
+    &__empty {
+        font-size: 1.3rem;
+        color: var(--text-less-prominent);
+    }
+
+    &__list {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 0.1rem;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__tick {
+        flex: 0 0 auto;
+        min-width: 5.2rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 0.6rem;
+        font-size: 1.3rem;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+        background: var(--general-section-1);
+        color: var(--text-general);
+
+        &--up {
+            background: color-mix(in srgb, var(--status-success) 18%, transparent);
+            color: var(--text-profit-success);
+            font-weight: 700;
+        }
+
+        &--down {
+            background: color-mix(in srgb, var(--status-danger) 18%, transparent);
+            color: var(--text-loss-danger);
+            font-weight: 700;
+        }
+    }
+}
