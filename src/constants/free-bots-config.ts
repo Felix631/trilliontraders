@@ -567,6 +567,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/calekyztrading/chichitraders2-Money-GRAM-V2-XRAY-AUTO-xml"
     },
     {
+        "id": "chichitraders2-Phantom-Capital-Protector",
+        "name": "Phantom Capital Protector",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/calekyztrading/chichitraders2-Phantom-Capital-Protector-xml"
+    },
+    {
         "id": "chichitraders2-Pip-speed-Dollar-OVER-TRADER",
         "name": "Pip speed Dollar OVER TRADER",
         "creator": "chichitraders2",
@@ -637,6 +643,18 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "BINARY MATRIX AI",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-BINARY-MATRIX-AI-xml"
+    },
+    {
+        "id": "chichitraders2-DBX-V2-Pro-1",
+        "name": "DBX V2 Pro 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-DBX-V2-Pro-1-xml"
+    },
+    {
+        "id": "chichitraders2-DBX-V3-Pro",
+        "name": "DBX V3 Pro",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-DBX-V3-Pro-xml"
     },
     {
         "id": "chichitraders2-DIGIT-PRO-V1",
@@ -955,6 +973,126 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "STEP INDICES QUANTUM AI",
         "creator": "chichitraders2",
         "file": "chichitraders2/premium/chichitraders2-STEP-INDICES-QUANTUM-AI-xml"
+    },
+    {
+        "id": "chichitraders2-1-tick-2-ticks-Digit-1-Match",
+        "name": "1 tick 2 ticks Digit 1 Match",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-1-tick-2-ticks-Digit-1-Match-xml"
+    },
+    {
+        "id": "chichitraders2-ADVANCED-STEP-INDICES-CAPITAL-BOT",
+        "name": "ADVANCED STEP INDICES CAPITAL BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-ADVANCED-STEP-INDICES-CAPITAL-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-AMAZING-ASIANS-GURU",
+        "name": "AMAZING ASIANS GURU",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-AMAZING-ASIANS-GURU-xml"
+    },
+    {
+        "id": "chichitraders2-Big-Boyz-Rise-N-fall-2",
+        "name": "Big Boyz Rise N fall 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Big-Boyz-Rise-N-fall-2-xml"
+    },
+    {
+        "id": "chichitraders2-CHICHITRADES-MATRIX-ORIGINAL",
+        "name": "CHICHITRADES MATRIX ORIGINAL",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-CHICHITRADES-MATRIX-ORIGINAL-xml"
+    },
+    {
+        "id": "chichitraders2-Digit-Over-3-PRO-BOT",
+        "name": "Digit Over 3 PRO BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Digit-Over-3-PRO-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-SPEED-BOT",
+        "name": "EVEN ODD SPEED BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-EVEN-ODD-SPEED-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-Githinji",
+        "name": "Githinji",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Githinji-xml"
+    },
+    {
+        "id": "chichitraders2-HIGH-LOWER-BOT",
+        "name": "HIGH LOWER BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-HIGH-LOWER-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-HIGH-PROFIT-BOT-2",
+        "name": "HIGH PROFIT BOT 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-HIGH-PROFIT-BOT-2-xml"
+    },
+    {
+        "id": "chichitraders2-LOWER-VIKING-TREND-by-Chichitrades",
+        "name": "LOWER VIKING TREND by Chichitrades",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-LOWER-VIKING-TREND-by-Chichitrades-xml"
+    },
+    {
+        "id": "chichitraders2-Master-Pro-Bot-Version-4-7",
+        "name": "Master Pro Bot Version 4 7",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Master-Pro-Bot-Version-4-7-xml"
+    },
+    {
+        "id": "chichitraders2-Over-1-Under-8-Recovery-Over-4",
+        "name": "Over 1 Under 8 Recovery Over 4",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Over-1-Under-8-Recovery-Over-4-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-4-OVER-5-STRATEGY-BOT",
+        "name": "OVER 4 OVER 5 STRATEGY BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-OVER-4-OVER-5-STRATEGY-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-Over-under-switcher-Bot",
+        "name": "Over under switcher Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-Over-under-switcher-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-CANDLE-TREND-ONLY",
+        "name": "RISE CANDLE TREND ONLY",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-RISE-CANDLE-TREND-ONLY-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-FALL-COSMIC-DBOT",
+        "name": "RISE FALL COSMIC DBOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-RISE-FALL-COSMIC-DBOT-xml"
+    },
+    {
+        "id": "chichitraders2-RISE-TREND-MATRIX",
+        "name": "RISE TREND MATRIX",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-RISE-TREND-MATRIX-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-3-STRATEGY-BOT",
+        "name": "UNDER 3 STRATEGY BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-UNDER-3-STRATEGY-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-WEALTH-SWITCHER",
+        "name": "WEALTH SWITCHER",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/special/chichitraders2-WEALTH-SWITCHER-xml"
     },
     {
         "id": "dalembert_max-stake",
@@ -11571,6 +11709,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 126
     },
     {
+        "id": "chichitraders2",
+        "label": "chichitraders2",
+        "count": 94
+    },
+    {
         "id": "derivbots",
         "label": "derivbots",
         "count": 84
@@ -11584,11 +11727,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "dollarprinter",
         "label": "dollarprinter",
         "count": 81
-    },
-    {
-        "id": "chichitraders2",
-        "label": "chichitraders2",
-        "count": 71
     },
     {
         "id": "matches-differs",

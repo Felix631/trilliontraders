@@ -29,11 +29,23 @@ Four extraction modes per site:
    URL with {id} replaced by the bot id. Files are saved as
    <site>-<bot id>-xml.xml.
 
-Usage:  python3 scripts/download-site-bots.py
+6. bundle catalog mode (bundle_catalog = True, folder_map = {site folder:
+   local subfolder})
+   The site's bot list is a require.context map
+   {"./<folder>/<Bot Name>.xml": "<chunk id>"} embedded in the main bundle
+   and every XML is inlined in that same bundle as a <chunk id> module.
+   The bundle URL is discovered from the site HTML. Entries are written to
+   <site>/<mapped folder>/<site>-<sanitised name>-xml.xml, and with
+   skip_existing only bots we do not have yet are fetched (idempotent
+   re-runs, so new additions can be spotted by diffing).
+
+Usage:  python3 scripts/download-site-bots.py [site ...]
+        (no args = every configured site)
 """
 import json
 import os
 import re
+import sys
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
@@ -151,6 +163,23 @@ SITES = {
             "_STEP-INDICES-QUANTUM-AI": 84190,
         },
     },
+    # chichitraders.site store as it stands today (rebuilt bundle): the bot
+    # list is a require.context map inside the main bundle and the XMLs are
+    # inlined in the same bundle. New bots land in src/xml/free-bots/chichitraders2
+    # under the site's own category folders; bots we already have are skipped.
+    "chichitraders2": {
+        "base": "https://chichitraders.site",
+        "bundle_catalog": True,
+        "skip_existing": True,
+        "folder_map": {
+            "calekyztrading": "calekyztrading",
+            "chichitraders/automated bots": "ai",
+            "chichitraders/no analysis": "no-analysis",
+            "chichitraders/normal bots": "normal",
+            "chichitraders/premium": "premium",
+            "chichitraders/special": "special",
+        },
+    },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads
     # its catalog from the shared Denara bots API and lazy-loads each bot XML
     # from the {id}/xml endpoint.
@@ -259,6 +288,80 @@ def http_get(url, redirects=5):
     raise RuntimeError(f"Too many redirects fetching {url}")
 
 
+def inline_xml_modules(bundle_js):
+    """Map every inlined <chunk id> module of a bundle to its XML string.
+
+    Modules look like:
+      <id>(e,n,l){"use strict";l.r(n),l.d(n,{default:()=>a});let a='<xml ...'
+    """
+    modules = {}
+    header = re.compile(
+        r"(?<![\w$])(\d+)\([A-Za-z_$][\w$]*,[A-Za-z_$][\w$]*,[A-Za-z_$][\w$]*\)"
+        r"\{\"use strict\";[A-Za-z_$][\w$]*\.r\([A-Za-z_$][\w$]*\),"
+        r"[A-Za-z_$][\w$]*\.d\([A-Za-z_$][\w$]*,\{default:\(\)=>[A-Za-z_$][\w$]*\}\)"
+        r";let [A-Za-z_$][\w$]*='"
+    )
+    for m in header.finditer(bundle_js):
+        # Anchor on </xml>, then skip trailing escapes up to the closing quote
+        # (XMLs may end with e.g. </xml>\\n').
+        tail = re.search(r"([\s\S]*?</xml>)(?:\\[\s\S])*?'", bundle_js[m.end() :])
+        if tail:
+            modules[m.group(1)] = js_single_quote_unescape(tail.group(1))
+    return modules
+
+
+def download_bundle_catalog(site, cfg, out_dir):
+    """Bundle catalog mode: read the require.context catalog out of the main
+    bundle and save every mapped XML we do not already have."""
+    total = 0
+    bundle_path = cfg.get("bundle")
+    if not bundle_path:
+        html = http_get(cfg["base"] + "/")
+        found = re.search(r"/static/js/index\.[a-f0-9]+\.js", html)
+        if not found:
+            print("  FAIL bundle: index bundle not referenced in the HTML")
+            return total
+        bundle_path = found.group(0)
+    bundle_js = http_get(cfg["base"] + bundle_path)
+    catalog = dict(re.findall(r'"(\./[^"]+\.xml)":"(\d+)"', bundle_js))
+    print(f"  bundle {bundle_path}: {len(catalog)} catalog entries")
+
+    folder_map = cfg.get("folder_map", {})
+    skip_existing = cfg.get("skip_existing", False)
+    # Skip any bot whose file we already have anywhere under <site>/, not just
+    # at its mapped destination: the same display name can appear in several
+    # site folders, and duplicate files would become duplicate ids in the
+    # generated free-bots config.
+    existing = set()
+    if skip_existing and os.path.isdir(out_dir):
+        for root, _, files in os.walk(out_dir):
+            existing.update(files)
+    modules = None
+    for key, chunk_id in sorted(catalog.items()):
+        rel = key[2:]
+        folder, _, raw = rel.rpartition("/")
+        if folder not in folder_map:
+            continue
+        name = js_single_quote_unescape(raw)[: -len(".xml")]
+        dest_dir = os.path.join(out_dir, folder_map[folder])
+        dest = os.path.join(dest_dir, f"{site}-{safe_name(name)}-xml.xml")
+        if skip_existing and os.path.basename(dest) in existing:
+            continue
+        if modules is None:
+            modules = inline_xml_modules(bundle_js)
+        xml = modules.get(chunk_id)
+        if not xml or "<xml" not in xml:
+            print(f"  FAIL extract {name} (chunk {chunk_id})")
+            continue
+        os.makedirs(dest_dir, exist_ok=True)
+        with open(dest, "w", encoding="utf-8") as f:
+            f.write(xml)
+        existing.add(os.path.basename(dest))
+        total += 1
+        print(f"  ok {os.path.relpath(dest, out_dir)} ({len(xml)} bytes)")
+    return total
+
+
 def safe_name(name):
     """Turn '<Bot Name>.xml' into '<Bot-Name>' (ascii, dashes)."""
     return re.sub(r"[^A-Za-z0-9]+", "-", name.replace(".xml", "")).strip("-")
@@ -267,6 +370,9 @@ def safe_name(name):
 def download_site(site, cfg, out_dir):
     """Download all bots configured for one site. Returns how many were saved."""
     total = 0
+
+    if cfg.get("bundle_catalog"):
+        return download_bundle_catalog(site, cfg, out_dir)
 
     if cfg.get("catalog"):
         # Catalog API mode: fetch the JSON catalog, then each bot's XML.
@@ -394,7 +500,15 @@ def download_site(site, cfg, out_dir):
 
 def main():
     total = 0
+    wanted = sys.argv[1:]
+    unknown = [s for s in wanted if s not in SITES]
+    if unknown:
+        print(f"Unknown site(s): {', '.join(unknown)}")
+        print(f"Configured: {', '.join(SITES)}")
+        return 1
     for site, cfg in SITES.items():
+        if wanted and site not in wanted:
+            continue
         out_dir = os.path.join(ROOT, "src", "xml", "free-bots", site)
         os.makedirs(out_dir, exist_ok=True)
         print(f"=== {site} ({cfg['base']}) ===")
@@ -403,7 +517,8 @@ def main():
         except Exception as exc:
             print(f"  SKIP {site}: {exc}")
     print(f"\nTotal saved: {total}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
