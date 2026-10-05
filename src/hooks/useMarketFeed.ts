@@ -84,9 +84,16 @@ const ensurePipSizes = async (
     }
 };
 
-export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: () => void } => {
+export const useMarketFeed = (
+    window_size: number,
+    // Optional symbol override — callers pass their own market list (e.g. the
+    // "i love you" tab scans the 30/90 (1s) indices too). Defaults to the
+    // shared volatility list used by the Digit Killer tool.
+    symbols: ReadonlyArray<{ value: string; label?: string; short?: string }> = MARKET_SYMBOLS
+): MarketFeedState & { rescan: () => void } => {
     const [state, setState] = useState<MarketFeedState>(EMPTY_STATE);
     const [scan_nonce, setScanNonce] = useState(0);
+    const symbols_key = symbols.map(market => market.value).join(',');
     const history_ref = useRef<Record<string, number[]>>({});
     const quotes_ref = useRef<Record<string, number | null>>({});
     const quote_history_ref = useRef<Record<string, number[]>>({});
@@ -96,6 +103,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
 
     useEffect(() => {
         let disposed = false;
+        const market_list = symbols;
         history_ref.current = {};
         quotes_ref.current = {};
         quote_history_ref.current = {};
@@ -120,7 +128,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
 
             const send = (request: unknown): Promise<any> => api.send(request) as unknown as Promise<any>;
 
-            await ensurePipSizes(send, MARKET_SYMBOLS.map(market => market.value));
+            await ensurePipSizes(send, market_list.map(market => market.value));
             const digitFor = (symbol: string, quote: number | string): number =>
                 lastDigitOfQuote(quote, pip_sizes_cache[symbol]);
 
@@ -140,7 +148,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                 quote_history_ref.current[tick.symbol] = [
                     ...(quote_history_ref.current[tick.symbol] || []),
                     Number(tick.quote),
-                ].slice(-120);
+                ].slice(-Math.max(120, window_size));
                 setState({
                     status: 'live',
                     error: null,
@@ -152,7 +160,7 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
             subscription_ref.current = message_subscription;
 
             // Seed each symbol with recent history + a live subscription.
-            for (const market of MARKET_SYMBOLS) {
+            for (const market of market_list) {
                 if (disposed) return;
                 // Register the symbol up-front so streamed ticks are never dropped,
                 // even if the history request below fails.
@@ -180,7 +188,9 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
                     }
                     history_ref.current[market.value] = ticks.slice(-window_size).map(t => digitFor(market.value, t.raw));
                     quotes_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].quote : null;
-                    quote_history_ref.current[market.value] = ticks.slice(-120).map(t => t.quote);
+                    quote_history_ref.current[market.value] = ticks
+                        .slice(-Math.max(120, window_size))
+                        .map(t => t.quote);
                     epochs_ref.current[market.value] = ticks.length ? ticks[ticks.length - 1].epoch : 0;
                     sub_ids_ref.current[market.value] = response?.subscription?.id || null;
                 } catch (error: any) {
@@ -246,7 +256,8 @@ export const useMarketFeed = (window_size: number): MarketFeedState & { rescan: 
             });
             sub_ids_ref.current = {};
         };
-    }, [window_size, scan_nonce]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [window_size, scan_nonce, symbols_key]);
 
     return { ...state, rescan: () => setScanNonce(n => n + 1) };
 };

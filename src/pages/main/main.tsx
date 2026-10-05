@@ -49,6 +49,7 @@ import RunPanel from '../../components/run-panel';
 import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import DTrader from '../dashboard/dtrader';
 import DigitKiller from '../dashboard/digit-killer';
+import ILoveYou from '../dashboard/i-love-you';
 import ChartModal from '../chart/chart-modal';
 import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
@@ -106,6 +107,7 @@ const AppWrapper = observer(() => {
         'tutorial',
         'dtrader',
         'analysis-2',
+        'i-love-you',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -599,6 +601,21 @@ const AppWrapper = observer(() => {
                                 id='id-analysis-2'
                             >
                                 <DigitKiller />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedSearchCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='i love you' />
+                                    </>
+                                }
+                                id='id-i-love-you'
+                            >
+                                <ILoveYou />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}
