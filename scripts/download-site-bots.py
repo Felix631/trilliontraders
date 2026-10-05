@@ -182,11 +182,13 @@ SITES = {
     },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads
     # its catalog from the shared Denara bots API and lazy-loads each bot XML
-    # from the {id}/xml endpoint.
+    # from the {id}/xml endpoint. skip_existing keeps re-runs idempotent and
+    # makes newly added bots easy to spot by diffing.
     "denarapro": {
         "base": "https://undasite.com",
         "catalog": "/api/public/denarabot/catalog",
         "xml_template": "/api/public/denarabot/bots/{id}/xml",
+        "skip_existing": True,
     },
     # prodbot.site free-bots tab: the bot library (async chunk 541) serves each
     # XML as a plain file at /xml/<Bot Name>.xml. The chunk lists 13 bots but 7
@@ -388,6 +390,15 @@ def download_site(site, cfg, out_dir):
                 bots.append(bot)
         print(f"  catalog: {len(folders)} folders, {len(bots)} bots")
 
+        skip_existing = cfg.get("skip_existing", False)
+        existing = set()
+        if skip_existing and os.path.isdir(out_dir):
+            existing.update(os.listdir(out_dir))
+
+        def is_skipped(bot):
+            bot_id = bot.get("id", "")
+            return skip_existing and f"{site}-{bot_id}-xml.xml" in existing
+
         def fetch_one(bot):
             bot_id = bot.get("id", "")
             if not bot_id:
@@ -402,8 +413,12 @@ def download_site(site, cfg, out_dir):
                 return (bot_id, None, "empty/invalid XML")
             return (bot_id, xml, None)
 
+        pending = [b for b in bots if not is_skipped(b)]
+        if skip_existing:
+            print(f"  skipping {len(bots) - len(pending)} already-downloaded bots")
+
         with ThreadPoolExecutor(max_workers=12) as pool:
-            for bot_id, xml, err in pool.map(fetch_one, bots):
+            for bot_id, xml, err in pool.map(fetch_one, pending):
                 if err or xml is None:
                     if bot_id:
                         print(f"  FAIL download {bot_id}: {err}")
