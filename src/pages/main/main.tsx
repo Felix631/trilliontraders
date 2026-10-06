@@ -50,6 +50,7 @@ import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import DTrader from '../dashboard/dtrader';
 import DigitKiller from '../dashboard/digit-killer';
 import ILoveYou from '../dashboard/i-love-you';
+import ILoveYouAI from '../dashboard/i-love-you-ai';
 import ChartModal from '../chart/chart-modal';
 import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
@@ -60,6 +61,7 @@ import RunStrategy from '../dashboard/run-strategy';
 import Scanner from '../dashboard/scanner';
 import SpeedBot from '../dashboard/trade-tools/speed-bot';
 import './main.scss';
+import './tabs-chrome.scss';
 
 const Tutorial = lazy(() => import('../tutorials'));
 
@@ -622,6 +624,9 @@ const AppWrapper = observer(() => {
                     </div>
                 </div>
             </div>
+            {/* Always-on floating Over 2 / Under 8 market scan — lives outside
+                the tab tree so it stays on top on every page and tab. */}
+            <ILoveYouAI />
             <DesktopWrapper>
                 <div className='main__run-strategy-wrapper'>
                     <RunStrategy />

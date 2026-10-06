@@ -17,6 +17,12 @@
     --ily-violet: #a855f7;
     --ily-radius: 14px;
 
+    // Fill the whole tab panel: the shared tab content is a flex row, so the
+    // page has to grow along the main axis or it collapses to its content
+    // width and only covers part of the screen.
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -320,18 +326,7 @@
         color: var(--ily-dim);
     }
 
-    // ---- Split panels ----------------------------------------------------
-    &__split {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 14px;
-        margin-bottom: 14px;
-
-        @media (max-width: 1024px) {
-            grid-template-columns: minmax(0, 1fr);
-        }
-    }
-
+    // ---- Panels ----------------------------------------------------------
     &__panel {
         border: 1px solid var(--ily-border);
         border-radius: var(--ily-radius);
@@ -435,96 +430,7 @@
         }
     }
 
-    // ---- Entry-point scanner --------------------------------------------
-    &__levels {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    &__level {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        grid-template-areas: 'id meter btn' 'msg msg msg';
-        align-items: center;
-        gap: 6px 12px;
-        padding: 7px 10px;
-        border-radius: 10px;
-        background: var(--ily-card-2);
-    }
-
-    &__level-id {
-        grid-area: id;
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-
-        strong {
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        em {
-            font-style: normal;
-            font-size: 10px;
-            color: var(--ily-cyan);
-        }
-    }
-
-    &__level-meter {
-        grid-area: meter;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 150px;
-
-        .ily__meter {
-            flex: 1 1 auto;
-            margin-top: 0;
-        }
-
-        > span {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--ily-dim);
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
-        }
-    }
-
-    &__level-btn {
-        grid-area: btn;
-        padding: 7px 14px;
-        border: none;
-        border-radius: 9px;
-        background: var(--ily-teal);
-        color: #04211b;
-        font-size: 11px;
-        font-weight: 800;
-        cursor: pointer;
-
-        &:disabled {
-            background: #24384b;
-            color: var(--ily-dim);
-            cursor: not-allowed;
-        }
-    }
-
-    &__level-msg {
-        grid-area: msg;
-        font-size: 10.5px;
-        font-weight: 700;
-        color: var(--ily-amber);
-
-        &--win {
-            color: var(--ily-green);
-        }
-
-        &--loss {
-            color: var(--ily-red);
-        }
-    }
-
+    // ---- Controls --------------------------------------------------------
     &__controls {
         display: flex;
         align-items: flex-end;
@@ -789,78 +695,6 @@
         }
     }
 
-    // ---- Match matrix ----------------------------------------------------
-    &__matrix {
-        margin-top: 14px;
-        border: 1px solid var(--ily-border);
-        border-radius: var(--ily-radius);
-        background: var(--ily-card);
-        padding: 12px 14px;
-    }
-
-    &__matrix-scroll {
-        overflow-x: auto;
-    }
-
-    &__matrix table {
-        width: 100%;
-        border-collapse: collapse;
-        font-variant-numeric: tabular-nums;
-
-        th,
-        td {
-            padding: 6px 4px;
-            font-size: 11px;
-            text-align: center;
-            border-bottom: 1px solid rgba(34, 54, 74, 0.6);
-        }
-
-        thead th {
-            font-size: 9.5px;
-            font-weight: 800;
-            letter-spacing: 0.06em;
-            color: var(--ily-dim);
-            text-transform: uppercase;
-        }
-
-        tbody th {
-            text-align: left;
-            white-space: nowrap;
-
-            strong {
-                display: block;
-                font-size: 12px;
-                font-weight: 800;
-            }
-
-            em {
-                font-style: normal;
-                font-size: 9px;
-                color: var(--ily-dim);
-            }
-        }
-    }
-
-    &__cell--hot {
-        color: var(--ily-green);
-        font-weight: 800;
-    }
-
-    &__cell--last {
-        color: var(--ily-cyan);
-        font-weight: 800;
-        background: rgba(34, 211, 238, 0.08);
-        border-radius: 6px;
-    }
-
-    &__matrix-note {
-        margin: 10px 0 0;
-        font-size: 10.5px;
-        line-height: 1.55;
-        color: var(--ily-dim);
-        max-width: 90rem;
-    }
-
     &__error {
         margin-top: 12px;
         padding: 10px 12px;
@@ -890,17 +724,12 @@
         background: linear-gradient(135deg, #fbbf24, #f59e0b);
     }
 
-    & .ily__badge--match {
-        background: linear-gradient(135deg, #a855f7, #7c3aed);
-    }
-
     & .ily__circle.ily__badge--over,
     & .ily__circle.ily__badge--under,
     & .ily__circle.ily__badge--even,
     & .ily__circle.ily__badge--odd,
     & .ily__circle.ily__badge--up,
-    & .ily__circle.ily__badge--down,
-    & .ily__circle.ily__badge--match {
+    & .ily__circle.ily__badge--down {
         color: #fff;
     }
 
@@ -913,5 +742,392 @@
         50% {
             opacity: 0.45;
         }
+    }
+}
+
+// ---- Full-width layout helpers --------------------------------------------
+.ily {
+    &__panel--wide {
+        margin-bottom: 14px;
+    }
+
+    &__ticks-hint {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ily-dim);
+    }
+
+    &__reco-both {
+        font-size: 11px;
+        color: var(--ily-dim);
+
+        b {
+            font-weight: 800;
+            color: var(--ily-text);
+        }
+    }
+
+    &__card-both {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 2px;
+    }
+
+    &__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 800;
+        color: #05201a;
+        white-space: nowrap;
+    }
+}
+
+// Accent backgrounds for the badges are also consumed by the floating AI
+// widget, which lives outside the `.ily` subtree.
+.ily__badge--over,
+.ily__badge--up {
+    background: linear-gradient(135deg, #34d399, #0f9e73);
+}
+
+.ily__badge--under,
+.ily__badge--down {
+    background: linear-gradient(135deg, #fb7185, #e11d48);
+}
+
+.ily__badge--even {
+    background: linear-gradient(135deg, #22e0a1, #12b981);
+}
+
+.ily__badge--odd {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+// ---------------------------------------------------------------------------
+// Floating "i love you" AI market scan.
+// Left fixed at app-shell level so it stays on top of every page and tab.
+// ---------------------------------------------------------------------------
+.ilyai {
+    --ilyai-bg: #0d1a28;
+    --ilyai-card: #16283a;
+    --ilyai-border: #233a50;
+    --ilyai-text: #e6eef7;
+    --ilyai-dim: #7f97ad;
+    --ilyai-teal: #00d4aa;
+    --ilyai-green: #22e0a1;
+    --ilyai-amber: #fbbf24;
+    --ilyai-red: #f87171;
+
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    font-family: var(--brand-font-primary), system-ui, -apple-system, sans-serif;
+
+    &__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 999px;
+        background: linear-gradient(135deg, #12202e, #0d1a28);
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+        color: var(--ilyai-text);
+        cursor: pointer;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            border-color: var(--ilyai-teal);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.28);
+            transform: translateY(-1px);
+        }
+    }
+
+    &__pill-icon {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    &__pill-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+
+        b {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 10px;
+            color: var(--ilyai-dim);
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &__pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ilyai-dim);
+
+        &--on {
+            background: var(--ilyai-green);
+            box-shadow: 0 0 7px var(--ilyai-green);
+            animation: ily-pulse 1.4s infinite;
+        }
+    }
+
+    &__panel {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 10px);
+        width: 340px;
+        max-height: min(72vh, 600px);
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 16px;
+        background: var(--ilyai-bg);
+        color: var(--ilyai-text);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+        pointer-events: none;
+        transition:
+            opacity 0.18s ease,
+            transform 0.18s ease;
+    }
+
+    &--open &__panel {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+    }
+
+    &__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        p {
+            margin: 2px 0 0;
+            font-size: 10.5px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__live {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--ilyai-dim);
+
+        i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ilyai-dim);
+        }
+
+        &--on {
+            color: var(--ilyai-green);
+
+            i {
+                background: var(--ilyai-green);
+                box-shadow: 0 0 6px var(--ilyai-green);
+                animation: ily-pulse 1.2s infinite;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ilyai-dim);
+        }
+
+        input {
+            width: 72px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--ilyai-border);
+            background: #0a1420;
+            color: var(--ilyai-text);
+            font-size: 12px;
+            outline: none;
+
+            &:focus {
+                border-color: var(--ilyai-teal);
+            }
+        }
+    }
+
+    &__counting {
+        font-size: 10px;
+        color: var(--ilyai-dim);
+    }
+
+    &__best {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--ilyai-border);
+        background: var(--ilyai-card);
+        margin-bottom: 10px;
+
+        &--ready {
+            border-color: var(--ilyai-green);
+            box-shadow: 0 0 18px rgba(34, 224, 161, 0.18);
+        }
+    }
+
+    &__best-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 800;
+        color: #05201a;
+        flex: 0 0 auto;
+    }
+
+    &__best-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+
+        strong {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        > span {
+            font-size: 10px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__best-both b {
+        color: var(--ilyai-text);
+    }
+
+    &__best-conf {
+        margin-left: auto;
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--ilyai-amber);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__empty,
+    &__row-empty {
+        font-size: 11px;
+        color: var(--ilyai-dim);
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 9px;
+        border-radius: 9px;
+        background: var(--ilyai-card);
+    }
+
+    &__row-name {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+        min-width: 0;
+
+        strong {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 9px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__row-entry {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #05201a;
+        white-space: nowrap;
+    }
+
+    &__row-rate {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--ilyai-text);
+        font-variant-numeric: tabular-nums;
+        min-width: 52px;
+        text-align: right;
+    }
+
+    &__note {
+        margin: 10px 0 0;
+        font-size: 9.5px;
+        line-height: 1.5;
+        color: var(--ilyai-dim);
     }
 }

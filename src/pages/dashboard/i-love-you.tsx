@@ -6,12 +6,14 @@ import { useStore } from '@/hooks/useStore';
 import { useMarketFeed } from '@/hooks/useMarketFeed';
 import { placeTrade } from '@/hooks/useDerivTrade';
 import {
-    LOVE_LOOKBACK,
-    LOVE_MARKETS,
+    ALL_MARKETS,
     LOVE_MODES,
     LOVE_THRESHOLD,
+    LOVE_TICKS_DEFAULT,
+    LOVE_TICKS_MAX,
+    LOVE_TICKS_MIN,
     evaluateMarket,
-    repeatRates,
+    marketsForMode,
     type LoveEntry,
     type LoveMarket,
     type LoveMode,
@@ -21,20 +23,26 @@ import './i-love-you.scss';
 /**
  * "i love you" — auto-scanning execution desk.
  *
- * Scans every volatility index (regular + the (1s) family, including the
- * 30 (1s) and 90 (1s) markets) and ranks the markets whose measured win rate
- * over the last 200 ticks clears the 90% execution bar. Built on the same
- * live tick feed as the Digit Killer tool, styled as its own dedicated desk:
- * header with account chip, mode tabs, a headline recommendation, a ranked
- * market list, an entry-point level scanner and a grid of volatility cards.
+ * Scans every volatility index (regular + the (1s) family) over a user-set
+ * tick window and ranks the markets whose measured win rate clears the 90%
+ * execution bar. Step Indices appear under Rise / Fall and Only Ups / Only
+ * Downs. Styled as its own dedicated desk: header with account chip, mode
+ * tabs, a headline recommendation, a ranked market list and a full-width grid
+ * of volatility cards.
  */
 
 interface Settings {
     stake: number;
     duration: number;
+    ticks: number;
 }
 
-const DEFAULT_SETTINGS: Settings = { stake: 1, duration: 1 };
+const DEFAULT_SETTINGS: Settings = { stake: 1, duration: 1, ticks: LOVE_TICKS_DEFAULT };
+
+const clampTicks = (value: number): number => {
+    const rounded = Math.floor(Number(value) || 0);
+    return Math.min(LOVE_TICKS_MAX, Math.max(LOVE_TICKS_MIN, rounded || LOVE_TICKS_DEFAULT));
+};
 
 interface TradeState {
     busy: boolean;
@@ -47,6 +55,7 @@ const IDLE_TRADE: TradeState = { busy: false, message: null, is_win: null };
 const ASSET_LOGO: Record<string, string> = {
     regular: '📈',
     '1s': '⚡',
+    step: '🪜',
 };
 
 const Sparkline = ({ values, up }: { values: number[]; up: boolean }) => {
@@ -64,7 +73,11 @@ const Sparkline = ({ values, up }: { values: number[]; up: boolean }) => {
         })
         .join(' ');
     return (
-        <svg className={classNames('ily__spark', { 'ily__spark--up': up, 'ily__spark--down': !up })} viewBox='0 0 100 100' preserveAspectRatio='none'>
+        <svg
+            className={classNames('ily__spark', { 'ily__spark--up': up, 'ily__spark--down': !up })}
+            viewBox='0 0 100 100'
+            preserveAspectRatio='none'
+        >
             <polyline points={points} fill='none' strokeWidth='3' vectorEffect='non-scaling-stroke' />
         </svg>
     );
@@ -72,7 +85,6 @@ const Sparkline = ({ values, up }: { values: number[]; up: boolean }) => {
 
 const ILoveYou = observer(() => {
     const { client } = useStore();
-    const feed = useMarketFeed(LOVE_LOOKBACK, LOVE_MARKETS);
     const [mode, setMode] = React.useState<LoveMode>('over_under');
     const [clock, setClock] = React.useState(0);
     const [trade_states, setTradeStates] = React.useState<Record<string, TradeState>>({});
@@ -85,6 +97,10 @@ const ILoveYou = observer(() => {
         }
     });
 
+    // The live feed follows the user's tick count. A single shared market list
+    // keeps Step Indices streaming even in modes that do not rank them.
+    const feed = useMarketFeed(settings.ticks, ALL_MARKETS);
+
     // A single 1s heartbeat drives the entry countdowns and keeps
     // time-to-entry labels feeling live.
     React.useEffect(() => {
@@ -94,12 +110,29 @@ const ILoveYou = observer(() => {
 
     const active_mode = LOVE_MODES.find(item => item.id === mode) || LOVE_MODES[0];
 
+    // Step Indices are only ranked under the direction modes, and only once
+    // they actually stream data — the account/region may not offer them.
+    const markets = React.useMemo<LoveMarket[]>(
+        () =>
+            marketsForMode(mode).filter(
+                market => market.group !== 'step' || (feed.history[market.value] || []).length > 0
+            ),
+        [mode, feed.history]
+    );
+
     const entries = React.useMemo<LoveEntry[]>(
         () =>
-            LOVE_MARKETS.map(market =>
-                evaluateMarket(mode, market, feed.history[market.value] || [], feed.quote_history[market.value] || [])
+            markets.map(market =>
+                evaluateMarket(
+                    mode,
+                    market,
+                    feed.history[market.value] || [],
+                    feed.quote_history[market.value] || [],
+                    settings.ticks,
+                    settings.duration
+                )
             ),
-        [mode, feed.history, feed.quote_history]
+        [mode, markets, feed.history, feed.quote_history, settings.ticks, settings.duration]
     );
 
     const ranked = React.useMemo(() => [...entries].sort((a, b) => b.confidence - a.confidence), [entries]);
@@ -179,8 +212,8 @@ const ILoveYou = observer(() => {
                     <div>
                         <h2 className='ily__title'>{localize('i love you')}</h2>
                         <p className='ily__tagline'>
-                            {localize('Auto-scans every volatility · last {{n}} ticks · {{t}}%+ win-rate execution', {
-                                n: String(LOVE_LOOKBACK),
+                            {localize('Auto-scans every volatility · {{n}} tick window · {{t}}%+ win-rate execution', {
+                                n: String(settings.ticks),
                                 t: String(LOVE_THRESHOLD),
                             })}
                         </p>
@@ -225,6 +258,48 @@ const ILoveYou = observer(() => {
 
             <p className='ily__blurb'>{active_mode.blurb}</p>
 
+            {/* Controls — stake, duration, tick window */}
+            <div className='ily__controls'>
+                <label>
+                    <span>{localize('Stake')}</span>
+                    <input
+                        type='number'
+                        min='0.35'
+                        step='0.05'
+                        value={settings.stake}
+                        onChange={e => updateSetting('stake', Number(e.target.value) || 0.35)}
+                    />
+                </label>
+                <label>
+                    <span>{localize('Duration (ticks)')}</span>
+                    <input
+                        type='number'
+                        min='1'
+                        max='10'
+                        value={settings.duration}
+                        onChange={e => updateSetting('duration', Number(e.target.value) || 1)}
+                    />
+                </label>
+                <label>
+                    <span>{localize('Ticks to analyse')}</span>
+                    <input
+                        type='number'
+                        min={LOVE_TICKS_MIN}
+                        max={LOVE_TICKS_MAX}
+                        step='10'
+                        value={settings.ticks}
+                        onChange={e => updateSetting('ticks', Number(e.target.value) || LOVE_TICKS_DEFAULT)}
+                        onBlur={e => updateSetting('ticks', clampTicks(Number(e.target.value)))}
+                    />
+                </label>
+                <span className='ily__ticks-hint'>
+                    {localize('{{min}}–{{max}} ticks', { min: String(LOVE_TICKS_MIN), max: String(LOVE_TICKS_MAX) })}
+                </span>
+                <button type='button' className='ily__btn' onClick={() => feed.rescan()}>
+                    {localize('Rescan')}
+                </button>
+            </div>
+
             {/* Recommendation */}
             <section className='ily__reco'>
                 <div className='ily__reco-label'>{localize('Best market right now')}</div>
@@ -242,6 +317,13 @@ const ILoveYou = observer(() => {
                                 <span>
                                     {recommendation.market.code} · {recommendation.detail}
                                 </span>
+                                {recommendation.over2_pct !== undefined && (
+                                    <span className='ily__reco-both'>
+                                        {localize('Over 2')} <b>{recommendation.over2_pct.toFixed(1)}%</b>
+                                        {'  ·  '}
+                                        {localize('Under 8')} <b>{recommendation.under8_pct?.toFixed(1)}%</b>
+                                    </span>
+                                )}
                             </div>
                             <div className='ily__reco-meter'>
                                 <span>{recommendation.confidence.toFixed(1)}%</span>
@@ -277,132 +359,47 @@ const ILoveYou = observer(() => {
                 )}
             </section>
 
-            {/* Ranked list + entry-point scanner */}
-            <div className='ily__split'>
-                <section className='ily__panel'>
-                    <div className='ily__panel-head'>
-                        <h3>{localize('Ranked markets · {{t}}%+ only', { t: String(LOVE_THRESHOLD) })}</h3>
-                        <span>{localize('{{n}} qualify', { n: String(qualifying.length) })}</span>
-                    </div>
-                    <div className='ily__ranked'>
-                        {ranked.map((entry, index) => {
-                            const ok = entry.confidence >= LOVE_THRESHOLD;
-                            return (
-                                <div
-                                    key={entry.market.value}
-                                    className={classNames('ily__row', { 'ily__row--ok': ok })}
-                                >
-                                    <span className='ily__row-rank'>{index + 1}</span>
-                                    <span className='ily__row-name'>
-                                        <strong>{entry.market.short}</strong>
-                                        <em>{entry.market.code}</em>
-                                    </span>
-                                    <span className={classNames('ily__row-entry', `ily__badge--${entry.accent}`)}>
-                                        {entry.entry_label}
-                                    </span>
-                                    <span className='ily__row-rate'>
-                                        {entry.confidence.toFixed(1)}%
-                                        <i className={classNames({ 'ily__row-tick': ok })}>
-                                            {ok ? '\u2714' : ''}
-                                        </i>
-                                    </span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                <section className='ily__panel'>
-                    <div className='ily__panel-head'>
-                        <h3>{localize('Entry-point level scanner')}</h3>
-                        <span>
-                            {localize('stake')} {Number(settings.stake) || 1} · {localize('{{n}} tick(s)', { n: String(Number(settings.duration) || 1) })}
-                        </span>
-                    </div>
-                    <div className='ily__levels'>
-                        {ranked.slice(0, 10).map(entry => {
-                            const ok = entry.confidence >= LOVE_THRESHOLD;
-                            const trade = trade_states[entry.market.value] || IDLE_TRADE;
-                            return (
-                                <div key={entry.market.value} className='ily__level'>
-                                    <div className='ily__level-id'>
-                                        <strong>{entry.market.code}</strong>
-                                        <em>{entry.entry_label}</em>
-                                    </div>
-                                    <div className='ily__level-meter'>
-                                        <div className='ily__meter'>
-                                            <i
-                                                style={{ width: `${Math.min(entry.confidence, 100)}%` }}
-                                                className={classNames({ 'ily__meter-ok': ok })}
-                                            />
-                                        </div>
-                                        <span>
-                                            {ok ? localize('LEVEL') : localize('WAIT')} {entry.confidence.toFixed(0)}%
-                                        </span>
-                                    </div>
-                                    <button
-                                        type='button'
-                                        className='ily__level-btn'
-                                        disabled={!ok || trade.busy || !entry.contract_type}
-                                        onClick={() => startTrade(entry)}
-                                    >
-                                        {trade.busy ? localize('…') : localize('ENTER')}
-                                    </button>
-                                    {trade.message && (
-                                        <span
-                                            className={classNames('ily__level-msg', {
-                                                'ily__level-msg--win': trade.is_win === true,
-                                                'ily__level-msg--loss': trade.is_win === false,
-                                            })}
-                                        >
-                                            {trade.message}
-                                        </span>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className='ily__controls'>
-                        <label>
-                            <span>{localize('Stake')}</span>
-                            <input
-                                type='number'
-                                min='0.35'
-                                step='0.05'
-                                value={settings.stake}
-                                onChange={e => updateSetting('stake', Number(e.target.value) || 0.35)}
-                            />
-                        </label>
-                        <label>
-                            <span>{localize('Duration (ticks)')}</span>
-                            <input
-                                type='number'
-                                min='1'
-                                max='10'
-                                value={settings.duration}
-                                onChange={e => updateSetting('duration', Number(e.target.value) || 1)}
-                            />
-                        </label>
-                        <button type='button' className='ily__btn' onClick={() => feed.rescan()}>
-                            {localize('Rescan')}
-                        </button>
-                    </div>
-                </section>
-            </div>
+            {/* Ranked markets */}
+            <section className='ily__panel ily__panel--wide'>
+                <div className='ily__panel-head'>
+                    <h3>{localize('Ranked markets · {{t}}%+ only', { t: String(LOVE_THRESHOLD) })}</h3>
+                    <span>{localize('{{n}} qualify', { n: String(qualifying.length) })}</span>
+                </div>
+                <div className='ily__ranked'>
+                    {ranked.map((entry, index) => {
+                        const ok = entry.confidence >= LOVE_THRESHOLD;
+                        return (
+                            <div key={entry.market.value} className={classNames('ily__row', { 'ily__row--ok': ok })}>
+                                <span className='ily__row-rank'>{index + 1}</span>
+                                <span className='ily__row-name'>
+                                    <strong>{entry.market.short}</strong>
+                                    <em>
+                                        {entry.market.code} · {entry.detail}
+                                    </em>
+                                </span>
+                                <span className={classNames('ily__row-entry', `ily__badge--${entry.accent}`)}>
+                                    {entry.entry_label}
+                                </span>
+                                <span className='ily__row-rate'>
+                                    {entry.confidence.toFixed(1)}%
+                                    <i className={classNames({ 'ily__row-tick': ok })}>{ok ? '\u2714' : ''}</i>
+                                </span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
 
             {/* Volatility cards — the "Digit Killer" style grid */}
             <section className='ily__cards'>
-                {LOVE_MARKETS.map(market => {
+                {markets.map(market => {
                     const entry = entries.find(item => item.market.value === market.value) || null;
                     const trade = trade_states[market.value] || IDLE_TRADE;
                     const quotes = feed.quote_history[market.value] || [];
                     const up = quotes.length > 1 && quotes[quotes.length - 1] >= quotes[0];
                     const ready = !!entry && entry.confidence >= LOVE_THRESHOLD;
                     return (
-                        <article
-                            key={market.value}
-                            className={classNames('ily__card', { 'ily__card--ready': ready })}
-                        >
+                        <article key={market.value} className={classNames('ily__card', { 'ily__card--ready': ready })}>
                             <div className='ily__card-head'>
                                 <div className='ily__card-id'>
                                     <span className='ily__card-asset'>{ASSET_LOGO[market.group]}</span>
@@ -421,13 +418,23 @@ const ILoveYou = observer(() => {
                             </div>
 
                             <div className='ily__card-body'>
-                                <span className={classNames('ily__circle', `ily__badge--${entry?.accent || 'match'}`)}>
+                                <span className={classNames('ily__circle', `ily__badge--${entry?.accent || 'over'}`)}>
                                     {entry?.badge ?? '–'}
                                 </span>
                                 <span className='ily__card-entry'>{entry?.entry_label ?? localize('Collecting…')}</span>
                                 <span className='ily__card-conf'>
                                     {localize('Confidence')}: <b>{entry ? entry.confidence.toFixed(1) : '0.0'}%</b>
                                 </span>
+                                {entry && entry.over2_pct !== undefined && (
+                                    <span className='ily__card-both'>
+                                        <span className='ily__pill ily__badge--over'>
+                                            {localize('Over 2')} {entry.over2_pct.toFixed(1)}%
+                                        </span>
+                                        <span className='ily__pill ily__badge--under'>
+                                            {localize('Under 8')} {entry.under8_pct?.toFixed(1)}%
+                                        </span>
+                                    </span>
+                                )}
                             </div>
 
                             <div className='ily__card-foot'>
@@ -447,11 +454,7 @@ const ILoveYou = observer(() => {
                                 disabled={!ready || trade.busy || !entry?.contract_type}
                                 onClick={() => entry && startTrade(entry)}
                             >
-                                {trade.busy
-                                    ? localize('Placing…')
-                                    : ready
-                                      ? localize('TRADE NOW')
-                                      : localize('WAITING FOR {{t}}%', { t: String(LOVE_THRESHOLD) })}
+                                {trade.busy ? localize('Placing…') : ready ? localize('TRADE NOW') : localize('HOLD')}
                             </button>
 
                             {trade.message && (
@@ -469,70 +472,7 @@ const ILoveYou = observer(() => {
                 })}
             </section>
 
-            {/* Matches deep analysis — two-digit probability matrix */}
-            {mode === 'matches' && (
-                <section className='ily__matrix'>
-                    <div className='ily__panel-head'>
-                        <h3>{localize('Two-digit match matrix · P(next = last digit)')}</h3>
-                        <span>
-                            {localize('All volatilities × digits 0–9 · last {{n}} ticks', { n: String(LOVE_LOOKBACK) })}
-                        </span>
-                    </div>
-                    <div className='ily__matrix-scroll'>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{localize('Volatility')}</th>
-                                    {Array.from({ length: 10 }, (_, digit) => (
-                                        <th key={digit}>{digit}</th>
-                                    ))}
-                                    <th>{localize('Last')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {LOVE_MARKETS.map(market => {
-                                    const history = feed.history[market.value] || [];
-                                    const rates = repeatRates(history);
-                                    const last = last_digit_of(market);
-                                    return (
-                                        <tr key={market.value}>
-                                            <th scope='row'>
-                                                <strong>{market.short}</strong>
-                                                <em>{market.code}</em>
-                                            </th>
-                                            {Array.from({ length: 10 }, (_, digit) => {
-                                                const rate = rates.totals[digit]
-                                                    ? Math.round((rates.repeats[digit] / rates.totals[digit]) * 1000) / 10
-                                                    : 0;
-                                                const is_last = last === digit;
-                                                return (
-                                                    <td
-                                                        key={digit}
-                                                        className={classNames({
-                                                            'ily__cell--hot': rate >= LOVE_THRESHOLD,
-                                                            'ily__cell--last': is_last,
-                                                        })}
-                                                    >
-                                                        {rates.totals[digit] ? `${rate.toFixed(0)}%` : '–'}
-                                                    </td>
-                                                );
-                                            })}
-                                            <td className='ily__cell--last'>{last ?? '–'}</td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                    <p className='ily__matrix-note'>
-                        {localize(
-                            'Each cell is the measured chance that a digit repeats immediately (x → x) after the last print, from the same market\'s recent ticks. The highlighted column follows the live last digit; the total over/under win rate for each market is shown at the top of the tab.'
-                        )}
-                    </p>
-                </section>
-            )}
 
-            {feed.error && <div className='ily__error'>{feed.error}</div>}
         </div>
     );
 });

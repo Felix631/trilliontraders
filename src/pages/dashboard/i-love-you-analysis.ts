@@ -4,31 +4,34 @@ import { localize } from '@deriv-com/translations';
  * "i love you" analysis engine.
  *
  * Every figure in the tab is an empirical probability measured over the last
- * LOVE_LOOKBACK ticks of the selected market — no historical fitting, no
- * predictive magic. We simply count how often each condition *would* have won
- * in the window and surface the markets whose measured win rate clears the
- * 90% execution bar.
+ * `ticks` ticks of the selected market — no historical fitting, no predictive
+ * magic. We simply count how often each condition *would* have won in the
+ * window and surface the markets whose measured win rate clears the 90%
+ * execution bar.
  *
  * Modes:
- *   over_under — Over 2 (digit > 2) and Under 8 (digit < 8), ranked by win rate.
- *   matches    — two-digit repeat probability: given the last digit printed is
- *                X, how often does the next digit print X again (x → x).
- *   even_odd   — Even (0,2,4,6,8) vs Odd (1,3,5,7,9) win rate.
- *   rise_fall  — Rise vs Fall win rate measured from the tick-to-tick quote moves.
+ *   over_under     — Over 2 (digit > 2) and Under 8 (digit < 8), both reported.
+ *   even_odd       — Even (0,2,4,6,8) vs Odd (1,3,5,7,9) win rate.
+ *   rise_fall      — Rise (CALL) vs Fall (PUT) measured from tick-to-tick quote
+ *                    moves. Step Indices are included here only.
+ *   only_ups_downs — Only Ups (RUNHIGH) vs Only Downs (RUNLOW): how often a run
+ *                    of `duration` consecutive ticks all moved the same way.
  */
 
-export const LOVE_LOOKBACK = 200;
+export const LOVE_TICKS_DEFAULT = 200;
+export const LOVE_TICKS_MIN = 20;
+export const LOVE_TICKS_MAX = 5000;
 export const LOVE_THRESHOLD = 90;
 
-export type LoveMode = 'matches' | 'over_under' | 'even_odd' | 'rise_fall';
+export type LoveMode = 'over_under' | 'even_odd' | 'rise_fall' | 'only_ups_downs';
 
 export interface LoveMarket {
     value: string;
-    /** Big number shown on the card, e.g. "50" / "50 (1s)". */
+    /** Big number shown on the card, e.g. "50" / "50 (1s)" / "Step 100". */
     short: string;
-    /** Deriv symbol code, e.g. "R_50" / "1HZ50V". */
+    /** Deriv symbol code, e.g. "R_50" / "1HZ50V" / "STPRNG". */
     code: string;
-    group: 'regular' | '1s';
+    group: 'regular' | '1s' | 'step';
 }
 
 /** All volatility indices: the 5 regular ones plus the (1s) family,
@@ -48,7 +51,26 @@ export const LOVE_MARKETS: LoveMarket[] = [
     { value: '1HZ100V', short: '100 (1s)', code: '1HZ100V', group: '1s' },
 ];
 
-export type LoveAccent = 'over' | 'under' | 'even' | 'odd' | 'up' | 'down' | 'match';
+/** Step Indices — surfaced under the Rise / Fall and Only Ups / Only Downs
+ *  modes only, as requested. */
+export const STEP_MARKETS: LoveMarket[] = [
+    { value: 'STPRNG', short: 'Step 100', code: 'STPRNG', group: 'step' },
+    { value: 'STPRNG2', short: 'Step 200', code: 'STPRNG2', group: 'step' },
+    { value: 'STPRNG3', short: 'Step 300', code: 'STPRNG3', group: 'step' },
+    { value: 'STPRNG4', short: 'Step 400', code: 'STPRNG4', group: 'step' },
+    { value: 'STPRNG5', short: 'Step 500', code: 'STPRNG5', group: 'step' },
+];
+
+/** Every market the live feed subscribes to (steps included so switching to
+ *  Rise / Fall needs no re-subscription). */
+export const ALL_MARKETS: LoveMarket[] = [...LOVE_MARKETS, ...STEP_MARKETS];
+
+/** The markets actually ranked for a given mode. Step Indices only appear
+ *  under the rise/fall and only-ups/downs (contract-direction) modes. */
+export const marketsForMode = (mode: LoveMode): LoveMarket[] =>
+    mode === 'rise_fall' || mode === 'only_ups_downs' ? ALL_MARKETS : LOVE_MARKETS;
+
+export type LoveAccent = 'over' | 'under' | 'even' | 'odd' | 'up' | 'down';
 
 export interface LoveEntry {
     market: LoveMarket;
@@ -56,7 +78,7 @@ export interface LoveEntry {
     prediction?: number;
     /** Text rendered inside the big coloured circle. */
     badge: string;
-    /** Tradable entry label, e.g. "Over 2" / "Match 8". */
+    /** Tradable entry label, e.g. "Over 2" / "Only Ups". */
     entry_label: string;
     /** Measured win rate over the lookback window, 0–100. */
     confidence: number;
@@ -65,13 +87,18 @@ export interface LoveEntry {
     detail: string;
     ready: boolean;
     accent: LoveAccent;
+    /** Over 2 / Under 8 are always both reported so neither is ever hidden. */
+    over2_pct?: number;
+    under8_pct?: number;
 }
 
 const pct = (count: number, total: number): number =>
     total > 0 ? Math.round((count / total) * 1000) / 10 : 0;
 
-const tail = (values: number[], size: number): number[] =>
-    values.length > size ? values.slice(-size) : values;
+const tail = (values: number[], size: number): number[] => {
+    const window_size = Math.max(1, Math.floor(size) || 1);
+    return values.length > window_size ? values.slice(-window_size) : values;
+};
 
 // ---------------------------------------------------------------------------
 // Over / Under — Over 2 (digit > 2) and Under 8 (digit < 8)
@@ -85,8 +112,8 @@ export interface OverUnderRates {
     under8_count: number;
 }
 
-export const overUnderRates = (history: number[]): OverUnderRates => {
-    const sample = tail(history, LOVE_LOOKBACK);
+export const overUnderRates = (history: number[], ticks = LOVE_TICKS_DEFAULT): OverUnderRates => {
+    const sample = tail(history, ticks);
     const n = sample.length;
     const over2 = sample.filter(d => d > 2).length;
     const under8 = sample.filter(d => d < 8).length;
@@ -100,47 +127,6 @@ export const overUnderRates = (history: number[]): OverUnderRates => {
 };
 
 // ---------------------------------------------------------------------------
-// Matches — two-digit repeat probability (x → x)
-// ---------------------------------------------------------------------------
-
-export interface RepeatRates {
-    /** Transitions analysed (sample_size - 1). */
-    transitions: number;
-    /** Occurrences of each digit where a following tick exists. */
-    totals: number[];
-    /** Occurrences where digit x was immediately followed by x again. */
-    repeats: number[];
-    /** Overall share of repeats across every transition. */
-    overall_pct: number;
-}
-
-export const repeatRates = (history: number[]): RepeatRates => {
-    const sample = tail(history, LOVE_LOOKBACK);
-    const n = sample.length;
-    const totals = Array(10).fill(0) as number[];
-    const repeats = Array(10).fill(0) as number[];
-    let repeat_total = 0;
-    for (let i = 0; i < n - 1; i += 1) {
-        const digit = sample[i];
-        totals[digit] += 1;
-        if (sample[i + 1] === digit) {
-            repeats[digit] += 1;
-            repeat_total += 1;
-        }
-    }
-    return {
-        transitions: Math.max(0, n - 1),
-        totals,
-        repeats,
-        overall_pct: pct(repeat_total, Math.max(0, n - 1)),
-    };
-};
-
-/** Repeat probability for a single digit: P(next = x | current = x). */
-export const repeatRateFor = (rates: RepeatRates, digit: number): number =>
-    pct(rates.repeats[digit], rates.totals[digit]);
-
-// ---------------------------------------------------------------------------
 // Even / Odd
 // ---------------------------------------------------------------------------
 
@@ -152,8 +138,8 @@ export interface ParityRates {
     odd_count: number;
 }
 
-export const parityRates = (history: number[]): ParityRates => {
-    const sample = tail(history, LOVE_LOOKBACK);
+export const parityRates = (history: number[], ticks = LOVE_TICKS_DEFAULT): ParityRates => {
+    const sample = tail(history, ticks);
     const n = sample.length;
     const even = sample.filter(d => d % 2 === 0).length;
     return {
@@ -169,6 +155,9 @@ export const parityRates = (history: number[]): ParityRates => {
 // Rise / Fall — measured from tick-to-tick quote moves
 // ---------------------------------------------------------------------------
 
+/** +1 last move up, -1 last move down, 0 flat. */
+export type Direction = -1 | 0 | 1;
+
 export interface RiseFallRates {
     /** Number of tick-to-tick moves analysed. */
     moves: number;
@@ -176,15 +165,14 @@ export interface RiseFallRates {
     down_pct: number;
     ups: number;
     downs: number;
-    /** +1 last move up, -1 last move down, 0 flat. */
-    last_direction: number;
+    last_direction: Direction;
 }
 
-export const riseFallRates = (quotes: number[]): RiseFallRates => {
-    const sample = tail(quotes, LOVE_LOOKBACK);
+export const riseFallRates = (quotes: number[], ticks = LOVE_TICKS_DEFAULT): RiseFallRates => {
+    const sample = tail(quotes, ticks);
     let ups = 0;
     let downs = 0;
-    let last_direction = 0;
+    let last_direction: Direction = 0;
     for (let i = 1; i < sample.length; i += 1) {
         const delta = sample[i] - sample[i - 1];
         if (delta > 0) ups += 1;
@@ -203,6 +191,54 @@ export const riseFallRates = (quotes: number[]): RiseFallRates => {
 };
 
 // ---------------------------------------------------------------------------
+// Only Ups / Only Downs — runs of `run_length` consecutive same-direction ticks
+// ---------------------------------------------------------------------------
+
+export interface RunRates {
+    /** Windows of `run_length` consecutive moves analysed. */
+    windows: number;
+    run_length: number;
+    up_runs: number;
+    down_runs: number;
+    up_pct: number;
+    down_pct: number;
+    last_direction: Direction;
+}
+
+export const runRates = (quotes: number[], ticks: number, run_length: number): RunRates => {
+    const sample = tail(quotes, ticks);
+    const moves: Direction[] = [];
+    for (let i = 1; i < sample.length; i += 1) {
+        const delta = sample[i] - sample[i - 1];
+        moves.push(delta > 0 ? 1 : delta < 0 ? -1 : 0);
+    }
+    const n = Math.max(1, Math.floor(run_length) || 1);
+    let up_runs = 0;
+    let down_runs = 0;
+    let windows = 0;
+    for (let i = 0; i + n <= moves.length; i += 1) {
+        windows += 1;
+        let all_up = true;
+        let all_down = true;
+        for (let j = 0; j < n; j += 1) {
+            if (moves[i + j] <= 0) all_up = false;
+            if (moves[i + j] >= 0) all_down = false;
+        }
+        if (all_up) up_runs += 1;
+        if (all_down) down_runs += 1;
+    }
+    return {
+        windows,
+        run_length: n,
+        up_runs,
+        down_runs,
+        up_pct: pct(up_runs, windows),
+        down_pct: pct(down_runs, windows),
+        last_direction: moves.length ? moves[moves.length - 1] : 0,
+    };
+};
+
+// ---------------------------------------------------------------------------
 // Per-market evaluation
 // ---------------------------------------------------------------------------
 
@@ -215,19 +251,19 @@ const emptyEntry = (market: LoveMarket, detail: string): LoveEntry => ({
     sample: 0,
     detail,
     ready: false,
-    accent: 'match',
+    accent: 'over',
 });
 
 export const evaluateMarket = (
     mode: LoveMode,
     market: LoveMarket,
     history: number[],
-    quotes: number[]
+    quotes: number[],
+    ticks = LOVE_TICKS_DEFAULT,
+    run_length = 1
 ): LoveEntry => {
-    const last_digit = history.length ? history[history.length - 1] : null;
-
     if (mode === 'over_under') {
-        const rates = overUnderRates(history);
+        const rates = overUnderRates(history, ticks);
         if (!rates.sample) return emptyEntry(market, localize('Waiting for ticks…'));
         const use_over = rates.over2_pct >= rates.under8_pct;
         const confidence = Math.max(rates.over2_pct, rates.under8_pct);
@@ -239,50 +275,20 @@ export const evaluateMarket = (
             entry_label: use_over ? localize('Over 2') : localize('Under 8'),
             confidence,
             sample: rates.sample,
-            detail: use_over
-                ? localize('{{c}}/{{s}} ticks printed above 2', {
-                      c: String(rates.over2_count),
-                      s: String(rates.sample),
-                  })
-                : localize('{{c}}/{{s}} ticks printed below 8', {
-                      c: String(rates.under8_count),
-                      s: String(rates.sample),
-                  }),
+            detail: localize('Over 2 {{o}}% · Under 8 {{u}}% ({{s}} ticks)', {
+                o: rates.over2_pct.toFixed(1),
+                u: rates.under8_pct.toFixed(1),
+                s: String(rates.sample),
+            }),
             ready: confidence >= LOVE_THRESHOLD,
             accent: use_over ? 'over' : 'under',
-        };
-    }
-
-    if (mode === 'matches') {
-        if (last_digit === null) return emptyEntry(market, localize('Waiting for ticks…'));
-        const rates = repeatRates(history);
-        const digit_rate = repeatRateFor(rates, last_digit);
-        // Fall back to the market-wide repeat rate when this digit is too rare
-        // to trust on its own.
-        const confident = rates.totals[last_digit] >= 5;
-        const confidence = confident ? digit_rate : rates.overall_pct;
-        return {
-            market,
-            contract_type: 'DIGITMATCH',
-            prediction: last_digit,
-            badge: String(last_digit),
-            entry_label: localize('Match {{d}}', { d: String(last_digit) }),
-            confidence,
-            sample: rates.totals[last_digit],
-            detail: confident
-                ? localize('{{r}}/{{t}} times {{d}} repeated', {
-                      r: String(rates.repeats[last_digit]),
-                      t: String(rates.totals[last_digit]),
-                      d: String(last_digit),
-                  })
-                : localize('Window repeat rate (thin sample for {{d}})', { d: String(last_digit) }),
-            ready: confidence >= LOVE_THRESHOLD,
-            accent: 'match',
+            over2_pct: rates.over2_pct,
+            under8_pct: rates.under8_pct,
         };
     }
 
     if (mode === 'even_odd') {
-        const rates = parityRates(history);
+        const rates = parityRates(history, ticks);
         if (!rates.sample) return emptyEntry(market, localize('Waiting for ticks…'));
         const use_even = rates.even_pct >= rates.odd_pct;
         const confidence = Math.max(rates.even_pct, rates.odd_pct);
@@ -301,8 +307,36 @@ export const evaluateMarket = (
         };
     }
 
+    if (mode === 'only_ups_downs') {
+        const rates = runRates(quotes, ticks, run_length);
+        if (!rates.windows) return emptyEntry(market, localize('Waiting for ticks…'));
+        const use_up = rates.up_pct >= rates.down_pct;
+        const confidence = Math.max(rates.up_pct, rates.down_pct);
+        return {
+            market,
+            contract_type: use_up ? 'RUNHIGH' : 'RUNLOW',
+            badge: use_up ? 'UP' : 'DN',
+            entry_label: use_up ? localize('Only Ups') : localize('Only Downs'),
+            confidence,
+            sample: rates.windows,
+            detail: use_up
+                ? localize('{{c}}/{{s}} runs of {{n}} ticks all rose', {
+                      c: String(rates.up_runs),
+                      s: String(rates.windows),
+                      n: String(rates.run_length),
+                  })
+                : localize('{{c}}/{{s}} runs of {{n}} ticks all fell', {
+                      c: String(rates.down_runs),
+                      s: String(rates.windows),
+                      n: String(rates.run_length),
+                  }),
+            ready: confidence >= LOVE_THRESHOLD,
+            accent: use_up ? 'up' : 'down',
+        };
+    }
+
     // rise_fall
-    const rates = riseFallRates(quotes);
+    const rates = riseFallRates(quotes, ticks);
     if (!rates.moves) return emptyEntry(market, localize('Waiting for ticks…'));
     const use_up = rates.up_pct >= rates.down_pct;
     const confidence = Math.max(rates.up_pct, rates.down_pct);
@@ -323,11 +357,11 @@ export const evaluateMarket = (
 
 export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blurb: string }> = [
     {
-        id: 'matches',
-        label: localize('Matches'),
-        icon: '🎯',
+        id: 'over_under',
+        label: localize('Over / Under'),
+        icon: '📊',
         blurb: localize(
-            'Two-digit repeat probability: if the last digit printed is X, how often has the next tick printed X again across the last 200 ticks — for every volatility and every digit 0–9.'
+            'Over 2 (digit above 2) and Under 8 (digit below 8) win rates over your lookback window. Both markets are always reported; only markets at or above 90% are recommended.'
         ),
     },
     {
@@ -335,15 +369,7 @@ export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blur
         label: localize('Even / Odd'),
         icon: '⚖️',
         blurb: localize(
-            'Even (0, 2, 4, 6, 8) versus Odd (1, 3, 5, 7, 9) share of the last 200 ticks, ranked by measured win rate.'
-        ),
-    },
-    {
-        id: 'over_under',
-        label: localize('Over / Under'),
-        icon: '📊',
-        blurb: localize(
-            'Over 2 (digit above 2) and Under 8 (digit below 8) win rates over the last 200 ticks. Only markets at or above 90% are recommended.'
+            'Even (0, 2, 4, 6, 8) versus Odd (1, 3, 5, 7, 9) share of the window, ranked by measured win rate.'
         ),
     },
     {
@@ -351,7 +377,15 @@ export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blur
         label: localize('Rise / Fall'),
         icon: '📈',
         blurb: localize(
-            'Tick-to-tick quote direction over the last 200 ticks: how often the price rose versus fell, and the dominant side per market.'
+            'Tick-to-tick quote direction over the window — how often the price rose versus fell. Step Indices (100–500) are included in this mode.'
+        ),
+    },
+    {
+        id: 'only_ups_downs',
+        label: localize('Only Ups / Only Downs'),
+        icon: '🚀',
+        blurb: localize(
+            'Only Ups (RUNHIGH) versus Only Downs (RUNLOW): how often a run of consecutive ticks all moved the same direction. Step Indices (100–500) are included.'
         ),
     },
 ];
