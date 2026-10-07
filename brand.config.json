@@ -32,7 +32,7 @@
     },
     "typography": {
         "font_family": {
-            "primary": "Inter",
+            "primary": "Poppins",
             "secondary": "Georgia, 'Times New Roman', Times, serif",
             "monospace": "'Courier New', Courier, monospace"
         },

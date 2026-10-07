@@ -32,7 +32,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 16px;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--brand-font-primary), system-ui, -apple-system, sans-serif;
     box-sizing: border-box;
 
     // ---- Header -----------------------------------------------------------

@@ -38,23 +38,21 @@
     /* Brand colors - dynamically generated from brand.config.json */
     --brand-white: #ffffff;
     --brand-dark-grey: #071225;
-    --brand-red-coral: #f59e0b; /* legacy compatibility */
-    --brand-orange: #f59e0b; /* legacy compatibility */
+    --brand-red-coral: #0047ab; /* legacy compatibility */
+    --brand-orange: #4f8cff; /* legacy compatibility */
 
     /* Dynamic brand colors (set by brand configuration) */
-    --brand-primary: #0f172a;
-    --brand-secondary: #1e293b;
-    --brand-tertiary: #f59e0b;
+    --brand-primary: #0047ab;
+    --brand-secondary: #071225;
+    --brand-tertiary: #4f8cff;
     --brand-success: #10b981;
     --brand-danger: #ef4444;
-    --brand-warning: #f59e0b;
-    --brand-info: #38bdf8;
-    --brand-neutral: #64748b;
-    --brand-blue-coral: #0f172a; /* legacy compatibility */
-    --brand-purple-coral: #0f172a; /* legacy compatibility */
+    --brand-warning: #4f8cff;
+    --brand-info: #4f8cff;
+    --brand-neutral: #6b7280;
 
     /* Brand typography - dynamically generated from brand.config.json */
-    --brand-font-primary: Inter;
+    --brand-font-primary: Poppins;
     --brand-font-secondary: Georgia, 'Times New Roman', Times, serif;
     --brand-font-monospace: 'Courier New', Courier, monospace;
     /* [/AI] */

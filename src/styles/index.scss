@@ -3,8 +3,10 @@
 // Third-party developers can add their own font imports if needed
 
 body {
-    // Updated to use brand font variable from brand.config.json
-    font-family: var(--brand-font-primary);
+    // Brand font from brand.config.json (Poppins) with a matching system fallback
+    // so text stays consistent before the web font finishes loading.
+    font-family: var(--brand-font-primary), Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, 'Helvetica Neue', Arial, sans-serif;
     background: var(--general-main-1);
 }
 

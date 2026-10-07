@@ -191,12 +191,13 @@
             &__item {
                 border-top-left-radius: 1rem;
                 border-top-right-radius: 1rem;
-                height: 5.2rem;
-                padding: 0 2rem;
+                // Nav tab metrics matched to the reference platform nav
+                // (height 46px, font-size 12px, padding 0 18px at a 10px root).
+                height: 4.6rem;
+                font-size: 1.2rem;
+                padding: 0 1.8rem;
                 width: auto;
                 flex: 0 0 auto;
-                font-size: 1.4rem;
-                letter-spacing: 0.01em;
 
                 @include flex-center;
 

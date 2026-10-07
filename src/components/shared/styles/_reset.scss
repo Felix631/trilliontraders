@@ -111,10 +111,9 @@ section {
 html {
     height: 100%;
 
-    // Base sizing for the whole rem-based design system. Lifted from 10px so
-    // every rem font-size (text tokens, typefaces, component styles) scales up
-    // together and stays in harmony rather than being bumped piecemeal.
-    font-size: 11px;
+    // 10px base — matches index.html :root { font-size: 62.5% } and the platform
+    // type scale, so our rem sizes line up 1:1 with the reference site.
+    font-size: 10px;
 }
 
 body {
