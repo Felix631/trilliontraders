@@ -47,8 +47,8 @@
     --brand-tertiary: #4f8cff;
     --brand-success: #10b981;
     --brand-danger: #ef4444;
-    --brand-warning: #4f8cff;
-    --brand-info: #4f8cff;
+    --brand-warning: #f5b544;
+    --brand-info: #22d3ee;
     --brand-neutral: #6b7280;
 
     /* Brand typography - dynamically generated from brand.config.json */
@@ -62,22 +62,30 @@
     --app-card-virtual-swap-free: #{constants.$gradient-virtual-swap-free};
 
     /*
-     * TrillionTraders palette — deep-navy chrome with amber/gold accents.
+     * Workspace chrome palette.
+     *
      * These --site-* tokens drive the header/tab chrome, the active-tab pill
-     * and the accent surfaces across the app.
+     * and the accent surfaces across the app. They now share the Aurora Deep
+     * spectrum (see `src/styles/_ux-tokens.scss`, loaded after this file):
+     * midnight ink for structure, electric blue → cyan → emerald for accents.
      */
-    --site-primary: #0f172a;
-    --site-primary-rgb: 15, 23, 42;
-    --site-secondary: #020617;
-    --site-secondary-rgb: 2, 6, 23;
-    --site-accent: #f59e0b;
-    --site-accent-rgb: 245, 158, 11;
-    --site-accent-soft: #fbbf24;
-    --site-tab-active: #f59e0b;
-    --site-surface: #0f172a;
-    --site-surface-elevated: #1e293b;
-    --site-border: rgba(245, 158, 11, 0.25);
-    --bot-studio-header-bg: #0f172a;
+    --site-primary: #050b1c;
+    --site-primary-rgb: 5, 11, 28;
+    --site-secondary: #030616;
+    --site-secondary-rgb: 3, 6, 22;
+    --site-accent: #4f8cff;
+    --site-accent-rgb: 79, 140, 255;
+    --site-accent-soft: #22d3ee;
+    --site-tab-active: #2563eb;
+    --site-surface: #0a1a38;
+    --site-surface-elevated: #102450;
+    --site-border: rgba(79, 140, 255, 0.24);
+    --bot-studio-header-bg: linear-gradient(
+        100deg,
+        rgba(4, 9, 26, 0.96) 0%,
+        rgba(8, 28, 74, 0.96) 55%,
+        rgba(8, 45, 120, 0.94) 100%
+    );
 
     // Opacity
     --tw-border-opacity: 1;

@@ -1,0 +1,212 @@
+/**
+ * Trillion Trades — "Aurora Deep" design tokens.
+ *
+ * One coherent language for the whole workspace: deep midnight ink for
+ * structure, an electric blue → cyan → emerald spectrum for life, and a
+ * warm gold for the few places that should shout (alerts, accents, focus).
+ *
+ * This file is deliberately additive and is loaded *after* `_themes.scss`, so
+ * the aliases at the bottom of each theme block re-point the app's existing
+ * token names (`--site-*`, `--app-*`, `--bot-studio-header-bg`) at the new
+ * spectrum — every page inherits the refresh without touching its own CSS.
+ *
+ * `--brand-*` stays owned by brand.config.json + scripts/generate-brand-css.js;
+ * nothing here overrides those.
+ */
+
+:root {
+    /* ------------------------------------------------------------------ */
+    /* Ink — structure                                                     */
+    /* ------------------------------------------------------------------ */
+    --ux-ink-950: #030616;
+    --ux-ink-900: #050b1c;
+    --ux-ink-850: #060f22;
+    --ux-ink-800: #071225;
+    --ux-ink-700: #0a1a38;
+    --ux-ink-600: #102450;
+    --ux-ink-500: #17306b;
+
+    /* ------------------------------------------------------------------ */
+    /* Spectrum — life                                                     */
+    /* ------------------------------------------------------------------ */
+    --ux-blue: #2563eb;
+    --ux-blue-bright: #4f8cff;
+    --ux-cyan: #22d3ee;
+    --ux-teal: #14b8a6;
+    --ux-emerald: #10b981;
+    --ux-gold: #f5b544;
+    --ux-amber: #f59e0b;
+    --ux-coral: #fb7185;
+    --ux-rose: #f43f5e;
+    --ux-violet: #8b5cf6;
+
+    /* ------------------------------------------------------------------ */
+    /* Gradients                                                           */
+    /* ------------------------------------------------------------------ */
+    --ux-grad-aurora: linear-gradient(120deg, #0047ab 0%, #2563eb 38%, #22d3ee 74%, #10b981 100%);
+    --ux-grad-royal: linear-gradient(120deg, #0a1a38 0%, #0d2c72 52%, #0047ab 100%);
+    --ux-grad-ocean: linear-gradient(120deg, #04122e 0%, #0a2b6b 58%, #0e6ba8 100%);
+    --ux-grad-mint: linear-gradient(120deg, #10b981 0%, #22d3ee 100%);
+    --ux-grad-warm: linear-gradient(120deg, #f5b544 0%, #fb7185 58%, #8b5cf6 100%);
+    --ux-grad-hairline: linear-gradient(90deg, transparent, var(--ux-blue-bright), var(--ux-cyan), transparent);
+    --ux-grad-sheen: linear-gradient(
+        110deg,
+        rgba(255, 255, 255, 0) 20%,
+        rgba(255, 255, 255, 0.16) 46%,
+        rgba(255, 255, 255, 0) 72%
+    );
+
+    /* ------------------------------------------------------------------ */
+    /* Shape + depth                                                       */
+    /* ------------------------------------------------------------------ */
+    --ux-r-xs: 0.8rem;
+    --ux-r-sm: 1rem;
+    --ux-r-md: 1.4rem;
+    --ux-r-lg: 1.8rem;
+    --ux-r-xl: 2.4rem;
+    --ux-r-pill: 999rem;
+
+    --ux-shadow-card: 0 1px 2px rgba(2, 6, 23, 0.45), 0 18px 40px -30px rgba(2, 6, 23, 0.95);
+    --ux-shadow-lift: 0 2px 4px rgba(2, 6, 23, 0.5), 0 30px 60px -34px rgba(2, 6, 23, 1);
+    --ux-glow-blue: 0 0 0 1px rgba(79, 140, 255, 0.35), 0 16px 38px -20px rgba(37, 99, 235, 0.85);
+    --ux-glow-cyan: 0 0 0 1px rgba(34, 211, 238, 0.32), 0 16px 38px -22px rgba(34, 211, 238, 0.75);
+    --ux-glow-gold: 0 0 0 1px rgba(245, 181, 68, 0.35), 0 16px 38px -22px rgba(245, 158, 11, 0.8);
+
+    /* ------------------------------------------------------------------ */
+    /* Motion                                                             */
+    /* ------------------------------------------------------------------ */
+    --ux-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ux-ease-spring: cubic-bezier(0.34, 1.32, 0.64, 1);
+    --ux-t-fast: 0.16s;
+    --ux-t-mid: 0.28s;
+    --ux-t-slow: 0.5s;
+
+    /* ------------------------------------------------------------------ */
+    /* Default (dark) surfaces — themes below override                      */
+    /* ------------------------------------------------------------------ */
+    --ux-canvas: var(--ux-ink-900);
+    --ux-canvas-glow-1: rgba(37, 99, 235, 0.3);
+    --ux-canvas-glow-2: rgba(34, 211, 238, 0.16);
+    --ux-canvas-glow-3: rgba(16, 185, 129, 0.14);
+    --ux-canvas-grid: rgba(148, 178, 255, 0.05);
+
+    --ux-panel: rgba(10, 26, 56, 0.72);
+    --ux-panel-2: rgba(13, 33, 70, 0.85);
+    --ux-panel-solid: #0a1a38;
+    --ux-panel-inset: rgba(3, 6, 22, 0.55);
+    --ux-border: rgba(96, 165, 250, 0.18);
+    --ux-border-strong: rgba(96, 165, 250, 0.36);
+    --ux-hover: rgba(79, 140, 255, 0.14);
+    --ux-divider: rgba(96, 165, 250, 0.14);
+
+    --ux-text: #eaf1ff;
+    --ux-text-dim: #9fb4d8;
+    --ux-text-mute: #6b83ab;
+    --ux-text-on-accent: #ffffff;
+
+    --ux-header-bg: linear-gradient(100deg, rgba(4, 9, 26, 0.96) 0%, rgba(8, 28, 74, 0.96) 55%, rgba(8, 45, 120, 0.94) 100%);
+    --ux-rail-bg: linear-gradient(100deg, rgba(5, 11, 28, 0.9) 0%, rgba(8, 25, 66, 0.86) 60%, rgba(6, 18, 44, 0.9) 100%);
+    --ux-nav-text: #a9c0e6;
+    --ux-scroll-thumb: rgba(79, 140, 255, 0.45);
+    --ux-scroll-track: rgba(4, 9, 26, 0.6);
+
+    /* ------------------------------------------------------------------ */
+    /* App-token aliases — the single source of chrome colour              */
+    /* ------------------------------------------------------------------ */
+    --site-primary: #050b1c;
+    --site-primary-rgb: 5, 11, 28;
+    --site-secondary: #030616;
+    --site-secondary-rgb: 3, 6, 22;
+    --site-accent: #4f8cff;
+    --site-accent-rgb: 79, 140, 255;
+    --site-accent-soft: #22d3ee;
+    --site-tab-active: #2563eb;
+    --site-surface: #0a1a38;
+    --site-surface-elevated: #102450;
+    --site-border: rgba(79, 140, 255, 0.24);
+    --bot-studio-header-bg: var(--ux-header-bg);
+
+    .theme--dark {
+        --ux-canvas: var(--ux-ink-900);
+        --ux-canvas-glow-1: rgba(37, 99, 235, 0.32);
+        --ux-canvas-glow-2: rgba(34, 211, 238, 0.16);
+        --ux-canvas-glow-3: rgba(16, 185, 129, 0.14);
+
+        --ux-panel: rgba(10, 26, 56, 0.72);
+        --ux-panel-2: rgba(13, 33, 70, 0.85);
+        --ux-panel-solid: #0a1a38;
+        --ux-panel-inset: rgba(3, 6, 22, 0.55);
+        --ux-border: rgba(96, 165, 250, 0.18);
+        --ux-border-strong: rgba(96, 165, 250, 0.36);
+        --ux-hover: rgba(79, 140, 255, 0.14);
+        --ux-divider: rgba(96, 165, 250, 0.14);
+
+        --ux-text: #eaf1ff;
+        --ux-text-dim: #9fb4d8;
+        --ux-text-mute: #6b83ab;
+        --ux-nav-text: #a9c0e6;
+        --ux-scroll-thumb: rgba(79, 140, 255, 0.45);
+        --ux-scroll-track: rgba(4, 9, 26, 0.6);
+
+        /* Premium app surfaces — same names the pages already read. */
+        --app-page-background: #050b1c;
+        --app-panel-background: rgba(10, 26, 56, 0.72);
+        --app-card-background: rgba(13, 33, 70, 0.72);
+        --app-card-background-alt: rgba(9, 22, 48, 0.82);
+        --app-elevated-background: rgba(16, 36, 80, 0.9);
+        --app-hover-background: rgba(23, 48, 107, 0.6);
+        --app-border-color: rgba(96, 165, 250, 0.18);
+        --app-border-strong-color: rgba(96, 165, 250, 0.36);
+        --app-accent-color: #4f8cff;
+        --app-accent-soft: rgba(79, 140, 255, 0.16);
+        --app-text-title: #f2f7ff;
+        --app-text-subtle: #5c74a0;
+        --app-text-muted: #7f97bf;
+        --app-scroll-thumb: rgba(79, 140, 255, 0.45);
+        --app-scroll-track: rgba(4, 9, 26, 0.6);
+    }
+
+    .theme--light {
+        --ux-canvas: #f1f5fd;
+        --ux-canvas-glow-1: rgba(37, 99, 235, 0.14);
+        --ux-canvas-glow-2: rgba(34, 211, 238, 0.12);
+        --ux-canvas-glow-3: rgba(16, 185, 129, 0.1);
+
+        --ux-panel: rgba(255, 255, 255, 0.9);
+        --ux-panel-2: #ffffff;
+        --ux-panel-solid: #ffffff;
+        --ux-panel-inset: rgba(238, 244, 255, 0.9);
+        --ux-border: #dbe6f8;
+        --ux-border-strong: #b9cdf0;
+        --ux-hover: rgba(37, 99, 235, 0.08);
+        --ux-divider: #e4ecfa;
+
+        --ux-text: #0b1a33;
+        --ux-text-dim: #4a5f80;
+        --ux-text-mute: #7b8ca6;
+        --ux-nav-text: #c3d6f5;
+        --ux-scroll-thumb: #b9cdf0;
+        --ux-scroll-track: #eef4ff;
+
+        // The chrome stays navy in both themes (the app forces white text on it),
+        // just lifted a step so it reads as part of the light workspace.
+        --ux-header-bg: linear-gradient(100deg, #071a3d 0%, #0d3a8c 55%, #0047ab 100%);
+        --ux-rail-bg: linear-gradient(100deg, rgba(7, 22, 51, 0.94) 0%, rgba(14, 45, 104, 0.92) 60%, rgba(8, 28, 70, 0.94) 100%);
+
+        --app-page-background: #f1f5fd;
+        --app-panel-background: #ffffff;
+        --app-card-background: #ffffff;
+        --app-card-background-alt: #f7faff;
+        --app-elevated-background: #eef4ff;
+        --app-hover-background: #e8f0ff;
+        --app-border-color: #dbe6f8;
+        --app-border-strong-color: #b9cdf0;
+        --app-accent-color: #0047ab;
+        --app-accent-soft: rgba(0, 71, 171, 0.12);
+        --app-text-title: #0b1a33;
+        --app-text-subtle: #9badc9;
+        --app-text-muted: #6b7f9e;
+        --app-scroll-thumb: #b9cdf0;
+        --app-scroll-track: #eef4ff;
+    }
+}

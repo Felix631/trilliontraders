@@ -1,6 +1,6 @@
 @use 'components/shared/styles/mixins' as *;
 
-// DTrader — manual trading desk, TrillionTraders navy/amber theme.
+// DTrader — manual trading desk, Aurora Deep theme.
 .dtrader {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 30rem;
@@ -312,7 +312,7 @@
         &.is-active {
             background: var(--site-accent);
             border-color: var(--site-accent);
-            box-shadow: 0 0 0.4rem rgba(245, 158, 11, 0.6);
+            box-shadow: 0 0 0.4rem color-mix(in srgb, var(--ux-gold, #f5b544) 60%, transparent);
         }
     }
 

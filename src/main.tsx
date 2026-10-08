@@ -13,6 +13,9 @@ import {
 } from './utils/document-branding';
 import { performVersionCheck } from './utils/version-check';
 import './styles/index.scss';
+// Aurora Deep kit — imported last so its rules win the cascade over the
+// per-page stylesheets pulled in by the app tree above.
+import './styles/ux-kit.scss';
 
 // Configure MobX to handle multiple instances in production builds
 configure({ isolateGlobalState: true });

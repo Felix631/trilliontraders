@@ -440,7 +440,7 @@
         // Live pointer marking the tile of the most recent digit.
         &--last {
             border-color: var(--site-accent);
-            box-shadow: 0 0 0.6rem rgba(245, 158, 11, 0.45);
+            box-shadow: 0 0 0.6rem color-mix(in srgb, var(--ux-gold, #f5b544) 45%, transparent);
 
             &::after {
                 content: '';

@@ -1,23 +1,25 @@
 // Digit Killer palette — shared with the `.dk-theme` overlay applied to the
 // Analyzer / Analysis Tool tabs so all analysis pages share one look.
 %dk-palette {
-    --dk-bg: #0f1923;
-    --dk-card: #1a2634;
-    --dk-card-hover: #1e2d3d;
-    --dk-border: #2a3a4a;
-    --dk-text: #e2e8f0;
-    --dk-text-dim: #94a3b8;
-    --dk-accent: #00d4aa;
-    --dk-accent-glow: rgba(0, 212, 170, 0.15);
-    --dk-danger: #ef4444;
-    --dk-warning: #f59e0b;
-    --dk-info: #3b82f6;
-    --dk-silver: #94a3b8;
-    --dk-ready: #10b981;
-    --dk-watching: #3b82f6;
-    --dk-idle: #64748b;
-    --dk-radius: 10px;
-    --dk-radius-sm: 6px;
+    // Page palette — aliased to the shared Aurora Deep spectrum so this desk
+    // reads as part of the same product as every other tab.
+    --dk-bg: var(--ux-canvas, #050b1c);
+    --dk-card: var(--ux-panel-solid, #0a1a38);
+    --dk-card-hover: var(--ux-panel-2, #0d2146);
+    --dk-border: var(--ux-border, rgba(96, 165, 250, 0.18));
+    --dk-text: var(--ux-text, #eaf1ff);
+    --dk-text-dim: var(--ux-text-dim, #9fb4d8);
+    --dk-accent: var(--ux-cyan, #22d3ee);
+    --dk-accent-glow: color-mix(in srgb, var(--ux-cyan, #22d3ee) 15%, transparent);
+    --dk-danger: var(--ux-rose, #f43f5e);
+    --dk-warning: var(--ux-gold, #f5b544);
+    --dk-info: var(--ux-blue-bright, #4f8cff);
+    --dk-silver: var(--ux-text-mute, #6b83ab);
+    --dk-ready: var(--ux-emerald, #10b981);
+    --dk-watching: var(--ux-blue-bright, #4f8cff);
+    --dk-idle: var(--ux-text-mute, #6b83ab);
+    --dk-radius: var(--ux-r-sm, 10px);
+    --dk-radius-sm: var(--ux-r-xs, 8px);
 }
 
 .dk,
@@ -457,7 +459,7 @@
             }
 
             &--mid {
-                background: linear-gradient(90deg, var(--dk-warning), #f97316);
+                background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
             }
 
             &--mid-high {
@@ -610,7 +612,7 @@
             }
 
             &.dk__conf-fill--mid {
-                background: linear-gradient(90deg, var(--dk-warning), #f97316);
+                background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
             }
 
             &.dk__conf-fill--mid-high {
@@ -672,7 +674,7 @@
         }
 
         &--pending {
-            background: rgba(245, 158, 11, 0.15);
+            background: color-mix(in srgb, var(--ux-gold, #f5b544) 15%, transparent);
             color: var(--dk-warning);
             border: 1px solid var(--dk-warning);
         }

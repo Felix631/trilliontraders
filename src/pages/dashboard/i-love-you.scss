@@ -1,21 +1,24 @@
-// "i love you" desk — dedicated dark execution UI. Deliberately close to the
-// Digit Killer look from the reference screenshot: deep navy canvas, raised
-// cards, teal accents, big coloured entry circles, yellow confidence labels.
+// "i love you" desk — dedicated dark execution UI in the shared Aurora Deep
+// language: midnight canvas, glass cards, cyan/teal accents, gold confidence
+// labels. All page colours alias the shared tokens in src/styles/_ux-tokens.scss.
 
 .ily {
-    --ily-bg: #0a1420;
-    --ily-card: #14212f;
-    --ily-card-2: #17283a;
-    --ily-border: #22364a;
-    --ily-text: #e6eef7;
-    --ily-dim: #7f97ad;
-    --ily-teal: #00d4aa;
-    --ily-cyan: #22d3ee;
-    --ily-amber: #fbbf24;
-    --ily-green: #22e0a1;
-    --ily-red: #f87171;
-    --ily-violet: #a855f7;
-    --ily-radius: 14px;
+    // Page palette — aliased to the shared Aurora Deep spectrum so this desk
+    // reads as part of the same product as every other tab. Fallbacks keep the
+    // old values for any surface rendered outside the app shell (e.g. portals).
+    --ily-bg: var(--ux-canvas, #050b1c);
+    --ily-card: var(--ux-panel-solid, #0a1a38);
+    --ily-card-2: var(--ux-panel-2, #0d2146);
+    --ily-border: var(--ux-border, rgba(96, 165, 250, 0.18));
+    --ily-text: var(--ux-text, #eaf1ff);
+    --ily-dim: var(--ux-text-dim, #9fb4d8);
+    --ily-teal: var(--ux-teal, #14b8a6);
+    --ily-cyan: var(--ux-cyan, #22d3ee);
+    --ily-amber: var(--ux-gold, #f5b544);
+    --ily-green: var(--ux-emerald, #10b981);
+    --ily-red: var(--ux-coral, #fb7185);
+    --ily-violet: var(--ux-violet, #8b5cf6);
+    --ily-radius: var(--ux-r-md, 14px);
 
     // Fill the whole tab panel: the shared tab content is a flex row, so the
     // page has to grow along the main axis or it collapses to its content
@@ -55,9 +58,11 @@
         width: 40px;
         height: 40px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        background: var(--ux-grad-aurora, linear-gradient(135deg, #0047ab, #22d3ee));
+        background-size: 200% 100%;
         font-size: 20px;
-        box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
+        box-shadow: var(--ux-glow-blue, 0 0 16px rgba(79, 140, 255, 0.45));
+        animation: ux-pan 12s linear infinite;
     }
 
     &__title {
@@ -281,7 +286,7 @@
             display: block;
             height: 100%;
             border-radius: 3px;
-            background: linear-gradient(90deg, var(--ily-amber), #f97316);
+            background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
             transition: width 0.45s ease;
 
             &.ily__meter-ok {
@@ -721,7 +726,7 @@
     }
 
     & .ily__badge--odd {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background: linear-gradient(135deg, var(--ux-gold, #f5b544), var(--ux-amber, #f59e0b));
     }
 
     & .ily__circle.ily__badge--over,
@@ -807,7 +812,7 @@
 }
 
 .ily__badge--odd {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    background: linear-gradient(135deg, var(--ux-gold, #f5b544), var(--ux-amber, #f59e0b));
 }
 
 // ---------------------------------------------------------------------------
@@ -815,15 +820,16 @@
 // Left fixed at app-shell level so it stays on top of every page and tab.
 // ---------------------------------------------------------------------------
 .ilyai {
-    --ilyai-bg: #0d1a28;
-    --ilyai-card: #16283a;
-    --ilyai-border: #233a50;
-    --ilyai-text: #e6eef7;
-    --ilyai-dim: #7f97ad;
-    --ilyai-teal: #00d4aa;
-    --ilyai-green: #22e0a1;
-    --ilyai-amber: #fbbf24;
-    --ilyai-red: #f87171;
+    // Same shared spectrum as the desk it scans for.
+    --ilyai-bg: var(--ux-canvas, #050b1c);
+    --ilyai-card: var(--ux-panel-solid, #0a1a38);
+    --ilyai-border: var(--ux-border, rgba(96, 165, 250, 0.18));
+    --ilyai-text: var(--ux-text, #eaf1ff);
+    --ilyai-dim: var(--ux-text-dim, #9fb4d8);
+    --ilyai-teal: var(--ux-teal, #14b8a6);
+    --ilyai-green: var(--ux-emerald, #10b981);
+    --ilyai-amber: var(--ux-gold, #f5b544);
+    --ilyai-red: var(--ux-coral, #fb7185);
 
     position: fixed;
     right: 20px;

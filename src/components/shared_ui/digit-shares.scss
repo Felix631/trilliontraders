@@ -11,7 +11,7 @@ $digit-green: #22c55e;
 $digit-blue: #3b82f6;
 $digit-red: #ef4444;
 $digit-silver: #94a3b8;
-$digit-amber: var(--site-accent, #f59e0b);
+$digit-amber: var(--ux-gold, #f5b544);
 
 .digit-shares {
     display: flex;
@@ -87,11 +87,11 @@ $digit-amber: var(--site-accent, #f59e0b);
 
         // ---- Last digit: neutral (pointer touched) ----------------
         &.is-last {
-            box-shadow: 0 0 0.6rem rgba(245, 158, 11, 0.65);
+            box-shadow: 0 0 0.6rem color-mix(in srgb, var(--ux-gold, #f5b544) 65%, transparent);
 
             // Override any rank colour with neutral amber ring
             &::before {
-                background: var(--site-accent-soft, rgba(245, 158, 11, 0.12));
+                background: color-mix(in srgb, var(--ux-gold, #f5b544) 12%, transparent);
             }
 
             .digit-shares__digit {

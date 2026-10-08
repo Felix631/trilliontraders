@@ -1,4 +1,9 @@
 @use 'components/shared/styles/themes' as *;
+// Aurora Deep — the workspace's shared design tokens. The matching component
+// kit lives in `./ux-kit.scss` and is imported last by `src/main.tsx`, so its
+// rules land after every page stylesheet.
+@use './ux-tokens' as *;
+
 // Removed IBM Plex Sans Google Font import - now using brand font from brand.config.json
 // Third-party developers can add their own font imports if needed
 
@@ -7,7 +12,18 @@ body {
     // so text stays consistent before the web font finishes loading.
     font-family: var(--brand-font-primary), Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
         Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--general-main-1);
+    background: var(--ux-canvas, var(--general-main-1));
+    color: var(--ux-text, var(--text-general));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    letter-spacing: -0.01em;
 }
 
 .icon-general-fill-path {

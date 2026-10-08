@@ -1,0 +1,845 @@
+/**
+ * Trillion Trades — "Aurora Deep" component kit.
+ *
+ * Loaded after the app's own stylesheets so it can re-express the *existing*
+ * markup in one visual language instead of adding a parallel set of pages.
+ * Everything here is either a token (see `_ux-tokens.scss`) or a small,
+ * reversible layer on top of a class the pages already render:
+ *
+ *   canvas      → .layout / .main            (aurora mesh, grid, vignette)
+ *   chrome      → .deriv-header, .dc-tabs__* (royal band, gradient tab pill)
+ *   surfaces    → __panel / __card / __grid  (glass cards, hover lift)
+ *   headings    → __title / __subtitle       (gradient display type)
+ *   controls    → inputs, selects, buttons   (soft fields, aurora actions)
+ *   data        → bars, dots, tables, stats  (gradient fills, tabular numerals)
+ */
+
+/* ===================================================================== */
+/* Motion                                                                */
+/* ===================================================================== */
+
+@keyframes ux-drift {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    33% {
+        transform: translate3d(3%, -2%, 0) scale(1.06);
+    }
+    66% {
+        transform: translate3d(-2%, 2%, 0) scale(0.97);
+    }
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes ux-pan {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 200% 50%;
+    }
+}
+
+@keyframes ux-pulse {
+    0% {
+        box-shadow: 0 0 0 0 currentColor;
+        opacity: 0.9;
+    }
+    70% {
+        box-shadow: 0 0 0 0.7rem transparent;
+        opacity: 1;
+    }
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+        opacity: 0.9;
+    }
+}
+
+@keyframes ux-rise {
+    from {
+        opacity: 0;
+        transform: translateY(0.6rem);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes ux-sheen {
+    from {
+        background-position: -60% 0;
+    }
+    to {
+        background-position: 160% 0;
+    }
+}
+
+/* ===================================================================== */
+/* Canvas — the aurora mesh behind every page                            */
+/* ===================================================================== */
+
+.layout {
+    // `layout.scss` paints an opaque canvas here. `isolation` makes this
+    // element its own stacking context so the negative-z layers below paint
+    // *above* that canvas (and below the content) instead of behind it.
+    position: relative;
+    isolation: isolate;
+    background: var(--ux-canvas);
+
+    &::before,
+    &::after {
+        content: '';
+        position: fixed;
+        inset: -25%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    // Colour field: three slow-drifting blooms in the brand spectrum.
+    &::before {
+        background:
+            radial-gradient(38% 42% at 12% 8%, var(--ux-canvas-glow-1), transparent 70%),
+            radial-gradient(34% 38% at 88% 4%, var(--ux-canvas-glow-2), transparent 72%),
+            radial-gradient(42% 46% at 68% 96%, var(--ux-canvas-glow-3), transparent 74%);
+        filter: blur(1.2rem);
+        animation: ux-drift 52s var(--ux-ease) infinite;
+    }
+
+    // Hairline grid: gives the workspace a measured, instrumented feel.
+    &::after {
+        inset: 0;
+        background-image:
+            linear-gradient(var(--ux-canvas-grid) 0.1rem, transparent 0.1rem),
+            linear-gradient(90deg, var(--ux-canvas-grid) 0.1rem, transparent 0.1rem);
+        background-size: 6.4rem 6.4rem;
+        mask-image: radial-gradient(120% 90% at 50% 0%, #000 12%, transparent 78%);
+        -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 12%, transparent 78%);
+    }
+}
+
+.main {
+    &__container {
+        border-radius: var(--ux-r-xl);
+
+        @media (min-width: 1024px) {
+            box-shadow: inset 0 0 0 0.1rem var(--ux-border);
+        }
+    }
+}
+
+// Pages paint their own opaque canvas by default, which would hide the aurora
+// mesh. Let the shared canvas show through instead — the pages' own cards stay
+// opaque, so contrast and legibility are unchanged.
+.tab__dashboard__content,
+.analyzer-tab,
+.ily,
+.dk,
+.scanner,
+.dtrader,
+.qt-page,
+.main__container .dc-tabs__content {
+    background: transparent;
+}
+
+/* ===================================================================== */
+/* Chrome — header band + tab rail                                       */
+/* ===================================================================== */
+
+.layout .deriv-header {
+    position: relative;
+    background: var(--ux-header-bg);
+    backdrop-filter: blur(1.4rem) saturate(150%);
+    border-bottom: 0.1rem solid var(--ux-border);
+
+    // Spectrum hairline riding the bottom edge of the header.
+    &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        bottom: -0.1rem;
+        height: 0.2rem;
+        background: var(--ux-grad-hairline);
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .app-header__logo-badge {
+        background: var(--ux-grad-aurora);
+        box-shadow: var(--ux-glow-blue);
+        color: var(--ux-text-on-accent);
+        border: 0;
+    }
+
+    .app-header__logo-text {
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-shadow: 0 0 2.4rem rgba(79, 140, 255, 0.4);
+    }
+
+    .auth-actions button {
+        border-radius: var(--ux-r-pill);
+        transition: transform var(--ux-t-fast) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease);
+
+        &:hover {
+            transform: translateY(-0.1rem);
+            box-shadow: var(--ux-glow-blue);
+        }
+    }
+}
+
+.main__container {
+    .dc-tabs__list--header--main__tabs {
+        background: var(--ux-rail-bg);
+        border-bottom: 0.1rem solid var(--ux-border);
+        backdrop-filter: blur(1.8rem) saturate(150%);
+        padding-inline: 1.2rem;
+        gap: 0.4rem;
+    }
+
+    .dc-tabs__item {
+        position: relative;
+        color: var(--ux-nav-text);
+        font-weight: 500;
+        letter-spacing: 0.015em;
+        border-radius: 1.2rem 1.2rem 0 0;
+        transition: color var(--ux-t-fast) var(--ux-ease), background var(--ux-t-mid) var(--ux-ease),
+            transform var(--ux-t-mid) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease);
+
+        svg path,
+        svg g path {
+            fill: currentColor;
+            transition: fill var(--ux-t-fast) var(--ux-ease);
+        }
+
+        &:not(.dc-tabs__active):hover {
+            color: var(--ux-text-on-accent);
+            background: var(--ux-hover);
+            transform: translateY(-0.2rem);
+        }
+
+        &.dc-tabs__active {
+            color: var(--ux-text-on-accent);
+            background: var(--ux-grad-aurora);
+            background-size: 200% 100%;
+            box-shadow: var(--ux-glow-blue);
+            animation: ux-pan 9s linear infinite;
+        }
+    }
+
+    // The pill carries the active state now, so retire the moving underline.
+    .dc-tabs__active-line {
+        display: none;
+    }
+}
+
+/* ===================================================================== */
+/* Global interaction polish                                             */
+/* ===================================================================== */
+
+::selection {
+    background: color-mix(in srgb, var(--ux-cyan) 42%, transparent);
+    color: var(--ux-text);
+}
+
+:focus-visible {
+    outline: 0.2rem solid var(--ux-blue-bright);
+    outline-offset: 0.2rem;
+    border-radius: var(--ux-r-xs);
+}
+
+/* ===================================================================== */
+/* Shared surfaces                                                       */
+/* ===================================================================== */
+
+%ux-surface {
+    background: var(--ux-panel);
+    border: 0.1rem solid var(--ux-border);
+    border-radius: var(--ux-r-lg);
+    box-shadow: var(--ux-shadow-card);
+    backdrop-filter: blur(1.2rem);
+}
+
+%ux-surface-hover {
+    transition: transform var(--ux-t-mid) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease),
+        border-color var(--ux-t-mid) var(--ux-ease);
+
+    &:hover {
+        transform: translateY(-0.3rem);
+        border-color: var(--ux-border-strong);
+        box-shadow: var(--ux-shadow-lift), var(--ux-glow-blue);
+    }
+}
+
+%ux-toolbar {
+    background: var(--ux-panel-inset);
+    border: 0.1rem solid var(--ux-border);
+    border-radius: var(--ux-r-md);
+}
+
+.ily__panel,
+.ily__card-entry,
+.ily__card-both,
+.ily__reco,
+.ily__reco-main,
+.dk__settings,
+.scanner__featured,
+.scanner__qualified,
+.scanner__settings,
+.scanner__market-card,
+.matches-analysis__aside,
+.matches-analysis__signal,
+.matches-analysis__signal-main,
+.matches-analysis__signal-side,
+.matches-analysis__shares,
+.matches-analysis__parity,
+.matches-analysis__lasttick,
+.matches-analysis__recent,
+.free-bots__body,
+.qt-panel,
+.qt-risk-card {
+    @extend %ux-surface;
+}
+
+.ily__card-entry,
+.ily__card-both,
+.ily__reco,
+.scanner__featured,
+.scanner__market-card,
+.qt-risk-card {
+    @extend %ux-surface-hover;
+
+    position: relative;
+    overflow: hidden;
+
+    // Aurora sheen that sweeps across a card on hover.
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--ux-grad-sheen);
+        background-size: 220% 100%;
+        background-position: -60% 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--ux-t-mid) var(--ux-ease);
+    }
+
+    &:hover::after {
+        opacity: 1;
+        animation: ux-sheen 1.1s var(--ux-ease);
+    }
+}
+
+.ily__controls,
+.dk__controls,
+.scanner__controls,
+.scanner__intro,
+.matches-analysis__controls,
+.free-bots__filters,
+.qt-form,
+.qt-ladder {
+    @extend %ux-toolbar;
+
+    padding: 1.2rem 1.4rem;
+}
+
+// Grid children that are themselves cards (market tiles, bot tiles, cards).
+.ily__cards > *,
+.dk__markets > *,
+.free-bots__grid > *,
+.scanner__grid > * {
+    @extend %ux-surface;
+    @extend %ux-surface-hover;
+}
+
+/* ===================================================================== */
+/* Display type — page headings + supporting copy                        */
+/* ===================================================================== */
+
+.ily__title,
+.dk__title,
+.scanner__title,
+.matches-analysis__title,
+.free-bots__title,
+.qt-page .qt-title {
+    margin: 0;
+    font-size: 2.3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    background: var(--ux-grad-aurora);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: ux-pan 14s linear infinite;
+}
+
+.ily__subtitle,
+.dk__subtitle,
+.scanner__subtitle,
+.matches-analysis__subtitle,
+.free-bots__subtitle,
+.ily__blurb,
+.scanner__intro,
+.qt-hint,
+.qt-mode-note {
+    color: var(--ux-text-dim);
+    font-size: 1.3rem;
+    line-height: 1.65;
+}
+
+.ily__tagline,
+.ily__brand,
+.scanner__featured-kicker,
+.dk__desc-ready,
+.matches-analysis__heading,
+.free-bots__heading {
+    color: var(--ux-text);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.ily__header,
+.dk__header,
+.scanner__header,
+.matches-analysis__header,
+.free-bots__header {
+    animation: ux-rise var(--ux-t-slow) var(--ux-ease) both;
+}
+
+/* ===================================================================== */
+/* Controls — fields, buttons, segmented rails                           */
+/* ===================================================================== */
+
+.ily,
+.dk,
+.scanner,
+.matches-analysis,
+.free-bots,
+.dtrader,
+.qt-page {
+    input[type='text'],
+    input[type='number'],
+    input[type='search'],
+    input[type='email'],
+    select,
+    textarea {
+        background: var(--ux-panel-inset);
+        border: 0.1rem solid var(--ux-border);
+        border-radius: var(--ux-r-sm);
+        color: var(--ux-text);
+        font-family: inherit;
+        font-size: 1.3rem;
+        transition: border-color var(--ux-t-fast) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease),
+            background var(--ux-t-mid) var(--ux-ease);
+
+        &::placeholder {
+            color: var(--ux-text-mute);
+        }
+
+        &:hover {
+            border-color: var(--ux-border-strong);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--ux-blue-bright);
+            box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--ux-blue-bright) 22%, transparent);
+        }
+    }
+
+    button,
+    [role='button'] {
+        font-family: inherit;
+        transition: transform var(--ux-t-fast) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease),
+            background-color var(--ux-t-mid) var(--ux-ease), color var(--ux-t-fast) var(--ux-ease),
+            border-color var(--ux-t-mid) var(--ux-ease);
+    }
+}
+
+// Primary actions — animated aurora fill + glow.
+.ily__btn,
+.dk__btn,
+.scanner__btn--primary,
+.dtrader__buy,
+.qt-primary-button,
+.qt-fill-button,
+.ily__card-trade,
+.ily__reco-trade {
+    background: var(--ux-grad-aurora);
+    background-size: 200% 100%;
+    color: var(--ux-text-on-accent);
+    border: 0;
+    border-radius: var(--ux-r-pill);
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    cursor: pointer;
+    animation: ux-pan 11s linear infinite;
+
+    &:hover {
+        transform: translateY(-0.2rem);
+        box-shadow: var(--ux-glow-blue);
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.988);
+    }
+
+    &:disabled,
+    &[disabled] {
+        filter: grayscale(0.35) brightness(0.8);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+// Secondary / ghost actions — glass.
+.scanner__btn,
+.qt-secondary-button,
+.scanner__btn--ghost,
+.ily__pill,
+.ily__chips > * {
+    background: var(--ux-panel-inset);
+    border: 0.1rem solid var(--ux-border);
+    border-radius: var(--ux-r-pill);
+    color: var(--ux-text);
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--ux-border-strong);
+        background: var(--ux-hover);
+        transform: translateY(-0.1rem);
+    }
+}
+
+.scanner__btn--small {
+    font-size: 1.15rem;
+    padding: 0.4rem 1rem;
+}
+
+// Segmented rails (mode switches) read as one instrument, not loose chips.
+.ily__tabs,
+.dk__tabs,
+.scanner__tabs,
+.matches-analysis__modes,
+.free-bots__filters {
+    border-radius: var(--ux-r-pill);
+
+    > * {
+        border-radius: var(--ux-r-pill);
+        transition: background var(--ux-t-mid) var(--ux-ease), color var(--ux-t-fast) var(--ux-ease),
+            box-shadow var(--ux-t-mid) var(--ux-ease);
+
+        &:hover {
+            background: var(--ux-hover);
+        }
+
+        &:is(.active, .is-active, [aria-selected='true'], [data-active='true'], [class*='--active']) {
+            background: var(--ux-grad-aurora);
+            background-size: 200% 100%;
+            color: var(--ux-text-on-accent);
+            font-weight: 600;
+            box-shadow: var(--ux-glow-blue);
+            animation: ux-pan 12s linear infinite;
+        }
+    }
+}
+
+/* ===================================================================== */
+/* Data — meters, status dots, tables, numerals                          */
+/* ===================================================================== */
+
+.ily__meter,
+.ily__reco-meter,
+.dk__conf-bar,
+.scanner__confidence-bar,
+.scanner__mini-bar,
+.matches-analysis__tile-bar,
+.matches-analysis__barrier-bar,
+.qt-progress {
+    background: var(--ux-panel-inset);
+    border-radius: var(--ux-r-pill);
+    overflow: hidden;
+}
+
+.ily__meter > *,
+.ily__reco-meter > *,
+.dk__conf-bar > *,
+.scanner__confidence-bar > *,
+.scanner__mini-bar > *,
+.matches-analysis__tile-bar > *,
+.matches-analysis__barrier-bar > *,
+.qt-progress__bar {
+    background: var(--ux-grad-mint);
+    border-radius: inherit;
+    transition: width var(--ux-t-slow) var(--ux-ease);
+}
+
+.ily__scan-dot,
+.ily__card-live,
+.dk__status-dot,
+.matches-analysis__status-dot {
+    background: var(--ux-emerald);
+    color: color-mix(in srgb, var(--ux-emerald) 55%, transparent);
+    border-radius: 50%;
+    animation: ux-pulse 2.4s var(--ux-ease) infinite;
+}
+
+.scanner__feed-state {
+    color: var(--ux-emerald);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.ily__card-last,
+.ily__card-asset,
+.ily__card-id,
+.scanner__quote,
+.scanner__market-quote,
+.dk__market-quote,
+.dk__market-last,
+.matches-analysis__lasttick-quote,
+.qt-fills,
+.ily__row-rate,
+.ily__card-conf,
+.scanner__winrate {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+}
+
+.scanner__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    th {
+        color: var(--ux-text-mute);
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-bottom: 0.1rem solid var(--ux-divider);
+    }
+
+    td {
+        border-bottom: 0.1rem solid var(--ux-divider);
+        font-variant-numeric: tabular-nums;
+    }
+
+    tbody tr {
+        transition: background var(--ux-t-fast) var(--ux-ease);
+
+        &:hover {
+            background: var(--ux-hover);
+        }
+    }
+}
+
+/* ===================================================================== */
+/* Semantic accents — hot / cold / win / loss                            */
+/* ===================================================================== */
+
+.matches-analysis__signal-row-value--hot,
+.matches-analysis__parity-percent,
+.scanner__winrate,
+.qt-stat--win,
+.qt-result--win {
+    color: var(--ux-emerald);
+}
+
+.matches-analysis__signal-row-value--cold,
+.qt-stat--loss,
+.qt-result--loss {
+    color: var(--ux-coral);
+}
+
+.ily__badge--over {
+    background: color-mix(in srgb, var(--ux-cyan) 20%, transparent);
+    border: 0.1rem solid color-mix(in srgb, var(--ux-cyan) 40%, transparent);
+    color: var(--ux-cyan);
+}
+
+.ily__badge--under {
+    background: color-mix(in srgb, var(--ux-gold) 18%, transparent);
+    border: 0.1rem solid color-mix(in srgb, var(--ux-gold) 42%, transparent);
+    color: var(--ux-gold);
+}
+
+.ily__tagline,
+.scanner__qualified-head,
+.dk__entry-target,
+.matches-analysis__barrier-group-title {
+    color: var(--ux-text);
+}
+
+.scanner__bot-tag,
+.ily__pill,
+.scanner__digit--cell,
+.matches-analysis__parity-digit {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ===================================================================== */
+/* Shared primitives — the app's own button + dialog components          */
+/* ===================================================================== */
+
+// button.scss ships Deriv's red defaults in its own `:root`; re-point them at
+// the brand spectrum so every `.dc-btn--primary` in the app (auth screens,
+// dialogs, run panel, builder) matches the tab chrome.
+:root {
+    --button-primary-default: #2563eb;
+    --button-primary-hover: #0047ab;
+    --button-secondary-default: var(--ux-border-strong);
+    --button-secondary-hover: var(--ux-hover);
+}
+
+.dc-btn {
+    border-radius: var(--ux-r-sm);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform var(--ux-t-fast) var(--ux-ease), box-shadow var(--ux-t-mid) var(--ux-ease),
+        background-color var(--ux-t-mid) var(--ux-ease), border-color var(--ux-t-mid) var(--ux-ease);
+}
+
+.dc-btn--primary {
+    background: var(--ux-grad-aurora);
+    background-size: 200% 100%;
+    box-shadow: var(--ux-glow-blue);
+    animation: ux-pan 11s linear infinite;
+
+    &:hover:not([disabled]) {
+        background: var(--ux-grad-aurora);
+        background-size: 200% 100%;
+        transform: translateY(-0.2rem);
+    }
+
+    &:active:not([disabled]) {
+        transform: translateY(0) scale(0.988);
+    }
+}
+
+.dc-btn--secondary {
+    background: var(--ux-panel-inset);
+    border: 0.1rem solid var(--ux-border);
+    color: var(--ux-text);
+
+    &:hover:not([disabled]) {
+        border-color: var(--ux-border-strong);
+    }
+}
+
+// Dialogs and drawers share one elevated surface treatment.
+.dc-modal__container,
+.dc-dialog__box,
+.dc-drawer__container {
+    border: 0.1rem solid var(--ux-border);
+    border-radius: var(--ux-r-lg);
+    box-shadow: var(--ux-shadow-lift);
+    backdrop-filter: blur(1.6rem);
+}
+
+/* ===================================================================== */
+/* Dashboard home — roomier, centred hero and column grid                */
+/* ===================================================================== */
+
+.tab__dashboard__content {
+    @media (min-width: 1024px) {
+        padding: 3.2rem clamp(1.6rem, 5vw, 6.4rem) 2.4rem;
+    }
+
+    .tab__dashboard__columns,
+    .tab__dashboard__header {
+        width: 100%;
+        max-width: 118rem;
+        margin-inline: auto;
+    }
+
+    .title {
+        font-size: 2.6rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        background: var(--ux-grad-aurora);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: ux-pan 14s linear infinite;
+    }
+
+    .subtitle {
+        color: var(--ux-text-dim);
+        max-width: 68ch;
+    }
+}
+
+/* ===================================================================== */
+/* Responsive + reduced motion                                           */
+/* ===================================================================== */
+
+@media (max-width: 1023px) {
+    .ily__title,
+    .dk__title,
+    .scanner__title,
+    .matches-analysis__title,
+    .free-bots__title {
+        font-size: 1.9rem;
+    }
+
+    .ily__controls,
+    .dk__controls,
+    .scanner__controls,
+    .matches-analysis__controls,
+    .qt-form,
+    .qt-ladder {
+        padding: 1rem 1.1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .layout::before,
+    .layout::after,
+    .ily__title,
+    .dk__title,
+    .scanner__title,
+    .matches-analysis__title,
+    .free-bots__title,
+    .dc-btn--primary,
+    .ily__btn,
+    .dk__btn,
+    .scanner__btn--primary,
+    .dtrader__buy,
+    .qt-primary-button,
+    .qt-fill-button,
+    .ily__card-trade,
+    .ily__reco-trade,
+    .ily__scan-dot,
+    .ily__card-live,
+    .dk__status-dot,
+    .matches-analysis__status-dot {
+        animation: none;
+    }
+
+    .ily__card-entry,
+    .ily__card-both,
+    .ily__reco,
+    .scanner__featured,
+    .scanner__market-card,
+    .qt-risk-card,
+    .ily__cards > *,
+    .dk__markets > *,
+    .free-bots__grid > *,
+    .scanner__grid > * {
+        transition: none;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}
