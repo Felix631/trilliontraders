@@ -259,7 +259,12 @@
     border: 0.1rem solid var(--ux-border);
     border-radius: var(--ux-r-lg);
     box-shadow: var(--ux-shadow-card);
-    backdrop-filter: blur(1.2rem);
+    // NOTE: deliberately no `backdrop-filter` here. These placeholders land on
+    // card *collections* (market tiles, bot cards, entry cards) where dozens of
+    // elements would each take their own composited layer and re-read the
+    // backdrop on every scroll frame. The aurora behind them is already heavily
+    // blurred, so translucency alone reads the same at a fraction of the cost.
+    // Blur stays on the fixed-count chrome (header, tab rail, dialogs).
 }
 
 %ux-surface-hover {
