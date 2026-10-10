@@ -1,24 +1,26 @@
-// "i love you" desk — dedicated dark execution UI in the shared Aurora Deep
-// language: midnight canvas, glass cards, cyan/teal accents, gold confidence
-// labels. All page colours alias the shared tokens in src/styles/_ux-tokens.scss.
+// "i love you" desk — dedicated dark execution UI.
+//
+// This tab keeps its OWN opaque palette rather than aliasing the shared Aurora
+// tokens: the shared canvas is a near-black midnight, which made the cards and
+// their copy read as one flat slab. These values sit on the desk's own navy so
+// every panel, label and digit stays clearly visible.
 
 .ily {
-    // Page palette — aliased to the shared Aurora Deep spectrum so this desk
-    // reads as part of the same product as every other tab. Fallbacks keep the
-    // old values for any surface rendered outside the app shell (e.g. portals).
-    --ily-bg: var(--ux-canvas, #050b1c);
-    --ily-card: var(--ux-panel-solid, #0a1a38);
-    --ily-card-2: var(--ux-panel-2, #0d2146);
-    --ily-border: var(--ux-border, rgba(96, 165, 250, 0.18));
-    --ily-text: var(--ux-text, #eaf1ff);
-    --ily-dim: var(--ux-text-dim, #9fb4d8);
-    --ily-teal: var(--ux-teal, #14b8a6);
-    --ily-cyan: var(--ux-cyan, #22d3ee);
-    --ily-amber: var(--ux-gold, #f5b544);
-    --ily-green: var(--ux-emerald, #10b981);
-    --ily-red: var(--ux-coral, #fb7185);
-    --ily-violet: var(--ux-violet, #8b5cf6);
-    --ily-radius: var(--ux-r-md, 14px);
+    // Page palette — opaque, own-surface colours with deliberately brighter
+    // text/dim tones than the shared tokens.
+    --ily-bg: #0a1420;
+    --ily-card: #14212f;
+    --ily-card-2: #17283a;
+    --ily-border: #2a4055;
+    --ily-text: #e9f2fa;
+    --ily-dim: #a8bdd4;
+    --ily-teal: #00d4aa;
+    --ily-cyan: #22d3ee;
+    --ily-amber: #fbbf24;
+    --ily-green: #22e0a1;
+    --ily-red: #f87171;
+    --ily-violet: #a855f7;
+    --ily-radius: 14px;
 
     // Fill the whole tab panel: the shared tab content is a flex row, so the
     // page has to grow along the main axis or it collapses to its content
@@ -219,11 +221,11 @@
 
     &__reco-label {
         grid-column: 1 / -1;
-        font-size: 10px;
+        font-size: 10.5px;
         font-weight: 800;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--ily-dim);
+        color: var(--ily-cyan);
     }
 
     &__reco-main {
@@ -297,6 +299,7 @@
 
     &__reco-note {
         font-size: 11.5px;
+        font-weight: 600;
         color: var(--ily-amber);
 
         &--ok {
@@ -379,8 +382,9 @@
         background: var(--ily-card-2);
         border: 1px solid transparent;
 
+        // Recommended rows are outlined in cyan, not green.
         &--ok {
-            border-color: rgba(34, 224, 161, 0.35);
+            border-color: rgba(34, 211, 238, 0.35);
         }
     }
 
@@ -505,9 +509,12 @@
             border-color 0.25s ease,
             box-shadow 0.25s ease;
 
+        // Par-clearing markets are marked with the cyan accent. No green fill
+        // or glow is painted over the card — green here means an Over/win
+        // result only, never "this box is special".
         &--ready {
-            border-color: var(--ily-green);
-            box-shadow: 0 0 22px rgba(34, 224, 161, 0.18);
+            border-color: var(--ily-cyan);
+            box-shadow: 0 0 18px rgba(34, 211, 238, 0.16);
         }
     }
 
@@ -557,8 +564,10 @@
         width: 86px;
         height: 26px;
 
+        // The momentum line is drawn in the desk's cyan (coral when falling)
+        // so no green is painted across the card head.
         polyline {
-            stroke: var(--ily-green);
+            stroke: var(--ily-cyan);
         }
 
         &--down polyline {
@@ -589,11 +598,11 @@
         }
 
         &--on {
-            color: var(--ily-green);
+            color: var(--ily-cyan);
 
             i {
-                background: var(--ily-green);
-                box-shadow: 0 0 6px var(--ily-green);
+                background: var(--ily-cyan);
+                box-shadow: 0 0 6px var(--ily-cyan);
                 animation: ily-pulse 1.2s infinite;
             }
         }
@@ -752,8 +761,17 @@
 
 // ---- Full-width layout helpers --------------------------------------------
 .ily {
+    // The recommended list is a compact digest, not a full-width slab.
     &__panel--wide {
         margin-bottom: 14px;
+        padding: 10px 12px;
+        max-width: 60rem;
+    }
+
+    &__ranked-empty {
+        font-size: 11px;
+        color: var(--ily-dim);
+        padding: 4px 2px;
     }
 
     &__ticks-hint {
@@ -820,16 +838,17 @@
 // Left fixed at app-shell level so it stays on top of every page and tab.
 // ---------------------------------------------------------------------------
 .ilyai {
-    // Same shared spectrum as the desk it scans for.
-    --ilyai-bg: var(--ux-canvas, #050b1c);
-    --ilyai-card: var(--ux-panel-solid, #0a1a38);
-    --ilyai-border: var(--ux-border, rgba(96, 165, 250, 0.18));
-    --ilyai-text: var(--ux-text, #eaf1ff);
-    --ilyai-dim: var(--ux-text-dim, #9fb4d8);
-    --ilyai-teal: var(--ux-teal, #14b8a6);
-    --ilyai-green: var(--ux-emerald, #10b981);
-    --ilyai-amber: var(--ux-gold, #f5b544);
-    --ilyai-red: var(--ux-coral, #fb7185);
+    // Same opaque palette as the desk it scans for.
+    --ilyai-bg: #0d1a28;
+    --ilyai-card: #16283a;
+    --ilyai-border: #233a50;
+    --ilyai-text: #e9f2fa;
+    --ilyai-dim: #a8bdd4;
+    --ilyai-teal: #00d4aa;
+    --ilyai-cyan: #22d3ee;
+    --ilyai-green: #22e0a1;
+    --ilyai-amber: #fbbf24;
+    --ilyai-red: #f87171;
 
     position: fixed;
     right: 20px;
@@ -892,8 +911,8 @@
         background: var(--ilyai-dim);
 
         &--on {
-            background: var(--ilyai-green);
-            box-shadow: 0 0 7px var(--ilyai-green);
+            background: var(--ilyai-cyan);
+            box-shadow: 0 0 7px var(--ilyai-cyan);
             animation: ily-pulse 1.4s infinite;
         }
     }
@@ -964,11 +983,11 @@
         }
 
         &--on {
-            color: var(--ilyai-green);
+            color: var(--ilyai-cyan);
 
             i {
-                background: var(--ilyai-green);
-                box-shadow: 0 0 6px var(--ilyai-green);
+                background: var(--ilyai-cyan);
+                box-shadow: 0 0 6px var(--ilyai-cyan);
                 animation: ily-pulse 1.2s infinite;
             }
         }
@@ -1024,8 +1043,8 @@
         margin-bottom: 10px;
 
         &--ready {
-            border-color: var(--ilyai-green);
-            box-shadow: 0 0 18px rgba(34, 224, 161, 0.18);
+            border-color: var(--ilyai-cyan);
+            box-shadow: 0 0 18px rgba(34, 211, 238, 0.16);
         }
     }
 

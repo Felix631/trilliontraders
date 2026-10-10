@@ -4,10 +4,10 @@ import { localize } from '@deriv-com/translations';
 import { useMarketFeed } from '@/hooks/useMarketFeed';
 import {
     ALL_MARKETS,
-    LOVE_THRESHOLD,
     LOVE_TICKS_DEFAULT,
     LOVE_TICKS_MAX,
     LOVE_TICKS_MIN,
+    PAR_RATE,
     overUnderRates,
     type LoveMarket,
 } from './i-love-you-analysis';
@@ -82,7 +82,9 @@ const ILoveYouAI = () => {
     );
 
     const best = picks[0] || null;
-    const ready = !!best && best.confidence >= LOVE_THRESHOLD;
+    // "Ready" means the measured rate matches the contract's par rate — the
+    // same achievable test the desk uses. No fixed 90% bar.
+    const ready = !!best && best.confidence >= (best.side === 'over' ? PAR_RATE.over2 : PAR_RATE.under8);
 
     const apply_ticks = (value: number) => {
         const next = clampTicks(value);
@@ -185,8 +187,8 @@ const ILoveYouAI = () => {
 
                 <p className='ilyai__note'>
                     {localize(
-                        'Ranked purely on the measured Over 2 / Under 8 win rate across the {{n}}-tick window. Only markets at or above {{t}}% are execution ready.',
-                        { n: String(ticks), t: String(LOVE_THRESHOLD) }
+                        'Ranked purely on the measured Over 2 / Under 8 win rate across the {{n}}-tick window. A market is marked ready when its rate matches or beats the par rate of that contract (Over 2 ≈ {{o}}%, Under 8 ≈ {{u}}%).',
+                        { n: String(ticks), o: String(PAR_RATE.over2), u: String(PAR_RATE.under8) }
                     )}
                 </p>
             </section>

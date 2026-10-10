@@ -8,7 +8,6 @@ import { placeTrade } from '@/hooks/useDerivTrade';
 import {
     ALL_MARKETS,
     LOVE_MODES,
-    LOVE_THRESHOLD,
     LOVE_TICKS_DEFAULT,
     LOVE_TICKS_MAX,
     LOVE_TICKS_MIN,
@@ -24,11 +23,11 @@ import './i-love-you.scss';
  * "i love you" — auto-scanning execution desk.
  *
  * Scans every volatility index (regular + the (1s) family) over a user-set
- * tick window and ranks the markets whose measured win rate clears the 90%
- * execution bar. Step Indices appear under Rise / Fall and Only Ups / Only
- * Downs. Styled as its own dedicated desk: header with account chip, mode
- * tabs, a headline recommendation, a ranked market list and a full-width grid
- * of volatility cards.
+ * tick window and surfaces the markets whose measured rate matches or beats the
+ * par rate their contract should deliver (no fixed 90% bar). Step Indices appear
+ * under Rise / Fall and Only Ups / Only Downs. Styled as its own dedicated desk:
+ * header with account chip, mode tabs, a headline recommendation, a
+ * recommended-markets list and a grid of volatility cards.
  */
 
 interface Settings {
@@ -136,9 +135,15 @@ const ILoveYou = observer(() => {
     );
 
     const ranked = React.useMemo(() => [...entries].sort((a, b) => b.confidence - a.confidence), [entries]);
-    const qualifying = ranked.filter(entry => entry.confidence >= LOVE_THRESHOLD);
-    const recommendation: LoveEntry | null = qualifying[0] || ranked[0] || null;
-    const ready_count = qualifying.length;
+    // A market is recommended when its measured rate matches or beats the par
+    // rate of its contract (see i-love-you-analysis.ts) — never against an
+    // unreachable fixed bar, which kept this list permanently empty.
+    const recommended = React.useMemo(() => ranked.filter(entry => entry.ready), [ranked]);
+    // The headline always shows the strongest market in the window so the panel
+    // is never blank; the trade itself is only offered when it clears par.
+    const recommendation: LoveEntry | null = recommended[0] || ranked[0] || null;
+    const is_recommended = !!recommendation?.ready;
+    const ready_count = recommended.length;
 
     const updateSetting = (key: keyof Settings, value: number) => {
         setSettings(prev => {
@@ -212,9 +217,8 @@ const ILoveYou = observer(() => {
                     <div>
                         <h2 className='ily__title'>{localize('i love you')}</h2>
                         <p className='ily__tagline'>
-                            {localize('Auto-scans every volatility · {{n}} tick window · {{t}}%+ win-rate execution', {
+                            {localize('Auto-scans every volatility · {{n}} tick window', {
                                 n: String(settings.ticks),
-                                t: String(LOVE_THRESHOLD),
                             })}
                         </p>
                     </div>
@@ -234,7 +238,7 @@ const ILoveYou = observer(() => {
             {/* Mode tabs */}
             <nav className='ily__tabs'>
                 {LOVE_MODES.map(item => {
-                    const market_ready = entries.some(entry => entry.confidence >= LOVE_THRESHOLD);
+                    const market_ready = entries.some(entry => entry.ready);
                     return (
                         <button
                             key={item.id}
@@ -334,21 +338,17 @@ const ILoveYou = observer(() => {
                         </div>
                         <div
                             className={classNames('ily__reco-note', {
-                                'ily__reco-note--ok': recommendation.confidence >= LOVE_THRESHOLD,
+                                'ily__reco-note--ok': is_recommended,
                             })}
                         >
-                            {recommendation.confidence >= LOVE_THRESHOLD
-                                ? localize('Clears the {{t}}% execution bar — take it on the next print.', {
-                                      t: String(LOVE_THRESHOLD),
-                                  })
-                                : localize('No market currently clears {{t}}% — closest shown, do not execute yet.', {
-                                      t: String(LOVE_THRESHOLD),
-                                  })}
+                            {is_recommended
+                                ? localize('Recommended — the measured rate matches or beats par for this contract.')
+                                : localize('Best of the window — still below par, do not execute yet.')}
                         </div>
                         <button
                             type='button'
                             className='ily__reco-trade'
-                            disabled={recommendation.confidence < LOVE_THRESHOLD || !recommendation.contract_type}
+                            disabled={!is_recommended || !recommendation.contract_type}
                             onClick={() => startTrade(recommendation)}
                         >
                             {localize('⚡ Execute {{label}}', { label: recommendation.entry_label })}
@@ -359,34 +359,33 @@ const ILoveYou = observer(() => {
                 )}
             </section>
 
-            {/* Ranked markets */}
+            {/* Recommended markets — only markets that clear the bar, nothing else */}
             <section className='ily__panel ily__panel--wide'>
                 <div className='ily__panel-head'>
-                    <h3>{localize('Ranked markets · {{t}}%+ only', { t: String(LOVE_THRESHOLD) })}</h3>
-                    <span>{localize('{{n}} qualify', { n: String(qualifying.length) })}</span>
+                    <h3>{localize('Recommended markets')}</h3>
+                    <span>{localize('{{n}} recommended', { n: String(recommended.length) })}</span>
                 </div>
                 <div className='ily__ranked'>
-                    {ranked.map((entry, index) => {
-                        const ok = entry.confidence >= LOVE_THRESHOLD;
-                        return (
-                            <div key={entry.market.value} className={classNames('ily__row', { 'ily__row--ok': ok })}>
-                                <span className='ily__row-rank'>{index + 1}</span>
-                                <span className='ily__row-name'>
-                                    <strong>{entry.market.short}</strong>
-                                    <em>
-                                        {entry.market.code} · {entry.detail}
-                                    </em>
-                                </span>
-                                <span className={classNames('ily__row-entry', `ily__badge--${entry.accent}`)}>
-                                    {entry.entry_label}
-                                </span>
-                                <span className='ily__row-rate'>
-                                    {entry.confidence.toFixed(1)}%
-                                    <i className={classNames({ 'ily__row-tick': ok })}>{ok ? '\u2714' : ''}</i>
-                                </span>
-                            </div>
-                        );
-                    })}
+                    {!recommended.length && (
+                        <div className='ily__ranked-empty'>
+                            {localize('No market is recommended right now — scanning.')}
+                        </div>
+                    )}
+                    {recommended.map((entry, index) => (
+                        <div key={entry.market.value} className='ily__row ily__row--ok'>
+                            <span className='ily__row-rank'>{index + 1}</span>
+                            <span className='ily__row-name'>
+                                <strong>{entry.market.short}</strong>
+                                <em>
+                                    {entry.market.code} · {entry.detail}
+                                </em>
+                            </span>
+                            <span className={classNames('ily__row-entry', `ily__badge--${entry.accent}`)}>
+                                {entry.entry_label}
+                            </span>
+                            <span className='ily__row-rate'>{entry.confidence.toFixed(1)}%</span>
+                        </div>
+                    ))}
                 </div>
             </section>
 
@@ -397,7 +396,7 @@ const ILoveYou = observer(() => {
                     const trade = trade_states[market.value] || IDLE_TRADE;
                     const quotes = feed.quote_history[market.value] || [];
                     const up = quotes.length > 1 && quotes[quotes.length - 1] >= quotes[0];
-                    const ready = !!entry && entry.confidence >= LOVE_THRESHOLD;
+                    const ready = !!entry?.ready;
                     return (
                         <article key={market.value} className={classNames('ily__card', { 'ily__card--ready': ready })}>
                             <div className='ily__card-head'>

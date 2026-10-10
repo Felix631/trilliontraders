@@ -1,0 +1,327 @@
+/**
+ * Bot Store — the community strategy shelf, as its own tab.
+ *
+ * Storefront layout on the shared Aurora language: a hero band with the shelf
+ * counts, a sticky search/creator toolbar, and a grid of product tiles that each
+ * import straight into the Bot Builder.
+ */
+
+.bot-store {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+
+    /* ---- Hero ---------------------------------------------------------- */
+    &__hero {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 20px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-lg);
+        background:
+            linear-gradient(120deg, rgba(0, 71, 171, 0.28), rgba(34, 211, 238, 0.12) 52%, transparent 100%),
+            var(--ux-panel-solid);
+        box-shadow: var(--ux-shadow-card);
+        overflow: hidden;
+
+        // Spectrum hairline along the top edge.
+        &::before {
+            content: '';
+            position: absolute;
+            inset-inline: 0;
+            top: 0;
+            height: 2px;
+            background: var(--ux-grad-hairline);
+        }
+    }
+
+    &__hero-text {
+        min-width: 0;
+        flex: 1 1 32rem;
+    }
+
+    &__kicker {
+        display: inline-block;
+        margin-bottom: 4px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ux-cyan);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        background: var(--ux-grad-aurora);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    &__subtitle {
+        margin: 6px 0 0;
+        color: var(--ux-text-dim);
+        font-size: 1.25rem;
+        line-height: 1.6;
+        max-width: 68ch;
+    }
+
+    &__hero-stats {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    &__stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 78px;
+        padding: 8px 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-inset);
+
+        strong {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--ux-text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        span {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ux-text-mute);
+        }
+
+        &--free {
+            border-color: color-mix(in srgb, var(--ux-emerald) 45%, transparent);
+
+            strong {
+                color: var(--ux-emerald);
+            }
+        }
+    }
+
+    /* ---- Toolbar ------------------------------------------------------- */
+    &__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-inset);
+    }
+
+    &__search {
+        flex: 1 1 22rem;
+        min-width: 0;
+    }
+
+    &__search-input {
+        width: 100%;
+        height: 3.4rem;
+        padding: 0 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-sm);
+        background: var(--ux-panel-solid);
+        color: var(--ux-text);
+        font-family: inherit;
+        font-size: 1.2rem;
+
+        &::placeholder {
+            color: var(--ux-text-mute);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--ux-blue-bright);
+            box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--ux-blue-bright) 22%, transparent);
+        }
+    }
+
+    &__filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    &__chip {
+        padding: 6px 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-pill);
+        background: transparent;
+        color: var(--ux-text-dim);
+        font-family: inherit;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color var(--ux-t-fast) var(--ux-ease), background var(--ux-t-mid) var(--ux-ease),
+            border-color var(--ux-t-mid) var(--ux-ease);
+
+        &:hover {
+            color: var(--ux-text);
+            border-color: var(--ux-border-strong);
+            background: var(--ux-hover);
+        }
+
+        &--active {
+            background: var(--ux-grad-aurora);
+            border-color: transparent;
+            color: var(--ux-text-on-accent);
+            box-shadow: var(--ux-glow-blue);
+        }
+    }
+
+    /* ---- Grid + tiles --------------------------------------------------- */
+    &__body {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+        gap: 12px;
+        padding-bottom: 8px;
+    }
+
+    &__tile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 14px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-solid);
+        box-shadow: var(--ux-shadow-card);
+        transition: transform var(--ux-t-mid) var(--ux-ease), border-color var(--ux-t-mid) var(--ux-ease),
+            box-shadow var(--ux-t-mid) var(--ux-ease);
+
+        &:hover {
+            transform: translateY(-3px);
+            border-color: var(--ux-border-strong);
+            box-shadow: var(--ux-shadow-lift), var(--ux-glow-blue);
+        }
+
+        &--loading {
+            border-color: var(--ux-blue-bright);
+            opacity: 0.85;
+        }
+    }
+
+    &__tile-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    &__tile-creator {
+        padding: 3px 9px;
+        border-radius: var(--ux-r-pill);
+        background: color-mix(in srgb, var(--ux-blue-bright) 16%, transparent);
+        border: 1px solid color-mix(in srgb, var(--ux-blue-bright) 34%, transparent);
+        color: var(--ux-blue-bright);
+        font-size: 0.95rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        max-width: 62%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__tile-price {
+        padding: 3px 9px;
+        border-radius: var(--ux-r-pill);
+        background: color-mix(in srgb, var(--ux-emerald) 18%, transparent);
+        border: 1px solid color-mix(in srgb, var(--ux-emerald) 40%, transparent);
+        color: var(--ux-emerald);
+        font-size: 0.95rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+    }
+
+    &__tile-name {
+        margin: 0;
+        flex: 1 1 auto;
+        color: var(--ux-text);
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    &__tile-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding-top: 10px;
+        border-top: 1px solid var(--ux-divider);
+    }
+
+    &__tile-meta {
+        flex: 1 1 12rem;
+        min-width: 0;
+        font-size: 1rem;
+        color: var(--ux-text-mute);
+    }
+
+    &__empty {
+        padding: 28px 16px;
+        border: 1px dashed var(--ux-border);
+        border-radius: var(--ux-r-md);
+    }
+
+    &__more {
+        display: flex;
+        justify-content: center;
+        padding: 16px 0 6px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .bot-store {
+        padding: 12px;
+
+        &__hero {
+            padding: 14px;
+        }
+
+        &__grid {
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bot-store__tile {
+        transition: none;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}

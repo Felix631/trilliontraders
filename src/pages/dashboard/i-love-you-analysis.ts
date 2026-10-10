@@ -6,8 +6,7 @@ import { localize } from '@deriv-com/translations';
  * Every figure in the tab is an empirical probability measured over the last
  * `ticks` ticks of the selected market — no historical fitting, no predictive
  * magic. We simply count how often each condition *would* have won in the
- * window and surface the markets whose measured win rate clears the 90%
- * execution bar.
+ * window and surface the markets that clear the recommendation bar.
  *
  * Modes:
  *   over_under     — Over 2 (digit > 2) and Under 8 (digit < 8), both reported.
@@ -21,7 +20,28 @@ import { localize } from '@deriv-com/translations';
 export const LOVE_TICKS_DEFAULT = 200;
 export const LOVE_TICKS_MIN = 20;
 export const LOVE_TICKS_MAX = 5000;
-export const LOVE_THRESHOLD = 90;
+
+/**
+ * Par (baseline) win rates — what a fair volatility index should deliver.
+ *
+ * These are structural, not predictive: Over 2 wins on 7 of the 10 digits
+ * (~70%) and Under 8 on 8 of the 10 (~80%), on any volatility index. There is
+ * deliberately NO 90% bar here: a fixed "90%+ only" filter can never be met by
+ * a digit contract, so it only ever produced an empty list. A market is
+ * *recommended* when its measured rate matches or beats the rate its contract
+ * should deliver — an achievable, honest test.
+ */
+export const PAR_RATE = {
+    over2: 70,
+    under8: 80,
+    even: 50,
+    odd: 50,
+    /** One direction of a symmetric tick-to-tick move. */
+    direction: 50,
+} as const;
+
+/** Par rate for a run of `n` consecutive same-direction ticks. */
+export const runParRate = (run_length: number): number => 100 / Math.pow(2, Math.max(1, run_length));
 
 export type LoveMode = 'over_under' | 'even_odd' | 'rise_fall' | 'only_ups_downs';
 
@@ -280,7 +300,7 @@ export const evaluateMarket = (
                 u: rates.under8_pct.toFixed(1),
                 s: String(rates.sample),
             }),
-            ready: confidence >= LOVE_THRESHOLD,
+            ready: confidence >= (use_over ? PAR_RATE.over2 : PAR_RATE.under8),
             accent: use_over ? 'over' : 'under',
             over2_pct: rates.over2_pct,
             under8_pct: rates.under8_pct,
@@ -302,7 +322,7 @@ export const evaluateMarket = (
             detail: use_even
                 ? localize('{{c}}/{{s}} even digits', { c: String(rates.even_count), s: String(rates.sample) })
                 : localize('{{c}}/{{s}} odd digits', { c: String(rates.odd_count), s: String(rates.sample) }),
-            ready: confidence >= LOVE_THRESHOLD,
+            ready: confidence >= (use_even ? PAR_RATE.even : PAR_RATE.odd),
             accent: use_even ? 'even' : 'odd',
         };
     }
@@ -330,7 +350,7 @@ export const evaluateMarket = (
                       s: String(rates.windows),
                       n: String(rates.run_length),
                   }),
-            ready: confidence >= LOVE_THRESHOLD,
+            ready: confidence >= runParRate(rates.run_length),
             accent: use_up ? 'up' : 'down',
         };
     }
@@ -350,7 +370,7 @@ export const evaluateMarket = (
         detail: use_up
             ? localize('{{c}}/{{s}} ticks moved up', { c: String(rates.ups), s: String(rates.moves) })
             : localize('{{c}}/{{s}} ticks moved down', { c: String(rates.downs), s: String(rates.moves) }),
-        ready: confidence >= LOVE_THRESHOLD,
+        ready: confidence >= PAR_RATE.direction,
         accent: use_up ? 'up' : 'down',
     };
 };
@@ -361,7 +381,7 @@ export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blur
         label: localize('Over / Under'),
         icon: '📊',
         blurb: localize(
-            'Over 2 (digit above 2) and Under 8 (digit below 8) win rates over your lookback window. Both markets are always reported; only markets at or above 90% are recommended.'
+            'Over 2 (digit above 2) and Under 8 (digit below 8) win rates over your lookback window. Both markets are always reported; only recommended markets are listed below.'
         ),
     },
     {

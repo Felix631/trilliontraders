@@ -18,21 +18,6 @@
 /* Motion                                                                */
 /* ===================================================================== */
 
-@keyframes ux-drift {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    33% {
-        transform: translate3d(3%, -2%, 0) scale(1.06);
-    }
-    66% {
-        transform: translate3d(-2%, 2%, 0) scale(0.97);
-    }
-    100% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-}
-
 @keyframes ux-pan {
     from {
         background-position: 0% 50%;
@@ -81,43 +66,30 @@
 /* Canvas — the aurora mesh behind every page                            */
 /* ===================================================================== */
 
+// The workspace canvas belongs to `.bot-dashboard` (app.scss paints
+// `--general-section-1` there) and it WRAPS the tab content, so a mesh painted
+// behind `.layout` would simply be covered by it. The Bot Builder also relies on
+// being able to sit at a negative z-index behind that surface while it is
+// inactive, so the mesh is added as extra background layers on the element that
+// already owns the canvas. No new stacking contexts and no change to how the
+// builder canvas hides and shows.
+.bot.bot-dashboard,
+#root .bot-dashboard {
+    background-image:
+        radial-gradient(70% 62% at 10% 0%, var(--ux-canvas-glow-1), transparent 70%),
+        radial-gradient(58% 54% at 90% 3%, var(--ux-canvas-glow-2), transparent 72%),
+        radial-gradient(78% 66% at 62% 100%, var(--ux-canvas-glow-3), transparent 74%),
+        linear-gradient(var(--ux-canvas-grid) 0.1rem, transparent 0.1rem),
+        linear-gradient(90deg, var(--ux-canvas-grid) 0.1rem, transparent 0.1rem);
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
+    background-size: 150% 150%, 150% 150%, 150% 150%, 6.4rem 6.4rem, 6.4rem 6.4rem;
+    background-position: 0% 0%, 100% 0%, 40% 100%, 0 0, 0 0;
+}
+
 .layout {
-    // `layout.scss` paints an opaque canvas here. `isolation` makes this
-    // element its own stacking context so the negative-z layers below paint
-    // *above* that canvas (and below the content) instead of behind it.
-    position: relative;
-    isolation: isolate;
+    // Base canvas colour only — deliberately no `isolation`/`position`, because
+    // both would change the stacking this app relies on (see above).
     background: var(--ux-canvas);
-
-    &::before,
-    &::after {
-        content: '';
-        position: fixed;
-        inset: -25%;
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    // Colour field: three slow-drifting blooms in the brand spectrum.
-    &::before {
-        background:
-            radial-gradient(38% 42% at 12% 8%, var(--ux-canvas-glow-1), transparent 70%),
-            radial-gradient(34% 38% at 88% 4%, var(--ux-canvas-glow-2), transparent 72%),
-            radial-gradient(42% 46% at 68% 96%, var(--ux-canvas-glow-3), transparent 74%);
-        filter: blur(1.2rem);
-        animation: ux-drift 52s var(--ux-ease) infinite;
-    }
-
-    // Hairline grid: gives the workspace a measured, instrumented feel.
-    &::after {
-        inset: 0;
-        background-image:
-            linear-gradient(var(--ux-canvas-grid) 0.1rem, transparent 0.1rem),
-            linear-gradient(90deg, var(--ux-canvas-grid) 0.1rem, transparent 0.1rem);
-        background-size: 6.4rem 6.4rem;
-        mask-image: radial-gradient(120% 90% at 50% 0%, #000 12%, transparent 78%);
-        -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 12%, transparent 78%);
-    }
 }
 
 .main {
@@ -135,7 +107,6 @@
 // opaque, so contrast and legibility are unchanged.
 .tab__dashboard__content,
 .analyzer-tab,
-.ily,
 .dk,
 .scanner,
 .dtrader,
@@ -284,11 +255,6 @@
     border-radius: var(--ux-r-md);
 }
 
-.ily__panel,
-.ily__card-entry,
-.ily__card-both,
-.ily__reco,
-.ily__reco-main,
 .dk__settings,
 .scanner__featured,
 .scanner__qualified,
@@ -302,15 +268,11 @@
 .matches-analysis__parity,
 .matches-analysis__lasttick,
 .matches-analysis__recent,
-.free-bots__body,
 .qt-panel,
 .qt-risk-card {
     @extend %ux-surface;
 }
 
-.ily__card-entry,
-.ily__card-both,
-.ily__reco,
 .scanner__featured,
 .scanner__market-card,
 .qt-risk-card {
@@ -338,12 +300,10 @@
     }
 }
 
-.ily__controls,
 .dk__controls,
 .scanner__controls,
 .scanner__intro,
 .matches-analysis__controls,
-.free-bots__filters,
 .qt-form,
 .qt-ladder {
     @extend %ux-toolbar;
@@ -352,9 +312,7 @@
 }
 
 // Grid children that are themselves cards (market tiles, bot tiles, cards).
-.ily__cards > *,
 .dk__markets > *,
-.free-bots__grid > *,
 .scanner__grid > * {
     @extend %ux-surface;
     @extend %ux-surface-hover;
@@ -364,11 +322,9 @@
 /* Display type — page headings + supporting copy                        */
 /* ===================================================================== */
 
-.ily__title,
 .dk__title,
 .scanner__title,
 .matches-analysis__title,
-.free-bots__title,
 .qt-page .qt-title {
     margin: 0;
     font-size: 2.3rem;
@@ -384,12 +340,9 @@
     animation: ux-pan 14s linear infinite;
 }
 
-.ily__subtitle,
 .dk__subtitle,
 .scanner__subtitle,
 .matches-analysis__subtitle,
-.free-bots__subtitle,
-.ily__blurb,
 .scanner__intro,
 .qt-hint,
 .qt-mode-note {
@@ -398,22 +351,17 @@
     line-height: 1.65;
 }
 
-.ily__tagline,
-.ily__brand,
 .scanner__featured-kicker,
 .dk__desc-ready,
-.matches-analysis__heading,
-.free-bots__heading {
+.matches-analysis__heading {
     color: var(--ux-text);
     font-weight: 600;
     letter-spacing: 0.01em;
 }
 
-.ily__header,
 .dk__header,
 .scanner__header,
-.matches-analysis__header,
-.free-bots__header {
+.matches-analysis__header {
     animation: ux-rise var(--ux-t-slow) var(--ux-ease) both;
 }
 
@@ -421,11 +369,9 @@
 /* Controls — fields, buttons, segmented rails                           */
 /* ===================================================================== */
 
-.ily,
 .dk,
 .scanner,
 .matches-analysis,
-.free-bots,
 .dtrader,
 .qt-page {
     input[type='text'],
@@ -468,14 +414,11 @@
 }
 
 // Primary actions — animated aurora fill + glow.
-.ily__btn,
 .dk__btn,
 .scanner__btn--primary,
 .dtrader__buy,
 .qt-primary-button,
-.qt-fill-button,
-.ily__card-trade,
-.ily__reco-trade {
+.qt-fill-button {
     background: var(--ux-grad-aurora);
     background-size: 200% 100%;
     color: var(--ux-text-on-accent);
@@ -507,9 +450,7 @@
 // Secondary / ghost actions — glass.
 .scanner__btn,
 .qt-secondary-button,
-.scanner__btn--ghost,
-.ily__pill,
-.ily__chips > * {
+.scanner__btn--ghost {
     background: var(--ux-panel-inset);
     border: 0.1rem solid var(--ux-border);
     border-radius: var(--ux-r-pill);
@@ -530,11 +471,9 @@
 }
 
 // Segmented rails (mode switches) read as one instrument, not loose chips.
-.ily__tabs,
 .dk__tabs,
 .scanner__tabs,
-.matches-analysis__modes,
-.free-bots__filters {
+.matches-analysis__modes {
     border-radius: var(--ux-r-pill);
 
     > * {
@@ -561,8 +500,6 @@
 /* Data — meters, status dots, tables, numerals                          */
 /* ===================================================================== */
 
-.ily__meter,
-.ily__reco-meter,
 .dk__conf-bar,
 .scanner__confidence-bar,
 .scanner__mini-bar,
@@ -574,8 +511,6 @@
     overflow: hidden;
 }
 
-.ily__meter > *,
-.ily__reco-meter > *,
 .dk__conf-bar > *,
 .scanner__confidence-bar > *,
 .scanner__mini-bar > *,
@@ -587,8 +522,6 @@
     transition: width var(--ux-t-slow) var(--ux-ease);
 }
 
-.ily__scan-dot,
-.ily__card-live,
 .dk__status-dot,
 .matches-analysis__status-dot {
     background: var(--ux-emerald);
@@ -603,17 +536,12 @@
     letter-spacing: 0.02em;
 }
 
-.ily__card-last,
-.ily__card-asset,
-.ily__card-id,
 .scanner__quote,
 .scanner__market-quote,
 .dk__market-quote,
 .dk__market-last,
 .matches-analysis__lasttick-quote,
 .qt-fills,
-.ily__row-rate,
-.ily__card-conf,
 .scanner__winrate {
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.01em;
@@ -665,19 +593,6 @@
     color: var(--ux-coral);
 }
 
-.ily__badge--over {
-    background: color-mix(in srgb, var(--ux-cyan) 20%, transparent);
-    border: 0.1rem solid color-mix(in srgb, var(--ux-cyan) 40%, transparent);
-    color: var(--ux-cyan);
-}
-
-.ily__badge--under {
-    background: color-mix(in srgb, var(--ux-gold) 18%, transparent);
-    border: 0.1rem solid color-mix(in srgb, var(--ux-gold) 42%, transparent);
-    color: var(--ux-gold);
-}
-
-.ily__tagline,
 .scanner__qualified-head,
 .dk__entry-target,
 .matches-analysis__barrier-group-title {
@@ -685,7 +600,6 @@
 }
 
 .scanner__bot-tag,
-.ily__pill,
 .scanner__digit--cell,
 .matches-analysis__parity-digit {
     font-variant-numeric: tabular-nums;
@@ -789,15 +703,12 @@
 /* ===================================================================== */
 
 @media (max-width: 1023px) {
-    .ily__title,
     .dk__title,
     .scanner__title,
-    .matches-analysis__title,
-    .free-bots__title {
+    .matches-analysis__title {
         font-size: 1.9rem;
     }
 
-    .ily__controls,
     .dk__controls,
     .scanner__controls,
     .matches-analysis__controls,
@@ -808,38 +719,24 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .layout::before,
-    .layout::after,
-    .ily__title,
     .dk__title,
     .scanner__title,
     .matches-analysis__title,
-    .free-bots__title,
     .dc-btn--primary,
-    .ily__btn,
     .dk__btn,
     .scanner__btn--primary,
     .dtrader__buy,
     .qt-primary-button,
     .qt-fill-button,
-    .ily__card-trade,
-    .ily__reco-trade,
-    .ily__scan-dot,
-    .ily__card-live,
     .dk__status-dot,
     .matches-analysis__status-dot {
         animation: none;
     }
 
-    .ily__card-entry,
-    .ily__card-both,
-    .ily__reco,
     .scanner__featured,
     .scanner__market-card,
     .qt-risk-card,
-    .ily__cards > *,
     .dk__markets > *,
-    .free-bots__grid > *,
     .scanner__grid > * {
         transition: none;
 

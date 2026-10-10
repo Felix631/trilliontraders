@@ -71,6 +71,7 @@ export default class LoadModalStore {
             updateListStrategies: action.bound,
             onToggleDeleteDialog: action,
             loadStrategyOnModalRecentPreview: action,
+            applyStrategyToBuilder: action,
             loadStrategyOnBotBuilder: action,
             saveStrategyToLocalStorage: action,
             updateXmlValuesOnStrategySelection: action,
@@ -465,21 +466,43 @@ export default class LoadModalStore {
         if (recent_files?.length > 0) this.setSelectedStrategyId(recent_files[0]?.id);
     };
 
-    loadStrategyOnBotBuilder = async () => {
-        const {
-            strategy_id = window.Blockly.utils.idGenerator.genUid(),
-            convertedDom,
-            block_string,
-        } = window.Blockly.xmlValues;
-        const derivWorkspace = window.Blockly.derivWorkspace;
+    /**
+     * Applies the strategy currently held in `window.Blockly.xmlValues` to the
+     * live Bot Builder workspace, and records its identity so Save/Run/Reset
+     * treat it like any imported strategy.
+     *
+     * This *is* the Load modal's "Open" step (the Local and Recent tabs both go
+     * through it), exposed so other entry points — the Free Bots library, the
+     * bot list — can import a bot exactly the way a file from local storage is
+     * imported, instead of re-implementing the sequence.
+     *
+     * @param strategy_xml Optional raw XML of the strategy being applied. When
+     *   given, it also becomes the workspace's `strategy_to_load` (what Reset
+     *   restores). Existing callers omit it and keep their previous behaviour.
+     * @returns whether the strategy was applied.
+     */
+    applyStrategyToBuilder = (strategy_xml?: string): boolean => {
+        const { convertedDom } = window.Blockly.xmlValues ?? {};
+        const derivWorkspace = window.Blockly?.derivWorkspace;
+        if (!derivWorkspace || derivWorkspace.disposed || !convertedDom) return false;
+
+        const strategy_id = window.Blockly.xmlValues.strategy_id || window.Blockly.utils.idGenerator.genUid();
 
         window.Blockly.Xml.clearWorkspaceAndLoadFromXml(convertedDom, derivWorkspace);
         derivWorkspace.cleanUp();
         derivWorkspace.clearUndo();
         derivWorkspace.current_strategy_id = strategy_id;
+        window.Blockly.xmlValues.strategy_id = strategy_id;
+        if (strategy_xml) derivWorkspace.strategy_to_load = strategy_xml;
 
         /* [AI] - Analytics event tracking removed - see migrate-docs/MONITORING_PACKAGES.md for re-implementation guide */
         /* [/AI] */
+
+        return true;
+    };
+
+    loadStrategyOnBotBuilder = async () => {
+        this.applyStrategyToBuilder();
     };
 
     updateXmlValuesOnStrategySelection = () => {

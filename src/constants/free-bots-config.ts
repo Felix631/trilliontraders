@@ -6711,30 +6711,6 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "new-bots/orstac-selected/STRAIGHT_DIFFERS_WITH_MAX_3_RETURNS_ON_2SPLIT_MART_(3)"
     },
     {
-        "id": ".Dragon Bite",
-        "name": ".Dragon Bite",
-        "creator": "superfree",
-        "file": "new-bots/superfree-binary/.Dragon Bite"
-    },
-    {
-        "id": ".SMA Daily",
-        "name": ".SMA Daily",
-        "creator": "superfree",
-        "file": "new-bots/superfree-binary/.SMA Daily"
-    },
-    {
-        "id": ".Sploof - SMA Counter-Trend With Soros",
-        "name": ".Sploof SMA Counter Trend With Soros",
-        "creator": "superfree",
-        "file": "new-bots/superfree-binary/.Sploof - SMA Counter-Trend With Soros"
-    },
-    {
-        "id": ".VelocityBot",
-        "name": ".VelocityBot",
-        "creator": "superfree",
-        "file": "new-bots/superfree-binary/.VelocityBot"
-    },
-    {
         "id": "after_purchase v2",
         "name": "after purchase v2",
         "creator": "superfree",
@@ -7237,6 +7213,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "digits XO TRADER'S ONLY UPS DOWNS VER 3.2",
         "creator": "superfree",
         "file": "new-bots/superfree-binary/digits_XO TRADER'S ONLY UPS DOWNS VER 3.2"
+    },
+    {
+        "id": "Dragon Bite",
+        "name": "Dragon Bite",
+        "creator": "superfree",
+        "file": "new-bots/superfree-binary/Dragon Bite"
     },
     {
         "id": "higherlower_Ambot 123 v. 4 Reverso",
@@ -8911,6 +8893,24 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "risefall Yen Forex DBot",
         "creator": "superfree",
         "file": "new-bots/superfree-binary/risefall_Yen-Forex_DBot"
+    },
+    {
+        "id": "SMA Daily",
+        "name": "SMA Daily",
+        "creator": "superfree",
+        "file": "new-bots/superfree-binary/SMA Daily"
+    },
+    {
+        "id": "Sploof - SMA Counter-Trend With Soros",
+        "name": "Sploof SMA Counter Trend With Soros",
+        "creator": "superfree",
+        "file": "new-bots/superfree-binary/Sploof - SMA Counter-Trend With Soros"
+    },
+    {
+        "id": "VelocityBot",
+        "name": "VelocityBot",
+        "creator": "superfree",
+        "file": "new-bots/superfree-binary/VelocityBot"
     },
     {
         "id": "newlyadded-Differs-5-Tick",

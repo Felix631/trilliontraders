@@ -21,14 +21,13 @@ export default class FreeBotsStore {
     }
 
     /**
-     * Loads a community bot from the Free Bots library into the Blockly
-     * workspace and switches to the Bot Builder tab. Each bot XML is a
-     * lazily-loaded module (raw string) injected via the shared `load`
-     * helper — the same import path the Quick Strategy flow uses.
+     * Loads a community bot from the Free Bots library into the Bot Builder.
+     * Each bot XML is a lazily-loaded module (raw string) injected through the
+     * shared loader — the same import path the Quick Strategy flow uses.
      */
     loadFreeBot = async (bot: TFreeBot) => {
         if (this.is_loading) return;
-        await this.loadBotXml(`../xml/free-bots/${bot.file}`, bot.name, true);
+        await this.loadBotXml(`../xml/free-bots/${bot.file}`, bot.name, true, bot.id);
     };
 
     /**
@@ -37,11 +36,10 @@ export default class FreeBotsStore {
      * Two hazards when arriving from another tab:
      * 1. Leaving the Bot Builder disposes the workspace but leaves
      *    `window.Blockly.derivWorkspace` pointing at the dead instance.
-     * 2. The remount can run `initWorkspace` more than once concurrently
-     *    (double-mount cycles); each run injects a NEW workspace and draws
-     *    the default strategy into it. Accepting the first reference we see
-     *    meant drawing into a workspace that a still-running init then
-     *    replaced — the import appeared to never happen.
+     * 2. The remount can run `initWorkspace` more than once concurrently;
+     *    each run injects a NEW workspace and draws the default strategy into
+     *    it. Accepting the first reference we see meant drawing into a
+     *    workspace that a still-running init then replaced.
      *
      * So we only return a reference that is alive AND unchanged across
      * several consecutive polls, which guarantees every init cycle has
@@ -89,36 +87,52 @@ export default class FreeBotsStore {
     };
 
     /**
-     * Loads any bot XML (file module path or raw string) into the Blockly
-     * workspace and switches to the Bot Builder tab. Used by the Free Bots
-     * library and by the Analysis Tool's Load Bot action.
+     * Loads any bot XML (file module path or raw string) into the Bot Builder.
      *
-     * Mirrors load-modal-store's canonical flow exactly: pass the raw XML
-     * string as `block_string`, use `window.Blockly.derivWorkspace`, and set
-     * `strategy_to_load` afterwards so Save/Run treat it like any imported
-     * strategy.
+     * The sequence is EXACTLY the one the Load modal performs when a file is
+     * imported from local storage, so every entry point behaves identically:
+     *
+     *   1. `load()` — the Local tab's first step: validate the XML, drop blocks
+     *      this build cannot render, publish the converted strategy to
+     *      `window.Blockly.xmlValues` and draw it.
+     *   2. `load_modal.applyStrategyToBuilder()` — the Local tab's "Open"
+     *      button: re-apply that converted strategy to the live builder
+     *      workspace and register its identity for Save/Run/Reset.
+     *
+     * A late `initWorkspace` can still replace the canvas after both steps, so
+     * we finish by confirming the *intended* strategy is the one the workspace
+     * holds. Emptiness is not a good enough check: the default strategy counts
+     * as content, which used to swallow the retry entirely.
      */
-    loadBotXml = async (source: string, name: string, is_module_path = false) => {
+    loadBotXml = async (source: string, name: string, is_module_path = false, bot_id?: string) => {
         if (this.is_loading) return;
 
         this.is_loading = true;
-        this.loading_bot_id = name;
+        // Identity for the store tile's spinner. `loadFreeBot` passes the bot id
+        // so the exact tile that was clicked shows its loading state; other
+        // callers fall back to the display name.
+        this.loading_bot_id = bot_id ?? name;
         try {
-            // Switch to Bot Builder tab first so the workspace mounts.
-            this.root_store.dashboard.setActiveTab(DBOT_TABS.BOT_BUILDER);
-
-            // Wait for the Blockly workspace to be ready.
-            const workspace = await this.waitForWorkspace();
-            if (!workspace) {
-                console.error('[TrillionTraders] Bot Builder workspace not available after waiting.');
-                return;
-            }
-
+            // Resolve the XML text first, so a broken module never leaves the
+            // user staring at a builder that switched tabs for nothing.
             let xml_string: string;
             if (is_module_path) {
-                // Same lazy-import pattern as quick-strategy-store:
-                // `../xml/${name}.xml` → raw-loader default export (XML text).
-                const strategy_mod = await import(/* webpackChunkName: `[request]` */ `${source}.xml`);
+                // The lazy XML import MUST keep a static directory prefix.
+                // With a fully dynamic request (`${source}.xml`) the bundler
+                // builds an EMPTY context rooted at this module's own folder
+                // (src/stores), so every load rejected with
+                // "Cannot find module '../xml/free-bots/…'" and the tile did
+                // nothing. Anchoring the request to `../xml/free-bots/` makes
+                // the bundler build the real context, so each bot is its own
+                // chunk fetched only when its tile is clicked.
+                const XML_ROOT = '../xml/free-bots/';
+                if (!source.startsWith(XML_ROOT)) {
+                    throw new Error(`Community bot path must live under ${XML_ROOT} (got "${source}")`);
+                }
+                const file_key = source.slice(XML_ROOT.length);
+                const strategy_mod = await import(
+                    /* webpackChunkName: `[request]` */ `../xml/free-bots/${file_key}.xml`
+                );
                 xml_string = strategy_mod.default;
                 if (!xml_string || typeof xml_string !== 'string') {
                     throw new Error(`Module resolved but contained no XML text for ${name}`);
@@ -127,73 +141,58 @@ export default class FreeBotsStore {
                 xml_string = source;
             }
 
+            // Switch to Bot Builder first so the workspace mounts.
+            this.root_store.dashboard.setActiveTab(DBOT_TABS.BOT_BUILDER);
+
+            const workspace = await this.waitForWorkspace();
+            if (!workspace) {
+                console.error('[TrillionTraders] Bot Builder workspace not available after waiting.');
+                return;
+            }
+
+            // Step 1 — the local-import load.
             await load({
                 block_string: xml_string,
                 file_name: name,
                 workspace,
-                from: save_types.UNSAVED,
-                drop_event: null,
-                strategy_id: null,
-                showIncompatibleStrategyDialog: null,
+                from: save_types.LOCAL,
+                drop_event: {},
+                strategy_id: undefined,
+                showIncompatibleStrategyDialog: false,
             });
 
-            // Keep the builder's notion of "current strategy" in sync — the
-            // canonical loaders always do this after a successful load.
-            try {
-                window.Blockly.derivWorkspace.strategy_to_load = xml_string;
-            } catch {
-                // non-fatal — the blocks are already on the canvas
-            }
+            // Step 2 — the local-import "Open".
+            this.root_store.load_modal.applyStrategyToBuilder(xml_string);
 
-            // Verify the blocks actually landed AND SURVIVED. A late-running
-            // init cycle can clear the workspace right after our load; if the
-            // canvas ends up empty, draw the bot once more onto whatever the
-            // final workspace is.
-            const verify_and_retry = async () => {
-                await new Promise(r => setTimeout(r, 600));
-                let current_ws = window.Blockly?.derivWorkspace;
-                if (current_ws && !current_ws.disposed && current_ws.getAllBlocks(false).length > 0) return;
-
-                // Canvas was wiped — wait for it to settle again and redraw.
-                current_ws = await this.waitForWorkspace();
-                if (!current_ws) return;
-                await load({
-                    block_string: xml_string,
-                    file_name: name,
-                    workspace: current_ws,
-                    from: save_types.UNSAVED,
-                    drop_event: null,
-                    strategy_id: null,
-                    showIncompatibleStrategyDialog: null,
-                    show_snackbar: false,
-                });
-                try {
-                    window.Blockly.derivWorkspace.strategy_to_load = xml_string;
-                } catch {
-                    /* non-fatal */
-                }
-                console.info(`[TrillionTraders] "${name}" re-applied after a late workspace replacement.`);
-            };
-
-            await verify_and_retry();
-
-            const block_count = window.Blockly?.derivWorkspace?.getAllBlocks(false).length ?? 0;
-            if (!block_count) {
-                console.error(`[TrillionTraders] "${name}" loaded but no blocks are on the canvas.`);
-            } else {
-                console.info(`[TrillionTraders] "${name}" loaded into Bot Builder (${block_count} blocks).`);
-            }
+            // Step 3 — make sure it survived a late workspace re-initialisation.
+            await this.ensureStrategyApplied(xml_string, name);
         } catch (err) {
             console.error('[TrillionTraders] Failed to load bot into builder:', err);
-            // Surface the failure in-app instead of failing silently.
-            try {
-                this.root_store.dashboard.setActiveTab(DBOT_TABS.BOT_BUILDER);
-            } catch {
-                /* ignore */
-            }
         } finally {
             this.is_loading = false;
             this.loading_bot_id = null;
+        }
+    };
+
+    /**
+     * Confirms the workspace is holding the strategy we just applied, and
+     * re-draws it if a late init cycle replaced the canvas. Compares against
+     * `strategy_to_load` (the workspace's own record of its strategy) rather
+     * than counting blocks, because the default strategy is non-empty and
+     * would otherwise mask the replacement.
+     */
+    private ensureStrategyApplied = async (xml_string: string, name: string) => {
+        const holds = (ws: any) => !!ws && !ws.disposed && ws.strategy_to_load === xml_string;
+
+        await new Promise(r => setTimeout(r, 500));
+        if (holds(window.Blockly?.derivWorkspace)) return;
+
+        const workspace = await this.waitForWorkspace();
+        if (!workspace) return;
+
+        const { load_modal } = this.root_store;
+        if (load_modal.applyStrategyToBuilder(xml_string)) {
+            console.info(`[TrillionTraders] "${name}" re-applied after a late workspace replacement.`);
         }
     };
 }
