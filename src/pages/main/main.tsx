@@ -98,10 +98,15 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
+    // Index -> URL hash for the tabs below. Must match DBOT_TABS / TAB_IDS in
+    // constants/bot-contents and the render order of the <Tabs> children.
     const hash = [
         'dashboard',
+        'bot-store',
         'analyzer',
         'scanner',
+        'analysis-2',
+        'i-love-you',
         'instant_fill',
         'speed_bot',
         'bulk_trader',
@@ -110,9 +115,6 @@ const AppWrapper = observer(() => {
         'chart',
         'tutorial',
         'dtrader',
-        'analysis-2',
-        'i-love-you',
-        'bot-store',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -430,6 +432,21 @@ const AppWrapper = observer(() => {
                             <div
                                 label={
                                     <>
+                                        <LabelPairedBasketShoppingCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Bot Store' />
+                                    </>
+                                }
+                                id='id-bot-store'
+                            >
+                                <BotStore />
+                            </div>
+                            <div
+                                label={
+                                    <>
                                         <LabelPairedChartTrendUpCaptionRegularIcon
                                             height='24px'
                                             width='24px'
@@ -460,6 +477,36 @@ const AppWrapper = observer(() => {
                                 <div className='dk-theme'>
                                     <Scanner />
                                 </div>
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedSearchCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Analysis 2' />
+                                    </>
+                                }
+                                id='id-analysis-2'
+                            >
+                                <DigitKiller />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedSearchCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='i love you' />
+                                    </>
+                                }
+                                id='id-i-love-you'
+                            >
+                                <ILoveYou />
                             </div>
                             <div
                                 label={
@@ -591,51 +638,6 @@ const AppWrapper = observer(() => {
                                 id='id-dtrader'
                             >
                                 <DTrader />
-                            </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedSearchCaptionRegularIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='Analysis 2' />
-                                    </>
-                                }
-                                id='id-analysis-2'
-                            >
-                                <DigitKiller />
-                            </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedSearchCaptionRegularIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='i love you' />
-                                    </>
-                                }
-                                id='id-i-love-you'
-                            >
-                                <ILoveYou />
-                            </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedBasketShoppingCaptionRegularIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='Bot Store' />
-                                    </>
-                                }
-                                id='id-bot-store'
-                            >
-                                <BotStore />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}
