@@ -147,6 +147,27 @@ export function validateCallback(params: CallbackParams, redirectUri: string): s
 }
 
 /**
+ * Turn a failed token response into something a human can act on.
+ *
+ * Deriv answers OAuth failures with `{"error": "...", "error_description": "..."}` —
+ * `invalid_client` when the app id is unknown or missing, `invalid_grant` when the
+ * PKCE verifier or the authorization code is stale/already used. Surfacing that
+ * verbatim is what tells a partner whether to fix the App ID, the registered
+ * redirect URI or their session storage, instead of a bare "failed".
+ */
+function describeTokenError(status: number, body: string): string {
+  try {
+    const parsed = JSON.parse(body);
+    const code = parsed?.error;
+    const description = parsed?.error_description;
+    if (code) return `${code}${description ? ` — ${description}` : ''}`;
+  } catch {
+    // Not JSON — fall through to the raw body.
+  }
+  return `HTTP ${status}${body ? ` — ${body}` : ''}`;
+}
+
+/**
  * Exchange authorization code for access and refresh tokens.
  */
 export async function exchangeCodeForTokens(params: TokenExchangeParams): Promise<AuthInfo> {
@@ -166,7 +187,7 @@ export async function exchangeCodeForTokens(params: TokenExchangeParams): Promis
 
   if (!response.ok) {
     const errorBody = await response.text();
-    throw new OAuthError(`Token exchange failed (${response.status}): ${errorBody}`);
+    throw new OAuthError(describeTokenError(response.status, errorBody));
   }
 
   const tokenData = await response.json();
@@ -206,7 +227,7 @@ export async function refreshAccessToken(
 
   if (!response.ok) {
     clearAllAuthData();
-    throw new OAuthError(`Token refresh failed (${response.status})`);
+    throw new OAuthError(`Token refresh failed — ${describeTokenError(response.status, await response.text())}`);
   }
 
   const tokenData = await response.json();

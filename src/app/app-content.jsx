@@ -49,13 +49,21 @@ const AppContent = observer(() => {
     // Initialize dev mode keyboard shortcuts
     useDevMode();
 
-    // Warn (once) when the OAuth app id isn't configured, so a developer running
-    // locally understands why Log in / Sign up are disabled. Skipped inside the
-    // App Builder static preview, which intentionally runs without env vars.
+    // Deriv credentials are the only credentials this app accepts, and the whole
+    // sign-in flow is built from the Deriv App ID. Warn (once, naming the exact
+    // key) when it isn't configured, so "Log in" being disabled can never be
+    // mistaken for a broken Deriv account. Skipped inside the App Builder static
+    // preview, which intentionally runs without env vars.
     useEffect(() => {
         if (isPreviewMode()) return;
         if (!process.env.NEXT_PUBLIC_DERIV_APP_ID) {
-            botNotification(localize('Waiting for environment variables to be set…'), undefined, { type: 'warning' });
+            botNotification(
+                localize(
+                    'Deriv sign-in is disabled: NEXT_PUBLIC_DERIV_APP_ID is not set for this deployment. Add your Deriv App ID to the host environment variables and rebuild.'
+                ),
+                undefined,
+                { type: 'warning', autoClose: 30000 }
+            );
         }
     }, []);
 
