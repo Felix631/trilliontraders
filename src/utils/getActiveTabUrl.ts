@@ -2,6 +2,7 @@
 // TAB_IDS in constants/bot-contents and the `hash` list in pages/main.
 const TAB_NAMES = [
     'dashboard',
+    'bot_builder',
     'bot-store',
     'analyzer',
     'scanner',
@@ -11,7 +12,6 @@ const TAB_NAMES = [
     'speed_bot',
     'bulk_trader',
     'risk_calculator',
-    'bot_builder',
     'chart',
     'tutorial',
     'dtrader',

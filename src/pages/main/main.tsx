@@ -102,6 +102,7 @@ const AppWrapper = observer(() => {
     // constants/bot-contents and the render order of the <Tabs> children.
     const hash = [
         'dashboard',
+        'bot_builder',
         'bot-store',
         'analyzer',
         'scanner',
@@ -111,7 +112,6 @@ const AppWrapper = observer(() => {
         'speed_bot',
         'bulk_trader',
         'risk_calculator',
-        'bot_builder',
         'chart',
         'tutorial',
         'dtrader',
@@ -432,6 +432,19 @@ const AppWrapper = observer(() => {
                             <div
                                 label={
                                     <>
+                                        <LabelPairedPuzzlePieceTwoCaptionBoldIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Bot Builder' />
+                                    </>
+                                }
+                                id='id-bot-builder'
+                            />
+                            <div
+                                label={
+                                    <>
                                         <LabelPairedBasketShoppingCaptionRegularIcon
                                             height='24px'
                                             width='24px'
@@ -568,19 +581,6 @@ const AppWrapper = observer(() => {
                             >
                                 <RiskCalculator />
                             </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedPuzzlePieceTwoCaptionBoldIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='Bot Builder' />
-                                    </>
-                                }
-                                id='id-bot-builder'
-                            />
                             <div
                                 label={
                                     <>
