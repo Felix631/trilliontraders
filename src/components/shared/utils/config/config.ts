@@ -8,6 +8,7 @@ import {
 } from '@/external/deriv-core';
 import type { AuthConfig } from '@/external/deriv-core';
 import { DerivWSAccountsService } from '@/services/derivws-accounts.service';
+import { getOAuthRedirectUri } from '@/utils/auth-utils';
 import brandConfig from '../../../../../brand.config.json';
 
 // =============================================================================
@@ -105,7 +106,10 @@ export const generateOAuthURL = async (prompt?: string): Promise<string> => {
 
         const config: AuthConfig = {
             clientId,
-            redirectUri: window.location.origin,
+            // Must be the exact URL registered on the Deriv OAuth client, and the
+            // same string the token exchange sends back (see App.tsx) — see
+            // getOAuthRedirectUri for why it is never normalised.
+            redirectUri: getOAuthRedirectUri(),
             scopes: 'trade',
         };
 

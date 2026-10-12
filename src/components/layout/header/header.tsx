@@ -2,12 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import { generateOAuthURL } from '@/components/shared';
+import { botNotification } from '@/components/bot-notification/bot-notification';
 import Button from '@/components/shared_ui/button';
 import useActiveAccount from '@/hooks/api/account/useActiveAccount';
 import { useApiBase } from '@/hooks/useApiBase';
 import { useLogout } from '@/hooks/useLogout';
 import { useStore } from '@/hooks/useStore';
-import { rememberAuthReturn } from '@/utils/auth-utils';
+import { describeOAuthRedirectIssue, getOAuthRedirectUri, rememberAuthReturn } from '@/utils/auth-utils';
 import { navigateToTransfer } from '@/utils/transfer-utils';
 import { Localize } from '@deriv-com/translations';
 import { Header, useDevice, Wrapper } from '@deriv-com/ui';
@@ -84,8 +85,24 @@ const AppHeader = observer(() => {
         return () => clearTimeout(timer);
     }, [isAuthorizing, activeLoginid, setIsAuthorizing, authTimeout, isOAuthPending]);
 
+    /**
+     * Deriv renders a rejected sign-in on ITS OWN error page, so a bad
+     * redirect_uri never comes back here. Catch the predictable cases (and make
+     * the exact string we send discoverable) before the browser leaves.
+     */
+    const canStartOAuth = useCallback(() => {
+        const issue = describeOAuthRedirectIssue();
+        if (issue) {
+            botNotification(issue, undefined, { type: 'warning', autoClose: 30000 });
+            return false;
+        }
+        console.info('[Deriv OAuth] redirect_uri sent to Deriv:', getOAuthRedirectUri());
+        return true;
+    }, []);
+
     const handleSignup = useCallback(async () => {
         try {
+            if (!canStartOAuth()) return;
             setIsAuthorizing(true);
             // Deriv redirects back to the bare origin, so remember the tab we
             // are leaving from and let the callback restore it.
@@ -101,10 +118,11 @@ const AppHeader = observer(() => {
             console.error('Signup redirection failed:', error);
             setIsAuthorizing(false);
         }
-    }, [setIsAuthorizing]);
+    }, [canStartOAuth, setIsAuthorizing]);
 
     const handleLogin = useCallback(async () => {
         try {
+            if (!canStartOAuth()) return;
             // Set authorizing state immediately when login is clicked
             setIsAuthorizing(true);
 
@@ -127,7 +145,7 @@ const AppHeader = observer(() => {
             // Reset authorizing state if redirection fails
             setIsAuthorizing(false);
         }
-    }, [setIsAuthorizing]);
+    }, [canStartOAuth, setIsAuthorizing]);
 
     const handleTransfer = useCallback(() => {
         const transferCurrency = authData?.currency;
@@ -229,6 +247,7 @@ const AppHeader = observer(() => {
             is_account_regenerating,
             isOAuthPending,
             authData,
+            canStartOAuth,
             handleLogin,
             handleSignup,
             handleTransfer,
