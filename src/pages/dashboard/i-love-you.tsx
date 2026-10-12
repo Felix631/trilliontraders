@@ -345,14 +345,6 @@ const ILoveYou = observer(() => {
                                 ? localize('Recommended — the measured rate matches or beats par for this contract.')
                                 : localize('Best of the window — still below par, do not execute yet.')}
                         </div>
-                        <button
-                            type='button'
-                            className='ily__reco-trade'
-                            disabled={!is_recommended || !recommendation.contract_type}
-                            onClick={() => startTrade(recommendation)}
-                        >
-                            {localize('⚡ Execute {{label}}', { label: recommendation.entry_label })}
-                        </button>
                     </>
                 ) : (
                     <div className='ily__reco-empty'>{localize('Scanning markets…')}</div>

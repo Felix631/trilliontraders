@@ -49,13 +49,20 @@ export interface LoveMarket {
     value: string;
     /** Big number shown on the card, e.g. "50" / "50 (1s)" / "Step 100". */
     short: string;
-    /** Deriv symbol code, e.g. "R_50" / "1HZ50V" / "STPRNG". */
+    /** Deriv symbol code, e.g. "R_50" / "1HZ50V" / "stpRNG". */
     code: string;
     group: 'regular' | '1s' | 'step';
 }
 
-/** All volatility indices: the 5 regular ones plus the (1s) family,
- *  including the 30 (1s) and 90 (1s) markets. */
+/** Every volatility index Deriv actually offers Over 2 / Under 8 on: the 5
+ *  regular markets plus the complete (1s) family.
+ *
+ *  The list is exactly the API's own `synthetic_index` set that answers
+ *  `contracts_for` with DIGITOVER/DIGITUNDER — verified live, 13/13:
+ *  R_10/25/50/75/100 and 1HZ10V/15V/25V/30V/50V/75V/90V/100V. There is no
+ *  150 (1s) or 250 (1s): `contracts_for` rejects both with
+ *  `OfferingsInvalidSymbol`, so scanning them would only ever recommend a
+ *  market the user cannot trade. */
 export const LOVE_MARKETS: LoveMarket[] = [
     { value: 'R_10', short: '10', code: 'R_10', group: 'regular' },
     { value: 'R_25', short: '25', code: 'R_25', group: 'regular' },
@@ -63,6 +70,7 @@ export const LOVE_MARKETS: LoveMarket[] = [
     { value: 'R_75', short: '75', code: 'R_75', group: 'regular' },
     { value: 'R_100', short: '100', code: 'R_100', group: 'regular' },
     { value: '1HZ10V', short: '10 (1s)', code: '1HZ10V', group: '1s' },
+    { value: '1HZ15V', short: '15 (1s)', code: '1HZ15V', group: '1s' },
     { value: '1HZ25V', short: '25 (1s)', code: '1HZ25V', group: '1s' },
     { value: '1HZ30V', short: '30 (1s)', code: '1HZ30V', group: '1s' },
     { value: '1HZ50V', short: '50 (1s)', code: '1HZ50V', group: '1s' },
@@ -72,13 +80,18 @@ export const LOVE_MARKETS: LoveMarket[] = [
 ];
 
 /** Step Indices — surfaced under the Rise / Fall and Only Ups / Only Downs
- *  modes only, as requested. */
+ *  modes only, as requested.
+ *
+ *  The code is Deriv's own `stpRNG` casing: `ticks_history` happens to accept
+ *  the uppercase form, but `contracts_for` rejects it with
+ *  `OfferingsInvalidSymbol` — so the uppercase symbols streamed fine yet could
+ *  never actually be traded from this desk. */
 export const STEP_MARKETS: LoveMarket[] = [
-    { value: 'STPRNG', short: 'Step 100', code: 'STPRNG', group: 'step' },
-    { value: 'STPRNG2', short: 'Step 200', code: 'STPRNG2', group: 'step' },
-    { value: 'STPRNG3', short: 'Step 300', code: 'STPRNG3', group: 'step' },
-    { value: 'STPRNG4', short: 'Step 400', code: 'STPRNG4', group: 'step' },
-    { value: 'STPRNG5', short: 'Step 500', code: 'STPRNG5', group: 'step' },
+    { value: 'stpRNG', short: 'Step 100', code: 'stpRNG', group: 'step' },
+    { value: 'stpRNG2', short: 'Step 200', code: 'stpRNG2', group: 'step' },
+    { value: 'stpRNG3', short: 'Step 300', code: 'stpRNG3', group: 'step' },
+    { value: 'stpRNG4', short: 'Step 400', code: 'stpRNG4', group: 'step' },
+    { value: 'stpRNG5', short: 'Step 500', code: 'stpRNG5', group: 'step' },
 ];
 
 /** Every market the live feed subscribes to (steps included so switching to

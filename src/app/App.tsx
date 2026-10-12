@@ -9,6 +9,7 @@ import RoutePromptDialog from '@/components/route-prompt-dialog';
 import { useAccountSwitching } from '@/hooks/useAccountSwitching';
 import { useLanguageFromURL } from '@/hooks/useLanguageFromURL';
 import { StoreProvider } from '@/hooks/useStore';
+import { consumeAuthReturn } from '@/utils/auth-utils';
 import { isPreviewMode, PREVIEW_BASE_PATH } from '@/utils/is-preview-mode';
 import { localize, TranslationProvider } from '@deriv-com/translations';
 import CoreStoreProvider from './CoreStoreProvider';
@@ -106,6 +107,7 @@ function App() {
         if (!urlParams.has('code')) return;
 
         const handleCallback = async () => {
+            let authenticated = false;
             try {
                 // Deriv credentials are the only credentials this app accepts: the
                 // code below exchanges Deriv's own OAuth code for a trading token.
@@ -142,13 +144,31 @@ function App() {
 
                 const { api_base } = await import('@/external/bot-skeleton');
                 await api_base.init(true);
+                authenticated = true;
             } catch (error) {
                 console.error('OAuth callback error:', error);
                 // Previously this was console-only, which is why a failed Deriv
                 // sign-in looked like a no-op in the UI.
                 reportFailure(error instanceof Error ? error.message : String(error));
             } finally {
+                // `cleanupUrl` drops every OAuth query param AND the hash, so it
+                // has to run first — the return target below is set after it.
                 cleanupUrl(window.location.origin);
+            }
+
+            if (authenticated) {
+                // Deriv redirects back to the bare origin, so the tab the user
+                // left from is gone by now. Restore it (falling back to the
+                // Dashboard) and reload once: the app shell reads the tab from
+                // the hash during its first render (see pages/main), so a
+                // hash-only change would otherwise be ignored.
+                const return_hash = consumeAuthReturn() || '#dashboard';
+                window.history.replaceState(
+                    window.history.state,
+                    '',
+                    `${window.location.pathname}${return_hash}`
+                );
+                window.location.reload();
             }
         };
 

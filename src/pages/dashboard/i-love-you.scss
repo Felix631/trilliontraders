@@ -1,26 +1,27 @@
-// "i love you" desk — dedicated dark execution UI.
+// "i love you" desk.
 //
-// This tab keeps its OWN opaque palette rather than aliasing the shared Aurora
-// tokens: the shared canvas is a near-black midnight, which made the cards and
-// their copy read as one flat slab. These values sit on the desk's own navy so
-// every panel, label and digit stays clearly visible.
+// The desk aliases the shared Aurora tokens instead of carrying its own opaque
+// palette, so it now follows the application theme (light and dark) exactly like
+// the Analyzer and Analysis Tool tabs. The hardcoded values are only fallbacks
+// for the case where the token sheet is missing; the page background is
+// transparent so the shared canvas shows through like every other tab.
 
 .ily {
-    // Page palette — opaque, own-surface colours with deliberately brighter
-    // text/dim tones than the shared tokens.
-    --ily-bg: #0a1420;
-    --ily-card: #14212f;
-    --ily-card-2: #17283a;
-    --ily-border: #2a4055;
-    --ily-text: #e9f2fa;
-    --ily-dim: #a8bdd4;
-    --ily-teal: #00d4aa;
-    --ily-cyan: #22d3ee;
-    --ily-amber: #fbbf24;
-    --ily-green: #22e0a1;
-    --ily-red: #f87171;
-    --ily-violet: #a855f7;
-    --ily-radius: 14px;
+    --ily-bg: transparent;
+    --ily-card: var(--ux-panel, #14212f);
+    --ily-card-2: var(--ux-panel-2, #17283a);
+    --ily-border: var(--ux-border, #2a4055);
+    --ily-border-strong: var(--ux-border-strong, #3a5670);
+    --ily-text: var(--ux-text, #e9f2fa);
+    --ily-dim: var(--ux-text-dim, #a8bdd4);
+    --ily-inset: var(--ux-panel-inset, #0f1c2a);
+    --ily-teal: var(--ux-emerald, #00d4aa);
+    --ily-cyan: var(--ux-cyan, #22d3ee);
+    --ily-amber: var(--ux-gold, #fbbf24);
+    --ily-green: var(--ux-emerald, #22e0a1);
+    --ily-red: var(--ux-coral, #f87171);
+    --ily-violet: var(--ux-violet, #a855f7);
+    --ily-radius: var(--ux-r-md, 14px);
 
     // Fill the whole tab panel: the shared tab content is a flex row, so the
     // page has to grow along the main axis or it collapses to its content
@@ -61,10 +62,8 @@
         height: 40px;
         border-radius: 12px;
         background: var(--ux-grad-aurora, linear-gradient(135deg, #0047ab, #22d3ee));
-        background-size: 200% 100%;
         font-size: 20px;
         box-shadow: var(--ux-glow-blue, 0 0 16px rgba(79, 140, 255, 0.45));
-        animation: ux-pan 12s linear infinite;
     }
 
     &__title {
@@ -163,9 +162,9 @@
         }
 
         &--active {
-            background: linear-gradient(135deg, var(--ily-teal), #059e86);
-            color: #04211b;
-            box-shadow: 0 0 18px rgba(0, 212, 170, 0.32);
+            background: var(--ux-grad-aurora, linear-gradient(135deg, #0047ab, #22d3ee));
+            color: var(--ux-text-on-accent, #ffffff);
+            box-shadow: var(--ux-glow-blue, 0 0 18px rgba(79, 140, 255, 0.32));
         }
 
         &--ready::after {
@@ -210,13 +209,14 @@
         position: relative;
         border: 1px solid var(--ily-border);
         border-radius: var(--ily-radius);
-        background: linear-gradient(135deg, #12202e, #101d2b);
+        background: var(--ux-panel-2, #101d2b);
         padding: 14px 16px;
         margin-bottom: 14px;
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr;
         gap: 10px 16px;
         align-items: center;
+        box-shadow: var(--ux-shadow-card, none);
     }
 
     &__reco-label {
@@ -298,33 +298,13 @@
     }
 
     &__reco-note {
+        grid-column: 1 / -1;
         font-size: 11.5px;
         font-weight: 600;
         color: var(--ily-amber);
 
         &--ok {
             color: var(--ily-green);
-        }
-    }
-
-    &__reco-trade {
-        grid-row: 2 / 4;
-        grid-column: 2;
-        align-self: stretch;
-        padding: 0 20px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--ily-teal), #059e86);
-        color: #04211b;
-        font-size: 13px;
-        font-weight: 800;
-        cursor: pointer;
-        white-space: nowrap;
-
-        &:disabled {
-            background: #24384b;
-            color: var(--ily-dim);
-            cursor: not-allowed;
         }
     }
 
@@ -504,7 +484,8 @@
         padding: 14px;
         border-radius: var(--ily-radius);
         border: 1px solid var(--ily-border);
-        background: linear-gradient(160deg, #16283a, #121d29);
+        background: var(--ux-panel, #14212f);
+        box-shadow: var(--ux-shadow-card, none);
         transition:
             border-color 0.25s ease,
             box-shadow 0.25s ease;
@@ -688,7 +669,7 @@
         cursor: pointer;
 
         &:disabled {
-            background: #20364a;
+            background: var(--ily-inset, #20364a);
             color: var(--ily-dim);
             cursor: not-allowed;
         }
@@ -838,17 +819,19 @@
 // Left fixed at app-shell level so it stays on top of every page and tab.
 // ---------------------------------------------------------------------------
 .ilyai {
-    // Same opaque palette as the desk it scans for.
-    --ilyai-bg: #0d1a28;
-    --ilyai-card: #16283a;
-    --ilyai-border: #233a50;
-    --ilyai-text: #e9f2fa;
-    --ilyai-dim: #a8bdd4;
-    --ilyai-teal: #00d4aa;
-    --ilyai-cyan: #22d3ee;
-    --ilyai-green: #22e0a1;
-    --ilyai-amber: #fbbf24;
-    --ilyai-red: #f87171;
+    // Aliases the shared Aurora tokens so the floating scan follows the app
+    // theme (light and dark) exactly like the desk does.
+    --ilyai-bg: var(--ux-panel-solid, #0d1a28);
+    --ilyai-card: var(--ux-panel, #16283a);
+    --ilyai-border: var(--ux-border, #233a50);
+    --ilyai-inset: var(--ux-panel-inset, #0f1c2a);
+    --ilyai-text: var(--ux-text, #e9f2fa);
+    --ilyai-dim: var(--ux-text-dim, #a8bdd4);
+    --ilyai-teal: var(--ux-emerald, #00d4aa);
+    --ilyai-cyan: var(--ux-cyan, #22d3ee);
+    --ilyai-green: var(--ux-emerald, #22e0a1);
+    --ilyai-amber: var(--ux-gold, #fbbf24);
+    --ilyai-red: var(--ux-coral, #f87171);
 
     position: fixed;
     right: 20px;
@@ -863,10 +846,12 @@
         padding: 9px 14px;
         border: 1px solid var(--ilyai-border);
         border-radius: 999px;
-        background: linear-gradient(135deg, #12202e, #0d1a28);
-        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+        background: var(--ux-panel-2, linear-gradient(135deg, #12202e, #0d1a28));
+        box-shadow: var(--ux-shadow-lift, 0 8px 26px rgba(0, 0, 0, 0.45));
         color: var(--ilyai-text);
-        cursor: pointer;
+        // The pill doubles as the drag handle for the whole widget.
+        cursor: grab;
+        touch-action: none;
         transition:
             border-color 0.2s ease,
             box-shadow 0.2s ease,
@@ -945,18 +930,45 @@
         pointer-events: auto;
     }
 
+    // ---- Dragging --------------------------------------------------------
+    // Applied once the user has moved the widget: the panel anchors to the
+    // widget's own left edge, and flips below the pill when the widget sits in
+    // the top half of the screen, so it is never pushed off an edge.
+    &--dragged {
+        right: auto;
+        bottom: auto;
+
+        .ilyai__panel {
+            right: auto;
+            left: 0;
+        }
+    }
+
+    &--panel-below .ilyai__panel {
+        bottom: auto;
+        top: calc(100% + 10px);
+    }
+
+    &--dragging {
+        user-select: none;
+    }
+
     &__head {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
         gap: 10px;
         margin-bottom: 10px;
+        // The header is the second drag handle, so the panel can be moved while
+        // it is open.
+        cursor: grab;
+        touch-action: none;
 
         h4 {
             margin: 0;
             font-size: 13px;
             font-weight: 800;
-            color: #fff;
+            color: var(--ilyai-text);
         }
 
         p {
@@ -1016,7 +1028,7 @@
             padding: 5px 8px;
             border-radius: 8px;
             border: 1px solid var(--ilyai-border);
-            background: #0a1420;
+            background: var(--ilyai-inset, #0a1420);
             color: var(--ilyai-text);
             font-size: 12px;
             outline: none;
@@ -1070,7 +1082,7 @@
         strong {
             font-size: 12.5px;
             font-weight: 800;
-            color: #fff;
+            color: var(--ilyai-text);
         }
 
         > span {
@@ -1147,6 +1159,31 @@
         font-variant-numeric: tabular-nums;
         min-width: 52px;
         text-align: right;
+    }
+
+    &__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 9.5px;
+        color: var(--ilyai-dim);
+    }
+
+    &__rescan {
+        padding: 4px 10px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 999px;
+        background: var(--ux-panel-inset, transparent);
+        color: var(--ilyai-text);
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--ilyai-teal);
+        }
     }
 
     &__note {

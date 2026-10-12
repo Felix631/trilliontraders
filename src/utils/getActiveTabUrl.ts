@@ -6,7 +6,6 @@ const TAB_NAMES = [
     'bot-store',
     'analyzer',
     'scanner',
-    'analysis-2',
     'i-love-you',
     'instant_fill',
     'speed_bot',

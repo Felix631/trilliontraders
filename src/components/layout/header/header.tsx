@@ -7,6 +7,7 @@ import useActiveAccount from '@/hooks/api/account/useActiveAccount';
 import { useApiBase } from '@/hooks/useApiBase';
 import { useLogout } from '@/hooks/useLogout';
 import { useStore } from '@/hooks/useStore';
+import { rememberAuthReturn } from '@/utils/auth-utils';
 import { navigateToTransfer } from '@/utils/transfer-utils';
 import { Localize } from '@deriv-com/translations';
 import { Header, useDevice, Wrapper } from '@deriv-com/ui';
@@ -86,6 +87,9 @@ const AppHeader = observer(() => {
     const handleSignup = useCallback(async () => {
         try {
             setIsAuthorizing(true);
+            // Deriv redirects back to the bare origin, so remember the tab we
+            // are leaving from and let the callback restore it.
+            rememberAuthReturn();
             const oauthUrl = await generateOAuthURL('registration');
             if (oauthUrl) {
                 window.location.replace(oauthUrl);
@@ -103,6 +107,10 @@ const AppHeader = observer(() => {
         try {
             // Set authorizing state immediately when login is clicked
             setIsAuthorizing(true);
+
+            // Remember the current tab so the post-login landing returns to it
+            // instead of the default tab (Deriv drops the hash on redirect).
+            rememberAuthReturn();
 
             // Generate OAuth URL with CSRF token and PKCE parameters
             const oauthUrl = await generateOAuthURL();

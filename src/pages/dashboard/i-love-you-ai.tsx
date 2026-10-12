@@ -4,6 +4,7 @@ import { localize } from '@deriv-com/translations';
 import { useMarketFeed } from '@/hooks/useMarketFeed';
 import {
     ALL_MARKETS,
+    LOVE_MARKETS,
     LOVE_TICKS_DEFAULT,
     LOVE_TICKS_MAX,
     LOVE_TICKS_MIN,
@@ -16,12 +17,14 @@ import './i-love-you.scss';
 /**
  * Floating "i love you" AI desk.
  *
- * A persistent, always-on-top hover widget that scans EVERY market (regular
- * volatility, the (1s) family and the Step Indices) for the Over 2 / Under 8
- * trade types only, and surfaces the volatility best suited to that contract.
+ * A persistent, always-on-top widget that streams EVERY market (regular
+ * volatility, the (1s) family and the Step Indices) in real time for the
+ * Over 2 / Under 8 trade types only, and surfaces the single best entry point
+ * — which market, which side of the contract — as the ticks arrive.
  *
  * It is mounted at the app shell level (see `main.tsx`) rather than inside a
- * tab, so it stays visible above whatever page or tab is open.
+ * tab, so it stays visible above whatever page or tab is open, and it can be
+ * dragged anywhere on the screen (the position is remembered).
  */
 
 interface AiPick {
@@ -33,6 +36,30 @@ interface AiPick {
     under8_pct: number;
     sample: number;
 }
+
+interface WidgetPosition {
+    x: number;
+    y: number;
+}
+
+const POSITION_KEY = 'tt_ily_ai_position';
+/** Width of the expanded panel — dragging clamps against this so the panel
+ *  can never open off the side of the screen. */
+const PANEL_WIDTH = 340;
+
+const read_position = (): WidgetPosition | null => {
+    try {
+        const saved = localStorage.getItem(POSITION_KEY);
+        if (!saved) return null;
+        const parsed = JSON.parse(saved);
+        const x = Number(parsed?.x);
+        const y = Number(parsed?.y);
+        if (Number.isFinite(x) && Number.isFinite(y)) return { x, y };
+    } catch {
+        // ignore storage errors
+    }
+    return null;
+};
 
 const read_ticks = (): number => {
     try {
@@ -56,14 +83,35 @@ const clampTicks = (value: number): number => {
 const ILoveYouAI = () => {
     const [open, set_open] = React.useState(false);
     const [ticks, set_ticks] = React.useState<number>(read_ticks);
+    const [position, set_position] = React.useState<WidgetPosition | null>(read_position);
+    const [dragging, set_dragging] = React.useState(false);
+    const [last_update, set_last_update] = React.useState(0);
+    const [now, set_now] = React.useState(() => Date.now());
+
+    const root_ref = React.useRef<HTMLDivElement | null>(null);
+    const drag_ref = React.useRef<{
+        dx: number;
+        dy: number;
+        start_x: number;
+        start_y: number;
+        last: WidgetPosition | null;
+        moved: boolean;
+    } | null>(null);
+    // A drag ends with a click event; the first click after a drag must not
+    // toggle the panel closed.
+    const suppress_click_ref = React.useRef(false);
 
     // Own live feed so the widget keeps working on every tab, whether or not
-    // the "i love you" tab itself is mounted.
+    // the "i love you" tab itself is mounted. It streams every market.
     const feed = useMarketFeed(ticks, ALL_MARKETS);
 
+    // Only markets that actually offer Over 2 / Under 8 are ranked. The Step
+    // Indices are streamed too (ALL_MARKETS), but `contracts_for` reports no
+    // digit contracts for them, so ranking them would mean recommending a
+    // "best entry point" the user could never place.
     const picks = React.useMemo<AiPick[]>(
         () =>
-            ALL_MARKETS.map(market => {
+            LOVE_MARKETS.map(market => {
                 const rates = overUnderRates(feed.history[market.value] || [], ticks);
                 const use_over = rates.over2_pct >= rates.under8_pct;
                 return {
@@ -86,6 +134,22 @@ const ILoveYouAI = () => {
     // same achievable test the desk uses. No fixed 90% bar.
     const ready = !!best && best.confidence >= (best.side === 'over' ? PAR_RATE.over2 : PAR_RATE.under8);
 
+    // Real-time heartbeat: stamp the last time a tick actually moved a market,
+    // so the widget can show how fresh the scan is.
+    React.useEffect(() => {
+        if (feed.status === 'live') set_last_update(Date.now());
+    }, [feed.quotes, feed.status]);
+
+    React.useEffect(() => {
+        const id = setInterval(() => set_now(Date.now()), 1000);
+        return () => clearInterval(id);
+    }, []);
+
+    const age_seconds = last_update ? Math.max(0, Math.round((now - last_update) / 1000)) : null;
+    // Open the panel below the pill when the widget sits in the upper half of
+    // the screen, so the panel is never pushed off the top edge.
+    const panel_below = !!position && position.y < window.innerHeight / 2;
+
     const apply_ticks = (value: number) => {
         const next = clampTicks(value);
         set_ticks(next);
@@ -98,14 +162,101 @@ const ILoveYouAI = () => {
         }
     };
 
+    // ---------------------------------------------------------------- dragging
+    const start_drag = (event: React.PointerEvent<HTMLElement>) => {
+        const el = root_ref.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        drag_ref.current = {
+            dx: event.clientX - rect.left,
+            dy: event.clientY - rect.top,
+            start_x: rect.left,
+            start_y: rect.top,
+            last: null,
+            moved: false,
+        };
+        set_dragging(true);
+        try {
+            event.currentTarget.setPointerCapture?.(event.pointerId);
+        } catch {
+            // Pointer capture is best-effort; dragging still works without it.
+        }
+    };
+
+    const move_drag = (event: React.PointerEvent<HTMLElement>) => {
+        const drag = drag_ref.current;
+        const el = root_ref.current;
+        if (!drag || !el) return;
+        // Keep the widget — and its (wider) panel, which anchors to the widget's
+        // left edge once dragged — fully on screen.
+        const max_x = Math.max(0, window.innerWidth - Math.max(el.offsetWidth, PANEL_WIDTH));
+        const max_y = Math.max(0, window.innerHeight - el.offsetHeight);
+        const x = Math.min(Math.max(0, event.clientX - drag.dx), max_x);
+        const y = Math.min(Math.max(0, event.clientY - drag.dy), max_y);
+        if (Math.abs(x - drag.start_x) > 3 || Math.abs(y - drag.start_y) > 3) drag.moved = true;
+        if (!drag.moved) return;
+        drag.last = { x, y };
+        set_position({ x, y });
+    };
+
+    const end_drag = (event: React.PointerEvent<HTMLElement>) => {
+        const drag = drag_ref.current;
+        drag_ref.current = null;
+        set_dragging(false);
+        try {
+            // `pointerup` already releases capture implicitly, so this can throw
+            // InvalidPointerId — never let that break the drop.
+            event.currentTarget.releasePointerCapture?.(event.pointerId);
+        } catch {
+            // ignore
+        }
+        if (!drag) return;
+        if (!drag.moved) return; // treated as a click — let the button handle it
+        suppress_click_ref.current = true;
+        if (drag.last) {
+            try {
+                localStorage.setItem(POSITION_KEY, JSON.stringify(drag.last));
+            } catch {
+                // ignore storage errors
+            }
+        }
+    };
+
+    const handle_pill_click = () => {
+        if (suppress_click_ref.current) {
+            suppress_click_ref.current = false;
+            return;
+        }
+        set_open(current => !current);
+    };
+
     return (
         <div
-            className={classNames('ilyai', { 'ilyai--open': open })}
-            onMouseEnter={() => set_open(true)}
-            onMouseLeave={() => set_open(false)}
+            ref={root_ref}
+            className={classNames('ilyai', {
+                'ilyai--open': open,
+                'ilyai--dragged': !!position,
+                'ilyai--dragging': dragging,
+                'ilyai--panel-below': panel_below,
+            })}
+            style={position ? { left: `${position.x}px`, top: `${position.y}px` } : undefined}
+            onMouseEnter={() => !dragging && set_open(true)}
+            onMouseLeave={() => !dragging && set_open(false)}
         >
-            <button type='button' className='ilyai__pill' onClick={() => set_open(o => !o)} aria-expanded={open}>
-                <span className='ilyai__pill-icon'>🤖</span>
+            <button
+                type='button'
+                className='ilyai__pill'
+                onClick={handle_pill_click}
+                onPointerDown={start_drag}
+                onPointerMove={move_drag}
+                onPointerUp={end_drag}
+                onPointerCancel={end_drag}
+                aria-expanded={open}
+                title={localize('Drag to move · click to expand')}
+            >
+                <span className='ilyai__pill-icon' aria-hidden='true'>
+                    🤖
+                </span>
                 <span className='ilyai__pill-text'>
                     <b>{localize('AI market scan')}</b>
                     <em>
@@ -118,10 +269,20 @@ const ILoveYouAI = () => {
             </button>
 
             <section className='ilyai__panel'>
-                <header className='ilyai__head'>
+                <header
+                    className='ilyai__head'
+                    onPointerDown={start_drag}
+                    onPointerMove={move_drag}
+                    onPointerUp={end_drag}
+                    onPointerCancel={end_drag}
+                >
                     <div>
                         <h4>{localize('AI market scan')}</h4>
-                        <p>{localize('Over 2 / Under 8 · every market')}</p>
+                        <p>
+                            {localize('Over 2 / Under 8 · {{n}} tradable markets', {
+                                n: String(LOVE_MARKETS.length),
+                            })}
+                        </p>
                     </div>
                     <span className={classNames('ilyai__live', { 'ilyai__live--on': feed.status === 'live' })}>
                         <i />
@@ -153,14 +314,19 @@ const ILoveYouAI = () => {
                             {best.side === 'over' ? 'O2' : 'U8'}
                         </span>
                         <div className='ilyai__best-info'>
-                            <strong>{localize('Best for {{type}}', { type: best.entry_label })}</strong>
+                            <strong>{localize('Best entry point')}</strong>
                             <span>
-                                {best.market.short} · {best.market.code}
+                                {best.market.short} · {best.market.code} · {best.entry_label}
                             </span>
                             <span className='ilyai__best-both'>
                                 {localize('Over 2')} <b>{best.over2_pct.toFixed(1)}%</b>
                                 {'  ·  '}
                                 {localize('Under 8')} <b>{best.under8_pct.toFixed(1)}%</b>
+                            </span>
+                            <span className='ilyai__best-both'>
+                                {best.side === 'over'
+                                    ? localize('Barrier: last digit above 2')
+                                    : localize('Barrier: last digit below 8')}
                             </span>
                         </div>
                         <span className='ilyai__best-conf'>{best.confidence.toFixed(1)}%</span>
@@ -170,7 +336,7 @@ const ILoveYouAI = () => {
                 )}
 
                 <div className='ilyai__list'>
-                    {picks.slice(0, 6).map(pick => (
+                    {picks.map(pick => (
                         <div key={pick.market.value} className='ilyai__row'>
                             <span className='ilyai__row-name'>
                                 <strong>{pick.market.short}</strong>
@@ -185,9 +351,20 @@ const ILoveYouAI = () => {
                     {!picks.length && <span className='ilyai__row-empty'>{localize('Waiting for tick data…')}</span>}
                 </div>
 
+                <div className='ilyai__foot'>
+                    <span>
+                        {age_seconds === null
+                            ? localize('Connecting to the market feed…')
+                            : localize('Updated {{s}}s ago', { s: String(age_seconds) })}
+                    </span>
+                    <button type='button' className='ilyai__rescan' onClick={() => feed.rescan()}>
+                        {localize('Restart scan')}
+                    </button>
+                </div>
+
                 <p className='ilyai__note'>
                     {localize(
-                        'Ranked purely on the measured Over 2 / Under 8 win rate across the {{n}}-tick window. A market is marked ready when its rate matches or beats the par rate of that contract (Over 2 ≈ {{o}}%, Under 8 ≈ {{u}}%).',
+                        'Ranked on the measured Over 2 / Under 8 win rate across the {{n}}-tick window. A market is ready when its rate matches or beats the par rate of that contract (Over 2 ≈ {{o}}%, Under 8 ≈ {{u}}%).',
                         { n: String(ticks), o: String(PAR_RATE.over2), u: String(PAR_RATE.under8) }
                     )}
                 </p>

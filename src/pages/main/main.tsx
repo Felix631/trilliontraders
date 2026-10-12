@@ -50,7 +50,6 @@ import RunPanel from '../../components/run-panel';
 import BotStore from '../dashboard/bot-store';
 import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import DTrader from '../dashboard/dtrader';
-import DigitKiller from '../dashboard/digit-killer';
 import ILoveYou from '../dashboard/i-love-you';
 import ILoveYouAI from '../dashboard/i-love-you-ai';
 import ChartModal from '../chart/chart-modal';
@@ -106,7 +105,6 @@ const AppWrapper = observer(() => {
         'bot-store',
         'analyzer',
         'scanner',
-        'analysis-2',
         'i-love-you',
         'instant_fill',
         'speed_bot',
@@ -490,21 +488,6 @@ const AppWrapper = observer(() => {
                                 <div className='dk-theme'>
                                     <Scanner />
                                 </div>
-                            </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedSearchCaptionRegularIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='Analysis 2' />
-                                    </>
-                                }
-                                id='id-analysis-2'
-                            >
-                                <DigitKiller />
                             </div>
                             <div
                                 label={
