@@ -5,6 +5,8 @@ import { localize } from '@deriv-com/translations';
 import DigitShares from '@/components/shared_ui/digit-shares';
 import './matches-analysis.scss';
 
+// The volatility family (regular + the (1s) set, including 30 and 90) and the
+// Jump Indices, all of which are offered the digit contracts analysed here.
 const SYMBOLS = [
     { value: 'R_100', label: 'Volatility 100 Index' },
     { value: 'R_75', label: 'Volatility 75 Index' },
@@ -12,10 +14,17 @@ const SYMBOLS = [
     { value: 'R_25', label: 'Volatility 25 Index' },
     { value: 'R_10', label: 'Volatility 10 Index' },
     { value: '1HZ100V', label: 'Volatility 100 (1s) Index' },
+    { value: '1HZ90V', label: 'Volatility 90 (1s) Index' },
     { value: '1HZ75V', label: 'Volatility 75 (1s) Index' },
     { value: '1HZ50V', label: 'Volatility 50 (1s) Index' },
+    { value: '1HZ30V', label: 'Volatility 30 (1s) Index' },
     { value: '1HZ25V', label: 'Volatility 25 (1s) Index' },
     { value: '1HZ10V', label: 'Volatility 10 (1s) Index' },
+    { value: 'JD100', label: 'Jump 100 Index' },
+    { value: 'JD75', label: 'Jump 75 Index' },
+    { value: 'JD50', label: 'Jump 50 Index' },
+    { value: 'JD25', label: 'Jump 25 Index' },
+    { value: 'JD10', label: 'Jump 10 Index' },
 ];
 
 const LOOKBACKS = [50, 100, 250, 500];

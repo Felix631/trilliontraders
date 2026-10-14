@@ -5,9 +5,9 @@ import { decimalsFromPipStep, lastDigitOfQuote } from '@/utils/last-digit';
 /**
  * Multi-symbol live tick feed for the Analysis Tool (AI Scanner).
  *
- * Streams every volatility index through the app's existing Deriv WebSocket
- * (`api_base.api`) and maintains one rolling last-digit history per symbol,
- * mirroring the reference scanner's `ticks_history` + `subscribe` flow.
+ * Streams every market in the list below through the app's existing Deriv
+ * WebSocket (`api_base.api`) and maintains one rolling last-digit history per
+ * symbol, mirroring the reference scanner's `ticks_history` + `subscribe` flow.
  */
 
 export interface MarketFeedState {
@@ -21,6 +21,11 @@ export interface MarketFeedState {
     quote_history: Record<string, number[]>;
 }
 
+/**
+ * The markets the Analysis Tool scans, in list order: the volatility family
+ * (regular + the (1s) set, 15 through 100) and the Jump Indices. Every one of
+ * them is offered the digit contracts the scanner's strategies trade.
+ */
 export const MARKET_SYMBOLS: Array<{ value: string; label: string; short: string }> = [
     { value: 'R_10', label: 'Volatility 10 Index', short: 'V10' },
     { value: 'R_25', label: 'Volatility 25 Index', short: 'V25' },
@@ -29,9 +34,16 @@ export const MARKET_SYMBOLS: Array<{ value: string; label: string; short: string
     { value: 'R_100', label: 'Volatility 100 Index', short: 'V100' },
     { value: '1HZ10V', label: 'Volatility 10 (1s) Index', short: 'V10s' },
     { value: '1HZ25V', label: 'Volatility 25 (1s) Index', short: 'V25s' },
+    { value: '1HZ30V', label: 'Volatility 30 (1s) Index', short: 'V30s' },
     { value: '1HZ50V', label: 'Volatility 50 (1s) Index', short: 'V50s' },
     { value: '1HZ75V', label: 'Volatility 75 (1s) Index', short: 'V75s' },
+    { value: '1HZ90V', label: 'Volatility 90 (1s) Index', short: 'V90s' },
     { value: '1HZ100V', label: 'Volatility 100 (1s) Index', short: 'V100s' },
+    { value: 'JD10', label: 'Jump 10 Index', short: 'J10' },
+    { value: 'JD25', label: 'Jump 25 Index', short: 'J25' },
+    { value: 'JD50', label: 'Jump 50 Index', short: 'J50' },
+    { value: 'JD75', label: 'Jump 75 Index', short: 'J75' },
+    { value: 'JD100', label: 'Jump 100 Index', short: 'J100' },
 ];
 
 const EMPTY_STATE: MarketFeedState = {

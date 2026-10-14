@@ -15,6 +15,10 @@ import { localize } from '@deriv-com/translations';
  *                    moves. Step Indices are included here only.
  *   only_ups_downs — Only Ups (RUNHIGH) vs Only Downs (RUNLOW): how often a run
  *                    of `duration` consecutive ticks all moved the same way.
+ *
+ * Markets: the volatility family (regular + the complete (1s) set, 10 through
+ * 100 including 15/30/90), the Jump Indices (JD10–JD100, digits and Rise / Fall)
+ * and the Step Indices (100–500, Rise / Fall only).
  */
 
 export const LOVE_TICKS_DEFAULT = 200;
@@ -49,9 +53,13 @@ export interface LoveMarket {
     value: string;
     /** Big number shown on the card, e.g. "50" / "50 (1s)" / "Step 100". */
     short: string;
-    /** Deriv symbol code, e.g. "R_50" / "1HZ50V" / "stpRNG". */
+    /** Deriv symbol code, e.g. "R_50" / "1HZ50V" / "JD25" / "stpRNG". */
     code: string;
-    group: 'regular' | '1s' | 'step';
+    /** Full tradable name, e.g. "Jump 50 Index". Used wherever the market is
+     *  named in full (the recommendation headline) so a Jump or Step market is
+     *  never described as a volatility index. */
+    label: string;
+    group: 'regular' | '1s' | 'jump' | 'step';
 }
 
 /** Every volatility index Deriv actually offers Over 2 / Under 8 on: the 5
@@ -64,19 +72,37 @@ export interface LoveMarket {
  *  `OfferingsInvalidSymbol`, so scanning them would only ever recommend a
  *  market the user cannot trade. */
 export const LOVE_MARKETS: LoveMarket[] = [
-    { value: 'R_10', short: '10', code: 'R_10', group: 'regular' },
-    { value: 'R_25', short: '25', code: 'R_25', group: 'regular' },
-    { value: 'R_50', short: '50', code: 'R_50', group: 'regular' },
-    { value: 'R_75', short: '75', code: 'R_75', group: 'regular' },
-    { value: 'R_100', short: '100', code: 'R_100', group: 'regular' },
-    { value: '1HZ10V', short: '10 (1s)', code: '1HZ10V', group: '1s' },
-    { value: '1HZ15V', short: '15 (1s)', code: '1HZ15V', group: '1s' },
-    { value: '1HZ25V', short: '25 (1s)', code: '1HZ25V', group: '1s' },
-    { value: '1HZ30V', short: '30 (1s)', code: '1HZ30V', group: '1s' },
-    { value: '1HZ50V', short: '50 (1s)', code: '1HZ50V', group: '1s' },
-    { value: '1HZ75V', short: '75 (1s)', code: '1HZ75V', group: '1s' },
-    { value: '1HZ90V', short: '90 (1s)', code: '1HZ90V', group: '1s' },
-    { value: '1HZ100V', short: '100 (1s)', code: '1HZ100V', group: '1s' },
+    { value: 'R_10', short: '10', code: 'R_10', label: 'Volatility 10 Index', group: 'regular' },
+    { value: 'R_25', short: '25', code: 'R_25', label: 'Volatility 25 Index', group: 'regular' },
+    { value: 'R_50', short: '50', code: 'R_50', label: 'Volatility 50 Index', group: 'regular' },
+    { value: 'R_75', short: '75', code: 'R_75', label: 'Volatility 75 Index', group: 'regular' },
+    { value: 'R_100', short: '100', code: 'R_100', label: 'Volatility 100 Index', group: 'regular' },
+    { value: '1HZ10V', short: '10 (1s)', code: '1HZ10V', label: 'Volatility 10 (1s) Index', group: '1s' },
+    { value: '1HZ15V', short: '15 (1s)', code: '1HZ15V', label: 'Volatility 15 (1s) Index', group: '1s' },
+    { value: '1HZ25V', short: '25 (1s)', code: '1HZ25V', label: 'Volatility 25 (1s) Index', group: '1s' },
+    { value: '1HZ30V', short: '30 (1s)', code: '1HZ30V', label: 'Volatility 30 (1s) Index', group: '1s' },
+    { value: '1HZ50V', short: '50 (1s)', code: '1HZ50V', label: 'Volatility 50 (1s) Index', group: '1s' },
+    { value: '1HZ75V', short: '75 (1s)', code: '1HZ75V', label: 'Volatility 75 (1s) Index', group: '1s' },
+    { value: '1HZ90V', short: '90 (1s)', code: '1HZ90V', label: 'Volatility 90 (1s) Index', group: '1s' },
+    { value: '1HZ100V', short: '100 (1s)', code: '1HZ100V', label: 'Volatility 100 (1s) Index', group: '1s' },
+];
+
+/** Jump Indices — the same digit contracts as the volatility family (Over 2 /
+ *  Under 8, Even / Odd, Matches / Differs) and Rise / Fall on top of them.
+ *
+ *  Contract coverage is taken from the bot XMLs this app ships rather than from
+ *  memory: JD10 with `callput` (Rise / Fall) and JD100 / JD25 / JD10 with
+ *  digits (`overunder`, `matchesdiffers`, `evenodd`).
+ *
+ *  They are ranked under the digit modes and Rise / Fall. They are deliberately
+ *  NOT ranked under Only Ups / Only Downs, which asks for the `runs` contract
+ *  these symbol families are not offered on. */
+export const JUMP_MARKETS: LoveMarket[] = [
+    { value: 'JD10', short: 'Jump 10', code: 'JD10', label: 'Jump 10 Index', group: 'jump' },
+    { value: 'JD25', short: 'Jump 25', code: 'JD25', label: 'Jump 25 Index', group: 'jump' },
+    { value: 'JD50', short: 'Jump 50', code: 'JD50', label: 'Jump 50 Index', group: 'jump' },
+    { value: 'JD75', short: 'Jump 75', code: 'JD75', label: 'Jump 75 Index', group: 'jump' },
+    { value: 'JD100', short: 'Jump 100', code: 'JD100', label: 'Jump 100 Index', group: 'jump' },
 ];
 
 /** Step Indices — surfaced under the Rise / Fall and Only Ups / Only Downs
@@ -87,21 +113,34 @@ export const LOVE_MARKETS: LoveMarket[] = [
  *  `OfferingsInvalidSymbol` — so the uppercase symbols streamed fine yet could
  *  never actually be traded from this desk. */
 export const STEP_MARKETS: LoveMarket[] = [
-    { value: 'stpRNG', short: 'Step 100', code: 'stpRNG', group: 'step' },
-    { value: 'stpRNG2', short: 'Step 200', code: 'stpRNG2', group: 'step' },
-    { value: 'stpRNG3', short: 'Step 300', code: 'stpRNG3', group: 'step' },
-    { value: 'stpRNG4', short: 'Step 400', code: 'stpRNG4', group: 'step' },
-    { value: 'stpRNG5', short: 'Step 500', code: 'stpRNG5', group: 'step' },
+    { value: 'stpRNG', short: 'Step 100', code: 'stpRNG', label: 'Step Index 100', group: 'step' },
+    { value: 'stpRNG2', short: 'Step 200', code: 'stpRNG2', label: 'Step Index 200', group: 'step' },
+    { value: 'stpRNG3', short: 'Step 300', code: 'stpRNG3', label: 'Step Index 300', group: 'step' },
+    { value: 'stpRNG4', short: 'Step 400', code: 'stpRNG4', label: 'Step Index 400', group: 'step' },
+    { value: 'stpRNG5', short: 'Step 500', code: 'stpRNG5', label: 'Step Index 500', group: 'step' },
 ];
 
-/** Every market the live feed subscribes to (steps included so switching to
- *  Rise / Fall needs no re-subscription). */
-export const ALL_MARKETS: LoveMarket[] = [...LOVE_MARKETS, ...STEP_MARKETS];
+/** Everything that trades the digit contracts (Over 2 / Under 8 and Even /
+ *  Odd): the volatility family and the Jump Indices. */
+export const DIGIT_MARKETS: LoveMarket[] = [...LOVE_MARKETS, ...JUMP_MARKETS];
 
-/** The markets actually ranked for a given mode. Step Indices only appear
- *  under the rise/fall and only-ups/downs (contract-direction) modes. */
-export const marketsForMode = (mode: LoveMode): LoveMarket[] =>
-    mode === 'rise_fall' || mode === 'only_ups_downs' ? ALL_MARKETS : LOVE_MARKETS;
+/** Every market the live feed subscribes to (steps and jumps included so
+ *  switching mode needs no re-subscription). */
+export const ALL_MARKETS: LoveMarket[] = [...DIGIT_MARKETS, ...STEP_MARKETS];
+
+/** The markets actually ranked for a given mode.
+ *
+ *  - digit modes (Over / Under, Even / Odd): the volatility family and the
+ *    Jump Indices, both of which are offered those digit contracts.
+ *  - rise / fall: those plus the Step Indices, which trade Rise / Fall and
+ *    nothing else.
+ *  - only ups / only downs: the volatility family only — the `runs` contract
+ *    behind Only Ups / Only Downs is not offered on the Step or Jump Indices. */
+export const marketsForMode = (mode: LoveMode): LoveMarket[] => {
+    if (mode === 'rise_fall') return ALL_MARKETS;
+    if (mode === 'only_ups_downs') return LOVE_MARKETS;
+    return DIGIT_MARKETS;
+};
 
 export type LoveAccent = 'over' | 'under' | 'even' | 'odd' | 'up' | 'down';
 
@@ -410,7 +449,7 @@ export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blur
         label: localize('Rise / Fall'),
         icon: '📈',
         blurb: localize(
-            'Tick-to-tick quote direction over the window — how often the price rose versus fell. Step Indices (100–500) are included in this mode.'
+            'Tick-to-tick quote direction over the window — how often the price rose versus fell. Step Indices (100–500) and the Jump Indices are included in this mode.'
         ),
     },
     {
@@ -418,7 +457,7 @@ export const LOVE_MODES: Array<{ id: LoveMode; label: string; icon: string; blur
         label: localize('Only Ups / Only Downs'),
         icon: '🚀',
         blurb: localize(
-            'Only Ups (RUNHIGH) versus Only Downs (RUNLOW): how often a run of consecutive ticks all moved the same direction. Step Indices (100–500) are included.'
+            'Only Ups (RUNHIGH) versus Only Downs (RUNLOW): how often a run of consecutive ticks all moved the same direction, measured on the volatility family.'
         ),
     },
 ];

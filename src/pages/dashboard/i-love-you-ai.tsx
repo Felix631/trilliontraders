@@ -4,7 +4,7 @@ import { localize } from '@deriv-com/translations';
 import { useMarketFeed } from '@/hooks/useMarketFeed';
 import {
     ALL_MARKETS,
-    LOVE_MARKETS,
+    DIGIT_MARKETS,
     LOVE_TICKS_DEFAULT,
     LOVE_TICKS_MAX,
     LOVE_TICKS_MIN,
@@ -18,8 +18,8 @@ import './i-love-you.scss';
  * Floating "i love you" AI desk.
  *
  * A persistent, always-on-top widget that streams EVERY market (regular
- * volatility, the (1s) family and the Step Indices) in real time for the
- * Over 2 / Under 8 trade types only, and surfaces the single best entry point
+ * volatility, the (1s) family, the Jump Indices and the Step Indices) in real
+ * time for the Over 2 / Under 8 trade types only, and surfaces the best entry
  * — which market, which side of the contract — as the ticks arrive.
  *
  * It is mounted at the app shell level (see `main.tsx`) rather than inside a
@@ -105,13 +105,13 @@ const ILoveYouAI = () => {
     // the "i love you" tab itself is mounted. It streams every market.
     const feed = useMarketFeed(ticks, ALL_MARKETS);
 
-    // Only markets that actually offer Over 2 / Under 8 are ranked. The Step
-    // Indices are streamed too (ALL_MARKETS), but `contracts_for` reports no
-    // digit contracts for them, so ranking them would mean recommending a
-    // "best entry point" the user could never place.
+    // Only markets that actually offer Over 2 / Under 8 are ranked — that is
+    // the volatility family and the Jump Indices. The Step Indices are streamed
+    // too (ALL_MARKETS), but they trade Rise / Fall only, so ranking them here
+    // would mean recommending a "best entry point" the user could never place.
     const picks = React.useMemo<AiPick[]>(
         () =>
-            LOVE_MARKETS.map(market => {
+            DIGIT_MARKETS.map(market => {
                 const rates = overUnderRates(feed.history[market.value] || [], ticks);
                 const use_over = rates.over2_pct >= rates.under8_pct;
                 return {
@@ -280,7 +280,7 @@ const ILoveYouAI = () => {
                         <h4>{localize('AI market scan')}</h4>
                         <p>
                             {localize('Over 2 / Under 8 · {{n}} tradable markets', {
-                                n: String(LOVE_MARKETS.length),
+                                n: String(DIGIT_MARKETS.length),
                             })}
                         </p>
                     </div>

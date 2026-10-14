@@ -54,6 +54,7 @@ const IDLE_TRADE: TradeState = { busy: false, message: null, is_win: null };
 const ASSET_LOGO: Record<string, string> = {
     regular: '📈',
     '1s': '⚡',
+    jump: '🌀',
     step: '🪜',
 };
 
@@ -109,14 +110,13 @@ const ILoveYou = observer(() => {
 
     const active_mode = LOVE_MODES.find(item => item.id === mode) || LOVE_MODES[0];
 
-    // Step Indices are only ranked under the direction modes, and only once
-    // they actually stream data — the account/region may not offer them.
+    // Step Indices are ranked under Rise / Fall. They are listed as soon as the
+    // feed is up so they are visibly part of the desk (their card shows the
+    // collecting state until their own ticks arrive) rather than silently
+    // dropped whenever their history is still empty.
     const markets = React.useMemo<LoveMarket[]>(
-        () =>
-            marketsForMode(mode).filter(
-                market => market.group !== 'step' || (feed.history[market.value] || []).length > 0
-            ),
-        [mode, feed.history]
+        () => marketsForMode(mode).filter(market => market.group !== 'step' || feed.status === 'live'),
+        [mode, feed.status]
     );
 
     const entries = React.useMemo<LoveEntry[]>(
@@ -315,8 +315,7 @@ const ILoveYou = observer(() => {
                             </span>
                             <div className='ily__reco-info'>
                                 <strong>
-                                    {localize('Volatility {{s}}', { s: recommendation.market.short })} ·{' '}
-                                    {recommendation.entry_label}
+                                    {recommendation.market.label} · {recommendation.entry_label}
                                 </strong>
                                 <span>
                                     {recommendation.market.code} · {recommendation.detail}
