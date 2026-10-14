@@ -58,7 +58,6 @@ import Dashboard from '../dashboard';
 import InstantFill from '../dashboard/trade-tools/instant-fill';
 import MatchesAnalysis from '../dashboard/matches-analysis';
 import RiskCalculator from '../dashboard/trade-tools/risk-calculator';
-import RunStrategy from '../dashboard/run-strategy';
 import Scanner from '../dashboard/scanner';
 import SpeedBot from '../dashboard/trade-tools/speed-bot';
 import './main.scss';
@@ -631,8 +630,11 @@ const AppWrapper = observer(() => {
                 the tab tree so it stays on top on every page and tab. */}
             <ILoveYouAI />
             <DesktopWrapper>
+                {/* The run panel's rail — the panel docks into this column and
+                    everything else lays out beside it. The Run/Stop control lives
+                    inside the panel itself (its footer), so it can never end up
+                    underneath the tab list or off the bottom of the screen. */}
                 <div className='main__run-strategy-wrapper'>
-                    <RunStrategy />
                     <RunPanel />
                 </div>
                 <ChartModal />

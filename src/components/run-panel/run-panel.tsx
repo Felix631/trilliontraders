@@ -15,9 +15,22 @@ import Transactions from '@/components/transactions';
 import { DBOT_TABS } from '@/constants/bot-contents';
 import { popover_zindex } from '@/constants/z-indexes';
 import { useStore } from '@/hooks/useStore';
+import { LabelPairedChevronsRightCaptionRegularIcon } from '@deriv/quill-icons';
 import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
 import ThemedScrollbars from '../shared_ui/themed-scrollbars';
+
+// Desktop rail geometry. The panel is a docked column, so its width is published
+// as `--run-panel-width` (how wide the panel is) and `--run-panel-rail` (how much
+// horizontal room it reserves — the same width when open, just the drag strip
+// when collapsed). The page, the tab list and the Blockly canvas all shrink by
+// `--run-panel-rail`, which is what keeps the panel from covering anything.
+const RUN_PANEL_DEFAULT_WIDTH = 366;
+const RUN_PANEL_MIN_WIDTH = 320;
+const RUN_PANEL_MAX_WIDTH = 620;
+// Matches the desktop grip width (`.dc-drawer__toggle` — 2.4rem) so a collapsed
+// panel shows exactly its grip and nothing else.
+const RUN_PANEL_COLLAPSED_RAIL = 24;
 
 type TStatisticsTile = {
     content: React.ElementType | string;
@@ -38,9 +51,10 @@ type TStatisticsSummary = {
 };
 type TDrawerHeader = {
     is_clear_stat_disabled: boolean;
-    is_mobile: boolean;
+    is_desktop: boolean;
     is_drawer_open: boolean;
     onClearStatClick: () => void;
+    onToggleDrawer: (is_open: boolean) => void;
 };
 
 type TDrawerContent = {
@@ -52,6 +66,7 @@ type TDrawerContent = {
 
 type TDrawerFooter = {
     is_clear_stat_disabled: boolean;
+    is_desktop: boolean;
     onClearStatClick: () => void;
 };
 
@@ -116,18 +131,47 @@ export const StatisticsSummary = ({
     </div>
 );
 
-const DrawerHeader = ({ is_clear_stat_disabled, is_mobile, is_drawer_open, onClearStatClick }: TDrawerHeader) =>
-    is_mobile &&
-    is_drawer_open && (
-        <Button
-            id='db-run-panel__clear-button'
-            className='run-panel__clear-button'
-            disabled={is_clear_stat_disabled}
-            text={localize('Reset')}
-            onClick={onClearStatClick}
-            secondary
-        />
+const DrawerHeader = ({
+    is_clear_stat_disabled,
+    is_desktop,
+    is_drawer_open,
+    onClearStatClick,
+    onToggleDrawer,
+}: TDrawerHeader) => {
+    // The header only exists while the panel is open; the drawer's own strip is
+    // what re-opens it. On desktop it names the panel and carries an explicit
+    // collapse control, so the panel is never a mystery strip you have to guess at.
+    if (!is_drawer_open) return null;
+
+    return (
+        <div className='run-panel__header'>
+            {is_desktop && (
+                <div className='run-panel__header-title'>
+                    <Localize i18n_default_text='Run bot' />
+                </div>
+            )}
+            {!is_desktop && (
+                <Button
+                    id='db-run-panel__clear-button'
+                    className='run-panel__clear-button'
+                    disabled={is_clear_stat_disabled}
+                    text={localize('Reset')}
+                    onClick={onClearStatClick}
+                    secondary
+                />
+            )}
+            <button
+                type='button'
+                className='run-panel__collapse-btn'
+                onClick={() => onToggleDrawer(false)}
+                aria-label={localize('Collapse the run panel')}
+                title={localize('Collapse the run panel')}
+            >
+                <LabelPairedChevronsRightCaptionRegularIcon className='run-panel__collapse-icon' />
+            </button>
+        </div>
     );
+};
 
 const DrawerContent = ({ active_index, is_drawer_open, active_tour, setActiveTabIndex, ...props }: TDrawerContent) => {
     const { isDesktop } = useDevice();
@@ -163,8 +207,18 @@ const DrawerContent = ({ active_index, is_drawer_open, active_tour, setActiveTab
     );
 };
 
-const DrawerFooter = ({ is_clear_stat_disabled, onClearStatClick }: TDrawerFooter) => (
+// The panel's own footer: the Run/Stop control belongs INSIDE the panel on
+// desktop. It used to float over the page as a separate tool bar, which put it
+// behind the tab list (and off the bottom of the viewport on short screens), so
+// there was no visible Run button on desktop at all. Living in the footer it is
+// always in view, always inside the panel, and can never overlap another layer.
+const DrawerFooter = ({ is_clear_stat_disabled, is_desktop, onClearStatClick }: TDrawerFooter) => (
     <div className='run-panel__footer'>
+        {is_desktop && (
+            <div className='run-panel__footer-controls'>
+                <TradeAnimation className='run-panel__footer-animation' />
+            </div>
+        )}
         <Button
             id='db-run-panel__clear-button'
             className='run-panel__footer-button'
@@ -270,6 +324,12 @@ const RunPanel = observer(() => {
     const { total_payout, total_profit, total_stake, won_contracts, lost_contracts, number_of_runs } = statistics;
     const { BOT_BUILDER, CHART } = DBOT_TABS;
 
+    // The panel only exists on the tabs whose bots can run (and outside the
+    // bot-builder tour). Its rail has to be reserved under exactly the same
+    // condition — otherwise an unrendered panel would still push the page aside.
+    const show_run_panel = [BOT_BUILDER, CHART].includes(active_tab) || active_tour;
+    const is_panel_docked = Boolean(isDesktop && show_run_panel && active_tour !== 'bot_builder');
+
     React.useEffect(() => {
         onMount();
         return () => onUnmount();
@@ -280,6 +340,56 @@ const RunPanel = observer(() => {
             toggleDrawer(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const [panel_width, setPanelWidth] = React.useState(RUN_PANEL_DEFAULT_WIDTH);
+    const [is_resizing, setIsResizing] = React.useState(false);
+    const resize_origin = React.useRef<{ client_x: number; width: number } | null>(null);
+
+    // Publish the rail geometry (see the constants above): the page, tab list and
+    // Blockly canvas read these to move themselves out of the panel's way.
+    React.useEffect(() => {
+        if (!is_panel_docked) return undefined;
+
+        const { style } = document.body;
+        style.setProperty('--run-panel-width', `${panel_width}px`);
+        style.setProperty('--run-panel-rail', `${is_drawer_open ? panel_width : RUN_PANEL_COLLAPSED_RAIL}px`);
+
+        return () => {
+            style.removeProperty('--run-panel-width');
+            style.removeProperty('--run-panel-rail');
+        };
+    }, [is_panel_docked, is_drawer_open, panel_width]);
+
+    // Blockly measures its canvas on a window resize, so nudge it whenever the
+    // rail (and with it the workspace) changed width.
+    React.useEffect(() => {
+        if (!is_panel_docked) return undefined;
+
+        const frame = window.requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+        return () => window.cancelAnimationFrame(frame);
+    }, [is_panel_docked, is_drawer_open, panel_width]);
+
+    // Drag the panel's edge to resize it. The panel is anchored to the right, so
+    // moving the pointer left has to widen it.
+    const handleResizeStart = React.useCallback(
+        (event: React.PointerEvent<HTMLDivElement>) => {
+            resize_origin.current = { client_x: event.clientX, width: panel_width };
+            setIsResizing(true);
+        },
+        [panel_width]
+    );
+
+    const handleResizeMove = React.useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+        const origin = resize_origin.current;
+        if (!origin) return;
+        const next_width = origin.width + (origin.client_x - event.clientX);
+        setPanelWidth(Math.min(RUN_PANEL_MAX_WIDTH, Math.max(RUN_PANEL_MIN_WIDTH, Math.round(next_width))));
+    }, []);
+
+    const handleResizeEnd = React.useCallback(() => {
+        resize_origin.current = null;
+        setIsResizing(false);
     }, []);
 
     const content = (
@@ -300,18 +410,24 @@ const RunPanel = observer(() => {
         />
     );
 
-    const footer = <DrawerFooter is_clear_stat_disabled={is_clear_stat_disabled} onClearStatClick={onClearStatClick} />;
-
-    const header = (
-        <DrawerHeader
+    const footer = (
+        <DrawerFooter
             is_clear_stat_disabled={is_clear_stat_disabled}
-            is_mobile={!isDesktop}
-            is_drawer_open={is_drawer_open}
+            is_desktop={isDesktop}
             onClearStatClick={onClearStatClick}
         />
     );
 
-    const show_run_panel = [BOT_BUILDER, CHART].includes(active_tab) || active_tour;
+    const header = (
+        <DrawerHeader
+            is_clear_stat_disabled={is_clear_stat_disabled}
+            is_desktop={isDesktop}
+            is_drawer_open={is_drawer_open}
+            onClearStatClick={onClearStatClick}
+            onToggleDrawer={toggleDrawer}
+        />
+    );
+
     if ((!show_run_panel && isDesktop) || active_tour === 'bot_builder') return null;
 
     return (
@@ -328,8 +444,15 @@ const RunPanel = observer(() => {
                     footer={isDesktop && footer}
                     is_open={is_drawer_open}
                     toggleDrawer={toggleDrawer}
-                    width={366}
+                    width={panel_width}
                     zIndex={popover_zindex.RUN_PANEL}
+                    /* Only an OPEN panel resizes: while it is collapsed the grip is
+                       a plain expand button, so a stray drag can never leave the
+                       user with a panel width they never asked for. */
+                    onResizeStart={isDesktop && is_drawer_open ? handleResizeStart : undefined}
+                    onResizeMove={isDesktop && is_drawer_open ? handleResizeMove : undefined}
+                    onResizeEnd={isDesktop && is_drawer_open ? handleResizeEnd : undefined}
+                    is_resizing={is_resizing}
                 >
                     {content}
                 </Drawer>

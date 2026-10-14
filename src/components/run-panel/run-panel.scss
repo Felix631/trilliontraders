@@ -17,7 +17,16 @@
             top: 0;
             left: 0;
             width: 100vw;
-            z-index: var(--zindex-drawer);
+            /* The run panel's own stacking layer, matching the desktop rail.
+               The sheet's top strip is the collapse grip, and the panel header
+               (with its collapse button) sits directly under it — both reach up
+               into the page's tab row, which is its own positioned layer at
+               z-index 20 (pages/main/tabs-chrome.scss). At the old
+               `--zindex-drawer` (5) the tab row painted over them, which is
+               what put the collapse control *under the tabs* and left it
+               untappable on mobile and tablet widths. 30 clears the tab row and
+               stays below the tour overlay (100) and every modal. */
+            z-index: 30;
             height: calc(100% - env(safe-area-inset-bottom, 0));
             padding-bottom: env(safe-area-inset-bottom, 0);
 
@@ -133,6 +142,8 @@
         justify-content: space-between;
         flex-direction: column;
         overflow: hidden !important;
+        flex: 1 1 auto;
+        min-height: 0;
 
         .dc-tabs {
             &__item {
@@ -140,6 +151,58 @@
                 text-overflow: ellipsis;
                 padding: 0 0.8rem;
             }
+        }
+    }
+
+    &__header {
+        /* Positioned so the collapse control keeps its own layer inside the
+           panel: everything in the tab body below it is positioned too
+           (`.dc-tabs__list`, `.dc-tabs__content`), and without this the header
+           is the only in-flow block left to be painted under them. */
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 0.8rem 0.8rem 0.8rem 1.6rem;
+        line-height: normal;
+
+        &-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-prominent);
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+    }
+
+    &__collapse-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: 3.2rem;
+        height: 3.2rem;
+        padding: 0;
+        border: 0;
+        border-radius: var(--ux-r-sm, 0.8rem);
+        background: transparent;
+        cursor: pointer;
+        transition: background var(--ux-t-fast, 0.16s) var(--ux-ease, ease);
+
+        svg,
+        svg path {
+            fill: var(--text-general);
+        }
+
+        &:hover {
+            background: var(--general-section-2);
+        }
+
+        &:focus-visible {
+            outline: 0.2rem solid var(--ux-blue-bright, #4f8cff);
+            outline-offset: 0.2rem;
         }
     }
 
@@ -153,6 +216,8 @@
 
     &-tab {
         &__content {
+            /* Filled in by the desktop rail below, which knows the real height of
+               the panel. The viewport-based value stays as the fallback. */
             height: calc(100vh - 42rem);
             overflow: hidden;
 
@@ -428,6 +493,213 @@
 
         &-scrollbar {
             padding-right: 1.2rem;
+        }
+    }
+}
+
+/* --------------------------------------------------------------------------- *
+ * Desktop rail — the run panel as a real right-hand column
+ *
+ * The panel used to be an overlay that slid in from the right while the page kept
+ * its full width, sized with `100vh` math. Three problems followed from that:
+ *
+ *   1. the Run/Stop tool bar floated over the page, behind the tab list, so there
+ *      was no usable Run button on desktop at all (it now lives in the panel's
+ *      own footer — see `DrawerFooter` in run-panel.tsx);
+ *   2. the tab list painted *over* the panel's top (the tab list is z-index 20,
+ *      the panel was 6);
+ *   3. the panel ran past the footer, so its bottom controls were cut off.
+ *
+ * Now the panel owns `--run-panel-rail` px on the right and the page shrinks by
+ * the same amount, so the tab list, the page content and the Blockly canvas are
+ * all laid out *beside* the panel instead of underneath it — no overlay, no
+ * underlay, nothing to scale around. Collapsing shrinks the rail to the width of
+ * the grip, which slides the rest of the panel out past the viewport edge, so all
+ * that is left visible is the handle that brings it back.
+ * --------------------------------------------------------------------------- */
+@include desktop-screen {
+    .bot-dashboard {
+        .main__run-strategy-wrapper {
+            position: absolute;
+            inset-block: 0;
+            inset-inline-end: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            /* The rail is only as wide as the panel when it is open and as the
+               grip when it is closed; either way it is the page's neighbour, not
+               a layer on top of it. */
+            width: var(--run-panel-rail, 0rem);
+            /* 4.8rem at the bottom lifts the panel clear of the app footer, which
+               overlaps the last ~4.6rem of `.bot-dashboard` (bot-dashboard is
+               sized `100vh - 4.4rem`, i.e. for a header but no footer). */
+            padding-block: 1.2rem 4.8rem;
+            z-index: 30;
+        }
+
+        /* The page — tab list included — stops where the panel starts.
+           Deliberately not transitioned: the same variable is dragged during a
+           resize, and animating it would both lag the pointer and make Blockly
+           measure a half-finished width when the nudge below fires. */
+        .main {
+            width: calc(100% - var(--run-panel-rail, 0rem));
+        }
+
+        /* Blockly measures itself against the viewport, so it has to shrink too.
+           Deliberately NOT animated: Blockly only re-measures on a resize event,
+           so it has to see the final width right away rather than easing into it. */
+        #scratch_div {
+            width: calc(100vw - var(--run-panel-rail, 0rem) - 3.2rem);
+        }
+
+        /* The div the panel tree itself renders into the rail. */
+        .main__run-strategy-wrapper > .run-panel {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            min-height: 0;
+            width: 100%;
+            height: auto;
+        }
+
+        /* The panel fills the rail top to bottom — no viewport guessing, and its
+           header, tabs and footer are all inside the box. */
+        .main__run-strategy-wrapper .dc-drawer.run-panel__container {
+            /* Values are forced because the vendored drawer positions itself
+               against the viewport (`.dc-drawer--right { left: calc(100vw - 16px) }`).
+               With every inset back to `auto` — and the rail's own transform
+               cancelled — the panel is a plain in-flow column of the rail. */
+            position: relative;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            /* Flex, not `height: 100%`: the rail has a definite height, so the
+               panel and everything inside it resolve to the real panel height
+               instead of a chain of percentages. */
+            flex: 1 1 auto;
+            min-height: 0;
+            height: auto !important;
+            width: var(--run-panel-width, 36.6rem) !important;
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid var(--general-section-1);
+            border-radius: var(--ux-r-md, 1.4rem);
+            background: var(--general-main-1);
+            box-shadow: var(--ux-shadow-card);
+        }
+
+        /* Collapsed: the panel overflows the narrow rail and is clipped away by
+           `.bot-dashboard`, which leaves exactly its grip in view. The vendored
+           styles translated the whole panel off-screen, which would hide the
+           grip too, so the transform is cancelled in both states. */
+        .main__run-strategy-wrapper .dc-drawer.run-panel__container:not(.dc-drawer--open),
+        .main__run-strategy-wrapper .dc-drawer.run-panel__container.dc-drawer--open {
+            transform: translateX(0) !important;
+        }
+
+        /* The panel's inner column: header, tab body and footer stacked, filling
+           the panel so each of them knows the height it has to work with. */
+        .main__run-strategy-wrapper .dc-drawer__container {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        /* Header, tabs, stats and footer share the panel height: the tab body gets
+           whatever is left instead of a hard-coded height that overflowed. */
+        .run-panel__content {
+            flex: 1 1 auto;
+            min-height: 0;
+
+            .dc-tabs {
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+
+            .dc-tabs__content {
+                position: relative;
+                min-height: 0;
+                overflow: hidden;
+            }
+        }
+
+        /* Absolute so the tab body has a *definite* height: the data lists and
+           scrollbars inside resolve `height: 100%` / `calc(100% - …)` against it
+           (a percentage chain off a flex item is not reliable). */
+        .dc-tabs__content > .run-panel-tab__content,
+        .dc-tabs__content > .run-panel-tab__content--no-stat {
+            position: absolute;
+            inset: 0;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .dc-drawer__header {
+            line-height: normal;
+        }
+
+        /* The toggle strip IS the handle on desktop: it expands a collapsed panel
+           and resizes an open one. Wider than the vendored 1.6rem so it is a real
+           target, and it keeps the panel's own surface so it reads as part of the
+           panel rather than as a stray line. */
+        .main__run-strategy-wrapper .dc-drawer__toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.4rem;
+            border-radius: var(--ux-r-md, 1.4rem) 0 0 var(--ux-r-md, 1.4rem);
+
+            &:hover {
+                background: var(--general-section-2);
+            }
+        }
+
+        .main__run-strategy-wrapper .dc-drawer__container--right {
+            padding-inline-start: 2.4rem;
+        }
+
+        /* Dragging the handle resizes the panel (pointer events only — the grip is
+           useless as a drag target if the browser also pans the page). */
+        .main__run-strategy-wrapper .dc-drawer__toggle--resizable {
+            cursor: col-resize;
+            touch-action: none;
+        }
+
+        .main__run-strategy-wrapper .dc-drawer__toggle--resizing {
+            background: var(--ux-blue-bright, #4f8cff);
+        }
+
+        /* The stats grid spans the panel whatever width the user drags it to. */
+        .main__run-strategy-wrapper .run-panel__stat {
+            width: 100%;
+        }
+
+        /* Panel footer: the Run/Stop control sits above the Reset button, both
+           inside the panel's frame. */
+        .main__run-strategy-wrapper .run-panel__footer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            padding: 0.8rem 1.6rem 1.2rem;
+            border-top: 1px solid var(--general-section-1);
+            background: var(--general-main-1);
+        }
+
+        .main__run-strategy-wrapper .run-panel__footer-controls {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main__run-strategy-wrapper .run-panel__footer-animation {
+            width: 100%;
+        }
+
+        /* `.run-panel__footer-button` was 318px + 24px margins inside a 350px
+           column — 16px wider than the panel. Let it fill the column instead. */
+        .main__run-strategy-wrapper .run-panel__footer-button {
+            align-self: stretch;
+            width: auto;
+            margin: 0;
         }
     }
 }
