@@ -19,6 +19,7 @@ const SYMBOLS = [
     { value: '1HZ50V', label: 'Volatility 50 (1s) Index' },
     { value: '1HZ30V', label: 'Volatility 30 (1s) Index' },
     { value: '1HZ25V', label: 'Volatility 25 (1s) Index' },
+    { value: '1HZ15V', label: 'Volatility 15 (1s) Index' },
     { value: '1HZ10V', label: 'Volatility 10 (1s) Index' },
     { value: 'JD100', label: 'Jump 100 Index' },
     { value: 'JD75', label: 'Jump 75 Index' },

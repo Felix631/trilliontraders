@@ -1,9 +1,31 @@
 // @ts-nocheck — vendored bot code with known upstream type gaps; see AGENTS.md
 import { action, makeObservable, reaction } from 'mobx';
 import { api_base, ApiHelpers, DBot, runIrreversibleEvents } from '@/external/bot-skeleton';
-import { setCurrency } from '@/external/bot-skeleton/scratch/utils';
+import { loadWorkspace, setCurrency } from '@/external/bot-skeleton/scratch/utils';
 import { TApiHelpersStore } from '@/types/stores.types';
 import RootStore from './root-store';
+
+/**
+ * The Bot Builder's own canvas, held for the lifetime of a remount.
+ *
+ * Mounting the builder builds a fresh Blockly workspace from the most recently
+ * *saved* strategy (`DBot.initWorkspace`), so leaving the builder and coming
+ * back used to silently discard every trade setting the user had changed since
+ * the last save — and a running bot or a fresh import had nowhere to live.
+ * Unmounting therefore stashes the canvas here and the next mount puts it back,
+ * which is what makes the builder keep what the user had.
+ *
+ * Deliberately in memory only: nothing is written to local storage, so the
+ * stashed strategy cannot be recovered off the device.
+ */
+type TWorkspaceSnapshot = {
+    xml: string;
+    strategy_id?: string;
+    strategy_to_load?: string;
+    file_name?: string;
+};
+
+let pending_workspace_snapshot: TWorkspaceSnapshot | null = null;
 
 export default class AppStore {
     root_store: RootStore;
@@ -21,6 +43,8 @@ export default class AppStore {
         makeObservable(this, {
             onMount: action,
             onUnmount: action,
+            captureWorkspaceSnapshot: action,
+            restoreWorkspaceSnapshot: action,
             registerCurrencyReaction: action,
             registerOnAccountSwitch: action,
 
@@ -62,6 +86,9 @@ export default class AppStore {
         blockly_store.setContainerSize();
         blockly_store.setLoading(false);
 
+        // Put back whatever the canvas held before this mount re-created it.
+        await this.restoreWorkspaceSnapshot();
+
         this.registerCurrencyReaction.call(this);
         this.registerOnAccountSwitch.call(this);
 
@@ -75,6 +102,9 @@ export default class AppStore {
     onUnmount = () => {
         DBot.terminateBot();
         DBot.terminateConnection();
+        // Stash the canvas first: `dispose` below destroys it, and the next mount
+        // would otherwise rebuild the builder from the last *saved* strategy.
+        this.captureWorkspaceSnapshot();
         if (window.Blockly?.derivWorkspace) {
             clearInterval(window.Blockly?.derivWorkspace.save_workspace_interval);
             window.Blockly.derivWorkspace?.dispose();
@@ -104,6 +134,66 @@ export default class AppStore {
 
         if (this.timer) clearInterval(this.timer);
         performance.clearMeasures();
+    };
+
+    /**
+     * Remembers the current canvas (blocks, their field values, the strategy
+     * identity and the bot name) so the next mount can restore it verbatim.
+     */
+    captureWorkspaceSnapshot = () => {
+        const workspace = window.Blockly?.derivWorkspace;
+        if (!workspace || workspace.disposed) return;
+        try {
+            // An empty canvas has nothing worth keeping — let the next mount draw
+            // the default strategy exactly as it always did.
+            if (!workspace.getTopBlocks(false)?.length) {
+                pending_workspace_snapshot = null;
+                return;
+            }
+            pending_workspace_snapshot = {
+                xml: window.Blockly.Xml.domToText(window.Blockly.Xml.workspaceToDom(workspace)),
+                strategy_id: workspace.current_strategy_id,
+                strategy_to_load: workspace.strategy_to_load,
+                file_name: this.root_store?.save_modal?.bot_name,
+            };
+        } catch (error) {
+            pending_workspace_snapshot = null;
+            console.warn('Could not snapshot the workspace before unmounting:', error); // eslint-disable-line
+        }
+    };
+
+    /**
+     * Re-draws the stashed canvas over the freshly initialised one. The snapshot
+     * is consumed either way — it belongs to exactly one remount.
+     */
+    restoreWorkspaceSnapshot = async () => {
+        const snapshot = pending_workspace_snapshot;
+        if (!snapshot) return;
+        pending_workspace_snapshot = null;
+
+        const workspace = window.Blockly?.derivWorkspace;
+        if (!workspace || workspace.disposed) return;
+
+        try {
+            // Exactly the sequence the loader uses, so the restored blocks are
+            // wired (variables, disabled-state, cleanup) the same way a load is.
+            const event_group = `dbot-restore${Date.now()}`;
+            window.Blockly.Events.setGroup(event_group);
+            await loadWorkspace(window.Blockly.utils.xml.textToDom(snapshot.xml), event_group, workspace);
+
+            workspace.current_strategy_id = snapshot.strategy_id;
+            workspace.strategy_to_load = snapshot.strategy_to_load ?? snapshot.xml;
+            window.Blockly.getMainWorkspace().strategy_to_load = workspace.strategy_to_load;
+            if (snapshot.file_name) this.root_store?.save_modal?.updateBotName?.(snapshot.file_name);
+
+            workspace.clearUndo();
+            window.dispatchEvent(new Event('resize'));
+            workspace.getAllBlocks().forEach(block => {
+                if (block.disabled) block.is_user_disabled_state = true;
+            });
+        } catch (error) {
+            console.warn('Could not restore the workspace after a remount:', error); // eslint-disable-line
+        }
     };
 
     registerCurrencyReaction = () => {

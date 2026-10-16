@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { NOTIFICATION_TYPE } from '@/components/bot-notification/bot-notification-utils';
 import { useStore } from '@/hooks/useStore';
+import { useIsOwnerAccount } from '@/hooks/useIsOwnerAccount';
 import { localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
 import Button from '../shared_ui/button';
@@ -18,6 +19,8 @@ const LocalFooter = observer(() => {
     } = load_modal;
     const { setOpenSettings, setPreviewOnPopup } = dashboard;
     const { isDesktop } = useDevice();
+    // Opening a strategy is fine for everyone; *storing* a copy of it is not.
+    const can_save = useIsOwnerAccount();
     const Wrapper = isDesktop ? React.Fragment : Button.Group;
 
     return (
@@ -29,7 +32,7 @@ const LocalFooter = observer(() => {
                 text={localize('Open')}
                 onClick={() => {
                     loadStrategyOnBotBuilder();
-                    saveStrategyToLocalStorage();
+                    if (can_save) saveStrategyToLocalStorage();
                     setLoadedLocalFile(null);
                     toggleLoadModal();
                     setPreviewOnPopup(false);

@@ -1,6 +1,7 @@
 import { botNotification } from '@/components/bot-notification/bot-notification';
 import { notification_message } from '@/components/bot-notification/bot-notification-utils';
 import { getCurrencyDisplayCode } from '@/components/shared';
+import { canExportStrategies } from '@/utils/owner-access';
 import { localize } from '@deriv-com/translations';
 import { config } from '../../constants/config';
 import { LogTypes } from '../../constants/messages';
@@ -11,6 +12,12 @@ import { removeLimitedBlocks } from '../../utils/workspace';
 import BlockConversion from '../backward-compatibility';
 import DBotStore from '../dbot-store';
 import { saveAs } from '../shared';
+import {
+    applyBlockTypeAliases,
+    convertOptionVariableBlocks,
+    normalizeStrategyXml,
+    registerCompatBlocks,
+} from './strategy-compat';
 
 export const inject_workspace_options = {
     // Getter (not a literal) so the public-path prefix is read when the options are spread
@@ -132,6 +139,10 @@ export const cleanUpOnLoad = (blocks_to_clean, drop_event, workspace) => {
 };
 
 export const save = (filename = '@deriv/bot', collection = false, xmlDom) => {
+    // Writing a strategy out to a file is owner-only (see utils/owner-access.ts).
+    // The Save dialog is hidden for everyone else, and this is the last gate in
+    // front of the actual download.
+    if (!canExportStrategies()) return;
     xmlDom.setAttribute('is_dbot', 'true');
     xmlDom.setAttribute('collection', collection ? 'true' : 'false');
 
@@ -169,9 +180,14 @@ export const load = async ({
         };
     };
 
+    // Some forks renamed Blockly's own structure tags (`<nexts>`, `<statements>`).
+    // Blockly ignores element names it does not know, so the strategy was silently
+    // truncated at the first one — put the standard names back before anything reads it.
+    const normalized_block_string = normalizeStrategyXml(block_string);
+
     // Check if XML can be parsed correctly.
     try {
-        const xmlDoc = new DOMParser().parseFromString(block_string, 'application/xml');
+        const xmlDoc = new DOMParser().parseFromString(normalized_block_string, 'application/xml');
         if (xmlDoc.getElementsByTagName('parsererror').length) {
             return showInvalidStrategyError();
         } else {
@@ -184,17 +200,26 @@ export const load = async ({
     let xml;
     // Check if XML can be parsed into a strategy.
     try {
-        xml = window.Blockly.utils.xml.textToDom(block_string);
+        xml = window.Blockly.utils.xml.textToDom(normalized_block_string);
     } catch (e) {
         return showInvalidStrategyError();
     }
     const blockConversion = new BlockConversion();
     xml = blockConversion.convertStrategy(xml, showIncompatibleStrategyDialog);
 
-    // Community strategies often include blocks from other Deriv Bot forks
-    // that are not registered in this build. Instead of rejecting the whole
-    // strategy, drop those unsupported blocks (and everything attached to
-    // them) so the remaining supported logic can still be loaded.
+    // Community strategies also carry block types this build spells differently
+    // (`variables__get`, `math__numbers`, …) or does not have at all. Swap the
+    // renames for the real block so they keep their fields and children, rebuild
+    // the fork's option-variable pair, and give any remaining foreign type a
+    // placeholder block of its own — see utils/strategy-compat.js. Nothing is
+    // dropped from the strategy unless even that fails.
+    applyBlockTypeAliases(xml);
+    convertOptionVariableBlocks(xml);
+    const placeholder_types = registerCompatBlocks(xml);
+
+    // Final safety net: anything *still* unknown (a shadow type the walk could
+    // not see, or a block with no type at all) is dropped from the strategy the
+    // way it always was, so the rest of it can still be loaded.
     const registered_block_types = window.Blockly.Blocks;
     const unsupported_blocks = Array.from(xml.getElementsByTagName('block')).filter(block => {
         const block_type = block.getAttribute('type');
@@ -221,6 +246,16 @@ export const load = async ({
     // Let the user know part of the strategy could not be loaded.
     if (has_removed_blocks) {
         botNotification(notification_message().unsupported_blocks_removed);
+    } else if (placeholder_types.length) {
+        // Everything loaded; some of it comes from another bot builder and is
+        // shown but not executed here.
+        botNotification(notification_message().unsupported_blocks_kept, undefined, {
+            type: 'warning',
+            autoClose: 10000,
+        });
+        globalObserver.emit('ui.log.notify', localize('Blocks kept from another bot builder: {{types}}', {
+            types: placeholder_types.join(', '),
+        }));
     }
 
     try {
@@ -692,7 +727,10 @@ const deleteBlocksLocaleText = () => localize('Delete Block');
 const deleteAllBlocksLocaleText = () => localize('Delete All Blocks');
 
 export const modifyContextMenu = (menu, add_new_items = []) => {
-    const common_included_items = [download_option()];
+    // "Download Block" writes the selected block out as an XML file, which is one
+    // more way to lift a strategy out of the app — owner-only, see
+    // utils/owner-access.ts.
+    const common_included_items = canExportStrategies() ? [download_option()] : [];
     const include_items = [...common_included_items, ...add_new_items];
     include_items.forEach(item => {
         menu.push({

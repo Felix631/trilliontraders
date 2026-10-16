@@ -6,6 +6,7 @@ import Interpreter from '../services/tradeEngine/utils/interpreter';
 import { compareXml, observer as globalObserver } from '../utils';
 import { getSavedWorkspaces, saveWorkspaceToRecent } from '../utils/local-storage';
 import { isDbotRTL } from '../utils/workspace';
+import { prepareStrategyXml } from './utils/strategy-compat';
 import main_xml from './xml/main.xml';
 import { forgetAccumulatorsProposalRequest } from './accumulators-proposal-handler';
 import { loadBlockly } from './blockly';
@@ -189,8 +190,11 @@ class DBot {
 
                 const event_group = `dbot-load${Date.now()}`;
                 window.Blockly.Events.setGroup(event_group);
+                // A strategy restored from local storage goes through the same
+                // compatibility pass as an import: it may well have been saved
+                // from a community bot with blocks this build spells differently.
                 window.Blockly.Xml.domToWorkspace(
-                    window.Blockly.utils.xml.textToDom(window.Blockly.derivWorkspace.strategy_to_load),
+                    prepareStrategyXml(window.Blockly.derivWorkspace.strategy_to_load),
                     this.workspace
                 );
                 const { save_modal } = DBotStore.instance;

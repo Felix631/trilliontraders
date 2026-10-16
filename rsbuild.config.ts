@@ -48,6 +48,10 @@ export default defineConfig({
         // Partner app name. The BFF writes this into .env.production at deploy time; the header
         // logo+name mark and the document title read it (with brand.config / default fallback).
         NEXT_PUBLIC_DERIV_APP_NAME: JSON.stringify(process.env.NEXT_PUBLIC_DERIV_APP_NAME ?? ''),
+        // Comma-separated allowlist of Deriv login ids that may save / download a
+        // strategy. Empty (the default) keeps every export path closed for
+        // everybody — see src/utils/owner-access.ts.
+        NEXT_PUBLIC_OWNER_LOGINIDS: JSON.stringify(process.env.NEXT_PUBLIC_OWNER_LOGINIDS ?? ''),
         // Marks the static preview build (served under /bot/preview); drives the
         // router basename so React Router resolves under that path prefix.
         NEXT_PUBLIC_APP_BUILD: JSON.stringify(process.env.NEXT_PUBLIC_APP_BUILD ?? ''),

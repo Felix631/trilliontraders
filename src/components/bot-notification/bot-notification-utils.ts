@@ -49,6 +49,9 @@ export const notification_message = () => ({
     unsupported_blocks_removed: localize(
         'This bot uses some blocks that are not supported by Trillion Trades. They were skipped so the rest could load.'
     ),
+    unsupported_blocks_kept: localize(
+        'This bot uses blocks from another bot builder. They are shown so the strategy stays complete, but they do not run here.'
+    ),
 });
 
 export const notification_style = {

@@ -58,9 +58,10 @@ const needs_digit = (family: string) => family !== 'CALLPUT';
 const tvSymbolMap: Record<string, string> = {
     R_10: 'DERIV:R_10', R_25: 'DERIV:R_25', R_50: 'DERIV:R_50',
     R_75: 'DERIV:R_75', R_100: 'DERIV:R_100',
-    '1HZ10V': 'DERIV:1HZ10V', '1HZ25V': 'DERIV:1HZ25V',
+    '1HZ10V': 'DERIV:1HZ10V', '1HZ15V': 'DERIV:1HZ15V',
+    '1HZ25V': 'DERIV:1HZ25V', '1HZ30V': 'DERIV:1HZ30V',
     '1HZ50V': 'DERIV:1HZ50V', '1HZ75V': 'DERIV:1HZ75V',
-    '1HZ100V': 'DERIV:1HZ100V',
+    '1HZ90V': 'DERIV:1HZ90V', '1HZ100V': 'DERIV:1HZ100V',
 };
 
 /** TradingView Advanced Chart for DTrader — shared deterministic iframe embed. */

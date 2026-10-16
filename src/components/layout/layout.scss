@@ -15,6 +15,20 @@
         border-bottom: 0.1rem solid var(--site-border, transparent);
         height: 5.6rem;
 
+        // The account switcher's dropdown panel (z-index 3) used to lose to the
+        // tab chrome (.dc-tabs__list, z-index 20) and slide behind the tabs,
+        // which made picking the real / demo account awkward. Lifting the whole
+        // header above the tab strip keeps the panel overlaying the page, and
+        // still leaves every modal (z-index 9998+) on top of it.
+        //
+        // z-index alone does the job: this header is a flex item of `.layout`,
+        // and a flex item with a z-index other than `auto` is a stacking context.
+        // Deliberately NO `position` here — the mobile menu drawer renders inside
+        // this header as an absolutely-positioned overlay, so positioning the
+        // header would make it that drawer's containing block and clip the drawer
+        // down to the header band (see the note in styles/_ux-kit-core.scss).
+        z-index: 30;
+
         // White header content on the navy band (logo text, hamburger, account
         // switcher trigger, login/signup buttons).
         .app-header__logo-text,

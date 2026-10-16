@@ -33,6 +33,7 @@ export const MARKET_SYMBOLS: Array<{ value: string; label: string; short: string
     { value: 'R_75', label: 'Volatility 75 Index', short: 'V75' },
     { value: 'R_100', label: 'Volatility 100 Index', short: 'V100' },
     { value: '1HZ10V', label: 'Volatility 10 (1s) Index', short: 'V10s' },
+    { value: '1HZ15V', label: 'Volatility 15 (1s) Index', short: 'V15s' },
     { value: '1HZ25V', label: 'Volatility 25 (1s) Index', short: 'V25s' },
     { value: '1HZ30V', label: 'Volatility 30 (1s) Index', short: 'V30s' },
     { value: '1HZ50V', label: 'Volatility 50 (1s) Index', short: 'V50s' },

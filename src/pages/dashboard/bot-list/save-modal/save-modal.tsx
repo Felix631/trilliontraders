@@ -20,6 +20,7 @@ import {
 } from '@deriv/quill-icons/Illustration';
 import { localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
+import { useIsOwnerAccount } from '@/hooks/useIsOwnerAccount';
 import IconRadio from './icon-radio';
 import './save-modal.scss';
 
@@ -185,12 +186,16 @@ const SaveModal = observer(() => {
     const { is_onscreen_keyboard_active, setCurrentFocus } = ui;
     const { isMobile } = useDevice();
     const { active_tab } = dashboard;
+    // Exporting a strategy is owner-only — see owner-access.ts.
+    const can_save = useIsOwnerAccount();
 
     useEffect(() => {
         if (active_tab === DBOT_TABS.BOT_BUILDER) {
             updateBotName(dashboard_strategies?.[0]?.name ?? '');
         }
     }, [active_tab, dashboard_strategies, updateBotName]);
+
+    if (!can_save) return null;
 
     return isMobile ? (
         <MobileFullPageModal

@@ -12,7 +12,6 @@ import Text from '@/components/shared_ui/text';
 import Summary from '@/components/summary';
 import TradeAnimation from '@/components/trade-animation';
 import Transactions from '@/components/transactions';
-import { DBOT_TABS } from '@/constants/bot-contents';
 import { popover_zindex } from '@/constants/z-indexes';
 import { useStore } from '@/hooks/useStore';
 import { LabelPairedChevronsRightCaptionRegularIcon } from '@deriv/quill-icons';
@@ -28,9 +27,6 @@ import ThemedScrollbars from '../shared_ui/themed-scrollbars';
 const RUN_PANEL_DEFAULT_WIDTH = 366;
 const RUN_PANEL_MIN_WIDTH = 320;
 const RUN_PANEL_MAX_WIDTH = 620;
-// Matches the desktop grip width (`.dc-drawer__toggle` — 2.4rem) so a collapsed
-// panel shows exactly its grip and nothing else.
-const RUN_PANEL_COLLAPSED_RAIL = 24;
 
 type TStatisticsTile = {
     content: React.ElementType | string;
@@ -75,6 +71,167 @@ type TStatisticsInfoModal = {
     is_statistics_info_modal_open: boolean;
     toggleStatisticsInfoModal: () => void;
 };
+
+/* --------------------------------------------------------------------------- *
+ * Collapsed desktop control — a floating, draggable "Run bot" pill.
+ *
+ * On mobile the run panel is opened from the bar that sits at the bottom of the
+ * screen. Desktop used to show a thin strip pinned to the right edge instead,
+ * which was easy to miss and could not be moved out of the way. This is the
+ * desktop equivalent of the mobile bar: it floats over the page (never pushing
+ * layouts around), it can be dragged anywhere on screen, and tapping it expands
+ * the full panel. It is rendered on every tab.
+ * --------------------------------------------------------------------------- */
+const LAUNCHER_POSITION_KEY = 'tt_run_launcher_position';
+const LAUNCHER_MARGIN = 8;
+const LAUNCHER_DRAG_THRESHOLD = 4;
+
+type TLauncherOffset = { x: number; y: number };
+
+const readLauncherOffset = (): TLauncherOffset => {
+    try {
+        const stored = JSON.parse(localStorage.getItem(LAUNCHER_POSITION_KEY) || 'null');
+        if (stored && Number.isFinite(stored.x) && Number.isFinite(stored.y)) return { x: stored.x, y: stored.y };
+    } catch {
+        // fall through to the default bottom-right corner
+    }
+    return { x: 0, y: 0 };
+};
+
+/** Keeps the pill inside the viewport; a degenerate range wins the low bound. */
+const clampOffset = (value: number, min: number, max: number) =>
+    min > max ? min : Math.min(Math.max(value, min), max);
+
+const RunLauncher = observer(({ onOpen }: { onOpen: () => void }) => {
+    const { run_panel } = useStore();
+    const { is_running } = run_panel;
+    const [offset, setOffset] = React.useState<TLauncherOffset>(readLauncherOffset);
+    const [is_dragging, setIsDragging] = React.useState(false);
+    const offset_ref = React.useRef(offset);
+    const has_moved_ref = React.useRef(false);
+    const launcher_ref = React.useRef<HTMLButtonElement>(null);
+    const drag_ref = React.useRef<{
+        pointer_id: number;
+        start_x: number;
+        start_y: number;
+        base: TLauncherOffset;
+        min_x: number;
+        max_x: number;
+        min_y: number;
+        max_y: number;
+    } | null>(null);
+
+    const applyOffset = (next: TLauncherOffset) => {
+        offset_ref.current = next;
+        setOffset(next);
+    };
+
+    const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+        const el = launcher_ref.current;
+        if (!el || event.button > 0) return;
+
+        // Measure the pill as it currently sits (its own box already includes the
+        // offset) so the allowed translate range keeps every edge on screen.
+        const rect = el.getBoundingClientRect();
+        const base = offset_ref.current;
+        drag_ref.current = {
+            pointer_id: event.pointerId,
+            start_x: event.clientX,
+            start_y: event.clientY,
+            base,
+            min_x: base.x + (LAUNCHER_MARGIN - rect.left),
+            max_x: base.x + (window.innerWidth - LAUNCHER_MARGIN - rect.right),
+            min_y: base.y + (LAUNCHER_MARGIN - rect.top),
+            max_y: base.y + (window.innerHeight - LAUNCHER_MARGIN - rect.bottom),
+        };
+        has_moved_ref.current = false;
+        el.setPointerCapture?.(event.pointerId);
+    };
+
+    const handlePointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+        const drag = drag_ref.current;
+        if (!drag || drag.pointer_id !== event.pointerId) return;
+
+        const delta_x = event.clientX - drag.start_x;
+        const delta_y = event.clientY - drag.start_y;
+        if (!has_moved_ref.current && Math.hypot(delta_x, delta_y) > LAUNCHER_DRAG_THRESHOLD) {
+            has_moved_ref.current = true;
+            setIsDragging(true);
+        }
+        if (!has_moved_ref.current) return;
+
+        applyOffset({
+            x: clampOffset(drag.base.x + delta_x, drag.min_x, drag.max_x),
+            y: clampOffset(drag.base.y + delta_y, drag.min_y, drag.max_y),
+        });
+    };
+
+    const handlePointerEnd = (event: React.PointerEvent<HTMLButtonElement>) => {
+        const drag = drag_ref.current;
+        if (!drag || drag.pointer_id !== event.pointerId) return;
+        drag_ref.current = null;
+        setIsDragging(false);
+
+        // A drag parks the pill where it was dropped; a tap expands the panel.
+        if (has_moved_ref.current) {
+            try {
+                localStorage.setItem(LAUNCHER_POSITION_KEY, JSON.stringify(offset_ref.current));
+            } catch {
+                // a full local storage must not break the control
+            }
+            return;
+        }
+        onOpen();
+    };
+
+    return (
+        <button
+            type='button'
+            ref={launcher_ref}
+            className={classNames('run-panel__launcher', {
+                'run-panel__launcher--running': is_running,
+                'run-panel__launcher--dragging': is_dragging,
+            })}
+            style={{ transform: `translate3d(${offset.x}px, ${offset.y}px, 0)` }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerEnd}
+            onPointerCancel={handlePointerEnd}
+            onKeyDown={event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    onOpen();
+                }
+            }}
+            aria-label={localize('Open the run panel')}
+            title={localize('Drag to move it anywhere · tap to open the run panel')}
+            data-testid='dt_run_panel_launcher'
+        >
+            <span className='run-panel__launcher-dot' aria-hidden='true' />
+            {is_running ? (
+                <Localize i18n_default_text='Bot running' />
+            ) : (
+                <Localize i18n_default_text='Run bot' />
+            )}
+            <svg
+                className='run-panel__launcher-chevron'
+                width='14'
+                height='14'
+                viewBox='0 0 14 14'
+                fill='none'
+                aria-hidden='true'
+            >
+                <path
+                    d='M9 3L5 7L9 11'
+                    stroke='currentColor'
+                    strokeWidth='1.8'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                />
+            </svg>
+        </button>
+    );
+});
 
 const StatisticsTile = ({ content, contentClassName, title }: TStatisticsTile) => (
     <div className='run-panel__tile'>
@@ -320,15 +477,14 @@ const RunPanel = observer(() => {
         toggleStatisticsInfoModal,
     } = run_panel;
     const { statistics } = transactions;
-    const { active_tour, active_tab } = dashboard;
+    const { active_tour } = dashboard;
     const { total_payout, total_profit, total_stake, won_contracts, lost_contracts, number_of_runs } = statistics;
-    const { BOT_BUILDER, CHART } = DBOT_TABS;
 
-    // The panel only exists on the tabs whose bots can run (and outside the
-    // bot-builder tour). Its rail has to be reserved under exactly the same
-    // condition — otherwise an unrendered panel would still push the page aside.
-    const show_run_panel = [BOT_BUILDER, CHART].includes(active_tab) || active_tour;
-    const is_panel_docked = Boolean(isDesktop && show_run_panel && active_tour !== 'bot_builder');
+    // The run control is reachable from every tab: on desktop the collapsed
+    // state is the floating launcher below, on mobile the bar at the bottom of
+    // the screen. The docked rail is only reserved while the panel is actually
+    // open, so a collapsed panel never pushes the page aside.
+    const is_panel_docked = Boolean(isDesktop && active_tour !== 'bot_builder');
 
     React.useEffect(() => {
         onMount();
@@ -353,7 +509,9 @@ const RunPanel = observer(() => {
 
         const { style } = document.body;
         style.setProperty('--run-panel-width', `${panel_width}px`);
-        style.setProperty('--run-panel-rail', `${is_drawer_open ? panel_width : RUN_PANEL_COLLAPSED_RAIL}px`);
+        // Collapsed: no rail at all — the floating launcher floats over the page
+        // instead of shrinking it.
+        style.setProperty('--run-panel-rail', `${is_drawer_open ? panel_width : 0}px`);
 
         return () => {
             style.removeProperty('--run-panel-width');
@@ -428,7 +586,22 @@ const RunPanel = observer(() => {
         />
     );
 
-    if ((!show_run_panel && isDesktop) || active_tour === 'bot_builder') return null;
+    if (active_tour === 'bot_builder') return null;
+
+    // Collapsed on desktop: the panel is replaced by the draggable launcher, so
+    // nothing docks beside the page until the user expands it.
+    if (isDesktop && !is_drawer_open) {
+        return (
+            <>
+                <RunLauncher onOpen={() => toggleDrawer(true)} />
+                <StatisticsInfoModal
+                    is_mobile={false}
+                    is_statistics_info_modal_open={is_statistics_info_modal_open}
+                    toggleStatisticsInfoModal={toggleStatisticsInfoModal}
+                />
+            </>
+        );
+    }
 
     return (
         <>

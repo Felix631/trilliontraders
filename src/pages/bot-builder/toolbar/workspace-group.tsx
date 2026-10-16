@@ -15,6 +15,7 @@ import {
 } from '@deriv/quill-icons/LabelPaired';
 import { localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
+import { useIsOwnerAccount } from '@/hooks/useIsOwnerAccount';
 /* [AI] - Analytics event tracking removed - see migrate-docs/MONITORING_PACKAGES.md for re-implementation guide */
 /* [/AI] */
 import ToolbarIcon from './toolbar-icon';
@@ -26,6 +27,8 @@ const WorkspaceGroup = observer(() => {
     const { toggleSaveModal } = save_modal;
     const { toggleLoadModal } = load_modal;
     const { isDesktop } = useDevice();
+    // Saving (to this device or to the cloud) is owner-only — see owner-access.ts.
+    const can_save = useIsOwnerAccount();
 
     return (
         <div className='toolbar__wrapper'>
@@ -61,19 +64,21 @@ const WorkspaceGroup = observer(() => {
                         </span>
                     }
                 />
-                <ToolbarIcon
-                    popover_message={localize('Save')}
-                    icon={
-                        <span
-                            className='toolbar__icon'
-                            id='db-toolbar__save-button'
-                            data-testid='dt_toolbar_save_button'
-                            onClick={toggleSaveModal}
-                        >
-                            <LabelPairedFloppyDiskMdRegularIcon />
-                        </span>
-                    }
-                />
+                {can_save && (
+                    <ToolbarIcon
+                        popover_message={localize('Save')}
+                        icon={
+                            <span
+                                className='toolbar__icon'
+                                id='db-toolbar__save-button'
+                                data-testid='dt_toolbar_save_button'
+                                onClick={toggleSaveModal}
+                            >
+                                <LabelPairedFloppyDiskMdRegularIcon />
+                            </span>
+                        }
+                    />
+                )}
                 <ToolbarIcon
                     popover_message={localize('Sort blocks')}
                     icon={

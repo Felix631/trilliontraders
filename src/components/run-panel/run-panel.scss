@@ -206,6 +206,83 @@
         }
     }
 
+    /* The collapsed desktop control: a floating, draggable pill pinned to the
+       bottom-right of the page (see `RunLauncher`). It floats over the content
+       on every tab — nothing is docked beside the page until it is expanded. */
+    &__launcher {
+        position: fixed;
+        right: 2.4rem;
+        /* Clears the fixed app footer (3.6rem + its border) so the pill sits on
+           the page rather than over the footer. */
+        bottom: 4.8rem;
+        /* Above the tab chrome (20) and the docked rail (30); below modal_root
+           (9998) so dialogs still cover it. */
+        z-index: 31;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.4rem 1rem 1.6rem;
+        border: 0;
+        border-radius: 99rem;
+        background: var(--site-primary, var(--brand-primary, #0047ab));
+        color: var(--text-colored-background, #fff);
+        font-family: inherit;
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: grab;
+        /* The pill is a drag target, so the browser must not pan the page. */
+        touch-action: none;
+        user-select: none;
+        box-shadow: 0 1.2rem 2.4rem rgb(3 12 30 / 32%);
+        will-change: transform;
+        transition:
+            box-shadow var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
+            background var(--ux-t-fast, 0.16s) var(--ux-ease, ease);
+
+        &:hover {
+            box-shadow: 0 1.4rem 2.8rem rgb(3 12 30 / 40%);
+        }
+
+        &:focus-visible {
+            outline: 0.2rem solid var(--ux-blue-bright, #4f8cff);
+            outline-offset: 0.2rem;
+        }
+
+        &:active,
+        &--dragging {
+            cursor: grabbing;
+            box-shadow: 0 1rem 2rem rgb(3 12 30 / 28%);
+        }
+
+        &--running {
+            background: var(--status-success, #10b981);
+        }
+
+        &-dot {
+            flex: none;
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.7;
+        }
+
+        &--running &-dot {
+            animation: run-panel-launcher-pulse 1.4s ease-in-out infinite;
+        }
+
+        &-chevron {
+            flex: none;
+            opacity: 0.85;
+        }
+
+        @include mobile-or-tablet-screen {
+            display: none;
+        }
+    }
+
     &__buttons {
         display: inline-flex !important;
         justify-content: space-between;
@@ -721,5 +798,17 @@
             white-space: normal;
             word-break: break-word;
         }
+    }
+}
+
+/* Live dot on the collapsed run launcher while a bot is running. */
+@keyframes run-panel-launcher-pulse {
+    0%,
+    100% {
+        opacity: 0.35;
+    }
+
+    50% {
+        opacity: 1;
     }
 }

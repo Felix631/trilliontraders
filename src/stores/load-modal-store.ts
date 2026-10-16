@@ -10,6 +10,7 @@ import {
     saveWorkspaceToRecent,
 } from '@/external/bot-skeleton';
 import { inject_workspace_options, updateXmlValues } from '@/external/bot-skeleton/scratch/utils';
+import { prepareStrategyXml } from '@/external/bot-skeleton/scratch/utils/strategy-compat';
 import { isDbotRTL } from '@/external/bot-skeleton/utils/workspace';
 import { TStores } from '@deriv/stores/types';
 import { localize } from '@deriv-com/translations';
@@ -509,7 +510,9 @@ export default class LoadModalStore {
         if (this.recent_strategies.length === 0) return;
         updateXmlValues({
             strategy_id: this.selected_strategy_id,
-            convertedDom: window?.Blockly?.utils?.xml?.textToDom(this.selected_strategy?.xml),
+            // Same compatibility pass as an import — a stored strategy may have
+            // been saved from a community bot with foreign or renamed blocks.
+            convertedDom: prepareStrategyXml(this.selected_strategy?.xml),
             file_name: this.selected_strategy?.name,
             from: this.selected_strategy?.save_type || save_types.UNSAVED,
         });
@@ -534,7 +537,7 @@ export default class LoadModalStore {
             if (!this.recent_workspace) this.recent_workspace = window.Blockly.inject(ref_preview, inject_options);
             (this.recent_workspace as any).RTL = isDbotRTL();
 
-            const convertedDom = window.Blockly?.utils?.xml?.textToDom(this.selected_strategy?.xml);
+            const convertedDom = prepareStrategyXml(this.selected_strategy?.xml);
 
             // Render the strategy into the modal's own preview workspace. Loading it
             // into the main workspace (as before) left the preview blank while
