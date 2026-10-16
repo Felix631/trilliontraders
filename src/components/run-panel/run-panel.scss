@@ -801,6 +801,40 @@
     }
 }
 
+/* --------------------------------------------------------------------------- *
+ * Pages end above the collapsed run control, never underneath it
+ *
+ * Collapsed, the run control is an overlay rather than a column: on mobile the
+ * Run/Stop bar (`.controls__section`) is fixed to the bottom edge, and on
+ * desktop the launcher pill floats over the page's bottom-right (4.8rem up, plus
+ * its own ~3.4rem height). Either one covers the last rows of whatever tab is
+ * open — which is what "the pages are behind the run panel" was.
+ *
+ * Every tab page scrolls inside `.dc-tabs__content`, so a bottom inset on that
+ * box — as tall as the control's top edge — lets each page scroll to its own end
+ * *above* the control instead of ending underneath it. `:has()` keys the inset to
+ * the control actually being on screen, so nothing is reserved on the tabs where
+ * it is not (the bot-builder tour, an open quick-strategy) or while the panel is
+ * expanded into its own column.
+ * --------------------------------------------------------------------------- */
+.main__container .dc-tabs__content {
+    padding-bottom: var(--run-panel-bottom-inset, 0rem);
+}
+
+@include mobile-or-tablet-screen {
+    /* 6rem bar + its 2px border, plus the iOS safe area the bar itself honours. */
+    .bot-dashboard:has(.controls__section) {
+        --run-panel-bottom-inset: calc(6.2rem + env(safe-area-inset-bottom, 0rem));
+    }
+}
+
+@include desktop-screen {
+    /* Pill top edge (4.8rem bottom offset + 3.4rem height) plus a little air. */
+    .bot-dashboard:has(.run-panel__launcher) {
+        --run-panel-bottom-inset: 5.6rem;
+    }
+}
+
 /* Live dot on the collapsed run launcher while a bot is running. */
 @keyframes run-panel-launcher-pulse {
     0%,

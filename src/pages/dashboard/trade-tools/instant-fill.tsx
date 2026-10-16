@@ -29,7 +29,7 @@ const InstantFill = () => {
         const label = describe_contract(params.contract_type, params.prediction ?? 0);
         cfg.setIsPlacing(true);
         setLast(null);
-        const result = await placeTrade(params);
+        const result = await placeTrade(params, 'instant_fill');
         cfg.setIsPlacing(false);
         if (result.error) {
             setLast({ is_win: false, pnl: 0, label, error: result.error });

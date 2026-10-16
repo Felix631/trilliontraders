@@ -230,6 +230,16 @@ const ILoveYouAI = () => {
         set_open(current => !current);
     };
 
+    // The panel no longer opens on hover, so it needs a keyboard way out.
+    React.useEffect(() => {
+        if (!open) return undefined;
+        const on_key_down = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') set_open(false);
+        };
+        window.addEventListener('keydown', on_key_down);
+        return () => window.removeEventListener('keydown', on_key_down);
+    }, [open]);
+
     return (
         <div
             ref={root_ref}
@@ -240,8 +250,6 @@ const ILoveYouAI = () => {
                 'ilyai--panel-below': panel_below,
             })}
             style={position ? { left: `${position.x}px`, top: `${position.y}px` } : undefined}
-            onMouseEnter={() => !dragging && set_open(true)}
-            onMouseLeave={() => !dragging && set_open(false)}
         >
             <button
                 type='button'
@@ -252,18 +260,17 @@ const ILoveYouAI = () => {
                 onPointerUp={end_drag}
                 onPointerCancel={end_drag}
                 aria-expanded={open}
-                title={localize('Drag to move · click to expand')}
+                title={localize('Drag to move it anywhere · click to open the market scan')}
             >
                 <span className='ilyai__pill-icon' aria-hidden='true'>
                     🤖
                 </span>
                 <span className='ilyai__pill-text'>
                     <b>{localize('AI market scan')}</b>
-                    <em>
-                        {best
-                            ? `${best.market.short} · ${best.entry_label} ${best.confidence.toFixed(1)}%`
-                            : localize('Over 2 / Under 8')}
-                    </em>
+                    {/* The ranked markets deliberately stay inside the panel: the
+                        pill is visible on every tab, so naming a market here would
+                        recommend one without the user ever opening the scan. */}
+                    <em>{localize('Over 2 / Under 8 · click to scan')}</em>
                 </span>
                 <span className={classNames('ilyai__pill-dot', { 'ilyai__pill-dot--on': feed.status === 'live' })} />
             </button>

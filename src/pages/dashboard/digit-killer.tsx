@@ -152,7 +152,7 @@ const DigitKiller = () => {
             duration: Number(settings.duration) || 1,
             duration_unit: 't',
             prediction: entry.prediction,
-        });
+        }, 'digit_killer');
         setTradeStates(prev => ({
             ...prev,
             [symbol]: outcome.error

@@ -176,7 +176,7 @@ const ILoveYou = observer(() => {
             duration: Number(settings.duration) || 1,
             duration_unit: 't',
             prediction: entry.prediction,
-        });
+        }, 'i_love_you');
         setTradeStates(prev => ({
             ...prev,
             [entry.market.value]: outcome.error

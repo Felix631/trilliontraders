@@ -64,7 +64,7 @@ const BulkTrader = () => {
                 duration: 1,
                 duration_unit: 't',
                 prediction: needs_digit(leg.family) ? leg.digit : undefined,
-            });
+            }, 'bulk_trader');
             if (result.error) setBatchError(result.error);
             else record(describe_contract(leg.direction, leg.digit), Number(leg.stake), result);
             setProgress({ done: i + 1, total: legs.length });

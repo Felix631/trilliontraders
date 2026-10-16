@@ -146,7 +146,7 @@ const AnalysisTool = () => {
             duration: Number(settings.duration) || 1,
             duration_unit: 't',
             prediction: signal.contract.prediction,
-        });
+        }, 'analysis_tool');
         setTradeState(
             result.error
                 ? { busy: false, message: result.error, is_win: null }

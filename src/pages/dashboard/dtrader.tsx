@@ -135,7 +135,7 @@ const DTrader = () => {
             symbol, contract_type: direction,
             stake: Math.max(0.35, stake), duration: Number(duration) || 1,
             duration_unit: 't', prediction: needs_digit(family) ? digit : undefined,
-        });
+        }, 'dtrader');
         setTradeState(
             result.error
                 ? { busy: false, message: result.error, is_win: null }

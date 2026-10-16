@@ -1,4 +1,5 @@
 import { api_base } from '@/external/bot-skeleton/services/api/api-base';
+import { localize } from '@deriv-com/translations';
 
 /**
  * Shared trading engine for the Quick Trade tools.
@@ -7,6 +8,10 @@ import { api_base } from '@/external/bot-skeleton/services/api/api-base';
  * the app's existing WebSocket: proposal → buy → proposal_open_contract until
  * settlement. When not authorised, tools fall back to simulation with realistic
  * contract odds so everything stays usable in demo mode.
+ *
+ * Trading is deliberately narrow: the Speed Bot page is the only page that can
+ * place an order (see `placeTrade`). The other pages keep their full analysis
+ * and tooling, but their trade actions are refused and say so.
  */
 
 export type TContractParams = {
@@ -28,6 +33,32 @@ export type TTradeResult = {
     simulated: boolean;
     error?: string;
 };
+
+/**
+ * Which page is asking to trade.
+ *
+ * The caller has to name itself, so adding a new trade action means choosing a
+ * side explicitly instead of quietly inheriting the ability to place orders —
+ * only `TRADING_SOURCE` is allowed through (see `placeTrade`).
+ */
+export type TTradeSource =
+    | 'speed_bot'
+    | 'dtrader'
+    | 'analysis_tool'
+    | 'analyzer'
+    | 'i_love_you'
+    | 'digit_killer'
+    | 'instant_fill'
+    | 'bulk_trader';
+
+/** The one page allowed to place trades — the Speed Bot. */
+export const TRADING_SOURCE: TTradeSource = 'speed_bot';
+
+/**
+ * Shown by every page whose trade action is refused. Resolved per call rather
+ * than at import time, so it is translated with the language in use.
+ */
+export const tradingDisabledMessage = () => localize('Trading is available from the Speed Bot page only.');
 
 export const isAuthorized = (): boolean => {
     try {
@@ -138,8 +169,21 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
 /**
  * Place a trade with automatic fallback:
  * authorised → real order; otherwise → simulation.
+ *
+ * Refuses every page but the Speed Bot — real orders *and* simulations, so the
+ * other pages place nothing at all. They surface this in the message area they
+ * already show a trade's outcome in.
  */
-export const placeTrade = async (params: TContractParams): Promise<TTradeResult> => {
+export const placeTrade = async (params: TContractParams, source: TTradeSource): Promise<TTradeResult> => {
+    if (source !== TRADING_SOURCE) {
+        return {
+            is_win: false,
+            profit: 0,
+            payout: 0,
+            simulated: false,
+            error: tradingDisabledMessage(),
+        };
+    }
     if (!isAuthorized()) return simulate(params.stake, params.contract_type, params.prediction);
     try {
         return await placeRealTrade(params);
