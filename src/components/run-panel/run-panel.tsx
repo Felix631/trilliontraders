@@ -12,6 +12,7 @@ import Text from '@/components/shared_ui/text';
 import Summary from '@/components/summary';
 import TradeAnimation from '@/components/trade-animation';
 import Transactions from '@/components/transactions';
+import { DBOT_TABS } from '@/constants/bot-contents';
 import { popover_zindex } from '@/constants/z-indexes';
 import { useStore } from '@/hooks/useStore';
 import { LabelPairedChevronsRightCaptionRegularIcon } from '@deriv/quill-icons';
@@ -477,7 +478,7 @@ const RunPanel = observer(() => {
         toggleStatisticsInfoModal,
     } = run_panel;
     const { statistics } = transactions;
-    const { active_tour } = dashboard;
+    const { active_tab, active_tour } = dashboard;
     const { total_payout, total_profit, total_stake, won_contracts, lost_contracts, number_of_runs } = statistics;
 
     // The run control is reachable from every tab: on desktop the collapsed
@@ -485,6 +486,14 @@ const RunPanel = observer(() => {
     // the screen. The docked rail is only reserved while the panel is actually
     // open, so a collapsed panel never pushes the page aside.
     const is_panel_docked = Boolean(isDesktop && active_tour !== 'bot_builder');
+
+    // The Bot Builder is the one tab that always keeps the panel docked on the
+    // right on desktop: the Run/Stop control lives at the bottom of that dock,
+    // so collapsing it there would hide the only way to start the strategy.
+    React.useEffect(() => {
+        if (!isDesktop || active_tab !== DBOT_TABS.BOT_BUILDER || is_drawer_open) return;
+        toggleDrawer(true);
+    }, [active_tab, isDesktop, is_drawer_open, toggleDrawer]);
 
     React.useEffect(() => {
         onMount();

@@ -117,10 +117,25 @@ const simulate = (stake: number, contract_type: string, prediction?: number): TT
     };
 };
 
+/** Contracts that settle on the next tick — Deriv only prices these on one tick. */
+const DIGIT_CONTRACT_TYPES = [
+    'DIGITEVEN',
+    'DIGITODD',
+    'DIGITOVER',
+    'DIGITUNDER',
+    'DIGITMATCH',
+    'DIGITDIFF',
+];
+
+export const isDigitContract = (contract_type: string): boolean =>
+    DIGIT_CONTRACT_TYPES.includes(contract_type);
+
 /** Place a real trade and wait for settlement. Throws on API errors. */
 export const placeRealTrade = async (params: TContractParams): Promise<TTradeResult> => {
     const api = await wait_for_api();
     if (!api) throw new Error('API connection not available');
+
+    const is_digit = isDigitContract(params.contract_type);
 
     const request: Record<string, unknown> = {
         proposal: 1,
@@ -128,18 +143,34 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
         basis: 'stake',
         contract_type: params.contract_type,
         currency: accountCurrency(),
-        duration: params.duration,
+        // A digit contract settles on the next tick, so any other duration is
+        // refused with "Invalid duration" — always ask for one tick.
+        duration: is_digit ? 1 : params.duration,
         duration_unit: params.duration_unit,
         symbol: params.symbol,
     };
-    if (params.prediction !== undefined) request.barrier = String(params.prediction);
+    if (params.prediction !== undefined) {
+        // The digit travels as `barrier` *and* as `selected_tick`, exactly the
+        // pair the bot engine sends (services/tradeEngine/utils/helpers.js).
+        // Without it the proposal for Over/Under, Match/Differs and the
+        // higher/lower types is rejected, so no order was ever placed.
+        request.barrier = String(params.prediction);
+        request.selected_tick = params.prediction;
+    }
 
     const send = (req: unknown): Promise<any> => api.send(req) as unknown as Promise<any>;
 
     const proposal = await send(request);
     if (proposal?.error) throw new Error(proposal.error.message || 'Proposal failed');
+    if (!proposal?.proposal?.id) throw new Error('The proposal came back without an id');
 
-    const buy = await send({ buy: proposal.proposal.id, price: params.stake });
+    // `buy.price` has to be the quoted ask price, not the stake that asked for
+    // the quote — they differ by the payout rounding and Deriv rejects a buy
+    // whose price does not match.
+    const buy = await send({
+        buy: proposal.proposal.id,
+        price: proposal.proposal.ask_price ?? params.stake,
+    });
     if (buy?.error) throw new Error(buy.error.message || 'Buy failed');
 
     const contract_id = buy.buy.contract_id;

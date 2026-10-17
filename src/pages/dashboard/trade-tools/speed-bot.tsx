@@ -52,14 +52,19 @@ const SpeedBot = () => {
                 // The Speed Bot is the one page allowed to place orders.
                 const result = await placeTrade(params, 'speed_bot');
                 if (cancelled) return;
-                if (!result.error) {
-                    session_pnl.current += result.profit;
-                    record(describe_contract(params.contract_type, params.prediction ?? 0), params.stake, result);
-                    if (result.is_win || !martingale) {
-                        next_stake.current = Number(cfg.stake);
-                    } else {
-                        next_stake.current = next_stake.current * Math.max(1.1, Number(factor));
-                    }
+                // A refused order used to be swallowed, which left the bot
+                // saying "Running…" while placing nothing at all. Say why and
+                // stop, so a bad setup is never mistaken for a quiet market.
+                if (result.error) {
+                    stop(localize('Order refused: {{error}}', { error: result.error }));
+                    return;
+                }
+                session_pnl.current += result.profit;
+                record(describe_contract(params.contract_type, params.prediction ?? 0), params.stake, result);
+                if (result.is_win || !martingale) {
+                    next_stake.current = Number(cfg.stake);
+                } else {
+                    next_stake.current = next_stake.current * Math.max(1.1, Number(factor));
                 }
                 if (session_pnl.current >= Number(take_profit)) {
                     stop(localize('🎯 Take profit reached — bot stopped'));

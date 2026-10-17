@@ -68,10 +68,11 @@
 
     &__title {
         margin: 0;
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: 0.01em;
-        color: #fff;
+        // The heading uses the app's shared display type — the same animated
+        // aurora gradient as the Analyzer / Analysis Tool / trade-tool titles
+        // (see `.ily__title` in `_ux-kit-core.scss`). Only the box is set here so
+        // the colour and its animation stay in one place.
+        display: inline-block;
     }
 
     &__tagline {
@@ -886,6 +887,8 @@
             font-size: 10px;
             color: var(--ilyai-dim);
             font-variant-numeric: tabular-nums;
+            // The recommendation reads as one line, never as a wrapped pair.
+            white-space: nowrap;
         }
     }
 

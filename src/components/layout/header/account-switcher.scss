@@ -786,3 +786,36 @@
         }
     }
 }
+
+/* --------------------------------------------------------------------------- *
+ * Light mode: the account, its type and its balance stay legible
+ *
+ * The status green is picked for the dark theme's ink-black chrome. In light mode
+ * the header is a brighter blue and the switcher's dropdown is a white surface,
+ * so the same teal (#4bb4b3) — and the demo yellow beside it — wash out in both
+ * places the account is shown. Each surface gets the pair that reads on it: a
+ * mint on the navy chrome, a deep teal / amber on the white dropdown.
+ * --------------------------------------------------------------------------- */
+.theme--light {
+    .acc-info {
+        &__balance,
+        &__account-type {
+            color: #86efd5;
+        }
+
+        // Demo accounts are flagged yellow; the chrome needs a paler one.
+        &--is-virtual .acc-info__account-type {
+            color: #ffd166;
+        }
+    }
+
+    .acc-dropdown {
+        &__account-type {
+            color: #0b7a6b;
+
+            &--virtual {
+                color: #a2620a;
+            }
+        }
+    }
+}

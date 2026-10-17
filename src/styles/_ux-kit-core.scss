@@ -323,6 +323,7 @@
 .dk__title,
 .scanner__title,
 .matches-analysis__title,
+.ily__title,
 .qt-page .qt-title {
     margin: 0;
     font-size: 2.3rem;
@@ -697,7 +698,8 @@
 @media (max-width: 1023px) {
     .dk__title,
     .scanner__title,
-    .matches-analysis__title {
+    .matches-analysis__title,
+    .ily__title {
         font-size: 1.9rem;
     }
 
@@ -714,6 +716,7 @@
     .dk__title,
     .scanner__title,
     .matches-analysis__title,
+    .ily__title,
     .tab__dashboard__content .title,
     .dk__status-dot,
     .matches-analysis__status-dot {

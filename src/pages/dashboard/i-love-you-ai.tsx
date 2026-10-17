@@ -240,6 +240,21 @@ const ILoveYouAI = () => {
         return () => window.removeEventListener('keydown', on_key_down);
     }, [open]);
 
+    // …and a mouse way out: a click anywhere outside the widget closes the
+    // ranked markets again, the same way it would for any other popover. The
+    // listener is on the capture phase so a page that stops propagation cannot
+    // keep the panel open, and the widget itself is exempt (dragging, pressing
+    // its buttons).
+    React.useEffect(() => {
+        if (!open) return undefined;
+        const on_pointer_down = (event: PointerEvent) => {
+            if (root_ref.current?.contains(event.target as Node)) return;
+            set_open(false);
+        };
+        document.addEventListener('pointerdown', on_pointer_down, true);
+        return () => document.removeEventListener('pointerdown', on_pointer_down, true);
+    }, [open]);
+
     return (
         <div
             ref={root_ref}
@@ -266,11 +281,16 @@ const ILoveYouAI = () => {
                     🤖
                 </span>
                 <span className='ilyai__pill-text'>
+                    {/* The pill carries the current recommendation, as it did
+                        before the scan became click-only, so the best entry
+                        point is visible on every tab; the full ranking is one
+                        click away. */}
                     <b>{localize('AI market scan')}</b>
-                    {/* The ranked markets deliberately stay inside the panel: the
-                        pill is visible on every tab, so naming a market here would
-                        recommend one without the user ever opening the scan. */}
-                    <em>{localize('Over 2 / Under 8 · click to scan')}</em>
+                    <em>
+                        {best
+                            ? `${best.market.short} · ${best.entry_label} ${best.confidence.toFixed(1)}%`
+                            : localize('Over 2 / Under 8 · collecting ticks…')}
+                    </em>
                 </span>
                 <span className={classNames('ilyai__pill-dot', { 'ilyai__pill-dot--on': feed.status === 'live' })} />
             </button>
