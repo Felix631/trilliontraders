@@ -20,6 +20,7 @@ import {
     normalizeStrategyXml,
     registerCompatBlocks,
 } from './strategy-compat';
+import { refreshTradeDefinitionDropdowns } from './trade-options';
 
 export const inject_workspace_options = {
     // Getter (not a literal) so the public-path prefix is read when the options are spread
@@ -285,6 +286,12 @@ export const load = async ({
                 await saveWorkspaceToRecent(xml, from);
             }
         }
+
+        // The dropdowns a strategy derives from its Trade parameters (Purchase
+        // list, contract type) are rebuilt from the workspace that was just
+        // drawn, so a loaded bot shows its saved selection instead of an empty
+        // list — see utils/trade-options.js.
+        refreshTradeDefinitionDropdowns(workspace, event_group);
 
         // Set user disabled state on all disabled blocks. This ensures we don't change the disabled
         // state through code, which was implemented for user experience.

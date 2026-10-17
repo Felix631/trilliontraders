@@ -111,6 +111,33 @@ const lastNAllEven = (digits, n) => !!digits?.length && digits.length >= n && di
 
 const lastNAllOdd = (digits, n) => !!digits?.length && digits.length >= n && digits.slice(-n).every(d => d % 2 !== 0);
 
+/** Volatility indices a market-switch block can move to. */
+const HOOK_MARKETS = ['R_10', 'R_25', 'R_50', 'R_75', 'R_100', '1HZ10V', '1HZ25V', '1HZ50V', '1HZ75V', '1HZ100V'];
+
+/**
+ * The money8gg fork's entry triggers, read off the fork's own block fields.
+ *
+ * `under` / `over` / `equals` look at the last `count` digits (all of them have
+ * to satisfy the comparison); `equals_any` looks at the last `set_size` digits
+ * and accepts each one that belongs to the block's digit set; `instant` is true
+ * as soon as the block runs.
+ */
+const triggerMet = ({ trigger, digits, value, count = 1, set = [] }) => {
+    const wanted = clampInt(count, 1, 1, 100);
+    if (trigger === 'instant') return true;
+    if (trigger === 'equals_any') {
+        const size = clampInt(set.length, wanted, 1, 100);
+        if (digits.length < size) return false;
+        return digits.slice(-size).every(digit => set.includes(digit));
+    }
+    if (digits.length < wanted) return false;
+    const window = digits.slice(-wanted);
+    if (trigger === 'under' || trigger === 'digit_under') return window.every(digit => digit < value);
+    if (trigger === 'over' || trigger === 'digit_over') return window.every(digit => digit > value);
+    if (trigger === 'equals') return window.every(digit => digit === value);
+    return false;
+};
+
 const notify = message => {
     globalObserver.emit('ui.log.notify', {
         className: 'journal__text--info',
@@ -138,6 +165,12 @@ export default Engine =>
             this._conceptLockRemaining = 0;
             this._conceptLockThreshold = null;
             this._nextContractType = null;
+            this._tradeRepeat = 1;
+            this._activeHook = null;
+            this._hookInRecovery = false;
+            this._hookSignalFired = false;
+            this._virtualStage = 'immediate';
+            this._virtualRetriesLeft = 0;
         }
 
         /* ------------------------------------------------------------------
@@ -506,10 +539,206 @@ export default Engine =>
         }
 
         /* ------------------------------------------------------------------
+         * money8gg fork hooks
+         *
+         * That fork shipped three "hook" blocks that are the purchase step of
+         * the strategy: they watch the digits and place the order themselves
+         * (their strategies have no separate Purchase block). They used to be
+         * inert placeholders, so those bots loaded but never traded. Each hook
+         * keeps the fork's own fields and is evaluated on every Before Purchase
+         * pass, exactly like a Purchase block with a condition attached.
+         * ---------------------------------------------------------------- */
+        async switchMarket(symbol) {
+            if (!symbol || symbol === 'disable') return;
+            if (!HOOK_MARKETS.includes(symbol)) return;
+            notify(`Switching market to ${symbol}`);
+            await this.setMarket(symbol);
+        }
+
+        /** How many contracts the following Purchase step should place. */
+        async setTradeRepeat(count) {
+            this._tradeRepeat = clampInt(count, 1, 1, 50);
+        }
+
+        /** Reads and clears the repeat count set by a Multiple trades block. */
+        _takeTradeRepeat() {
+            const repeat = clampInt(this._tradeRepeat, 1, 1, 50);
+            this._tradeRepeat = 1;
+            return repeat;
+        }
+
+        async _hookBuy(contract, prediction, label) {
+            this.setNextContractType(contract, prediction);
+            notify(`${label}: ${contract}${prediction === undefined ? '' : ` ${prediction}`}`);
+            await this.purchase(contract, prediction);
+        }
+
+        async _hookDigits(count = 15) {
+            try {
+                return await this.getDigitsForStrategy(count);
+            } catch {
+                return [];
+            }
+        }
+
+        /**
+         * Over/Under hook — the fork's "over_under_hook" step.
+         *
+         * Main entry: the configured trigger on the recent digits, then buy the
+         * main contract at its prediction. `continuous` keeps entering for as
+         * long as the trigger holds; `single` enters once per trigger run. A
+         * loss moves the strategy into its recovery trigger when one is set.
+         */
+        async overUnderHook(config = {}) {
+            this._activeHook = { type: 'over_under', config };
+            const digits = await this._hookDigits(15);
+            const recovery_configured = config.recovery_contract && config.recovery_contract !== 'OFF';
+
+            if (this._hookInRecovery && recovery_configured) {
+                const ready = triggerMet({
+                    trigger: config.recovery_trigger,
+                    digits,
+                    value: Number(config.recovery_value),
+                    count: config.recovery_consec,
+                });
+                if (!ready) {
+                    notify('Recovery: waiting for the configured digit run');
+                    return false;
+                }
+                await this._hookBuy(config.recovery_contract, Number(config.recovery_prediction), 'Recovery entry');
+                return true;
+            }
+
+            const set = [config.main_digit_1, config.main_digit_2, config.main_digit_3]
+                .filter(digit => digit !== undefined && digit !== null && digit !== '')
+                .map(digit => Number(digit));
+            const ready =
+                config.main_trigger === 'equals_any'
+                    ? triggerMet({ trigger: 'equals_any', digits, set })
+                    : triggerMet({
+                          trigger: config.main_trigger,
+                          digits,
+                          value: Number(config.main_value),
+                          count: config.main_consec,
+                      });
+
+            if (!ready) {
+                this._hookSignalFired = false;
+                return false;
+            }
+            if (config.main_mode === 'single' && this._hookSignalFired) return false;
+
+            this._hookSignalFired = true;
+            await this._hookBuy(config.main_contract, Number(config.main_prediction), 'Main entry');
+            return true;
+        }
+
+        /**
+         * Virtual hook — the fork's "virtual_hook" step. It trades immediately
+         * (retrying a limited number of times), falls back to a digit trigger on
+         * the main run, and uses a third trigger while recovering from a loss.
+         */
+        async virtualHook(config = {}) {
+            this._activeHook = { type: 'virtual', config };
+            if (this._virtualRetriesLeft === 0 && this._virtualStage === 'immediate') {
+                this._virtualRetriesLeft = clampInt(config.immediate_retries, 1, 0, 20);
+            }
+
+            const digits = await this._hookDigits(15);
+
+            if (this._virtualStage === 'immediate' && this._virtualRetriesLeft > 0 && config.immediate_trigger !== 'off') {
+                await this._hookBuy(
+                    config.immediate_contract,
+                    Number(config.immediate_prediction),
+                    'Immediate entry'
+                );
+                return true;
+            }
+
+            const stage = this._hookInRecovery ? 'recovery' : 'main';
+            const trigger = stage === 'recovery' ? config.recovery_trigger : config.main_trigger;
+            const value = Number(stage === 'recovery' ? config.recovery_value : config.main_value);
+            const count = stage === 'recovery' ? config.recovery_count : config.main_count;
+            const contract = stage === 'recovery' ? config.recovery_contract : config.main_contract;
+            const prediction = Number(stage === 'recovery' ? config.recovery_prediction : config.main_prediction);
+
+            if (!triggerMet({ trigger, digits, value, count })) {
+                notify(`${stage === 'recovery' ? 'Recovery' : 'Main'} stage: waiting for the digit trigger`);
+                return false;
+            }
+
+            await this._hookBuy(contract, prediction, stage === 'recovery' ? 'Recovery entry' : 'Main entry');
+            return true;
+        }
+
+        /**
+         * Hedge hook — the fork's "hedge_hook" step: once the gate digit shows
+         * up, buy both legs of the hedge in the same tick.
+         */
+        async hedgeHook(config = {}) {
+            this._activeHook = { type: 'hedge', config };
+            const digits = await this._hookDigits(15);
+
+            if (
+                !triggerMet({
+                    trigger: config.gate_trigger,
+                    digits,
+                    value: Number(config.gate_value),
+                    count: config.gate_count,
+                })
+            ) {
+                notify('Hedge gate not met — waiting for the configured digit');
+                return false;
+            }
+
+            notify(`Hedge gate met — buying ${config.leg_a_contract} and ${config.leg_b_contract}`);
+            // Both legs are placed before either buy settles: the engine is
+            // still in Before Purchase for the second call, so the pair goes out
+            // together instead of one leg being dropped.
+            this.setNextContractType(config.leg_a_contract, Number(config.leg_a_prediction));
+            const leg_a = this.purchase(config.leg_a_contract, Number(config.leg_a_prediction));
+            this.setNextContractType(config.leg_b_contract, Number(config.leg_b_prediction));
+            const leg_b = this.purchase(config.leg_b_contract, Number(config.leg_b_prediction));
+            await Promise.allSettled([leg_a, leg_b]);
+            return true;
+        }
+
+        _hookSettlement(isWin) {
+            const hook = this._activeHook;
+            if (!hook) return;
+
+            if (hook.type === 'over_under') {
+                const recovery_configured =
+                    hook.config.recovery_contract && hook.config.recovery_contract !== 'OFF';
+                if (!isWin && recovery_configured) {
+                    this._hookInRecovery = true;
+                } else if (isWin) {
+                    this._hookInRecovery = false;
+                }
+                return;
+            }
+
+            if (hook.type === 'virtual') {
+                if (isWin) {
+                    this._hookInRecovery = false;
+                    if (this._virtualStage === 'immediate') this._virtualStage = 'main';
+                    return;
+                }
+                if (this._virtualStage === 'immediate') {
+                    this._virtualRetriesLeft -= 1;
+                    if (this._virtualRetriesLeft <= 0) this._virtualStage = 'main';
+                    return;
+                }
+                this._hookInRecovery = true;
+            }
+        }
+
+        /* ------------------------------------------------------------------
          * Settlement hook (called from Total.updateTotals)
          * ---------------------------------------------------------------- */
         onStrategySettlement(isWin) {
             if (this._contractSequenceActive) this._contractSequenceSettlement(isWin);
             if (this._conceptBlockActive) this._conceptBlockSettlement(isWin);
+            this._hookSettlement(isWin);
         }
     };

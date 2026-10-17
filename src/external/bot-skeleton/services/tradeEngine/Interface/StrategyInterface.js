@@ -6,6 +6,12 @@ const getStrategyInterface = tradeEngine => {
         setActiveSymbol: (...args) => tradeEngine.setActiveSymbol(...args),
         setContractType: (...args) => tradeEngine.setContractType(...args),
         apolloPurchase: (...args) => tradeEngine.apolloPurchase(...args),
+        // The money8gg fork's purchase hooks and market switch.
+        overUnderHook: (...args) => tradeEngine.overUnderHook(...args),
+        virtualHook: (...args) => tradeEngine.virtualHook(...args),
+        hedgeHook: (...args) => tradeEngine.hedgeHook(...args),
+        switchMarket: (...args) => tradeEngine.switchMarket(...args),
+        setTradeRepeat: (...args) => tradeEngine.setTradeRepeat(...args),
     };
 };
 

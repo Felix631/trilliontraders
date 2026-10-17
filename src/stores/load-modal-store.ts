@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
     getSavedWorkspaces,
     load,
+    refreshTradeDefinitionDropdowns,
     removeExistingWorkspace,
     save_types,
     saveWorkspaceToRecent,
@@ -495,6 +496,12 @@ export default class LoadModalStore {
         derivWorkspace.current_strategy_id = strategy_id;
         window.Blockly.xmlValues.strategy_id = strategy_id;
         if (strategy_xml) derivWorkspace.strategy_to_load = strategy_xml;
+
+        // Redrawing the workspace skips the blocks' own change listeners, so the
+        // dropdowns a strategy derives from its Trade parameters (Purchase list,
+        // contract type) have to be refilled here or a loaded bot shows an empty
+        // Purchase list.
+        refreshTradeDefinitionDropdowns(derivWorkspace, `dbot-load${Date.now()}`);
 
         /* [AI] - Analytics event tracking removed - see migrate-docs/MONITORING_PACKAGES.md for re-implementation guide */
         /* [/AI] */

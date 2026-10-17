@@ -20,9 +20,17 @@ describe('the purchase block family', () => {
     it('knows the step under every name the library uses, canonical first', () => {
         expect(PURCHASE_BLOCK_TYPES[0]).toBe('purchase');
 
-        ['apollo_purchase', 'apollo_purchase2', 'ceo_purchase', 'mon_purchase', 'purchase_with_prediction'].forEach(
-            type => expect(isPurchaseBlockType(type)).toBe(true)
-        );
+        [
+            'apollo_purchase',
+            'apollo_purchase2',
+            'ceo_purchase',
+            'mon_purchase',
+            'purchase_with_prediction',
+            // The money8gg hooks buy on their own — they are that fork's step.
+            'over_under_hook',
+            'virtual_hook',
+            'hedge_hook',
+        ].forEach(type => expect(isPurchaseBlockType(type)).toBe(true));
 
         // The structural blocks around the step are not the step.
         ['before_purchase', 'during_purchase', 'after_purchase', 'trade_definition'].forEach(type =>
@@ -38,8 +46,13 @@ describe('the purchase block family', () => {
         expect(isRequiredBlockPresent('purchase', workspace_with('mon_purchase'))).toBe(true);
         expect(isRequiredBlockPresent('purchase', workspace_with('purchase_with_prediction'))).toBe(true);
 
+        expect(isRequiredBlockPresent('purchase', workspace_with('virtual_hook'))).toBe(true);
+        expect(isRequiredBlockPresent('purchase', workspace_with('hedge_hook'))).toBe(true);
+
         // No purchase step at all is still a missing Purchase block.
         expect(isRequiredBlockPresent('purchase', workspace_with('before_purchase', 'trade_definition'))).toBe(false);
+        // A Multiple trades wrapper on its own does not buy anything.
+        expect(isRequiredBlockPresent('purchase', workspace_with('multiple_trades'))).toBe(false);
         // …and the other required types keep their exact meaning.
         expect(isRequiredBlockPresent('before_purchase', workspace_with('before_purchase'))).toBe(true);
         expect(isRequiredBlockPresent('before_purchase', workspace_with('ceo_purchase'))).toBe(false);
