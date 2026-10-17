@@ -531,6 +531,36 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/ai/chichitraders2-RISE-FALL-AUTOSRIKE-AI-by-chichi-1-xml"
     },
     {
+        "id": "chichitraders2-12-smartbotV1",
+        "name": "12 smartbotV1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/blocktradelive/chichitraders2-12-smartbotV1-xml"
+    },
+    {
+        "id": "chichitraders2-24hrs-bot-pr",
+        "name": "24hrs bot pr",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/blocktradelive/chichitraders2-24hrs-bot-pr-xml"
+    },
+    {
+        "id": "chichitraders2-BINARY-BOT-OVER-PROFIT-made-lossess",
+        "name": "BINARY BOT OVER PROFIT made lossess",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/blocktradelive/chichitraders2-BINARY-BOT-OVER-PROFIT-made-lossess-xml"
+    },
+    {
+        "id": "chichitraders2-Over-Under-0-75-new-1",
+        "name": "Over Under 0 75 new 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/blocktradelive/chichitraders2-Over-Under-0-75-new-1-xml"
+    },
+    {
+        "id": "chichitraders2-recover-bot-v8",
+        "name": "recover bot v8",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/blocktradelive/chichitraders2-recover-bot-v8-xml"
+    },
+    {
         "id": "chichitraders2-2-Prediction-O-U-M7-Bot",
         "name": "2 Prediction O U M7 Bot",
         "creator": "chichitraders2",
@@ -615,10 +645,238 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "chichitraders2/calekyztrading/chichitraders2-Trade-Ninja-Even-Odd-snipper-xml"
     },
     {
+        "id": "chichitraders2-1-Updated-Bandwagon-Bot-Without-Entry",
+        "name": "1 Updated Bandwagon Bot Without Entry",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-1-Updated-Bandwagon-Bot-Without-Entry-xml"
+    },
+    {
+        "id": "chichitraders2-7-Over-1-Under-8-Bot",
+        "name": "7 Over 1 Under 8 Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-7-Over-1-Under-8-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-AUTO-C4-PRO-v2",
+        "name": "AUTO C4 PRO v2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-AUTO-C4-PRO-v2-xml"
+    },
+    {
+        "id": "chichitraders2-AUTOMATED-OVER-2",
+        "name": "AUTOMATED OVER 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-AUTOMATED-OVER-2-xml"
+    },
+    {
+        "id": "chichitraders2-Candle-Mine-Version-2-2",
+        "name": "Candle Mine Version 2 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Candle-Mine-Version-2-2-xml"
+    },
+    {
+        "id": "chichitraders2-CASHTRADER-AI-ROBOT",
+        "name": "CASHTRADER AI ROBOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-CASHTRADER-AI-ROBOT-xml"
+    },
+    {
+        "id": "chichitraders2-Deriv-wizard-2-2",
+        "name": "Deriv wizard 2 2",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Deriv-wizard-2-2-xml"
+    },
+    {
+        "id": "chichitraders2-Dice-over-under-ENTRY-PRO-BOT-1",
+        "name": "Dice over under ENTRY PRO BOT 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Dice-over-under-ENTRY-PRO-BOT-1-xml"
+    },
+    {
+        "id": "chichitraders2-Even-master-Ai",
+        "name": "Even master Ai",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Even-master-Ai-xml"
+    },
+    {
+        "id": "chichitraders2-Greenprint-bot",
+        "name": "Greenprint bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Greenprint-bot-xml"
+    },
+    {
+        "id": "chichitraders2-MASSIVE-RECOVERY-BOT-BINARYTOOL-1",
+        "name": "MASSIVE RECOVERY BOT BINARYTOOL 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-MASSIVE-RECOVERY-BOT-BINARYTOOL-1-xml"
+    },
+    {
+        "id": "chichitraders2-MATCHES-Entry-1-1",
+        "name": "MATCHES Entry 1 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-MATCHES-Entry-1-1-xml"
+    },
+    {
+        "id": "chichitraders2-Original-Expert-Speed-Bot-0768302239-1-1-1-1",
+        "name": "Original Expert Speed Bot 0768302239 1 1 1 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Original-Expert-Speed-Bot-0768302239-1-1-1-1-xml"
+    },
+    {
+        "id": "chichitraders2-Over-1-destroyer-1",
+        "name": "Over 1 destroyer 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Over-1-destroyer-1-xml"
+    },
+    {
+        "id": "chichitraders2-Over-2-recovery-beast-bot",
+        "name": "Over 2 recovery beast bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Over-2-recovery-beast-bot-xml"
+    },
+    {
+        "id": "chichitraders2-PATEL-with-Entry-1",
+        "name": "PATEL with Entry 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-PATEL-with-Entry-1-xml"
+    },
+    {
+        "id": "chichitraders2-The-Splitter",
+        "name": "The Splitter",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-The-Splitter-xml"
+    },
+    {
+        "id": "chichitraders2-Under-7-recovery-ai-Bot",
+        "name": "Under 7 recovery ai Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Under-7-recovery-ai-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-Under-7-recovery",
+        "name": "Under 7 recovery",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Under-7-recovery-xml"
+    },
+    {
+        "id": "chichitraders2-Under-8-desroyer-1",
+        "name": "Under 8 desroyer 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Under-8-desroyer-1-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-8-OVER-4-BOT-hit-and-run-bot-1",
+        "name": "UNDER 8 OVER 4 BOT hit and run bot 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-UNDER-8-OVER-4-BOT-hit-and-run-bot-1-xml"
+    },
+    {
+        "id": "chichitraders2-Wealth-Generator-1",
+        "name": "Wealth Generator 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/diceice/chichitraders2-Wealth-Generator-1-xml"
+    },
+    {
+        "id": "chichitraders2-11-Over-under-switcher-Bot",
+        "name": "11 Over under switcher Bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-11-Over-under-switcher-Bot-xml"
+    },
+    {
+        "id": "chichitraders2-AI-ONLY-UP-DOWNS-VERSION-BY-GEELONG",
+        "name": "AI ONLY UP DOWNS VERSION BY GEELONG",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-AI-ONLY-UP-DOWNS-VERSION-BY-GEELONG-xml"
+    },
+    {
+        "id": "chichitraders2-Deriv-killer-3-0",
+        "name": "Deriv killer 3 0",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Deriv-killer-3-0-xml"
+    },
+    {
+        "id": "chichitraders2-Deriv-wizard-1-1",
+        "name": "Deriv wizard 1 1",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Deriv-wizard-1-1-xml"
+    },
+    {
+        "id": "chichitraders2-Digit-over-and-under",
+        "name": "Digit over and under",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Digit-over-and-under-xml"
+    },
+    {
+        "id": "chichitraders2-Fixed-over-3-wizard-by-Geelong",
+        "name": "Fixed over 3 wizard by Geelong",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Fixed-over-3-wizard-by-Geelong-xml"
+    },
+    {
+        "id": "chichitraders2-M27-Original-version",
+        "name": "M27 Original version",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-M27-Original-version-xml"
+    },
+    {
+        "id": "chichitraders2-Sv7-Entry-Scanner-robot",
+        "name": "Sv7 Entry Scanner robot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Sv7-Entry-Scanner-robot-xml"
+    },
+    {
+        "id": "chichitraders2-Ultimate-bot",
+        "name": "Ultimate bot",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/geelongtrades/chichitraders2-Ultimate-bot-xml"
+    },
+    {
+        "id": "chichitraders2-EVEN-ODD-AI-BOT",
+        "name": "EVEN ODD AI BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/master/chichitraders2-EVEN-ODD-AI-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-5-AI-BOT",
+        "name": "OVER 5 AI BOT",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/master/chichitraders2-OVER-5-AI-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-OVER-5-UNDER-5-RECOVERY-no-entry",
+        "name": "OVER 5 UNDER 5 RECOVERY no entry",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/master/chichitraders2-OVER-5-UNDER-5-RECOVERY-no-entry-xml"
+    },
+    {
+        "id": "chichitraders2-UNDER-5-RECOVERY-OVER-5-AI",
+        "name": "UNDER 5 RECOVERY OVER 5 AI",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/master/chichitraders2-UNDER-5-RECOVERY-OVER-5-AI-xml"
+    },
+    {
         "id": "chichitraders2-2-5-STRATEGY-BOT",
         "name": "2 5 STRATEGY BOT",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-2-5-STRATEGY-BOT-xml"
+    },
+    {
+        "id": "chichitraders2-6-Recovery-With-Odd-Bot-Version-3",
+        "name": "6 Recovery With Odd Bot Version 3",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-6-Recovery-With-Odd-Bot-Version-3-xml"
+    },
+    {
+        "id": "chichitraders2-7-Recovery-With-Even-Bot-Version-3",
+        "name": "7 Recovery With Even Bot Version 3",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-7-Recovery-With-Even-Bot-Version-3-xml"
+    },
+    {
+        "id": "chichitraders2-8-Over-1-Under-8-Recovery-Over-4",
+        "name": "8 Over 1 Under 8 Recovery Over 4",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-8-Over-1-Under-8-Recovery-Over-4-xml"
     },
     {
         "id": "chichitraders2-APEX-SWITCHER",
@@ -655,6 +913,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "DBX V3 Pro",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-DBX-V3-Pro-xml"
+    },
+    {
+        "id": "chichitraders2-Differ-Recovery-over-4-under-5",
+        "name": "Differ Recovery over 4 under 5",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-Differ-Recovery-over-4-under-5-xml"
     },
     {
         "id": "chichitraders2-DIGIT-PRO-V1",
@@ -733,6 +997,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "INFINITY ALGO",
         "creator": "chichitraders2",
         "file": "chichitraders2/no-analysis/chichitraders2-INFINITY-ALGO-xml"
+    },
+    {
+        "id": "chichitraders2-Magic-Recovery",
+        "name": "Magic Recovery",
+        "creator": "chichitraders2",
+        "file": "chichitraders2/no-analysis/chichitraders2-Magic-Recovery-xml"
     },
     {
         "id": "chichitraders2-NDER-DESTROYER",
@@ -11704,14 +11974,14 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 367
     },
     {
+        "id": "chichitraders2",
+        "label": "chichitraders2",
+        "count": 139
+    },
+    {
         "id": "over-under",
         "label": "over-under",
         "count": 126
-    },
-    {
-        "id": "chichitraders2",
-        "label": "chichitraders2",
-        "count": 94
     },
     {
         "id": "derivbots",

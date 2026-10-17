@@ -171,6 +171,8 @@ SITES = {
         "base": "https://chichitraders.site",
         "bundle_catalog": True,
         "skip_existing": True,
+        # No explicit bundle path: the site rotates the index hash, so it is
+        # discovered from the HTML on every run.
         "folder_map": {
             "calekyztrading": "calekyztrading",
             "chichitraders/automated bots": "ai",
@@ -178,6 +180,11 @@ SITES = {
             "chichitraders/normal bots": "normal",
             "chichitraders/premium": "premium",
             "chichitraders/special": "special",
+            # Folders the site added later; each one keeps its own creator chip.
+            "chichitraders/master": "master",
+            "diceice": "diceice",
+            "geelongtrades": "geelongtrades",
+            "blocktradelive": "blocktradelive",
         },
     },
     # denarapro.com free-bots section: the marketplace (async chunk 795) reads
