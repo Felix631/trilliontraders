@@ -53,6 +53,16 @@ const TYPE_ALIASES = {
     notifyhsfgorewhsj: 'notify',
 };
 
+/**
+ * Field names a few forks doubled an underscore in (`PURCHASE__LIST`,
+ * `DURATIONTYPE__LISTS`). A block that does not declare the field ignores it, so
+ * the saved setting would silently be lost — put the real name back.
+ */
+const FIELD_ALIASES = {
+    PURCHASE__LIST: 'PURCHASE_LIST',
+    DURATIONTYPE__LISTS: 'DURATIONTYPE_LIST',
+};
+
 /** Input names those forks used for the message a notify/print block shows. */
 const MESSAGE_INPUT_NAMES = ['MESSAGE', 'TEXT', 'MSG', 'VALUE'];
 
@@ -155,6 +165,23 @@ export const applyBlockTypeAliases = xml => {
     });
 
     return converted;
+};
+
+/**
+ * Renames the mangled field names, but only inside a block this build has —
+ * anywhere else the field is meaningless. Returns how many were renamed.
+ */
+export const applyFieldAliases = xml => {
+    let renamed = 0;
+    [...xml.getElementsByTagName('field')].forEach(field => {
+        const alias = FIELD_ALIASES[field.getAttribute('name')];
+        if (!alias) return;
+        const block = field.parentNode;
+        if (!block || !isKnownBlockType(block.getAttribute('type'))) return;
+        field.setAttribute('name', alias);
+        renamed += 1;
+    });
+    return renamed;
 };
 
 /**
@@ -344,6 +371,7 @@ export const convertOptionVariableBlocks = xml => {
 export const prepareStrategyXml = raw_string => {
     const xml = window.Blockly.utils.xml.textToDom(normalizeStrategyXml(raw_string ?? ''));
     applyBlockTypeAliases(xml);
+    applyFieldAliases(xml);
     convertOptionVariableBlocks(xml);
     registerCompatBlocks(xml);
     return xml;

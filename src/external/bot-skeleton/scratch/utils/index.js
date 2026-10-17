@@ -12,8 +12,10 @@ import { removeLimitedBlocks } from '../../utils/workspace';
 import BlockConversion from '../backward-compatibility';
 import DBotStore from '../dbot-store';
 import { saveAs } from '../shared';
+import { isPurchaseBlockType, isRequiredBlockPresent } from './purchase-blocks';
 import {
     applyBlockTypeAliases,
+    applyFieldAliases,
     convertOptionVariableBlocks,
     normalizeStrategyXml,
     registerCompatBlocks,
@@ -214,6 +216,7 @@ export const load = async ({
     // placeholder block of its own — see utils/strategy-compat.js. Nothing is
     // dropped from the strategy unless even that fails.
     applyBlockTypeAliases(xml);
+    applyFieldAliases(xml);
     convertOptionVariableBlocks(xml);
     const placeholder_types = registerCompatBlocks(xml);
 
@@ -448,7 +451,8 @@ export const addDomAsBlock = (el_block, parent_block = null) => {
 
 const getAllRequiredBlocks = (workspace, required_block_types) => {
     return workspace.getAllBlocks().filter(block => {
-        if (required_block_types.includes(block.type)) {
+        // A purchase step counts in any of its spellings — see ./purchase-blocks.
+        if (required_block_types.includes(block.type) || isPurchaseBlockType(block.type)) {
             return (
                 (block.childBlocks_.length === 0 && required_block_types.includes(block.category_)) ||
                 block.parentBlock_ === null
@@ -458,9 +462,13 @@ const getAllRequiredBlocks = (workspace, required_block_types) => {
 };
 
 const getMissingBlocks = (workspace, required_block_types) => {
-    return required_block_types.filter(blockType => {
-        return !workspace.getAllBlocks().some(block => block.type === blockType);
-    });
+    // Strategies that came from another bot builder place their order with their
+    // own Purchase block (ceo_purchase, mon_purchase, …). That *is* the Purchase
+    // step, so a workspace holding one is not missing it — the run used to be
+    // refused with "The Purchase block is mandatory and cannot be disabled."
+    const present_types = workspace.getAllBlocks().map(block => block.type);
+
+    return required_block_types.filter(blockType => !isRequiredBlockPresent(blockType, present_types));
 };
 
 const getDisabledBlocks = required_blocks_check => {
@@ -469,11 +477,17 @@ const getDisabledBlocks = required_blocks_check => {
     const disabled_blocks = Object.fromEntries(
         workspace
             .getAllBlocks()
-            .filter(block => required_block_types.includes(block.type))
+            .filter(block => required_block_types.includes(block.type) || isPurchaseBlockType(block.type))
             .map(block => [block.type, block.disabled])
     );
     const mandatory_blocks = ['before_purchase', 'purchase', 'trade_definition', 'trade_definition_tradeoptions'];
-    const has_disabled_blocks = mandatory_blocks.some(type => disabled_blocks[type]);
+    const has_disabled_blocks = mandatory_blocks.some(type =>
+        isPurchaseBlockType(type)
+            ? Object.entries(disabled_blocks).some(
+                  ([block_type, is_disabled]) => is_disabled && isPurchaseBlockType(block_type)
+              )
+            : disabled_blocks[type]
+    );
 
     return has_disabled_blocks
         ? required_blocks_check.filter(block => block.disabled || block.childBlocks_?.some(child => child.disabled))

@@ -11,10 +11,12 @@ const path = require('path');
 
 const {
     applyBlockTypeAliases,
+    applyFieldAliases,
     convertOptionVariableBlocks,
     normalizeStrategyXml,
     registerCompatBlocks,
 } = require('../strategy-compat');
+const { PURCHASE_BLOCK_TYPES, PURCHASE_TYPE_ALIASES, isPurchaseBlockType } = require('../purchase-blocks');
 
 const walk = (dir, ext, out = []) => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -25,6 +27,15 @@ const walk = (dir, ext, out = []) => {
     return out;
 };
 
+/**
+ * Block families this build defines from a table of type names instead of one
+ * `Blockly.Blocks.<name> =` per block, so the assignment above cannot see them.
+ */
+const TABLE_DEFINED_BLOCK_SOURCES = [
+    'src/external/bot-skeleton/scratch/blocks/Binary/Before Purchase/imported-purchases.js',
+    'src/external/bot-skeleton/scratch/blocks/Binary/Indicators/imported-indicators.js',
+];
+
 /* The real block registry, read straight off the vendored block sources. */
 const realBlockTypes = () => {
     const types = [];
@@ -32,6 +43,10 @@ const realBlockTypes = () => {
         const src = fs.readFileSync(file, 'utf8');
         for (const m of src.matchAll(/Blockly\.Blocks\.([A-Za-z0-9_]+)\s*=/g)) types.push(m[1]);
         for (const m of src.matchAll(/Blockly\.Blocks\[\s*['"]([A-Za-z0-9_]+)['"]\s*\]\s*=/g)) types.push(m[1]);
+    }
+    for (const file of TABLE_DEFINED_BLOCK_SOURCES) {
+        const src = fs.readFileSync(file, 'utf8');
+        for (const m of src.matchAll(/\{\s*type:\s*'([A-Za-z0-9_]+)'/g)) types.push(m[1]);
     }
     return types;
 };
@@ -53,6 +68,7 @@ const installBlocklyStub = () => {
 const processXml = raw => {
     const xml = new DOMParser().parseFromString(normalizeStrategyXml(raw), 'application/xml');
     applyBlockTypeAliases(xml);
+    applyFieldAliases(xml);
     convertOptionVariableBlocks(xml);
     const placeholders = registerCompatBlocks(xml);
     return { xml, placeholders };
@@ -127,6 +143,70 @@ describe('strategy compatibility', () => {
             still_unknown: [],
             unmountable: [],
         });
+    });
+
+    it('keeps every purchase step the shipped bots place their orders with', () => {
+        // Anything named …purchase… in the library is either one of the four
+        // structural blocks or the step that buys the contract. A trading bot
+        // cannot run without that step, so each spelling has to be a block this
+        // build really has — otherwise it is dropped on load and the run is
+        // refused with "The Purchase block is mandatory …".
+        const structural = type =>
+            ['purchase', 'before_purchase', 'during_purchase', 'after_purchase'].includes(type.replace(/_{2,}/g, '_'));
+
+        const used = new Set();
+        xmlFiles.forEach(file => {
+            const src = fs.readFileSync(file, 'utf8');
+            for (const m of src.matchAll(/type="([A-Za-z0-9_]*[Pp]urchase[A-Za-z0-9_]*)"/g)) used.add(m[1]);
+        });
+
+        const purchase_steps = [...used].filter(type => !structural(type));
+        expect(purchase_steps.length).toBeGreaterThan(0);
+
+        purchase_steps.forEach(type => {
+            expect(isPurchaseBlockType(type) || PURCHASE_TYPE_ALIASES.includes(type)).toBe(true);
+            expect(REAL_TYPES).toContain(type);
+        });
+        expect(PURCHASE_BLOCK_TYPES).toContain('purchase');
+    });
+
+    it('loads an imported purchase step as that bot\u2019s own block, not a placeholder', () => {
+        const cases = {
+            'src/xml/free-bots/denarapro/denarapro-th-profit-1-bot-06-xml.xml': 'ceo_purchase',
+            'src/xml/free-bots/denarapro/denarapro-th-speed-bot-ceo-sami-v2-01-xml.xml': 'ceosami_purchase',
+            'src/xml/free-bots/chichitraders2/no-analysis/chichitraders2-INFINITY-ALGO-xml.xml': 'mon_purchase',
+            'src/xml/free-bots/traderkit-HUNTER-martingale_matches_differs-xml.xml': 'purchase_with_prediction',
+            'src/xml/free-bots/denarapro/denarapro-tk-hunter-autodifferbylegoo-xml-xml.xml': 'traderlegoo_purchase',
+            'src/xml/free-bots/jmtraders/jmtraders-Dollarprinter_2025_Bot-xml.xml': 'purchase_hsfgorewhsj',
+        };
+
+        Object.entries(cases).forEach(([file, type]) => {
+            installBlocklyStub();
+            const { xml, placeholders } = processXml(fs.readFileSync(file, 'utf8'));
+            const types = [...xml.getElementsByTagName('block')].map(node => node.getAttribute('type'));
+
+            expect(types).toContain(type);
+            expect(placeholders).not.toContain(type);
+        });
+    });
+
+    it('restores the field names a fork doubled an underscore in', () => {
+        const file = 'src/xml/free-bots/jmtraders/jmtraders-Dollarprinter_2025_Bot-xml.xml';
+        const xml = new DOMParser().parseFromString(normalizeStrategyXml(fs.readFileSync(file, 'utf8')), 'application/xml');
+
+        const step = xml.querySelector('block[type="purchase_hsfgorewhsj"]');
+        expect(step.querySelector('field[name="PURCHASE__LIST"]').textContent).toBe('DIGITODD');
+
+        // Block types first, then fields: the duration field sits in a block the
+        // fork also renamed, and the rename has to be resolved before its fields
+        // are worth touching.
+        applyBlockTypeAliases(xml);
+        expect(applyFieldAliases(xml)).toBe(2);
+
+        // The contract the bot buys is read off the real field name now, and the
+        // duration type of its trade options with it.
+        expect(step.querySelector('field[name="PURCHASE_LIST"]').textContent).toBe('DIGITODD');
+        expect(xml.querySelector('field[name="DURATIONTYPE_LIST"]').textContent).toBe('t');
     });
 
     it('rebuilds the fork option-variable pair into real blocks', () => {

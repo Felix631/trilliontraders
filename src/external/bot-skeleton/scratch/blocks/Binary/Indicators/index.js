@@ -8,3 +8,4 @@ import './sma_statement';
 import './smaa_statement';
 import './macda_statement';
 import './Parts';
+import './imported-indicators';

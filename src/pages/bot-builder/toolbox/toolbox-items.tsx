@@ -162,6 +162,32 @@ export const ToolboxItems = () =>
                 <Block type='before_purchase' />
                 <Block type='purchase' />
                 <Block type='apollo_purchase2' />
+                {/* Purchase blocks imported from other bot builders: the same step, the
+                    same runtime call. They are listed here so a strategy that arrived
+                    with one can also be built and edited in this app. */}
+                <Block type='purchase_with_prediction'>
+                    <Field name='CONTRACT_TYPE'>DIGITMATCH</Field>
+                    <Value name='PREDICTION'>
+                        <Shadow type='math_number'>
+                            <Field name='NUM'>1</Field>
+                        </Shadow>
+                    </Value>
+                </Block>
+                <Block type='ceo_purchase'>
+                    <Field name='PURCHASE_LIST'>CALL</Field>
+                </Block>
+                <Block type='ceosami_purchase'>
+                    <Field name='PURCHASE_LIST'>CALL</Field>
+                </Block>
+                <Block type='mon_purchase'>
+                    <Field name='PURCHASE_LIST'>DIGITEVEN</Field>
+                </Block>
+                <Block type='traderlegoo_purchase'>
+                    <Field name='PURCHASE_LIST'>DIGITDIFF</Field>
+                </Block>
+                <Block type='purchase_hsfgorewhsj'>
+                    <Field name='PURCHASE_LIST'>DIGITODD</Field>
+                </Block>
             </Category>
             <Category id='sell_conditions' name={localize('Sell conditions (optional)')}>
                 <Block type='during_purchase' />
@@ -422,6 +448,132 @@ export const ToolboxItems = () =>
                                 </Next>
                             </Block>
                         </Statement>
+                    </Block>
+                    {/* Value-returning spellings of the same indicators. Strategies from
+                        other builders measure the market with these, so they are here
+                        alongside the variable-setting blocks. */}
+                    <Block type='sma'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='smaa'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='ema'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='emaa'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='rsi'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='rsia'>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='bb'>
+                        <Field name='BBRESULT_LIST'>0</Field>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='UPMULTIPLIER'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>5</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='DOWNMULTIPLIER'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>5</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='bba'>
+                        <Field name='BBRESULT_LIST'>0</Field>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>10</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='UPMULTIPLIER'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>5</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='DOWNMULTIPLIER'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>5</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='macda'>
+                        <Field name='MACDFIELDS_LIST'>1</Field>
+                        <Value name='INPUT'>
+                            <Block type='ticks' />
+                        </Value>
+                        <Value name='FAST_EMA_PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>12</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='SLOW_EMA_PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>26</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='SIGNAL_EMA_PERIOD'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>9</Field>
+                            </Shadow>
+                        </Value>
                     </Block>
                 </Category>
 
