@@ -1,6 +1,7 @@
 import { localize } from '@deriv-com/translations';
 import { getContractTypeOptions } from '../../shared';
 import { excludeOptionFromContextMenu, modifyContextMenu } from '../../utils';
+import { multiPurchaseCode, purchaseCode } from '../../utils/purchase-blocks';
 
 const SYMBOL_OPTIONS = [
     ['R_10', 'R_10'],
@@ -24,6 +25,28 @@ const CONTRACT_CHANGER_OPTIONS = [
     ['DIGITMATCH', 'DIGITMATCH'],
     ['DIGITDIFF', 'DIGITDIFF'],
     [localize('Disabled'), 'disable'],
+];
+
+/**
+ * Contract types the Apollo purchase block can buy before the trade definition
+ * narrows the list. A dropdown only resolves a value that is in its options, so
+ * a saved strategy (or the toolbox default) needs a real list here — otherwise
+ * the field comes back blank and the block cannot place its order.
+ */
+const PURCHASE_LIST_OPTIONS = [
+    ['', ''],
+    ['DIGITOVER', 'DIGITOVER'],
+    ['DIGITUNDER', 'DIGITUNDER'],
+    ['DIGITEVEN', 'DIGITEVEN'],
+    ['DIGITODD', 'DIGITODD'],
+    ['DIGITMATCH', 'DIGITMATCH'],
+    ['DIGITDIFF', 'DIGITDIFF'],
+    [localize('Rise'), 'CALL'],
+    [localize('Fall'), 'PUT'],
+    [localize('Only Ups'), 'RUNHIGH'],
+    [localize('Only Downs'), 'RUNLOW'],
+    [localize('No Touch'), 'NOTOUCH'],
+    [localize('One Touch'), 'ONETOUCH'],
 ];
 
 const strategyBlockConfig = {
@@ -130,7 +153,7 @@ window.Blockly.Blocks.apollo_purchase = {
                 {
                     type: 'field_dropdown',
                     name: 'PURCHASE_LIST',
-                    options: [['', '']],
+                    options: PURCHASE_LIST_OPTIONS,
                 },
                 {
                     type: 'field_checkbox',
@@ -197,7 +220,7 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.apollo_purchase = block =
     const purchaseList = block.getFieldValue('PURCHASE_LIST');
     const multipleContracts = block.getFieldValue('MULTIPLE_CONTRACTS') === 'TRUE';
     const quantity = block.getFieldValue('CONTRACT_QUANTITY') || 1;
-    return `Bot.apolloPurchase('${purchaseList}', ${multipleContracts}, ${quantity});\n`;
+    return multiPurchaseCode(purchaseList, multipleContracts, quantity);
 };
 
 const APOLLO_PURCHASE2_OPTIONS = [
@@ -278,7 +301,7 @@ addEnableDisableContextMenu(window.Blockly.Blocks.apollo_purchase2);
 window.Blockly.JavaScript.javascriptGenerator.forBlock.apollo_purchase2 = block => {
     const purchaseList = block.getFieldValue('PURCHASE_LIST');
     if (!PREDICTION_CONTRACT_TYPES.includes(purchaseList)) {
-        return `Bot.purchase('${purchaseList}');\n`;
+        return purchaseCode(purchaseList);
     }
     const prediction =
         window.Blockly.JavaScript.javascriptGenerator.valueToCode(
@@ -286,5 +309,5 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.apollo_purchase2 = block 
             'PREDICTION',
             window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
         ) || '1';
-    return `Bot.purchase('${purchaseList}', ${prediction});\n`;
+    return purchaseCode(purchaseList, prediction);
 };

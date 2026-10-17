@@ -1,5 +1,6 @@
 import { localize } from '@deriv-com/translations';
 import { excludeOptionFromContextMenu, modifyContextMenu } from '../../../utils';
+import { multiPurchaseCode, purchaseCode } from '../../../utils/purchase-blocks';
 
 /**
  * Purchase blocks imported from other bot builders.
@@ -159,7 +160,7 @@ const defineImportedPurchase = spec => {
         if (quantity) {
             const multiple = block.getFieldValue('MULTIPLE_CONTRACTS') === 'TRUE';
             const count = Number(block.getFieldValue('CONTRACT_QUANTITY')) || 1;
-            return `Bot.apolloPurchase('${contract_type}', ${multiple}, ${count});\\n`;
+            return multiPurchaseCode(contract_type, multiple, count);
         }
         if (prediction) {
             const barrier =
@@ -168,9 +169,9 @@ const defineImportedPurchase = spec => {
                     'PREDICTION',
                     window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
                 ) || '1';
-            return `Bot.purchase('${contract_type}', ${barrier});\\n`;
+            return purchaseCode(contract_type, barrier);
         }
-        return `Bot.purchase('${contract_type}');\\n`;
+        return purchaseCode(contract_type);
     };
 };
 

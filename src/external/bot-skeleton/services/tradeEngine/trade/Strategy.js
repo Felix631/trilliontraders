@@ -163,6 +163,18 @@ export default Engine =>
             } else if (this._conceptBlockActive && this.tradeOptions?.contract_type) {
                 contractType = this.tradeOptions.contract_type;
             }
+            // A bot exported from another builder can arrive with an empty
+            // contract-type dropdown (its options only fill in once the trade
+            // definition is present). Buying the contract type chosen in Trade
+            // parameters is the only order that definition allows anyway, and
+            // it keeps the bot trading instead of failing on an empty type.
+            if (!contractType || contractType === 'undefined' || contractType === 'null') {
+                contractType = this.tradeOptions?.contract_type || '';
+            }
+            if (!contractType) {
+                notify('Apollo purchase skipped: no contract type in the block or Trade parameters');
+                return;
+            }
             const count = multipleContracts && Number(quantity) > 1 ? Math.min(Number(quantity), 50) : 1;
             for (let i = 0; i < count; i += 1) {
                 await this.purchase(contractType);

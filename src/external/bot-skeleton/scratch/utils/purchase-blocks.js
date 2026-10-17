@@ -40,6 +40,33 @@ export const PURCHASE_TYPE_ALIASES = ['apollo__purchase', 'ceo__purchase', 'mon_
 export const isPurchaseBlockType = type => PURCHASE_BLOCK_TYPES.includes(type);
 
 /**
+ * Runtime call for a single-contract purchase step. The statement always ends
+ * with a REAL newline: generated code is handed straight to the interpreter,
+ * so a `\n` escape left in the source is a syntax error ("Expecting Unicode
+ * escape sequence \uXXXX") — which is what an imported Purchase block used to
+ * emit, stopping every strategy that bought with one.
+ *
+ * An unset contract type emits nothing: the runtime rejects an empty
+ * contract_type, and a strategy must not send a malformed buy.
+ */
+export const purchaseCode = (contract_type, prediction) => {
+    if (!contract_type) return '';
+    return prediction === undefined
+        ? `Bot.purchase('${contract_type}');\n`
+        : `Bot.purchase('${contract_type}', ${prediction});\n`;
+};
+
+/**
+ * Runtime call for the multi-contract Apollo purchase step. An empty contract
+ * type is kept as an empty string on purpose: the trade engine then buys the
+ * contract chosen in Trade parameters instead of sending an invalid order.
+ */
+export const multiPurchaseCode = (contract_type, multiple_contracts = false, quantity = 1) => {
+    const count = Math.min(Math.max(parseInt(quantity, 10) || 1, 1), 50);
+    return `Bot.apolloPurchase('${contract_type || ''}', ${Boolean(multiple_contracts)}, ${count});\n`;
+};
+
+/**
  * True when a workspace's blocks (or a plain list of type names) include a
  * purchase step. Accepts both so the caller can pass whatever it already has.
  */

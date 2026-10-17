@@ -16,6 +16,19 @@ export default Engine =>
                 return Promise.resolve();
             }
 
+            // A strategy imported from another builder can arrive with its
+            // contract-type dropdown empty (the options are filled in from the
+            // trade definition when the block is drawn, not when the XML is
+            // read). The definition already fixes the contract type this trade
+            // buys, so use it instead of sending an order with no type — which
+            // the API rejects and which used to stop the whole bot.
+            if (!contract_type || contract_type === 'undefined' || contract_type === 'null') {
+                contract_type = this.tradeOptions?.contract_type;
+            }
+            if (!contract_type) {
+                return Promise.resolve();
+            }
+
             // The Apollo purchase block may pass an explicit prediction
             // (e.g. for Over/Under/Matches/Differs digit contracts).
             if (prediction !== undefined && prediction !== null) {

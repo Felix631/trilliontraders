@@ -162,6 +162,14 @@ export const ToolboxItems = () =>
                 <Block type='before_purchase' />
                 <Block type='purchase' />
                 <Block type='apollo_purchase2' />
+                {/* Apollo purchase — the multi-contract step from the Apollo build of
+                    this library. It belongs next to Purchase: a strategy whose buy step
+                    is an Apollo block needs it in this menu to be built or edited. */}
+                <Block type='apollo_purchase'>
+                    <Field name='PURCHASE_LIST'>DIGITOVER</Field>
+                    <Field name='MULTIPLE_CONTRACTS'>FALSE</Field>
+                    <Field name='CONTRACT_QUANTITY'>1</Field>
+                </Block>
                 {/* Purchase blocks imported from other bot builders: the same step, the
                     same runtime call. They are listed here so a strategy that arrived
                     with one can also be built and edited in this app. */}
@@ -244,7 +252,6 @@ export const ToolboxItems = () =>
                 <Block type='strategy_rotate_market' />
                 <Block type='active_symbol_changer' />
                 <Block type='contract_changer_block' />
-                <Block type='apollo_purchase' />
             </Category>
 
             <Category id='analysis' name={localize('Analysis')}>

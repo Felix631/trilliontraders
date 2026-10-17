@@ -12,6 +12,8 @@ const {
     isPurchaseBlockType,
     hasPurchaseBlock,
     isRequiredBlockPresent,
+    purchaseCode,
+    multiPurchaseCode,
 } = require('../purchase-blocks');
 
 describe('the purchase block family', () => {
@@ -47,5 +49,43 @@ describe('the purchase block family', () => {
         expect(hasPurchaseBlock(['before_purchase', { type: 'traderlegoo_purchase' }])).toBe(true);
         expect(hasPurchaseBlock(['before_purchase', 'during_purchase'])).toBe(false);
         expect(hasPurchaseBlock(undefined)).toBe(false);
+    });
+
+    // Generated statements go straight to the interpreter, which parses them as
+    // JavaScript. An escaped `\n` (the imported Purchase blocks used to emit
+    // one) fails there with "Expecting Unicode escape sequence \uXXXX" and the
+    // whole bot stops before its first trade.
+    const parses = code => {
+        expect(() => new Function(code)).not.toThrow();
+    };
+
+    it('generates a single purchase statement the interpreter can parse', () => {
+        const code = purchaseCode('DIGITOVER');
+        expect(code.endsWith('\n')).toBe(true);
+        expect(code).not.toContain('\\n');
+        expect(() => parses(code)).not.toThrow();
+
+        const with_prediction = purchaseCode('DIGITMATCH', 3);
+        expect(with_prediction.endsWith('\n')).toBe(true);
+        expect(with_prediction).toContain("Bot.purchase('DIGITMATCH', 3)");
+        expect(() => parses(with_prediction)).not.toThrow();
+
+        // No contract type means no order at all — never `Bot.purchase('')`.
+        expect(purchaseCode('')).toBe('');
+    });
+
+    it('generates the Apollo multi-contract purchase the interpreter can parse', () => {
+        const code = multiPurchaseCode('DIGITEVEN');
+        expect(code).toBe("Bot.apolloPurchase('DIGITEVEN', false, 1);\n");
+        expect(() => parses(code)).not.toThrow();
+
+        const multiple = multiPurchaseCode('DIGITOVER', true, 3);
+        expect(multiple).toBe("Bot.apolloPurchase('DIGITOVER', true, 3);\n");
+        expect(() => parses(multiple)).not.toThrow();
+
+        // A blank dropdown falls back to Trade parameters at runtime, so the
+        // call is still valid and the bot keeps trading with its chosen type.
+        expect(multiPurchaseCode('', false, 1)).toBe("Bot.apolloPurchase('', false, 1);\n");
+        expect(multiPurchaseCode('CALL', false, 999)).toContain(' 50);');
     });
 });
