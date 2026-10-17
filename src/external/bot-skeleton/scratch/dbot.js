@@ -7,7 +7,6 @@ import { compareXml, observer as globalObserver } from '../utils';
 import { getSavedWorkspaces, saveWorkspaceToRecent } from '../utils/local-storage';
 import { isDbotRTL } from '../utils/workspace';
 import { prepareStrategyXml } from './utils/strategy-compat';
-import { refreshTradeDefinitionDropdowns } from './utils/trade-options';
 import main_xml from './xml/main.xml';
 import { forgetAccumulatorsProposalRequest } from './accumulators-proposal-handler';
 import { loadBlockly } from './blockly';
@@ -203,10 +202,6 @@ class DBot {
                 save_modal.updateBotName(file_name);
                 this.workspace.cleanUp(0, is_mobile ? 60 : 56);
                 this.workspace.clearUndo();
-                // The initial strategy is drawn without its blocks' change
-                // listeners firing, so its Purchase list / contract type
-                // dropdowns are filled in from the Trade parameters here.
-                refreshTradeDefinitionDropdowns(this.workspace, event_group);
 
                 window.dispatchEvent(new Event('resize'));
                 window.addEventListener('dragover', DBot.handleDragOver);

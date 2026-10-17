@@ -1,5 +1,4 @@
 import { localize } from '@deriv-com/translations';
-import { getPurchaseListOptions } from '../../../shared';
 import { modifyContextMenu } from '../../../utils';
 
 window.Blockly.Blocks.ask_price = {
@@ -13,7 +12,7 @@ window.Blockly.Blocks.ask_price = {
                 {
                     type: 'field_dropdown',
                     name: 'PURCHASE_LIST',
-                    options: getPurchaseListOptions(),
+                    options: [['', '']],
                 },
             ],
             output: 'Number',

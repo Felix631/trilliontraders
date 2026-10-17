@@ -125,10 +125,6 @@ export default Engine =>
             }
             const trade_option = tradeOptionToBuy(contract_type, this.tradeOptions);
             const action = () => api_base.api.send(trade_option);
-            // A "Multiple trades" block asked for several contracts of the same
-            // trade. Each direct buy is its own contract, so they are sent one
-            // after another; every one is reported like a normal purchase.
-            const repeat = typeof this._takeTradeRepeat === 'function' ? this._takeTradeRepeat() : 1;
 
             this.isSold = false;
 
@@ -138,11 +134,7 @@ export default Engine =>
             });
 
             if (!this.options.timeMachineEnabled) {
-                let pending = doUntilDone(action).then(onSuccess);
-                for (let i = 1; i < repeat; i += 1) {
-                    pending = pending.then(() => doUntilDone(action)).then(onSuccess);
-                }
-                return pending;
+                return doUntilDone(action).then(onSuccess);
             }
 
             return recoverFromError(

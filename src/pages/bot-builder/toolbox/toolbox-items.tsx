@@ -170,29 +170,6 @@ export const ToolboxItems = () =>
                     <Field name='MULTIPLE_CONTRACTS'>FALSE</Field>
                     <Field name='CONTRACT_QUANTITY'>1</Field>
                 </Block>
-                {/* The money8gg hooks are that family's own purchase step: they
-                    watch the digits and buy when their trigger fires. */}
-                <Block type='over_under_hook'>
-                    <Field name='MAIN_TRIGGER'>under</Field>
-                    <Field name='MAIN_CONTRACT'>DIGITOVER</Field>
-                    <Field name='RECOVERY_CONTRACT'>OFF</Field>
-                </Block>
-                <Block type='virtual_hook'>
-                    <Field name='MAIN_TRIGGER'>digit_under</Field>
-                    <Field name='MAIN_CONTRACT'>DIGITOVER</Field>
-                </Block>
-                <Block type='hedge_hook'>
-                    <Field name='GATE_VALUE'>9</Field>
-                    <Field name='LEG_A_CONTRACT'>DIGITOVER</Field>
-                    <Field name='LEG_B_CONTRACT'>DIGITUNDER</Field>
-                </Block>
-                <Block type='multiple_trades'>
-                    <Value name='TRADE_COUNT'>
-                        <Shadow type='math_number'>
-                            <Field name='NUM'>5</Field>
-                        </Shadow>
-                    </Value>
-                </Block>
                 {/* Purchase blocks imported from other bot builders: the same step, the
                     same runtime call. They are listed here so a strategy that arrived
                     with one can also be built and edited in this app. */}
@@ -275,9 +252,6 @@ export const ToolboxItems = () =>
                 <Block type='strategy_rotate_market' />
                 <Block type='active_symbol_changer' />
                 <Block type='contract_changer_block' />
-                <Block type='one_s_markets'>
-                    <Field name='MARKET_LIST'>1HZ10V</Field>
-                </Block>
             </Category>
 
             <Category id='analysis' name={localize('Analysis')}>

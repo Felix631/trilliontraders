@@ -1,5 +1,5 @@
 import { localize } from '@deriv-com/translations';
-import { getContractTypeOptions, getPurchaseListOptions } from '../../../shared';
+import { getContractTypeOptions } from '../../../shared';
 import { excludeOptionFromContextMenu, modifyContextMenu } from '../../../utils';
 
 window.Blockly.Blocks.purchase = {
@@ -16,9 +16,7 @@ window.Blockly.Blocks.purchase = {
                 {
                     type: 'field_dropdown',
                     name: 'PURCHASE_LIST',
-                    // Seeded so a loaded strategy keeps its saved contract type:
-                    // the trade-definition list is filled in afterwards.
-                    options: getPurchaseListOptions(),
+                    options: [['', '']],
                 },
             ],
             previousStatement: null,

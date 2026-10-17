@@ -8,4 +8,3 @@ export {
     scrollWorkspace,
     updateWorkspaceName,
 } from './utils/index';
-export { refreshTradeDefinitionDropdowns } from './utils/trade-options';

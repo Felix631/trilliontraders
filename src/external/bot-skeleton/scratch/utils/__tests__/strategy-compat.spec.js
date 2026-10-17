@@ -33,7 +33,6 @@ const walk = (dir, ext, out = []) => {
  */
 const TABLE_DEFINED_BLOCK_SOURCES = [
     'src/external/bot-skeleton/scratch/blocks/Binary/Before Purchase/imported-purchases.js',
-    'src/external/bot-skeleton/scratch/blocks/Binary/Before Purchase/hook-purchases.js',
     'src/external/bot-skeleton/scratch/blocks/Binary/Indicators/imported-indicators.js',
 ];
 

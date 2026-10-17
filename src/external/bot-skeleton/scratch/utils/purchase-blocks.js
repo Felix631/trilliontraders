@@ -31,12 +31,6 @@ export const PURCHASE_BLOCK_TYPES = [
     'purchase_hsfgorewhsj',
     'purchase_with_prediction',
     'traderlegoo_purchase',
-    // The money8gg fork's hooks are the purchase step of its strategies: they
-    // watch the digits and buy themselves, so a strategy with one really does
-    // have a Purchase block.
-    'over_under_hook',
-    'virtual_hook',
-    'hedge_hook',
 ];
 
 /** Type names the compat pass also rewrites onto `purchase` (see strategy-compat.js). */
