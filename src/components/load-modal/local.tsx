@@ -102,7 +102,10 @@ const LocalComponent = observer(() => {
                 <div
                     data-testid='dt__local-dropzone-area'
                     className='load-strategy__local-dropzone-area'
+                    // A drop only happens if the drag is allowed over the area.
+                    onDragOver={e => e.preventDefault()}
                     onDrop={e => {
+                        e.preventDefault();
                         handleFileChange(e, false);
                     }}
                 >
