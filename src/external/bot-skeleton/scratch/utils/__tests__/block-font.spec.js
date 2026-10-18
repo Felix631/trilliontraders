@@ -7,6 +7,11 @@
  * and in an inherited family, so the glyphs were wider than the space Blockly had
  * reserved and longer variable names / section headers spilled over the block
  * edges. The font now lives in the theme (scratch/blockly.js) only.
+ *
+ * The same rule applies to everything Blockly positions from those metrics: a
+ * checkbox field draws its tick and its box from `FIELD_TEXT_HEIGHT` /
+ * `FIELD_CHECKBOX_X_OFFSET`, so the old pinned 16px/7/2 geometry from the 11pt
+ * days has to stay out of the stylesheet or the tick leaves its box.
  */
 const fs = require('fs');
 const path = require('path');
@@ -60,11 +65,40 @@ describe('block text sizing and contrast', () => {
         expect(body).not.toMatch(/font-size\s*:/);
     });
 
-    it('clears the pale label rect behind the white root-block headers', () => {
+    it('keeps the root block header labels light on the dark root blocks', () => {
         const sheet = readSource('index.scss');
 
-        expect(sheet).toMatch(/:has\(> \.blocklyTextRootBlockHeader\)\s*>\s*rect/);
         expect(sheet).toMatch(/\.blocklyTextRootBlockHeader[^{]*\{[^}]*fill:\s*#fff/);
+    });
+
+    it('does not pin the checkbox tick or its box to the old font metrics', () => {
+        const sheet = readSource('index.scss');
+
+        expect(ruleBody(sheet, '.blocklyCheckbox')).toBeNull();
+        expect(sheet).not.toMatch(/:has\(> \.blocklyCheckbox\)/);
+        expect(ruleBody(sheet, '.blocklyFieldRect')).toBeNull();
+    });
+
+    it('keeps the collapsed function title dark: it sits on a light block', () => {
+        const sheet = readSource('index.scss');
+        const body = ruleBody(sheet, '.header__title');
+
+        expect(body).not.toBeNull();
+        expect(body).toMatch(/fill:\s*#333/);
+        expect(body).not.toMatch(/fill:\s*(#fff|var\(--text-prominent\))/);
+    });
+
+    it('paints the body-level drop-down options and field editor text dark', () => {
+        const sheet = readSource('index.scss');
+        const rule = sheet.match(/\.blocklyDropDownDiv \.blocklyMenuItemContent,[\s\S]*?\}/);
+
+        // These widgets are appended to <body> (Blockly tags them with the
+        // renderer and theme classes, but they are not nested inside the
+        // workspace), so the selector must not carry the renderer prefix, and
+        // the declaration has to beat the renderer's own white option colour.
+        expect(rule).not.toBeNull();
+        expect(rule[0]).toMatch(/blocklyWidgetDiv \.blocklyHtmlInput/);
+        expect(rule[0]).toMatch(/color:\s*#16181f !important/);
     });
 });
 

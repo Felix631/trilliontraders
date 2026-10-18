@@ -1038,20 +1038,15 @@ drag a block and selected text moves instead.
         font-weight: bold;
     }
 
-    .blocklyCheckbox {
-        width: 16px;
-        height: 16px;
-        y: 7;
-        x: 2;
-    }
-
     .header__title {
-        // Collapsed function header: it sits on the dark root block, where the
-        // theme's prominent text colour is dark too — white keeps it readable.
-        // Weight stays normal so the label is no wider than the space Blockly
-        // measured for it (see .blocklyText above).
-        color: #fff;
-        fill: #fff;
+        // Collapsed function header. Function blocks are drawn in the light
+        // "Special2" colour, so the text has to stay dark in both themes (the
+        // theme's prominent colour turns white in the dark theme, which is what
+        // made this label invisible on its own block). Weight stays normal so
+        // the label is no wider than the space Blockly measured for it (see
+        // .blocklyText above).
+        color: #333;
+        fill: #333;
         display: inline-block;
         font-weight: 400;
     }
@@ -1246,26 +1241,31 @@ drag a block and selected text moves instead.
     .blocklyTextTickAnalysis {
         fill: #fff;
     }
-
-    /*
-     * Blockly draws a translucent white rect behind every label. White text on
-     * that pale rect is barely legible, so drop the rect for the labels that sit
-     * directly on the dark root blocks and let the block supply the background.
-     */
-    .blocklyNonEditableText:has(> .blocklyTextRootBlockHeader) > rect,
-    .blocklyNonEditableText:has(> .blocklyTextRootBlockHeaderCollapsed) > rect,
-    .blocklyNonEditableText:has(> .blocklyTextTickAnalysis) > rect,
-    .blocklyNonEditableText:has(> .header__title) > rect {
-        fill: none;
-    }
 }
 
-.blocklyNonEditableText:has(> .blocklyCheckbox) .blocklyFieldRect,
-.blocklyEditableText:has(> .blocklyCheckbox) .blocklyFieldRect {
-    width: 16px;
-    height: 16px;
-    y: 7;
-    x: 2;
+/*
+ * Checkbox (tick) fields: no pinned rect geometry. Blockly sizes and positions
+ * both the box and the tick character from the theme font metrics
+ * (`FIELD_CHECKBOX_X_OFFSET`, `FIELD_TEXT_HEIGHT`), and the old 16px/7/2 values
+ * belonged to the 11pt font — with the current 13pt metrics the tick ended up
+ * outside its box. Letting Blockly's own attributes through keeps the two in
+ * step.
+ */
+
+/*
+ * Drop-down options and the edit-in-place input are appended to <body> and
+ * Blockly tags them with the renderer + theme classes, so its zelos sheet wins
+ * here: it paints the drop-down options white — meant for zelos' saturated block
+ * colours — on top of the menu surface, which in this build is the block's own
+ * light colour. The result was white text on a white menu. Pin the option text
+ * dark (and the editor text with it) so both are readable in either theme; the
+ * menu surface is light in light mode and is forced light by the dark-theme rule
+ * above.
+ */
+.blocklyDropDownDiv .blocklyMenuItemContent,
+.blocklyDropDownDiv .goog-menuitem-content,
+.blocklyWidgetDiv .blocklyHtmlInput {
+    color: #16181f !important;
 }
 
 g.editing .blocklyEditableText {
