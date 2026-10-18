@@ -1244,13 +1244,20 @@ drag a block and selected text moves instead.
 }
 
 /*
- * Checkbox (tick) fields: no pinned rect geometry. Blockly sizes and positions
- * both the box and the tick character from the theme font metrics
- * (`FIELD_CHECKBOX_X_OFFSET`, `FIELD_TEXT_HEIGHT`), and the old 16px/7/2 values
- * belonged to the 11pt font — with the current 13pt metrics the tick ended up
- * outside its box. Letting Blockly's own attributes through keeps the two in
- * step.
+ * Tick (checkbox) fields. Blockly sizes the field rect to the full line box, so
+ * the box is as tall as the font and hangs well below the tick it holds — and
+ * below the ")" that ends the label. Shrink it from both edges to a square whose
+ * side is the field's own width, centred on the tick.
+ *
+ * The side and the offset come from the theme metrics published as
+ * --blockly-checkbox-* in scratch/blockly.js, so they track the block font
+ * instead of being frozen at one font size the way the old 16px/7/2 values were.
  */
+.blocklyEditableText:has(> .blocklyCheckbox) > rect,
+.blocklyNonEditableText:has(> .blocklyCheckbox) > rect {
+    height: var(--blockly-checkbox-size, 14px);
+    y: var(--blockly-checkbox-y, 4px);
+}
 
 /*
  * Drop-down options and the edit-in-place input are appended to <body> and

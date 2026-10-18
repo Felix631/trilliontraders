@@ -71,12 +71,19 @@ describe('block text sizing and contrast', () => {
         expect(sheet).toMatch(/\.blocklyTextRootBlockHeader[^{]*\{[^}]*fill:\s*#fff/);
     });
 
-    it('does not pin the checkbox tick or its box to the old font metrics', () => {
+    it('squares the tick box off against the published theme metrics', () => {
         const sheet = readSource('index.scss');
 
         expect(ruleBody(sheet, '.blocklyCheckbox')).toBeNull();
-        expect(sheet).not.toMatch(/:has\(> \.blocklyCheckbox\)/);
         expect(ruleBody(sheet, '.blocklyFieldRect')).toBeNull();
+
+        const rule = sheet.match(/\:has\(> \.blocklyCheckbox\)[\s\S]*?\}/);
+
+        expect(rule).not.toBeNull();
+        // Side = the field's own width (so the tick stays centred in it), and the
+        // box is centred on the taller line box instead of being pinned to one.
+        expect(rule[0]).toMatch(/height:\s*var\(--blockly-checkbox-size/);
+        expect(rule[0]).toMatch(/y:\s*var\(--blockly-checkbox-y/);
     });
 
     it('keeps the collapsed function title dark: it sits on a light block', () => {
@@ -113,5 +120,29 @@ describe('the zelos renderer', () => {
 
         expect(constants.FIELD_TEXT_FONTSIZE).toBe(13);
         expect(constants.FIELD_TEXT_FONTFAMILY).toContain('Poppins');
+    }, 60000);
+
+    it('publishes the tick box side and offset the stylesheet squares it with', async () => {
+        const { loadBlockly } = require('../../blockly');
+        await loadBlockly(false);
+
+        const renderer = new window.Blockly.zelos.Renderer('zelos', window.Blockly.Themes.zelos_renderer);
+        renderer.init(window.Blockly.Themes.zelos_renderer);
+        const constants = renderer.getConstants();
+        const { style } = document.documentElement;
+        const size = parseFloat(style.getPropertyValue('--blockly-checkbox-size'));
+        const offset = parseFloat(style.getPropertyValue('--blockly-checkbox-y'));
+
+        expect(Number.isFinite(size)).toBe(true);
+        expect(Number.isFinite(offset)).toBe(true);
+        // The square's side is the field's own width: its two margins plus the
+        // measured tick, so it is wider than the margins alone.
+        expect(size).toBeGreaterThan(2 * constants.FIELD_CHECKBOX_X_OFFSET);
+        // ...and the shorter box is centred on the line box, so the tick stays
+        // where Blockly put it whatever height that line box measures.
+        expect(offset).toBeCloseTo(
+            (Math.max(constants.FIELD_TEXT_HEIGHT, constants.FIELD_BORDER_RECT_HEIGHT) - size) / 2,
+            2
+        );
     }, 60000);
 });

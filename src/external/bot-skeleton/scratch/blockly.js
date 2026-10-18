@@ -70,6 +70,51 @@ const waitForBlockFont = async () => {
     }
 };
 
+/**
+ * Width of the tick character in the block font, measured on a hidden host
+ * element so the browser applies the same font fallback the SVG text gets (the
+ * tick is not in every font family).
+ */
+const measureTickWidth = () => {
+    const host = document.createElement('span');
+    host.style.cssText = 'position:fixed;left:-1000px;top:0;visibility:hidden;white-space:pre';
+    host.style.font = `${BLOCK_FONT.weight} ${BLOCK_FONT.size}pt ${BLOCK_FONT.family}`;
+    host.textContent = window.Blockly.FieldCheckbox.CHECK_CHAR;
+    document.body.appendChild(host);
+
+    try {
+        // Without a layout engine (jsdom) the width is 0 — fall back to a share
+        // of the font size. Only the square's side depends on this number.
+        return host.getBoundingClientRect().width || BLOCK_FONT.size * (4 / 3) * 0.62;
+    } finally {
+        host.remove();
+    }
+};
+
+/**
+ * Publish the numbers the stylesheet needs to draw the tick boxes as squares.
+ *
+ * Blockly sizes a checkbox field to the full line box, so the rect ends up as
+ * tall as the font and the tick sits well above the bottom edge. Shrinking it to
+ * a square that matches the ")" that ends the label means knowing the field's
+ * width (the square's side) and how far the shorter box moves down to stay
+ * centred on the tick. Both are read from Blockly's own metrics, so they follow
+ * the theme font and the block scale.
+ */
+const publishCheckboxMetrics = theme => {
+    const renderer = new window.Blockly.zelos.Renderer('zelos', theme);
+    renderer.init(theme);
+    const constants = renderer.getConstants();
+    // FieldCheckbox sizes itself to 2 * FIELD_CHECKBOX_X_OFFSET + the tick, and
+    // the renderer squares the rect off against the taller line box.
+    const box_size = 2 * constants.FIELD_CHECKBOX_X_OFFSET + measureTickWidth();
+    const field_height = Math.max(constants.FIELD_TEXT_HEIGHT, constants.FIELD_BORDER_RECT_HEIGHT);
+    const { style } = document.documentElement;
+
+    style.setProperty('--blockly-checkbox-size', `${box_size.toFixed(2)}px`);
+    style.setProperty('--blockly-checkbox-y', `${((field_height - box_size) / 2).toFixed(2)}px`);
+};
+
 export const loadBlockly = async isDarkMode => {
     const BlocklyModule = await import('blockly');
     window.Blockly = BlocklyModule.default;
@@ -86,6 +131,7 @@ export const loadBlockly = async isDarkMode => {
         componentStyles: {},
         fontStyle: { ...BLOCK_FONT },
     });
+    publishCheckboxMetrics(window.Blockly.Themes.zelos_renderer);
     modifyBlocklyWorkSpaceContextMenu();
     setColors(isDarkMode);
     await import('./hooks/index.js');
