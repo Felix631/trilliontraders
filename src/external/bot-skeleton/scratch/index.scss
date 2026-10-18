@@ -7,8 +7,10 @@ $colour_scrollbarHover: $black;
 $colour_scrollbar: $black;
 $colour_flyout: $black;
 $colour_toolbox: $black;
-$colour_toolboxText: $black;
-$colour_toolboxHover: $black;
+// The toolbox / flyout surfaces above are near-black, so their labels have to be
+// light — this used to be $black on $black (invisible category and flyout text).
+$colour_toolboxText: #e2e8f0;
+$colour_toolboxHover: #fff;
 $colour_toolboxSelected: $black;
 
 .theme--dark {
@@ -44,7 +46,10 @@ $colour_toolboxSelected: $black;
 
     .zelos-renderer.classic-theme .blocklyNonEditableText > rect:not(.blocklyDropdownRect),
     .zelos-renderer.classic-theme .blocklyEditableText > rect:not(.blocklyDropdownRect) {
-        fill: unset;
+        // Match the main workspace: dark field rects under the light field text.
+        // "unset" fell back to Blockly's translucent white rect, which left the
+        // light field text sitting unreadably on top of it.
+        fill: $black;
     }
 }
 
@@ -397,8 +402,11 @@ $colour_toolboxSelected: $black;
 
     .blocklyText {
         fill: #333;
-        font-family: inherit;
-        font-size: 1.63rem;
+        // No font-family / font-size here on purpose: Blockly sizes every block
+        // from the font it injects from the theme's fontStyle (see
+        // scratch/blockly.js), and it measures *with* that font. Overriding the
+        // size or the family here made the rendered glyphs wider than the space
+        // Blockly had reserved, so long text spilled over the block edges.
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -430,7 +438,6 @@ $colour_toolboxSelected: $black;
 
     .blocklyDropdownText {
         fill: var(--text-prominent) !important;
-        font-size: 1.6rem;
     }
 
     .blocklyBubbleText {
@@ -474,7 +481,8 @@ $colour_toolboxSelected: $black;
 
     .blocklyFlyoutLabelText {
         font-size: 14px;
-        fill: #575e75;
+        // Sits on the near-black flyout background, where #575e75 was too dim.
+        fill: #cbd5e1;
         font-weight: bold;
     }
 
@@ -824,7 +832,8 @@ drag a block and selected text moves instead.
     }
 
     .blocklyTreeRow:not(.blocklyTreeSelected):hover {
-        background-color: #e4e4e4;
+        // A light hover row would swallow the light toolbox text.
+        background-color: rgb(255 255 255 / 12%);
     }
 
     .blocklyTreeSeparator {
@@ -1037,9 +1046,14 @@ drag a block and selected text moves instead.
     }
 
     .header__title {
-        color: var(--text-prominent);
+        // Collapsed function header: it sits on the dark root block, where the
+        // theme's prominent text colour is dark too — white keeps it readable.
+        // Weight stays normal so the label is no wider than the space Blockly
+        // measured for it (see .blocklyText above).
+        color: #fff;
+        fill: #fff;
         display: inline-block;
-        font-weight: 700;
+        font-weight: 400;
     }
 
     .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-accel,
@@ -1225,19 +1239,24 @@ drag a block and selected text moves instead.
 
     .blocklyTextRootBlockHeader,
     .blocklyTextRootBlockHeaderCollapsed {
-        width: 17rem !important;
         color: #fff;
         fill: #fff;
-        font-size: 1.9rem;
-    }
-
-    .blocklyTextRootBlockHeaderCollapsed {
-        font-size: 1.8rem;
     }
 
     .blocklyTextTickAnalysis {
         fill: #fff;
-        font-size: 1.6rem;
+    }
+
+    /*
+     * Blockly draws a translucent white rect behind every label. White text on
+     * that pale rect is barely legible, so drop the rect for the labels that sit
+     * directly on the dark root blocks and let the block supply the background.
+     */
+    .blocklyNonEditableText:has(> .blocklyTextRootBlockHeader) > rect,
+    .blocklyNonEditableText:has(> .blocklyTextRootBlockHeaderCollapsed) > rect,
+    .blocklyNonEditableText:has(> .blocklyTextTickAnalysis) > rect,
+    .blocklyNonEditableText:has(> .header__title) > rect {
+        fill: none;
     }
 }
 

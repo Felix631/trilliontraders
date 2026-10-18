@@ -40,7 +40,7 @@ window.Blockly.Blocks.before_purchase = {
                 {
                     type: 'field_image',
                     src: ' ', // this is here to add extra padding
-                    width: 380,
+                    width: 440,
                     height: 10,
                 },
             ],

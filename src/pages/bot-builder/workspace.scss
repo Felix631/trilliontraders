@@ -13,7 +13,8 @@
 }
 
 .blocklyText.blocklyTextRootBlockHeader {
-    font-size: calc(var(--text-size-sm) * 0.9);
+    // Font size comes from the Blockly theme's fontStyle (scratch/blockly.js) so
+    // that the header is measured with, and rendered in, the same font.
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
