@@ -46,6 +46,23 @@ describe('the Load strategy modal and its Local tab', () => {
         expect(REQUIRED_RULES.filter(rule => !sheet.includes(rule))).toEqual([]);
     });
 
+    it('scopes the tab to the mobile full-page modal as well as #modal_root', () => {
+        const sheet = readSource('load-modal.scss');
+
+        // MobileFullPageModal renders inline (it does not portal into
+        // #modal_root), so rules scoped to #modal_root alone never reached the
+        // Local tab on phones and tablets.
+        expect(sheet).toMatch(/#modal_root,\s*\n\.load-strategy__wrapper\s*\{/);
+    });
+
+    it('fills the mobile page with the drop zone, as the official tab does', () => {
+        const sheet = readSource('load-modal.scss');
+        const dropzone = sheet.slice(sheet.indexOf('&-dropzone {'), sheet.indexOf('&__preview-workspace {'));
+
+        expect(dropzone).toMatch(/mobile-or-tablet-screen[\s\S]*height:\s*100%/);
+        expect(dropzone).toMatch(/mobile-or-tablet-screen[\s\S]*padding:\s*1\.6rem/);
+    });
+
     it('renders exactly the classes those rules cover', () => {
         const classes = rendered_classes();
 

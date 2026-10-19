@@ -1,7 +1,16 @@
 @use 'components/shared/styles/mixins' as *;
 @use 'components/shared/styles/constants' as *;
 
-#modal_root {
+/*
+ * The desktop modal renders into #modal_root, but the full-page modal used on
+ * phones and tablets renders inline (MobileFullPageModal does not portal), so
+ * its content lives under .load-strategy__wrapper instead. Scope the modal
+ * content to either shell, or the Local tab is unstyled on mobile — the same
+ * raw stack of icon/text/button the desktop tab had before these rules moved
+ * here.
+ */
+#modal_root,
+.load-strategy__wrapper {
     .load-strategy {
         &__recent {
             display: flex;
@@ -166,6 +175,12 @@
                 flex: 1 1 auto;
                 min-height: 0;
                 margin-top: 0.8rem;
+
+                @include mobile-or-tablet-screen {
+                    // The full-page modal already pads the tab; an extra gap
+                    // would push the drop zone past its (clipped) container.
+                    margin-top: 0;
+                }
             }
 
             &--has-footer {
@@ -210,6 +225,9 @@
                 padding: 1.6rem 0 0;
 
                 @include mobile-or-tablet-screen {
+                    // Match the official full-page tab: the drop zone fills the
+                    // page, with the banner sitting edge to edge above it.
+                    height: 100%;
                     padding: 1.6rem;
                 }
 

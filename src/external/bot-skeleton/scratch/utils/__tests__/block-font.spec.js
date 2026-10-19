@@ -86,6 +86,19 @@ describe('block text sizing and contrast', () => {
         expect(rule[0]).toMatch(/y:\s*var\(--blockly-checkbox-y/);
     });
 
+    it('keeps block text dark on the grey blocks in the dark theme', () => {
+        const sheet = readSource('index.scss');
+        const dark = sheet.slice(sheet.indexOf('.theme--dark'));
+
+        // setColors() gives the ordinary blocks the same light grey fill in both
+        // themes, so the field text on them cannot follow --text-prominent into
+        // white the way it did (invisible on the grey blocks).
+        expect(dark).toMatch(/\.blocklyEditableText > text[\s\S]{0,200}?fill:\s*#333/);
+        expect(dark).toMatch(/\.blocklyDropdownText[^{]*\{[^}]*fill:\s*#333 !important/);
+        // ...while the labels on the dark blue root blocks stay light.
+        expect(sheet).toMatch(/\.blocklyTextRootBlockHeader[^{]*\{[^}]*fill:\s*#fff/);
+    });
+
     it('keeps the collapsed function title dark: it sits on a light block', () => {
         const sheet = readSource('index.scss');
         const body = ruleBody(sheet, '.header__title');

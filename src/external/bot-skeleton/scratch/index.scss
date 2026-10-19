@@ -19,18 +19,42 @@ $colour_toolboxSelected: $black;
         border-color: rgb(194 194 194) !important;
     }
 
+    /*
+     * Only the workspace surface and the root blocks go dark in this theme:
+     * setColors() paints every other block the same light grey it has in the
+     * light theme. So the text drawn on those grey blocks has to stay dark too.
+     * --text-prominent (which the renderer's field text inherits) turns white
+     * in this theme, which is what made the labels and field values disappear
+     * on the grey part of the blocks. The root-block headers sit on the dark
+     * blue root blocks, so those keep the white from the rules further down.
+     */
+    .blocklyNonEditableText > text:not(.blocklyTextRootBlockHeader):not(.blocklyTextRootBlockHeaderCollapsed):not(.blocklyTextTickAnalysis),
+    .blocklyEditableText > text,
+    .header__title {
+        // !important because the renderer-scoped rule in this sheet is more
+        // specific than this one and would otherwise keep the white.
+        fill: #333 !important;
+    }
+
+    /*
+     * The base sheet pins this one to the theme's prominent colour, with the
+     * renderer prefix on the selector. Mirror that prefix so this wins.
+     */
+    .zelos-renderer.zelos_renderer-theme .blocklyDropdownText,
+    .flyout .zelos-renderer.classic-theme .blocklyDropdownText,
+    .gtm-search-results .blocklyDropdownText,
+    .load-strategy__container .blocklyDropdownText {
+        fill: #333 !important;
+    }
+
     .zelos-renderer.zelos_renderer-theme .blocklyMainBackground,
     .load-strategy__container .blocklyMainBackground,
-    .zelos-renderer.zelos_renderer-theme rect.blocklyFieldRect.blocklyDropdownRect,
-    .zelos-renderer.zelos_renderer-theme .blocklyNonEditableText > rect:not(.blocklyDropdownRect),
-    .zelos-renderer.zelos_renderer-theme .blocklyEditableText > rect:not(.blocklyDropdownRect),
     .blocklyPath[fill='#fff'],
     .blocklyVariableGet .blocklyPath,
     .blocklyOutlinePath {
         fill: $black !important;
     }
 
-    .flyout rect.blocklyFieldRect.blocklyDropdownRect,
     .flyout .zelos-renderer.classic-theme .blocklyMainBackground {
         fill: #151816 !important;
     }
@@ -42,14 +66,6 @@ $colour_toolboxSelected: $black;
 
     .flyout .zelos-renderer.classic-theme .blocklyEditableText > image {
         filter: invert(0);
-    }
-
-    .zelos-renderer.classic-theme .blocklyNonEditableText > rect:not(.blocklyDropdownRect),
-    .zelos-renderer.classic-theme .blocklyEditableText > rect:not(.blocklyDropdownRect) {
-        // Match the main workspace: dark field rects under the light field text.
-        // "unset" fell back to Blockly's translucent white rect, which left the
-        // light field text sitting unreadably on top of it.
-        fill: $black;
     }
 }
 
