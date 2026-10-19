@@ -535,6 +535,103 @@
         }
     }
 
+    // ---- Per-market entry points -------------------------------------------
+    &__entries {
+        background: var(--app-card-background);
+        border: 1px solid var(--app-border-color);
+        border-radius: 1rem;
+        padding: 1.1rem 1.3rem;
+    }
+
+    &__entries-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(23rem, 1fr));
+        gap: 0.8rem;
+    }
+
+    &__entry {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        padding: 0.85rem 0.95rem;
+        border-radius: 0.8rem;
+        border: 1px solid var(--app-border-color);
+        background: var(--app-page-background);
+        min-height: 12.5rem;
+
+        &--top {
+            border-color: var(--site-accent);
+            box-shadow: 0 0 0 1px var(--site-accent-soft, var(--site-accent));
+        }
+    }
+
+    &__entry-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    &__entry-market {
+        font-weight: bold;
+        font-size: var(--text-size-xxs);
+        color: var(--app-text-title);
+    }
+
+    &__entry-last {
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__entry-top {
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        background: var(--site-accent);
+        color: #1c1206;
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    &__entry-signal {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    &__entry-contract {
+        font-size: var(--text-size-xs);
+        font-weight: bold;
+        color: var(--site-accent);
+    }
+
+    &__entry-pattern {
+        margin: 0;
+        font-size: var(--text-size-xxxs);
+        line-height: 1.45;
+        color: var(--text-general);
+    }
+
+    &__entry-psych {
+        margin: 0;
+        font-size: var(--text-size-xxxs);
+        font-style: italic;
+        line-height: 1.4;
+        color: var(--app-text-muted);
+    }
+
+    &__entry-foot {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: auto;
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
     // ---- All-markets strip -------------------------------------------------
     &__grid {
         display: grid;

@@ -12,6 +12,7 @@ import {
     type SignalContract,
     type StrategyEval,
 } from '@/constants/scanner-strategies';
+import { formatEdge, recommendEntryPoint, type EntryPointPlan } from '@/constants/scanner-entry-points';
 import { signalBotXml } from '@/utils/signal-bot-xml';
 import DigitShares from '@/components/shared_ui/digit-shares';
 import './scanner.scss';
@@ -121,6 +122,22 @@ const AnalysisTool = () => {
         qualified.find(s => s.eval.state === 'live') ||
         qualified.slice().sort((a, b) => b.eval.confidence - a.eval.confidence)[0] ||
         null;
+
+    // One entry-point read per market, from that market's own ticks — never a
+    // pool across symbols, so a hot pattern on V75 never leaks into J25.
+    const entry_points: Array<{ symbol: string; short: string; plan: EntryPointPlan | null }> = React.useMemo(
+        () =>
+            MARKET_SYMBOLS.map(market => ({
+                symbol: market.value,
+                short: market.short,
+                plan: recommendEntryPoint(feed.history[market.value] || []),
+            })),
+        [feed.history]
+    );
+    const top_entry = entry_points
+        .filter(entry => entry.plan)
+        .sort((a, b) => (b.plan?.confidence || 0) - (a.plan?.confidence || 0))[0];
+    const featured_entry = featured ? entry_points.find(entry => entry.symbol === featured.symbol)?.plan || null : null;
 
     const updateSetting = (key: keyof Settings, value: any) => {
         setSettings(prev => {
@@ -390,6 +407,9 @@ const AnalysisTool = () => {
                                 <span className='scanner__winrate'>
                                     {localize('Winning rate')} · {featured.eval.winning_rate}%
                                 </span>
+                                <span className='scanner__winrate'>
+                                    {localize('Entry point')} · {featured_entry ? `${featured_entry.label} (${featured_entry.digit ?? '–'})` : '–'}
+                                </span>
                             </div>
                             <div className='scanner__featured-actions'>
                                 <button
@@ -437,6 +457,66 @@ const AnalysisTool = () => {
                         <p>{localize('The scanner is still waiting for the first qualified market.')}</p>
                     </div>
                 )}
+
+                <div className='scanner__entries'>
+                    <div className='scanner__qualified-head'>
+                        <h3>{localize('Best entry point by market')}</h3>
+                        <span>
+                            {localize('A digit-level entry for each volatility and jump index, from that market’s own pattern.')}
+                        </span>
+                    </div>
+                    <div className='scanner__entries-grid'>
+                        {entry_points.map(entry => {
+                            const plan = entry.plan;
+                            const is_top = top_entry?.symbol === entry.symbol;
+                            return (
+                                <div
+                                    key={entry.symbol}
+                                    className={classNames('scanner__entry', {
+                                        'scanner__entry--top': is_top,
+                                    })}
+                                >
+                                    <div className='scanner__entry-head'>
+                                        <span className='scanner__entry-market'>{entry.short}</span>
+                                        {is_top ? (
+                                            <span className='scanner__entry-top'>{localize('Top entry')}</span>
+                                        ) : (
+                                            <span className='scanner__entry-last'>
+                                                {localize('Last')} {plan?.last_digit ?? '–'}
+                                            </span>
+                                        )}
+                                    </div>
+                                    {plan ? (
+                                        <>
+                                            <div className='scanner__entry-signal'>
+                                                <span className='scanner__digit'>{plan.digit ?? '–'}</span>
+                                                <span className='scanner__entry-contract'>{plan.label}</span>
+                                            </div>
+                                            <p className='scanner__entry-pattern'>{plan.pattern}</p>
+                                            <p className='scanner__entry-psych'>{plan.psychology}</p>
+                                            <div className='scanner__entry-foot'>
+                                                <span>
+                                                    {localize('Win')} {plan.winning_rate}%
+                                                </span>
+                                                <span>
+                                                    {localize('Edge')} {formatEdge(plan.edge)}
+                                                </span>
+                                                <span>{plan.confidence}%</span>
+                                            </div>
+                                            <div className='scanner__mini-bar'>
+                                                <span style={{ width: `${plan.confidence}%` }} />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <p className='scanner__entry-pattern'>
+                                            {localize('Reading the pattern — waiting for 30 ticks…')}
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
 
                 <div className='scanner__qualified'>
                     <div className='scanner__qualified-head'>
