@@ -10,6 +10,11 @@
     "build": "rsbuild build",
     "test": "jest",
     "type-check": "tsc --noEmit",
+    "master:collect": "node scripts/master-collect.mjs",
+    "master:study": "PYTHONPATH=python python3 -m master study --input python/master/state/ticks.json --output public/master/report.json",
+    "master:scan": "npm run master:collect && npm run master:study",
+    "master:serve": "PYTHONPATH=python python3 -m master serve --port 8765",
+    "master:test": "PYTHONPATH=python python3 -m unittest discover -s python/master/tests -t python",
     "generate:brand-css": "node scripts/generate-brand-css.js",
     "prebuild": "node scripts/generate-brand-css.js"
   },

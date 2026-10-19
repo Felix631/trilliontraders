@@ -14,6 +14,7 @@ const TAB_NAMES = [
     'chart',
     'tutorial',
     'dtrader',
+    'master',
 ] as const;
 
 export const getActiveTabUrl = () => {

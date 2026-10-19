@@ -15,7 +15,8 @@ export const tabs_title: TTabsTitle = Object.freeze({
 // must stay in sync with TAB_IDS below and the `hash` list in pages/main.
 // The workspace leads (Dashboard, then the Bot Builder it feeds), followed by
 // the featured tabs (Bot Store, Analyzer, Analysis Tool, i love you) and then
-// the rest.
+// the rest. Master is appended last so adding it never shifts an existing tab's
+// stored index.
 export const DBOT_TABS: TDashboardTabIndex = Object.freeze({
     DASHBOARD: 0,
     BOT_BUILDER: 1,
@@ -30,6 +31,7 @@ export const DBOT_TABS: TDashboardTabIndex = Object.freeze({
     CHART: 10,
     TUTORIAL: 11,
     DTRADER: 12,
+    MASTER: 13,
 });
 
 export const MAX_STRATEGIES = 10;
@@ -50,6 +52,7 @@ export const TAB_IDS = [
     'id-charts',
     'id-tutorials',
     'id-dtrader',
+    'id-master',
 ];
 
 export const DEBOUNCE_INTERVAL_TIME = 500;

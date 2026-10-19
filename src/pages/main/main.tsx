@@ -34,6 +34,7 @@ import {
     LabelPairedBasketShoppingCaptionRegularIcon,
     LabelPairedChartLineCaptionRegularIcon,
     LabelPairedChartTrendUpCaptionRegularIcon,
+    LabelPairedCircleStarCaptionRegularIcon,
     LabelPairedCopyCaptionRegularIcon,
     LabelPairedGaugeMaxCaptionRegularIcon,
     LabelPairedMoneyBillCaptionRegularIcon,
@@ -56,6 +57,7 @@ import ChartModal from '../chart/chart-modal';
 import ChartsView from '../chart/charts-view';
 import Dashboard from '../dashboard';
 import InstantFill from '../dashboard/trade-tools/instant-fill';
+import Master from '../dashboard/master';
 import MatchesAnalysis from '../dashboard/matches-analysis';
 import RiskCalculator from '../dashboard/trade-tools/risk-calculator';
 import Scanner from '../dashboard/scanner';
@@ -112,6 +114,7 @@ const AppWrapper = observer(() => {
         'chart',
         'tutorial',
         'dtrader',
+        'master',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -620,6 +623,21 @@ const AppWrapper = observer(() => {
                                 id='id-dtrader'
                             >
                                 <DTrader />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedCircleStarCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Master' />
+                                    </>
+                                }
+                                id='id-master'
+                            >
+                                <Master />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}

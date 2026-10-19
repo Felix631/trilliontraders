@@ -13,6 +13,11 @@ dist/
 out/
 coverage/
 
+# Master engine runtime state (ticks + learned memory); the report itself is committed
+python/master/state/
+__pycache__/
+*.pyc
+
 # Logs & OS junk
 npm-debug.log*
 yarn-error.log*
