@@ -99,14 +99,32 @@ describe('block text sizing and contrast', () => {
         expect(sheet).toMatch(/\.blocklyTextRootBlockHeader[^{]*\{[^}]*fill:\s*#fff/);
     });
 
+    it('classifies the fills the builder actually paints', () => {
+        const { isDarkColour } = require('../../hooks/colours');
+
+        // Ordinary blocks (both themes): light grey → the labels stay dark.
+        expect(isDarkColour('#e5e5e5')).toBe(false);
+        expect(isDarkColour('#ffffff')).toBe(false);
+
+        // Root blocks navy, and the black workspace of the dark theme → light
+        // labels, because dark grey on these is what could not be read.
+        expect(isDarkColour('#064e72')).toBe(true);
+        expect(isDarkColour('#0e0e0e')).toBe(true);
+
+        // Anything that is not a 6-digit hex fill is left alone.
+        expect(isDarkColour(undefined)).toBe(false);
+        expect(isDarkColour('#fff')).toBe(false);
+        expect(isDarkColour('BLUE')).toBe(false);
+    });
+
     it('paints the labels white on a block that is itself dark', () => {
         const sheet = readSource('index.scss');
         const hook = readSource('hooks/block_svg.js');
 
         // The root blocks keep their navy fill while the ordinary blocks are
         // light grey, so the label colour cannot be one theme-wide constant:
-        // re-rendering a block tags it from its own fill's luma.
-        expect(hook).toMatch(/luma < 160/);
+        // re-rendering a block tags it from its own fill.
+        expect(hook).toMatch(/isDarkColour\(colour\)/);
         expect(hook).toMatch(/addClass\(group, 'block--on-dark'\)/);
         expect(hook).toMatch(/removeClass\(group, 'block--on-dark'\)/);
 
