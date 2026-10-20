@@ -2,6 +2,48 @@ import debounce from 'lodash.debounce';
 import { localize } from '@deriv-com/translations';
 import DBotStore from '../dbot-store';
 
+/**
+ * Whether a block's own fill is dark enough that its labels have to be light.
+ *
+ * The root blocks are painted #064e72 in every theme while the ordinary blocks
+ * are the light grey from setColors(), so the label colour cannot be a single
+ * theme-wide constant. Same luma test the collapsed-header code uses.
+ */
+const isDarkBlock = block => {
+    const colour = typeof block.getColour === 'function' ? block.getColour() : null;
+    if (typeof colour !== 'string' || colour.charAt(0) !== '#') return false;
+
+    const rgb = parseInt(colour.substring(1), 16);
+    if (!Number.isFinite(rgb)) return false;
+
+    const luma =
+        0.2126 * ((rgb >> 16) & 0xff) + 0.7152 * ((rgb >> 8) & 0xff) + 0.0722 * (rgb & 0xff);
+
+    return luma < 160;
+};
+
+/**
+ * Tag the block so the stylesheet can paint its labels white (block--on-dark).
+ * Called after every render, which covers creation, colour changes and collapse.
+ */
+const applyBlockContrast = block => {
+    const group = block.svgGroup_;
+    if (!group || !window.Blockly.utils?.dom) return;
+
+    if (isDarkBlock(block)) {
+        window.Blockly.utils.dom.addClass(group, 'block--on-dark');
+    } else {
+        window.Blockly.utils.dom.removeClass(group, 'block--on-dark');
+    }
+};
+
+const originalRender = window.Blockly.BlockSvg.prototype.render;
+window.Blockly.BlockSvg.prototype.render = function (...args) {
+    const result = originalRender.apply(this, args);
+    applyBlockContrast(this);
+    return result;
+};
+
 window.Blockly.BlockSvg.prototype.removeSelect = function () {
     window.Blockly.utils.dom.removeClass(this.svgGroup_, 'blocklySelected');
     if (window.Blockly.derivWorkspace.lastAddedBlock === this) {

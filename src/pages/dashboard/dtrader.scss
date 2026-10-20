@@ -288,7 +288,7 @@
             &.is-active {
                 background: var(--site-accent);
                 border-color: var(--site-accent);
-                color: #1c1206;
+                color: var(--site-accent-ink, #1c1206);
                 font-weight: bold;
             }
         }
@@ -345,7 +345,7 @@
             &.is-active {
                 background: var(--site-accent);
                 border-color: var(--site-accent);
-                color: #1c1206;
+                color: var(--site-accent-ink, #1c1206);
             }
         }
     }
@@ -373,7 +373,7 @@
             &.is-active {
                 background: var(--site-accent);
                 border-color: var(--site-accent);
-                color: #1c1206;
+                color: var(--site-accent-ink, #1c1206);
                 font-weight: bold;
             }
         }

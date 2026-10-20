@@ -93,10 +93,30 @@ describe('block text sizing and contrast', () => {
         // setColors() gives the ordinary blocks the same light grey fill in both
         // themes, so the field text on them cannot follow --text-prominent into
         // white the way it did (invisible on the grey blocks).
-        expect(dark).toMatch(/\.blocklyEditableText > text[\s\S]{0,200}?fill:\s*#333/);
+        expect(dark).toMatch(/\.blocklyEditableText > text[\s\S]{0,600}?fill:\s*#333/);
         expect(dark).toMatch(/\.blocklyDropdownText[^{]*\{[^}]*fill:\s*#333 !important/);
         // ...while the labels on the dark blue root blocks stay light.
         expect(sheet).toMatch(/\.blocklyTextRootBlockHeader[^{]*\{[^}]*fill:\s*#fff/);
+    });
+
+    it('paints the labels white on a block that is itself dark', () => {
+        const sheet = readSource('index.scss');
+        const hook = readSource('hooks/block_svg.js');
+
+        // The root blocks keep their navy fill while the ordinary blocks are
+        // light grey, so the label colour cannot be one theme-wide constant:
+        // re-rendering a block tags it from its own fill's luma.
+        expect(hook).toMatch(/luma < 160/);
+        expect(hook).toMatch(/addClass\(group, 'block--on-dark'\)/);
+        expect(hook).toMatch(/removeClass\(group, 'block--on-dark'\)/);
+
+        const dark = sheet.slice(sheet.indexOf('.theme--dark'), sheet.indexOf('.flyout .injectionDiv'));
+
+        // Dark block → white labels (white on black).
+        expect(dark).toMatch(/\.block--on-dark \.blocklyEditableText > text[\s\S]{0,160}?fill:\s*#fff !important/);
+        expect(dark).toMatch(/\.block--on-dark \.blocklyText[^{]*\{[^}]*fill:\s*#fff/);
+        // Light grey block → the dark labels that are readable on it.
+        expect(dark).toMatch(/:not\(\.block--on-dark\) \.blocklyEditableText > text[\s\S]{0,600}?fill:\s*#333/);
     });
 
     it('keeps the collapsed function title dark: it sits on a light block', () => {

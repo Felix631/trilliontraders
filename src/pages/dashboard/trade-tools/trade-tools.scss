@@ -42,7 +42,7 @@
         padding: 0.15rem 0.7rem;
 
         &--live {
-            color: #1c1206;
+            color: var(--site-accent-ink, #1c1206);
             background: var(--site-accent);
             border-color: var(--site-accent);
         }
@@ -105,7 +105,7 @@
     font-size: var(--text-size-sm);
     font-weight: bolder;
     letter-spacing: 0.06em;
-    color: #1c1206;
+    color: var(--site-accent-ink, #1c1206);
     background: linear-gradient(135deg, var(--site-accent), var(--site-accent-soft));
     cursor: pointer;
     transition: filter 0.15s ease, transform 0.05s ease;
@@ -166,7 +166,7 @@
 .qt-primary-button {
     background: var(--site-accent);
     border: 1px solid var(--site-accent);
-    color: #1c1206;
+    color: var(--site-accent-ink, #1c1206);
 }
 
 .qt-hint,

@@ -120,6 +120,10 @@
     --site-accent: #4f8cff;
     --site-accent-rgb: 79, 140, 255;
     --site-accent-soft: #22d3ee;
+    /* Ink for label text drawn on an accent-coloured surface. The dark theme's
+       accent is bright, so it takes dark ink; light mode's deeper accent takes
+       white (see the .theme--light block). */
+    --site-accent-ink: #1c1206;
     --site-tab-active: #2563eb;
     --site-surface: #0a1a38;
     --site-surface-elevated: #102450;
@@ -167,46 +171,71 @@
     }
 
     .theme--light {
-        --ux-canvas: #f1f5fd;
-        --ux-canvas-glow-1: rgba(37, 99, 235, 0.14);
-        --ux-canvas-glow-2: rgba(34, 211, 238, 0.12);
+        /*
+         * Light mode is its own design, not the dark one inverted: paper-white
+         * cards on a soft blue-grey page, ink-navy text at three weights and
+         * shadows that read as depth instead of the dark theme's glows. Every
+         * page reads these tokens, so refining them here lifts the whole app.
+         */
+        --ux-canvas: #f4f7fd;
+        --ux-canvas-glow-1: rgba(37, 99, 235, 0.12);
+        --ux-canvas-glow-2: rgba(34, 211, 238, 0.1);
         --ux-canvas-glow-3: rgba(16, 185, 129, 0.1);
+        --ux-canvas-grid: rgba(11, 26, 51, 0.045);
 
-        --ux-panel: rgba(255, 255, 255, 0.9);
+        --ux-panel: rgba(255, 255, 255, 0.94);
         --ux-panel-2: #ffffff;
         --ux-panel-solid: #ffffff;
-        --ux-panel-inset: rgba(238, 244, 255, 0.9);
-        --ux-border: #dbe6f8;
-        --ux-border-strong: #b9cdf0;
+        --ux-panel-inset: #eef3fb;
+        --ux-border: #dce6f5;
+        --ux-border-strong: #b7cbea;
         --ux-hover: rgba(37, 99, 235, 0.08);
-        --ux-divider: #e4ecfa;
+        --ux-divider: #e6edf9;
 
         --ux-text: #0b1a33;
-        --ux-text-dim: #4a5f80;
-        --ux-text-mute: #7b8ca6;
+        --ux-text-dim: #44597a;
+        --ux-text-mute: #6b7f9e;
         --ux-nav-text: #c3d6f5;
-        --ux-scroll-thumb: #b9cdf0;
-        --ux-scroll-track: #eef4ff;
+        --ux-scroll-thumb: #c2d2e8;
+        --ux-scroll-track: #eef3fb;
+
+        /* Depth and accent glows tuned for paper-white surfaces. */
+        --ux-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 18px 40px -32px rgba(15, 23, 42, 0.28);
+        --ux-shadow-lift: 0 2px 6px rgba(15, 23, 42, 0.07), 0 30px 60px -36px rgba(15, 23, 42, 0.32);
+        --ux-glow-blue: 0 0 0 1px rgba(37, 99, 235, 0.22), 0 16px 38px -22px rgba(37, 99, 235, 0.4);
+        --ux-glow-cyan: 0 0 0 1px rgba(20, 184, 166, 0.24), 0 16px 38px -24px rgba(20, 184, 166, 0.38);
+        --ux-glow-gold: 0 0 0 1px rgba(217, 119, 6, 0.24), 0 16px 38px -24px rgba(217, 119, 6, 0.38);
 
         // The chrome stays navy in both themes (the app forces white text on it),
         // just lifted a step so it reads as part of the light workspace.
         --ux-header-bg: linear-gradient(100deg, #071a3d 0%, #0d3a8c 55%, #0047ab 100%);
         --ux-rail-bg: linear-gradient(100deg, rgba(7, 22, 51, 0.94) 0%, rgba(14, 45, 104, 0.92) 60%, rgba(8, 28, 70, 0.94) 100%);
 
-        --app-page-background: #f1f5fd;
+        --app-page-background: #f4f7fd;
         --app-panel-background: #ffffff;
         --app-card-background: #ffffff;
-        --app-card-background-alt: #f7faff;
-        --app-elevated-background: #eef4ff;
-        --app-hover-background: #e8f0ff;
-        --app-border-color: #dbe6f8;
-        --app-border-strong-color: #b9cdf0;
+        --app-card-background-alt: #fbfcff;
+        --app-elevated-background: #eef3fb;
+        --app-hover-background: #e9f0ff;
+        --app-border-color: #dce6f5;
+        --app-border-strong-color: #b7cbea;
         --app-accent-color: #0047ab;
-        --app-accent-soft: rgba(0, 71, 171, 0.12);
+        --app-accent-soft: rgba(0, 71, 171, 0.1);
         --app-text-title: #0b1a33;
-        --app-text-subtle: #9badc9;
+        --app-text-subtle: #a9b8d0;
         --app-text-muted: #6b7f9e;
-        --app-scroll-thumb: #b9cdf0;
-        --app-scroll-track: #eef4ff;
+        --app-scroll-thumb: #c2d2e8;
+        --app-scroll-track: #eef3fb;
+
+        /* Chrome accents: a deeper royal blue keeps white label text legible
+           on the accent pills where the dark theme uses the brighter blue. */
+        --site-accent: #0047ab;
+        --site-accent-rgb: 0, 71, 171;
+        --site-accent-soft: #14b8a6;
+        --site-accent-ink: #ffffff;
+        --site-tab-active: #0047ab;
+        --site-surface: #ffffff;
+        --site-surface-elevated: #eef3fb;
+        --site-border: #dce6f5;
     }
 }

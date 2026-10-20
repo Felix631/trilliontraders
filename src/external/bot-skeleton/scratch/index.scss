@@ -20,17 +20,22 @@ $colour_toolboxSelected: $black;
     }
 
     /*
-     * Only the workspace surface and the root blocks go dark in this theme:
-     * setColors() paints every other block the same light grey it has in the
-     * light theme. So the text drawn on those grey blocks has to stay dark too.
-     * --text-prominent (which the renderer's field text inherits) turns white
-     * in this theme, which is what made the labels and field values disappear
-     * on the grey part of the blocks. The root-block headers sit on the dark
-     * blue root blocks, so those keep the white from the rules further down.
+     * The label colour follows the block it is drawn on, not the theme.
+     *
+     * setColors() paints every ordinary block the same light grey in both
+     * themes, so their labels have to stay dark — --text-prominent (which the
+     * renderer's field text inherits) turns white in this theme, which is what
+     * made those labels disappear. The root blocks are the exception: they keep
+     * the dark navy fill from Colours.RootBlock, and a dark grey label on a
+     * near-black block is unreadable.
+     *
+     * block_svg.js tags a block whose own fill is dark with `block--on-dark`, so
+     * the grey blocks get the dark labels below and the dark blocks get the
+     * white ones underneath, without either rule leaking into the other.
      */
-    .blocklyNonEditableText > text:not(.blocklyTextRootBlockHeader):not(.blocklyTextRootBlockHeaderCollapsed):not(.blocklyTextTickAnalysis),
-    .blocklyEditableText > text,
-    .header__title {
+    .blocklyDraggable:not(.block--on-dark) .blocklyNonEditableText > text,
+    .blocklyDraggable:not(.block--on-dark) .blocklyEditableText > text,
+    .blocklyDraggable:not(.block--on-dark) .header__title {
         // !important because the renderer-scoped rule in this sheet is more
         // specific than this one and would otherwise keep the white.
         fill: #333 !important;
@@ -40,11 +45,37 @@ $colour_toolboxSelected: $black;
      * The base sheet pins this one to the theme's prominent colour, with the
      * renderer prefix on the selector. Mirror that prefix so this wins.
      */
-    .zelos-renderer.zelos_renderer-theme .blocklyDropdownText,
-    .flyout .zelos-renderer.classic-theme .blocklyDropdownText,
-    .gtm-search-results .blocklyDropdownText,
-    .load-strategy__container .blocklyDropdownText {
+    .zelos-renderer.zelos_renderer-theme .blocklyDraggable:not(.block--on-dark) .blocklyDropdownText,
+    .flyout .zelos-renderer.classic-theme .blocklyDraggable:not(.block--on-dark) .blocklyDropdownText,
+    .gtm-search-results .blocklyDraggable:not(.block--on-dark) .blocklyDropdownText,
+    .load-strategy__container .blocklyDraggable:not(.block--on-dark) .blocklyDropdownText {
         fill: #333 !important;
+    }
+
+    /*
+     * White on black: every label on a dark block, including the field values
+     * and the collapsed function title. This is what makes the navy root blocks
+     * readable — their text used to be #333 on #064e72.
+     */
+    .block--on-dark .blocklyText,
+    .block--on-dark .blocklyNonEditableText > text,
+    .block--on-dark .blocklyEditableText > text,
+    .block--on-dark .blocklyDropdownText,
+    .block--on-dark .header__title {
+        fill: #fff !important;
+        color: #fff !important;
+    }
+
+    /* The white pill behind a drop-down would swallow the white option text. */
+    .block--on-dark rect.blocklyFieldRect {
+        fill: rgb(255 255 255 / 16%) !important;
+        stroke: rgb(255 255 255 / 34%) !important;
+    }
+
+    // Field icons are dark glyphs; on a dark block they follow the labels.
+    .block--on-dark .blocklyEditableText > image,
+    .block--on-dark .blocklyNonEditableText > image {
+        filter: invert(1);
     }
 
     .zelos-renderer.zelos_renderer-theme .blocklyMainBackground,
