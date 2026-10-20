@@ -105,6 +105,13 @@
                 color: var(--master-dominant);
             }
         }
+
+        // The study clock: the tab reads the present, not a last-fetched stamp.
+        &--live {
+            border-color: var(--master-dominant);
+            color: var(--app-text-title);
+            gap: 0.5rem;
+        }
     }
 
     &__hero-actions {
@@ -234,6 +241,54 @@
         }
     }
 
+    &__actions-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    // Numeric controls (study rounds, sample size): a labelled pill around a
+    // borderless number input, so they sit with the buttons instead of looking
+    // like a form.
+    &__control {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.8rem;
+        border: 1px solid var(--master-line);
+        border-radius: 999px;
+        background: var(--master-inset);
+        font-size: var(--text-size-xxxs);
+        color: var(--app-text-muted);
+
+        input {
+            width: 4.2rem;
+            border: none;
+            background: transparent;
+            color: var(--app-text-title);
+            font-size: var(--text-size-xxs);
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+
+            &:focus {
+                outline: none;
+                color: var(--master-accent);
+            }
+
+            // Keep the spinners, they are the fastest way to nudge the value.
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                opacity: 0.55;
+            }
+        }
+
+        &--wide {
+            flex: 1;
+            justify-content: space-between;
+        }
+    }
+
     // ---- Notices, stats -----------------------------------------------------
     &__notice {
         border: 1px solid var(--master-line);
@@ -250,6 +305,10 @@
 
         &--error {
             border-left-color: var(--text-loss-danger);
+        }
+
+        &--live {
+            border-left-color: var(--master-dominant);
         }
     }
 
@@ -337,6 +396,109 @@
         margin: 0.2rem 0 0;
         font-size: var(--text-size-m);
         color: var(--app-text-title);
+    }
+
+    &__lead-head-right {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+    }
+
+    // Where the lead read came from. A live read is the default; the engine
+    // snapshot only leads while the tape warms up.
+    &__source {
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--master-line);
+        background: var(--master-inset);
+        font-size: var(--text-size-xxxxs);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--app-text-muted);
+
+        &.is-live {
+            border-color: var(--master-dominant);
+            color: var(--master-dominant);
+        }
+    }
+
+    // Market switcher for the lead card: every market, one click away.
+    &__markets {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.9rem;
+        scrollbar-width: thin;
+    }
+
+    &__market {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        flex: 0 0 auto;
+        padding: 0.32rem 0.7rem;
+        border: 1px solid var(--master-line);
+        border-radius: 999px;
+        background: var(--master-inset);
+        color: var(--app-text-muted);
+        font-size: var(--text-size-xxxs);
+        cursor: pointer;
+        transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+
+        em {
+            font-style: normal;
+            font-size: var(--text-size-xxxxs);
+            color: var(--master-accent);
+            font-variant-numeric: tabular-nums;
+        }
+
+        &:hover {
+            border-color: var(--master-accent);
+            color: var(--app-text-title);
+        }
+
+        &.is-ready {
+            color: var(--app-text-title);
+        }
+
+        &.is-active {
+            background: var(--master-accent);
+            border-color: var(--master-accent);
+            color: var(--master-ink);
+            font-weight: bold;
+
+            em {
+                color: var(--master-ink);
+            }
+        }
+    }
+
+    &__rerun {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex: 0 0 auto;
+        margin-left: 0.2rem;
+        padding: 0.32rem 0.85rem;
+        border: 1px dashed var(--master-accent);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--master-accent);
+        font-size: var(--text-size-xxxs);
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease;
+
+        &:hover:not(:disabled) {
+            background: var(--app-accent-soft);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: progress;
+        }
     }
 
     &__lead-live {
@@ -453,6 +615,58 @@
         font-size: var(--text-size-xxxs);
         color: var(--app-text-muted);
         font-variant-numeric: tabular-nums;
+
+        // The trade type the card is recommending.
+        &--trade {
+            border-color: var(--master-accent);
+            background: var(--app-accent-soft);
+            color: var(--master-accent);
+            font-weight: bold;
+        }
+    }
+
+    // Every read for the recommended market, best one highlighted.
+    &__dirs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.3rem;
+        margin-top: 0.2rem;
+    }
+
+    &__dir {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.1rem 0.4rem;
+        padding: 0.4rem 0.55rem;
+        border: 1px solid var(--master-line);
+        border-radius: 0.7rem;
+        background: var(--master-inset);
+        font-size: var(--text-size-xxxxs);
+        color: var(--app-text-muted);
+
+        strong {
+            grid-column: 1;
+            font-size: var(--text-size-xxs);
+            color: var(--app-text-title);
+        }
+
+        em {
+            grid-row: 1 / span 2;
+            grid-column: 2;
+            align-self: center;
+            font-style: normal;
+            color: var(--app-text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        &.is-best {
+            border-color: var(--master-dominant);
+            background: rgba(16, 185, 129, 0.1);
+
+            strong {
+                color: var(--master-dominant);
+            }
+        }
     }
 
     &__lead-pattern {
@@ -777,6 +991,88 @@
             background: rgba(251, 113, 133, 0.12);
             color: var(--master-weak);
         }
+    }
+
+    // Sample-size control under the hitmap.
+    &__sample {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        padding-top: 0.5rem;
+        border-top: 1px dashed var(--master-line);
+    }
+
+    &__sample-quick {
+        display: flex;
+        gap: 0.25rem;
+
+        button {
+            padding: 0.28rem 0.65rem;
+            border: 1px solid var(--master-line);
+            border-radius: 999px;
+            background: var(--master-inset);
+            color: var(--app-text-muted);
+            font-size: var(--text-size-xxxxs);
+            font-variant-numeric: tabular-nums;
+            cursor: pointer;
+
+            &:hover {
+                border-color: var(--master-accent);
+            }
+
+            &.is-active {
+                border-color: var(--master-accent);
+                background: var(--app-accent-soft);
+                color: var(--master-accent);
+                font-weight: bold;
+            }
+        }
+    }
+
+    &__sample-note {
+        font-size: var(--text-size-xxxxs);
+        color: var(--app-text-muted);
+        margin-left: auto;
+    }
+
+    // The hidden-pattern scan, under the movement read.
+    &__hidden {
+        margin-top: auto;
+        padding-top: 0.7rem;
+        border-top: 1px dashed var(--master-line);
+
+        h4 {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 0 0 0.4rem;
+            font-size: var(--text-size-xxxs);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--master-accent);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            font-size: var(--text-size-xxxs);
+            line-height: 1.5;
+            color: var(--text-general);
+        }
+    }
+
+    &__hidden-scan {
+        margin-left: auto;
+        font-size: var(--text-size-xxxxs);
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--app-text-muted);
+        font-variant-numeric: tabular-nums;
     }
 
     &__trail {

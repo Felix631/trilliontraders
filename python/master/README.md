@@ -60,9 +60,21 @@ PYTHONPATH=python python3 -m master record \
 PYTHONPATH=python python3 -m master summary
 ```
 
-The tab polls `http://127.0.0.1:8765/report.json` first (when
-`master:serve`/`autonomous` is running) and falls back to the committed
-snapshot at `/master/report.json`.
+## The tab
+
+The Master tab does not lead with the report. It streams the same markets
+through the app's Deriv socket and runs these reads itself
+(`src/pages/dashboard/master-live-analysis.ts`) over the sample window and
+number of study rounds the trader sets: the barrier, parity, momentum and run
+continuations, plus the hidden-selection scan (missing digits, repeat
+transitions, live runs). `Refresh findings` runs the deeper pass — three
+windows per market — and recomputes every recommendation.
+
+The report still matters: the tab polls `http://127.0.0.1:8765/report.json`
+first (when `master:serve`/`autonomous` is running) and falls back to the
+committed snapshot at `/master/report.json`. Its findings lead only while the
+live window is warming up, and its memory (lessons, settled accuracy, study
+rounds) is shown as the past read the engine remembers.
 
 ## Memory and state
 
