@@ -4,9 +4,16 @@ import { localize } from '@deriv-com/translations';
 import { useMarketFeed, MARKET_SYMBOLS } from '@/hooks/useMarketFeed';
 import {
     MIN_SAMPLE,
+    SCORE_FLOOR,
+    pattern_record,
     rank_picks,
+    read_pattern_archive,
     study_markets,
+    study_patterns,
+    write_pattern_archive,
+    type ArchivePattern,
     type LiveFinding,
+    type MarketPatternStudy,
     type MasterTradeType,
     type StudyDigits,
     type TapeStudy,
@@ -88,8 +95,19 @@ interface MarketMeta {
     family: 'volatility' | 'jump';
 }
 
-/** Stable empty list, so the study memo does not restart on every render. */
+/** The read the tab is holding. It only changes when the trader asks. */
+interface SettledRead {
+    symbol: string;
+    finding: LiveFinding | MasterFinding;
+    /** Every read for that market at the moment it was settled. */
+    findings: Partial<Record<MasterTradeType, LiveFinding | MasterFinding>>;
+    live: boolean;
+    at: number;
+}
+
+/** Stable empty lists, so the study memos do not restart on every render. */
 const NO_MARKETS: MasterMarket[] = [];
+const NO_PATTERNS: ArchivePattern[] = [];
 
 const TRADE_TYPES: Array<{ id: TradeType; label: string }> = [
     { id: 'over_under', label: localize('Over / Under') },
@@ -194,6 +212,38 @@ const confidenceLabel = (confidence: number) => {
     return localize('Thin edge');
 };
 
+/** What a read predicts. The live study spells it out; the engine report does not. */
+const outcome_text = (finding: MasterFinding | LiveFinding): string => {
+    if ('predicted_outcome' in finding && finding.predicted_outcome) return finding.predicted_outcome;
+    switch (finding.trade_type) {
+        case 'over_under':
+            return finding.label.startsWith('Over')
+                ? `next settlement lands 5–9 (above ${finding.entry_digit})`
+                : `next settlement lands 0–4 (below ${finding.entry_digit})`;
+        case 'even_odd':
+            return `next settlement is ${finding.label.toLowerCase()}`;
+        case 'rise_fall':
+            return `exit quote settles ${finding.label === 'Rise' ? 'above' : 'below'} the entry`;
+        case 'only_ups_downs':
+            return `the whole run stays ${finding.label === 'Only Ups' ? 'above' : 'below'} the entry`;
+        default:
+            return finding.label;
+    }
+};
+
+const patternStatusLabel = (status: MarketPatternStudy['status']) => {
+    switch (status) {
+        case 'cleared':
+            return localize('Cleared the floor');
+        case 'recalled':
+            return localize('Recalled past pattern');
+        case 'short':
+            return localize('Below the floor');
+        default:
+            return localize('Warming up');
+    }
+};
+
 const Master = () => {
     const feed = useMarketFeed(TAPE_WINDOW);
     const [report, setReport] = React.useState<MasterReport | null>(null);
@@ -204,8 +254,16 @@ const Master = () => {
     const [family, setFamily] = React.useState<'all' | 'volatility' | 'jump'>('all');
     const [trade_type, setTradeType] = React.useState<'all' | TradeType>('all');
     const [selected, setSelected] = React.useState<string | null>(null);
-    const [lead_symbol, setLeadSymbol] = React.useState<string | null>(null);
-    const [auto_study, setAutoStudy] = React.useState(true);
+    // The recommendation is held, not re-picked on every tick: it only moves on
+    // a manual refresh or when the trader switches market himself.
+    const [settled, setSettled] = React.useState<SettledRead | null>(null);
+    // The market whose patterns the study lab works on, chosen by the trader.
+    const [pattern_symbol, setPatternSymbol] = React.useState<string | null>(null);
+    const [pattern_archive, setPatternArchive] = React.useState<Record<string, ArchivePattern[]>>(() =>
+        read_pattern_archive()
+    );
+    // Manual by default: the page settles instead of chasing every tick.
+    const [auto_study, setAutoStudy] = React.useState(false);
     const [checked_at, setCheckedAt] = React.useState<number | null>(null);
     const [study_started_at, setStudyStartedAt] = React.useState(() => Date.now());
     const [refresh_nonce, setRefreshNonce] = React.useState(0);
@@ -321,7 +379,7 @@ const Master = () => {
     const picks = live_picks.length ? live_picks : report_picks;
     const live_pick_count = live_picks.length;
 
-    const settled = report
+    const settled_totals = report
         ? report.markets.reduce(
               (totals, market) => ({
                   wins: totals.wins + market.memory.wins,
@@ -330,8 +388,10 @@ const Master = () => {
               { wins: 0, losses: 0 }
           )
         : { wins: 0, losses: 0 };
-    const settled_total = settled.wins + settled.losses;
-    const settled_accuracy = settled_total ? Math.round((settled.wins / settled_total) * 100) : null;
+    const settled_total = settled_totals.wins + settled_totals.losses;
+    const settled_accuracy = settled_total
+        ? Math.round((settled_totals.wins / settled_total) * 100)
+        : null;
 
     const filters_match = (market: MarketMeta) => {
         if (family !== 'all' && market.family !== family) return false;
@@ -350,27 +410,67 @@ const Master = () => {
     });
 
     const ready_markets = market_meta.filter(market => study_by_symbol[market.symbol]?.ready);
+    // The lens follows the trader's own selection, then the settled lead. It no
+    // longer chases whichever market happens to top the list on this tick.
     const focus_meta: MarketMeta | null =
         market_meta.find(market => market.symbol === selected) ||
-        market_meta.find(market => market.symbol === filtered_picks[0]?.symbol) ||
+        market_meta.find(market => market.symbol === settled?.symbol) ||
+        market_meta.find(market => market.symbol === report_picks[0]?.symbol) ||
         ready_markets[0] ||
         market_meta[0] ||
         null;
     const focus_study = focus_meta ? study_by_symbol[focus_meta.symbol] || null : null;
     const focus_report = focus_meta ? markets.find(market => market.symbol === focus_meta.symbol) || null : null;
 
-    // The lead card follows the live pick until the trader switches markets,
-    // and then reads that market. The engine snapshot is the fallback, clearly
-    // labelled as a past read.
-    const lead_meta: MarketMeta | null =
-        market_meta.find(market => market.symbol === lead_symbol) ||
-        market_meta.find(market => market.symbol === filtered_picks[0]?.symbol) ||
-        focus_meta;
+    // Pick a read once, when the tape first has one, and then hold it. Nothing
+    // on this page swaps the recommendation on its own; only Refresh findings,
+    // Analyze again or the trader's own market switch do.
+    React.useEffect(() => {
+        if (settled || loading) return;
+        const best = rank_picks(studies)[0];
+        if (!best) return;
+        const study = study_by_symbol[best.symbol];
+        setSettled({
+            symbol: best.symbol,
+            finding: best,
+            findings: study?.findings || {},
+            live: true,
+            at: Date.now(),
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [settled, loading, studies]);
+
+    const read_for = (symbol: string, tape: TapeStudy[] = studies): SettledRead | null => {
+        const study = tape.find(entry => entry.symbol === symbol);
+        if (study?.ready && study.best)
+            return { symbol, finding: study.best, findings: study.findings, live: true, at: Date.now() };
+        const report_market = markets.find(entry => entry.symbol === symbol);
+        if (report_market?.best)
+            return {
+                symbol,
+                finding: report_market.best,
+                findings: report_market.findings,
+                live: false,
+                at: Date.now(),
+            };
+        return null;
+    };
+
+    /** Switch the lead to a market the trader picked, reading it immediately. */
+    const settle_on = (symbol: string | null, tape?: TapeStudy[]) => {
+        if (!symbol) return;
+        const read = read_for(symbol, tape);
+        if (read) setSettled(read);
+    };
+
+    const lead_meta: MarketMeta | null = settled
+        ? market_meta.find(market => market.symbol === settled.symbol) || null
+        : focus_meta;
     const lead_study = lead_meta ? study_by_symbol[lead_meta.symbol] || null : null;
     const lead_report_market = lead_meta ? markets.find(market => market.symbol === lead_meta.symbol) || null : null;
     const lead_finding: (MasterFinding | LiveFinding) | null =
-        (lead_study?.ready ? lead_study.best : null) || lead_report_market?.best || null;
-    const lead_is_live = Boolean(lead_study?.ready && lead_study.best);
+        settled?.finding || (lead_study?.ready ? null : lead_report_market?.best) || null;
+    const lead_is_live = Boolean(settled?.live);
 
     const hitmap = hitmapFor(focus_study, focus_report);
     const hitmap_peak = Math.max(...hitmap, 0.0001);
@@ -385,8 +485,29 @@ const Master = () => {
     const is_sample = report ? report.source !== 'deriv' : false;
     const lead_live_digit = lead_meta ? feed.history[lead_meta.symbol]?.slice(-1)[0] : undefined;
 
-    const select_trade_type = (lead_study?.ready ? lead_study.findings : lead_report_market?.findings) || {};
+    const select_trade_type =
+        settled?.findings || (lead_study?.ready ? lead_study.findings : lead_report_market?.findings) || {};
     const focus_reads = (focus_study?.ready ? focus_study.findings : focus_report?.findings) || {};
+
+    // ---- The pattern lab: one market the trader picks, studied until a read
+    // clears the 72% floor. When nothing live clears it, the recorded patterns
+    // for that market are recalled instead of quoting a weak read.
+    const pattern_meta: MarketMeta | null =
+        market_meta.find(market => market.symbol === pattern_symbol) || focus_meta;
+    const pattern_tape = pattern_meta ? pattern_archive[pattern_meta.symbol] || NO_PATTERNS : NO_PATTERNS;
+    const pattern_study: MarketPatternStudy | null = React.useMemo(
+        () =>
+            study_patterns(
+                pattern_meta,
+                feed.history,
+                feed.quote_history,
+                sample_size,
+                study_rounds,
+                pattern_tape
+            ),
+        [pattern_meta, feed.history, feed.quote_history, sample_size, study_rounds, pattern_tape]
+    );
+    const pattern_history = pattern_study?.history || NO_PATTERNS;
 
     const movement_reads = (['rise_fall', 'only_ups_downs'] as TradeType[])
         .map(id => focus_reads[id])
@@ -456,8 +577,56 @@ const Master = () => {
         setStudyStartedAt(Date.now());
     };
 
-    /** Refresh findings: a fresh engine read *and* a fresh thorough live study. */
+    /** Re-study the chosen market and keep its pattern if it clears the floor. */
+    const record_pattern_now = () => {
+        if (!pattern_meta) return;
+        const fresh = study_patterns(
+            pattern_meta,
+            feed.history,
+            feed.quote_history,
+            sample_size,
+            study_rounds,
+            pattern_tape
+        );
+        const record = fresh ? pattern_record(fresh) : null;
+        if (record) setPatternArchive(write_pattern_archive([record]));
+    };
+
+    /** Study the selected market's patterns again, without touching the lead. */
+    const study_pattern_market = () => {
+        record_pattern_now();
+        setScanning(true);
+    };
+
+    /**
+     * Refresh findings: a fresh engine read *and* a fresh thorough live study.
+     * This is the one action that replaces the held recommendation (together
+     * with the trader's own market switch).
+     */
     const refresh_findings = () => {
+        const tape = study_markets(market_meta, feed.history, feed.quote_history, sample_size, study_rounds, true);
+        const best = rank_picks(tape)[0];
+        if (best) {
+            const study = tape.find(entry => entry.symbol === best.symbol);
+            setSettled({
+                symbol: best.symbol,
+                finding: best,
+                findings: study?.findings || {},
+                live: true,
+                at: Date.now(),
+            });
+        } else if (report_picks[0]) {
+            const fallback = report_picks[0];
+            setSettled({
+                symbol: fallback.symbol,
+                finding: fallback,
+                findings: markets.find(market => market.symbol === fallback.symbol)?.findings || {},
+                live: false,
+                at: Date.now(),
+            });
+        }
+
+        record_pattern_now();
         setScanning(true);
         setThorough(true);
         setStudyStartedAt(Date.now());
@@ -618,8 +787,13 @@ const Master = () => {
                         </div>
                         <div className='master__lead-head-right'>
                             <span className={classNames('master__source', { 'is-live': lead_is_live })}>
-                                {lead_is_live ? localize('Live tape read') : localize('Engine past read')}
+                                {lead_is_live ? localize('Settled live read') : localize('Engine past read')}
                             </span>
+                            {settled && (
+                                <span className='master__held'>
+                                    {localize('held since')} {new Date(settled.at).toLocaleTimeString()}
+                                </span>
+                            )}
                             {lead_meta && (
                                 <span className='master__lead-live'>
                                     <span
@@ -638,31 +812,34 @@ const Master = () => {
                         </div>
                     </div>
 
-                    {/* Switch markets without leaving the recommendation. */}
-                    <div className='master__markets' role='group' aria-label={localize('Recommendation market')}>
-                        {market_meta.map(market => {
-                            const study = study_by_symbol[market.symbol];
-                            return (
-                                <button
-                                    key={market.symbol}
-                                    type='button'
-                                    className={classNames('master__market', {
-                                        'is-active': lead_meta?.symbol === market.symbol,
-                                        'is-ready': study?.ready,
-                                    })}
-                                    aria-pressed={lead_meta?.symbol === market.symbol}
-                                    onClick={() => {
-                                        setLeadSymbol(market.symbol);
-                                        setSelected(market.symbol);
-                                    }}
-                                >
-                                    <span>{market.short}</span>
-                                    {study?.ready && study.best && (
-                                        <em>{study.best.confidence}%</em>
-                                    )}
-                                </button>
-                            );
-                        })}
+                    {/* Switch markets without leaving the recommendation — the same
+                        dropdown the lens uses, so the two controls stay one habit. */}
+                    <div className='master__markets'>
+                        <label className='master__market-switch'>
+                            <span>{localize('Market')}</span>
+                            <select
+                                className='master__select master__select--compact'
+                                value={lead_meta?.symbol || ''}
+                                aria-label={localize('Recommendation market')}
+                                onChange={event => {
+                                    setSelected(event.target.value);
+                                    settle_on(event.target.value);
+                                }}
+                            >
+                                {market_meta.map(market => {
+                                    const study = study_by_symbol[market.symbol];
+                                    return (
+                                        <option key={market.symbol} value={market.symbol}>
+                                            {market.short} · {market.name}
+                                            {study?.ready && study.best ? ` · ${study.best.confidence}%` : ''}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </label>
+                        <span className='master__market-note'>
+                            {localize('The read holds until you refresh or switch market.')}
+                        </span>
                         <button
                             type='button'
                             className='master__rerun'
@@ -712,9 +889,12 @@ const Master = () => {
                                         {localize('hit rate')} {lead_finding.win_rate}%
                                     </span>
                                     <span className='master__tag'>
-                                        {localize('sample')} {lead_study?.sample ?? lead_report_market?.sample ?? 0}
+                                        {localize('sample')} {lead_finding.sample ?? 0}
                                     </span>
                                 </div>
+                                <p className='master__lead-outcome'>
+                                    <span>{localize('Predicted outcome')}</span> {outcome_text(lead_finding)}
+                                </p>
                                 <p className='master__lead-pattern'>{lead_finding.pattern}</p>
                                 <p className='master__lead-psych'>{lead_finding.psychology}</p>
                                 <div className='master__bar'>
@@ -722,7 +902,7 @@ const Master = () => {
                                 </div>
                                 <span className='master__lead-note'>
                                     {lead_is_live
-                                        ? `${localize('Read live from')} ${lead_study?.sample ?? 0} ${localize(
+                                        ? `${localize('Read live from')} ${lead_finding.sample} ${localize(
                                               'ticks'
                                           )} · ${lead_study?.rounds ?? study_rounds} ${localize(
                                               'study rounds'
@@ -785,8 +965,8 @@ const Master = () => {
                                                 <button
                                                     type='button'
                                                     onClick={() => {
-                                                        setLeadSymbol(pick.symbol);
                                                         setSelected(pick.symbol);
+                                                        settle_on(pick.symbol);
                                                     }}
                                                     className={classNames({
                                                         'is-selected': pick.symbol === lead_meta.symbol,
@@ -823,7 +1003,7 @@ const Master = () => {
                                 value={focus_meta?.symbol || ''}
                                 onChange={event => {
                                     setSelected(event.target.value);
-                                    setLeadSymbol(event.target.value);
+                                    settle_on(event.target.value);
                                 }}
                                 aria-label={localize('Market under the lens')}
                             >
@@ -1055,7 +1235,8 @@ const Master = () => {
                             )}
                             {settled_total > 0 && (
                                 <div className='master__accuracy'>
-                                    {settled.wins} {localize('won')} · {settled.losses} {localize('lost')} ·{' '}
+                                    {settled_totals.wins} {localize('won')} · {settled_totals.losses}{' '}
+                                    {localize('lost')} ·{' '}
                                     {settled_accuracy}% {localize('accuracy')}
                                 </div>
                             )}
@@ -1089,6 +1270,167 @@ const Master = () => {
                                 </p>
                             )}
                         </div>
+                    </div>
+
+                    {/* ---- One market, studied until a read clears the floor -- */}
+                    <div className='master__lab'>
+                        <div className='master__lab-head'>
+                            <div>
+                                <h3 className='master__panel-title'>{localize('Pattern study')}</h3>
+                                <span className='master__lab-sub'>
+                                    {localize(
+                                        'Pick one market. The study iterates three strategies and only offers a read that clears the floor.'
+                                    )}
+                                </span>
+                            </div>
+                            <span className='master__floor'>
+                                {localize('Floor')} <strong>{SCORE_FLOOR}%</strong>
+                            </span>
+                        </div>
+
+                        <div className='master__lab-controls'>
+                            <label className='master__control master__control--wide'>
+                                <span>{localize('Study market')}</span>
+                                <select
+                                    className='master__select'
+                                    value={pattern_meta?.symbol || ''}
+                                    aria-label={localize('Pattern study market')}
+                                    onChange={event => setPatternSymbol(event.target.value)}
+                                >
+                                    {market_meta.map(market => (
+                                        <option key={market.symbol} value={market.symbol}>
+                                            {market.short} · {market.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <button
+                                type='button'
+                                className='master__rerun'
+                                onClick={study_pattern_market}
+                                disabled={loading || scanning}
+                            >
+                                <span className={classNames('master__btn-icon', { 'is-spinning': scanning })} />
+                                {localize('Study this market')}
+                            </button>
+                        </div>
+
+                        {pattern_study ? (
+                            <div className='master__lab-body'>
+                                <div className='master__lab-read'>
+                                    <div className='master__lab-read-top'>
+                                        <span
+                                            className={classNames('master__pill master__pill--status', {
+                                                'is-cleared': pattern_study.status === 'cleared',
+                                                'is-recalled': pattern_study.status === 'recalled',
+                                                'is-short': pattern_study.status === 'short',
+                                            })}
+                                        >
+                                            {patternStatusLabel(pattern_study.status)}
+                                        </span>
+                                        <span className='master__lab-market'>{pattern_meta?.name}</span>
+                                    </div>
+                                    <p className='master__lab-note'>{pattern_study.note}</p>
+
+                                    {(pattern_study.chosen || pattern_study.recall) && (
+                                        <div className='master__lab-call'>
+                                            <div className='master__lab-call-head'>
+                                                <strong>
+                                                    {pattern_study.chosen?.label || pattern_study.recall?.label}
+                                                </strong>
+                                                <em>
+                                                    {pattern_study.chosen?.confidence ?? pattern_study.recall?.score}%
+                                                </em>
+                                            </div>
+                                            <span className='master__lab-outcome'>
+                                                {localize('Predicts')}{' '}
+                                                {pattern_study.chosen?.predicted_outcome ||
+                                                    pattern_study.recall?.predicted_outcome}
+                                            </span>
+                                            <p className='master__pattern-text'>
+                                                {pattern_study.chosen?.pattern || pattern_study.recall?.pattern}
+                                            </p>
+                                            {pattern_study.recall && (
+                                                <span className='master__lab-recall'>
+                                                    {localize('recalled from')}{' '}
+                                                    {timeAgo(new Date(pattern_study.recall.recorded_at).toISOString())}{' '}
+                                                    {'·'} {pattern_study.recall.strategy}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className='master__lab-iterations'>
+                                    <h4>{localize('Strategies tried')}</h4>
+                                    <ul>
+                                        {pattern_study.iterations.map(pass => (
+                                            <li
+                                                key={pass.id}
+                                                className={classNames({ 'is-cleared': pass.cleared })}
+                                            >
+                                                <div className='master__pass-head'>
+                                                    <span>{pass.label}</span>
+                                                    <span className='master__pass-window'>
+                                                        {pass.window} {localize('ticks')}
+                                                    </span>
+                                                    <span className='master__pass-score'>
+                                                        {pass.finding ? `${pass.score}%` : '—'}
+                                                    </span>
+                                                    {pass.cleared && (
+                                                        <span className='master__pass-check'>{localize('cleared')}</span>
+                                                    )}
+                                                </div>
+                                                <p>{pass.finding ? pass.finding.predicted_outcome : pass.note}</p>
+                                            </li>
+                                        ))}
+                                        {!pattern_study.iterations.length && (
+                                            <li>
+                                                <p>{localize('Waiting for ticks on this market.')}</p>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </div>
+
+                                <div className='master__lab-past'>
+                                    <h4>
+                                        {localize('Past patterns on')} {pattern_meta?.short || ''}
+                                        <em>
+                                            {pattern_history.length} {localize('recorded')}
+                                        </em>
+                                    </h4>
+                                    {pattern_history.length ? (
+                                        <ul>
+                                            {pattern_history.map(record => (
+                                                <li
+                                                    key={`${record.symbol}-${record.trade_type}-${record.label}-${record.recorded_at}`}
+                                                >
+                                                    <div className='master__pass-head'>
+                                                        <span>{record.label}</span>
+                                                        <span className='master__pass-score'>{record.score}%</span>
+                                                        <span className='master__pass-window'>
+                                                            {timeAgo(new Date(record.recorded_at).toISOString())}
+                                                        </span>
+                                                    </div>
+                                                    <p>
+                                                        {record.strategy} · {localize('predicts')}{' '}
+                                                        {record.predicted_outcome}
+                                                    </p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className='master__empty'>
+                                            {localize(
+                                                'Nothing recorded for this market yet. A pattern is kept once it clears the floor, and recalled whenever a live pass cannot.'
+                                            )}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <p className='master__empty'>{localize('Pick a market to study.')}</p>
+                        )}
                     </div>
                 </section>
 
@@ -1166,13 +1508,13 @@ const Master = () => {
                                     aria-pressed={focus_meta?.symbol === market.symbol}
                                     onClick={() => {
                                         setSelected(market.symbol);
-                                        setLeadSymbol(market.symbol);
+                                        settle_on(market.symbol);
                                     }}
                                     onKeyDown={event => {
                                         if (event.key === 'Enter' || event.key === ' ') {
                                             event.preventDefault();
                                             setSelected(market.symbol);
-                                            setLeadSymbol(market.symbol);
+                                            settle_on(market.symbol);
                                         }
                                     }}
                                 >

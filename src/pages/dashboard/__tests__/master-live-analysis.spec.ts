@@ -6,10 +6,15 @@
  */
 import {
     MIN_SAMPLE,
+    SCORE_FLOOR,
+    pattern_record,
     rank_picks,
+    read_pattern_archive,
     study_market,
     study_markets,
+    study_patterns,
     weighted_shares,
+    write_pattern_archive,
 } from '../master-live-analysis';
 
 const repeat = (value: number, count: number) => new Array(count).fill(value);
@@ -49,9 +54,11 @@ describe('the live Master study', () => {
 
         expect(study.ready).toBe(true);
         expect(study.best).not.toBeNull();
-        expect(study.findings.over_under?.label).toBe('Over 8');
+        // Over 4 is the only over barrier quoted: a one-sided high tape reads
+        // Over 4, never whichever barrier happens to look best.
+        expect(study.findings.over_under?.label).toBe('Over 4');
         expect(study.findings.over_under?.contract_type).toBe('DIGITOVER');
-        expect(study.findings.over_under?.entry_digit).toBe(8);
+        expect(study.findings.over_under?.entry_digit).toBe(4);
         expect(study.findings.even_odd?.label).toBe('Odd');
         expect(study.findings.rise_fall?.label).toBe('Rise');
         expect(study.findings.only_ups_downs?.label).toBe('Only Ups');
@@ -122,5 +129,59 @@ describe('the live Master study', () => {
         // One read per family leads, so a strong digit market cannot hide the
         // movement reads entirely.
         expect(new Set(picks.slice(0, 4).map(pick => pick.trade_type)).size).toBeGreaterThan(1);
+    });
+});
+
+describe('the studied patterns', () => {
+    const market = { symbol: 'R_50', name: 'Volatility 50 Index', short: 'V50', family: 'volatility' as const };
+    const quotes = Array.from({ length: 200 }, (_, index) => 1000 + index * 0.5);
+    const strong = repeat(9, 200);
+
+    beforeEach(() => localStorage.clear());
+
+    it('quotes only the 4/5 over-under split', () => {
+        const high = study_market(input(repeat(9, 200), quotes), 200, 4);
+        const low = study_market(input(repeat(1, 200), quotes), 200, 4);
+
+        expect(high.findings.over_under?.label).toBe('Over 4');
+        expect(low.findings.over_under?.label).toBe('Under 5');
+        expect(low.findings.over_under?.entry_digit).toBe(5);
+    });
+
+    it('iterates the strategies and keeps the read that clears the floor', () => {
+        const study = study_patterns(market, { R_50: strong }, { R_50: quotes }, 200, 4);
+
+        expect(study).not.toBeNull();
+        expect(study?.floor).toBe(SCORE_FLOOR);
+        expect(study?.iterations.length).toBeGreaterThan(1);
+        expect(study?.status).toBe('cleared');
+        expect(study?.chosen?.confidence).toBeGreaterThanOrEqual(SCORE_FLOOR);
+        expect(study?.chosen?.predicted_outcome).toMatch(/5–9/);
+    });
+
+    it('recalls a recorded pattern when no live pass clears the floor', () => {
+        const cleared = study_patterns(market, { R_50: strong }, { R_50: quotes }, 200, 4)!;
+        const record = pattern_record(cleared)!;
+
+        expect(record.score).toBeGreaterThanOrEqual(SCORE_FLOOR);
+        write_pattern_archive([record]);
+        expect(read_pattern_archive().R_50?.[0]?.label).toBe(record.label);
+
+        // A mild 55/45 tape: there is a read, but it cannot reach 72%.
+        const mild = Array.from({ length: 200 }, (_, index) =>
+            index % 100 < 55 ? 5 + (index % 5) : index % 5
+        );
+        const recalled = study_patterns(
+            market,
+            { R_50: mild },
+            { R_50: [] },
+            200,
+            4,
+            read_pattern_archive().R_50
+        );
+
+        expect(recalled?.status).toBe('recalled');
+        expect(recalled?.recall?.label).toBe(record.label);
+        expect(recalled?.recall?.score).toBeGreaterThanOrEqual(SCORE_FLOOR);
     });
 });

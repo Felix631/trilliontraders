@@ -26,7 +26,8 @@ Anything else in a feed is ignored. Match/Differs is deliberately not emitted.
 2. `python/master/patterns.py` derives settlement digits from the quotes at the
    symbol's pip size, then reads:
    - recency-weighted digit shares and a one-step Markov transition,
-   - over/under barriers scored against the contract's own baseline,
+   - over/under restricted to the 4/5 split — Over 4 (5–9) or Under 5 (0–4),
+    each scored against the contract's 50% baseline, never another barrier,
    - even/odd parity bias and streaks,
    - quote momentum, tick volatility and runs for rise/fall and only-ups/downs,
    - a hidden-psychology read (crowd band chasing, hot-hand fading, missing-digit
@@ -69,6 +70,18 @@ number of study rounds the trader sets: the barrier, parity, momentum and run
 continuations, plus the hidden-selection scan (missing digits, repeat
 transitions, live runs). `Refresh findings` runs the deeper pass — three
 windows per market — and recomputes every recommendation.
+
+The recommendation is **held**: it is settled once when the tape first has a
+read, and only moves when the trader runs `Refresh findings` / `Analyze again`
+or picks another market from the recommendation dropdown. Auto-study is off by
+default.
+
+Below the board, the **pattern study** works on one market the trader selects.
+It iterates three strategies (full window, recent half, and the settlements
+that followed the last digit), keeps the strongest read, and refuses to offer
+anything under `SCORE_FLOOR` (72%). When no live pass clears the floor it
+recalls the strongest pattern it recorded for that market earlier; recorded
+patterns live in `localStorage` under `tt_master_patterns`.
 
 The report still matters: the tab polls `http://127.0.0.1:8765/report.json`
 first (when `master:serve`/`autonomous` is running) and falls back to the

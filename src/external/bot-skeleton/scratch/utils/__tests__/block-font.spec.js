@@ -142,15 +142,17 @@ describe('block text sizing and contrast', () => {
         expect(theme).toMatch(/:not\(\.block--on-dark\) \.blocklyEditableText > text[\s\S]{0,600}?fill:\s*#333/);
     });
 
-    it('keeps the bot-builder canvas light in the dark theme', () => {
+    it('houses the bot builder on a dark canvas in the dark theme', () => {
         const sheet = readSource('index.scss');
         const theme = sheet.slice(sheet.indexOf('.theme--dark'), sheet.indexOf('White labels on a dark block'));
 
-        // The blocks are the same grey in both themes, so the canvas behind them
-        // must not turn black in the dark theme — that was the one visible
-        // difference in how a strategy was drawn.
-        expect(theme).toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*#fff !important/);
-        expect(theme).not.toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*\$black/);
+        // The surface the bot is housed on follows the theme...
+        expect(theme).toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*#101820 !important/);
+        expect(theme).not.toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*#fff !important/);
+        // ...while the blocks themselves are not re-coloured by it: the canvas
+        // rule carries the surface colour and nothing else.
+        const canvas_rule = theme.match(/\.blocklyMainBackground[^{]*\{([^}]*)\}/);
+        expect(canvas_rule[1].trim()).toBe('fill: #101820 !important;');
     });
 
     it('keeps the collapsed function title dark: it sits on a light block', () => {

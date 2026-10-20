@@ -144,7 +144,10 @@ def digit_findings(digits: list[int]) -> dict:
 
     candidates: list[dict] = []
 
-    for barrier in range(1, 6):
+    # Only the 4/5 split is quoted: Over 4 (settlement clears 4, i.e. 5–9) and
+    # Under 5 (settlement stays below 5, i.e. 0–4). No other barrier is offered,
+    # so the read can never be whichever barrier happened to look best.
+    for barrier in (4,):
         win = sum(probabilities[barrier + 1 :])
         high_share = _share(lambda digit, b=barrier: digit > b, digits, 40)
         candidates.append(
@@ -167,7 +170,7 @@ def digit_findings(digits: list[int]) -> dict:
             }
         )
 
-    for barrier in range(5, 10):
+    for barrier in (5,):
         win = sum(probabilities[:barrier])
         low_share = _share(lambda digit, b=barrier: digit < b, digits, 40)
         candidates.append(

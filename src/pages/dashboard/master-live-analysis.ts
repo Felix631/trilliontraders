@@ -25,6 +25,8 @@ export interface LiveFinding {
     pattern: string;
     psychology: string;
     sample: number;
+    /** The settlement the read is predicting, in plain words. */
+    predicted_outcome: string;
     /** Marks a read computed from the live tape rather than an engine snapshot. */
     live: true;
 }
@@ -153,63 +155,89 @@ const confidence_from = (edge: number, sample: number, consistency: number): num
     return Math.round(clamp(52 + edge * 2.1 * sample_factor * consistency_factor, 8, 97));
 };
 
+/** What a read is predicting, in the trader's own terms. */
+export const predicted_outcome = (
+    finding: Pick<LiveFinding, 'trade_type' | 'label' | 'entry_digit'>
+): string => {
+    switch (finding.trade_type) {
+        case 'over_under':
+            return finding.label.startsWith('Over')
+                ? `next settlement lands 5–9 (above ${finding.entry_digit})`
+                : `next settlement lands 0–4 (below ${finding.entry_digit})`;
+        case 'even_odd':
+            return `next settlement is ${finding.label.toLowerCase()}`;
+        case 'rise_fall':
+            return `exit quote settles ${finding.label === 'Rise' ? 'above' : 'below'} the entry`;
+        case 'only_ups_downs':
+            return `the whole run stays ${finding.label === 'Only Ups' ? 'above' : 'below'} the entry`;
+        default:
+            return finding.label;
+    }
+};
+
+/**
+ * The only over/under barriers this engine quotes: Over 4 (the settlement
+ * clears 4) and Under 5 (it stays below 5). Every other barrier is ignored, so
+ * the read is always the same 4/5 split of the tape and never a barrier that
+ * happens to look good because it was searched for.
+ */
+export const OVER_BARRIER = 4;
+export const UNDER_BARRIER = 5;
+
 const over_under_finding = (digits: number[], consistency: number): LiveFinding | null => {
     if (digits.length < MIN_SAMPLE) return null;
     const shares = weighted_shares(digits);
 
-    let best: LiveFinding | null = null;
-    for (let barrier = 0; barrier <= 9; barrier += 1) {
-        const above = shares.reduce((total, share, digit) => (digit > barrier ? total + share : total), 0);
-        const below = shares.reduce((total, share, digit) => (digit < barrier ? total + share : total), 0);
+    // Above 4 = 5–9; below 5 = 0–4. The two are complementary, so exactly one
+    // side can carry an edge over the 50% line.
+    const over = shares.reduce((total, share, digit) => (digit > OVER_BARRIER ? total + share : total), 0);
+    const under = shares.reduce((total, share, digit) => (digit < UNDER_BARRIER ? total + share : total), 0);
 
-        const candidates = [
-            {
-                side: 'Over' as const,
-                measurement: above,
-                baseline: (9 - barrier) / 10,
-                contract_type: 'DIGITOVER',
-                psychology:
-                    'The crowd fades the upper band after a cluster of highs; the tape is still clearing it, so the fade is the wrong side.',
-            },
-            {
-                side: 'Under' as const,
-                measurement: below,
-                baseline: barrier / 10,
-                contract_type: 'DIGITUNDER',
-                psychology:
-                    'Low settlements are being treated as due for a bounce; the window says the low band is still where the tape settles.',
-            },
-        ];
+    const candidates = [
+        {
+            side: 'Over' as const,
+            barrier: OVER_BARRIER,
+            measurement: over,
+            contract_type: 'DIGITOVER',
+            psychology:
+                'The crowd fades the upper band after a cluster of highs; the tape is still clearing it, so the fade is the wrong side.',
+        },
+        {
+            side: 'Under' as const,
+            barrier: UNDER_BARRIER,
+            measurement: under,
+            contract_type: 'DIGITUNDER',
+            psychology:
+                'Low settlements are being treated as due for a bounce; the window says the low band is still where the tape settles.',
+        },
+    ];
 
-        candidates.forEach(candidate => {
-            const edge = (candidate.measurement - candidate.baseline) * 100;
-            if (edge <= 0) return;
-            const confidence = confidence_from(edge, digits.length, consistency);
-            // Confidence saturates at 97 for a one-sided tape, so a tie goes to
-            // the wider edge: Over 8 beats Over 2 when both are as certain.
-            if (best && (confidence < best.confidence || (confidence === best.confidence && edge <= best.edge))) {
-                return;
-            }
-            const hit_rate = pct(candidate.measurement);
-            best = {
-                trade_type: 'over_under',
-                label: `${candidate.side} ${barrier}`,
-                contract_type: candidate.contract_type,
-                prediction: barrier,
-                entry_digit: barrier,
-                win_rate: hit_rate,
-                edge: round1(edge),
-                confidence,
-                pattern: `${candidate.side} ${barrier} settled in ${hit_rate}% of the weighted tape (${digits.length} ticks) against a ${pct(
-                    candidate.baseline
-                )}% baseline — a ${round1(edge)} point edge.`,
-                psychology: candidate.psychology,
-                sample: digits.length,
-                live: true,
-            };
-        });
-    }
-    return best;
+    const candidate = candidates[0].measurement >= candidates[1].measurement ? candidates[0] : candidates[1];
+    const edge = (candidate.measurement - 0.5) * 100;
+    if (edge <= 0) return null;
+
+    const hit_rate = pct(candidate.measurement);
+    return {
+        trade_type: 'over_under',
+        label: `${candidate.side} ${candidate.barrier}`,
+        contract_type: candidate.contract_type,
+        prediction: candidate.barrier,
+        entry_digit: candidate.barrier,
+        win_rate: hit_rate,
+        edge: round1(edge),
+        confidence: confidence_from(edge, digits.length, consistency),
+        pattern: `${candidate.side} ${candidate.barrier} cleared in ${hit_rate}% of the weighted tape (${digits.length} ticks) — the 4/5 split is the only barrier quoted, so this is a ${round1(
+            edge
+        )} point edge over the 50% line.`,
+        psychology: candidate.psychology,
+        sample: digits.length,
+        live: true,
+        predicted_outcome: predicted_outcome({
+            trade_type: 'over_under',
+            label: `${candidate.side} ${candidate.barrier}`,
+            entry_digit: candidate.barrier,
+        }),
+    };
 };
 
 const even_odd_finding = (digits: number[], consistency: number): LiveFinding | null => {
@@ -239,6 +267,11 @@ const even_odd_finding = (digits: number[], consistency: number): LiveFinding | 
             'Parity streaks pull money to the opposite side as if the tape owed it a switch; the window says the current side is still paying.',
         sample: digits.length,
         live: true,
+        predicted_outcome: predicted_outcome({
+            trade_type: 'even_odd',
+            label: use_even ? 'Even' : 'Odd',
+            entry_digit: null,
+        }),
     };
 };
 
@@ -272,6 +305,11 @@ const rise_fall_finding = (quotes: number[], consistency: number): LiveFinding |
             'Momentum traders buy the pullback; on this tape the pullback has been the continuation, not the reversal.',
         sample: quotes.length,
         live: true,
+        predicted_outcome: predicted_outcome({
+            trade_type: 'rise_fall',
+            label: use_up ? 'Rise' : 'Fall',
+            entry_digit: null,
+        }),
     };
 };
 
@@ -324,6 +362,11 @@ const only_ups_downs_finding = (quotes: number[], consistency: number): LiveFind
             'Run contracts get sold after a long streak on the assumption it must snap; the measured continuation rate prices that assumption.',
         sample: quotes.length,
         live: true,
+        predicted_outcome: predicted_outcome({
+            trade_type: 'only_ups_downs',
+            label: use_up ? 'Only Ups' : 'Only Downs',
+            entry_digit: null,
+        }),
     };
 };
 
@@ -558,4 +601,311 @@ export const rank_picks = (studies: TapeStudy[]): Array<LiveFinding & { symbol: 
         if (!diverse.includes(pick)) diverse.push(pick);
     });
     return diverse.slice(0, 6);
+};
+
+// ---------------------------------------------------------------------------
+// Studied patterns, one market at a time
+// ---------------------------------------------------------------------------
+//
+// A market is studied by a small search, not a single read: the full window,
+// the newest half, and the settlements that followed the last digit are all
+// read, and the strongest of them is kept. A read is only offered when it
+// clears SCORE_FLOOR. When nothing live clears it, the study reaches into the
+// patterns it recorded on earlier passes and recalls the strongest of those, so
+// a weak tape never becomes a weak recommendation.
+
+/** The minimum score a studied pattern must carry before it is offered. */
+export const SCORE_FLOOR = 72;
+const ARCHIVE_KEY = 'tt_master_patterns';
+const ARCHIVE_PER_MARKET = 12;
+
+export interface ArchivePattern {
+    symbol: string;
+    short: string;
+    trade_type: MasterTradeType;
+    label: string;
+    contract_type: string;
+    entry_digit: number | null;
+    score: number;
+    strategy: string;
+    predicted_outcome: string;
+    pattern: string;
+    sample: number;
+    recorded_at: number;
+}
+
+export interface StrategyPass {
+    id: string;
+    label: string;
+    /** How many ticks that pass actually read. */
+    window: number;
+    finding: LiveFinding | null;
+    score: number;
+    cleared: boolean;
+    note: string;
+}
+
+export interface MarketPatternStudy {
+    symbol: string;
+    name: string;
+    short: string;
+    floor: number;
+    status: 'warming' | 'cleared' | 'recalled' | 'short';
+    /** The live read kept for this market, when a pass cleared the floor. */
+    chosen: LiveFinding | null;
+    chosen_pass: StrategyPass | null;
+    /** The recorded pattern recalled because no live pass cleared the floor. */
+    recall: ArchivePattern | null;
+    iterations: StrategyPass[];
+    history: ArchivePattern[];
+    note: string;
+}
+
+const is_archive_pattern = (value: unknown): value is ArchivePattern => {
+    if (!value || typeof value !== 'object') return false;
+    const record = value as ArchivePattern;
+    return (
+        typeof record.symbol === 'string' &&
+        typeof record.label === 'string' &&
+        typeof record.trade_type === 'string' &&
+        typeof record.score === 'number' &&
+        typeof record.recorded_at === 'number'
+    );
+};
+
+/** The recorded patterns, per market, newest first. */
+export const read_pattern_archive = (): Record<string, ArchivePattern[]> => {
+    try {
+        const raw = localStorage.getItem(ARCHIVE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return {};
+        const archive: Record<string, ArchivePattern[]> = {};
+        Object.entries(parsed as Record<string, unknown>).forEach(([symbol, list]) => {
+            if (!Array.isArray(list)) return;
+            archive[symbol] = list.filter(is_archive_pattern).slice(0, ARCHIVE_PER_MARKET);
+        });
+        return archive;
+    } catch {
+        return {};
+    }
+};
+
+/** Merge cleared patterns into the archive, skipping ones already recorded. */
+export const write_pattern_archive = (records: ArchivePattern[]): Record<string, ArchivePattern[]> => {
+    const archive = read_pattern_archive();
+    let changed = false;
+    records.forEach(record => {
+        const list = archive[record.symbol] || [];
+        const known = list.some(
+            item =>
+                item.trade_type === record.trade_type &&
+                item.label === record.label &&
+                item.strategy === record.strategy
+        );
+        if (known) return;
+        archive[record.symbol] = [record, ...list].slice(0, ARCHIVE_PER_MARKET);
+        changed = true;
+    });
+    if (changed) {
+        try {
+            localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+        } catch {
+            // storage full or blocked: the study still runs, it just cannot recall
+        }
+    }
+    return archive;
+};
+
+/** The strongest finding of a study, optionally limited to the digit families. */
+const strongest = (study: TapeStudy, only?: MasterTradeType[]): LiveFinding | null => {
+    const pool = (only || TRADE_TYPE_ORDER)
+        .map(id => study.findings[id])
+        .filter((finding): finding is LiveFinding => Boolean(finding));
+    if (!pool.length) return null;
+    return pool.reduce((top, finding) => (finding.confidence > top.confidence ? finding : top));
+};
+
+/** The settlements that followed the last digit — the transition strategy. */
+const conditional_tape = (digits: number[]): { last: number | null; tape: number[] } => {
+    if (digits.length < 2) return { last: null, tape: [] };
+    const last = digits[digits.length - 1];
+    const tape: number[] = [];
+    for (let index = 0; index < digits.length - 1; index += 1) {
+        if (digits[index] === last) tape.push(digits[index + 1]);
+    }
+    return { last, tape };
+};
+
+/**
+ * Study one market's patterns. `archive` is the market's recorded history; it
+ * is only consulted when no live pass clears the floor.
+ */
+export const study_patterns = (
+    market: { symbol: string; name: string; short: string; family: 'volatility' | 'jump' } | null,
+    history: Record<string, number[]>,
+    quote_history: Record<string, number[]>,
+    sample: number,
+    rounds: number,
+    archive: ArchivePattern[] = []
+): MarketPatternStudy | null => {
+    if (!market) return null;
+
+    const digits = history[market.symbol] || [];
+    const quotes = quote_history[market.symbol] || [];
+    const history_for_market = archive
+        .filter(record => record.symbol === market.symbol && record.score >= SCORE_FLOOR)
+        .sort((a, b) => b.recorded_at - a.recorded_at)
+        .slice(0, ARCHIVE_PER_MARKET);
+
+    const iterations: StrategyPass[] = [];
+    const run_pass = (
+        id: string,
+        label: string,
+        tape: number[],
+        quote_tape: number[],
+        window: number,
+        note: string,
+        only?: MasterTradeType[]
+    ) => {
+        const study = study_market(
+            { ...market, digits: tape, quotes: quote_tape },
+            window,
+            rounds
+        );
+        const finding = study.ready ? strongest(study, only) : null;
+        const score = finding?.confidence ?? 0;
+        iterations.push({
+            id,
+            label,
+            window: study.sample,
+            finding,
+            score,
+            cleared: score >= SCORE_FLOOR,
+            note: study.ready
+                ? note
+                : `${note}, but only ${study.sample} ticks were available`,
+        });
+    };
+
+    if (digits.length) {
+        run_pass(
+            'full',
+            'Full window',
+            digits,
+            quotes,
+            sample,
+            `the whole ${Math.min(sample, digits.length)} tick window`
+        );
+        run_pass(
+            'recent',
+            'Recent half',
+            digits,
+            quotes,
+            Math.max(MIN_SAMPLE, Math.floor(sample / 2)),
+            'the newest half, to catch a fresh shift the full window dilutes'
+        );
+    }
+
+    const { last, tape: conditional } = conditional_tape(digits);
+    if (last != null && conditional.length >= MIN_SAMPLE) {
+        run_pass(
+            'conditional',
+            `After ${last}`,
+            conditional,
+            [],
+            Math.max(MIN_SAMPLE, conditional.length),
+            `only the settlements that followed a ${last}`,
+            ['over_under', 'even_odd']
+        );
+    }
+
+    const cleared = iterations
+        .filter(pass => pass.cleared && pass.finding)
+        .sort((a, b) => b.score - a.score)[0];
+
+    const base: MarketPatternStudy = {
+        symbol: market.symbol,
+        name: market.name,
+        short: market.short,
+        floor: SCORE_FLOOR,
+        status: 'warming',
+        chosen: null,
+        chosen_pass: null,
+        recall: null,
+        iterations,
+        history: history_for_market,
+        note: '',
+    };
+
+    if (cleared?.finding) {
+        return {
+            ...base,
+            status: 'cleared',
+            chosen: cleared.finding,
+            chosen_pass: cleared,
+            note: `${cleared.label} cleared the ${SCORE_FLOOR}% floor at ${cleared.score}% from ${
+                cleared.window
+            } ticks — it predicts ${cleared.finding.predicted_outcome}.`,
+        };
+    }
+
+    if (!iterations.some(pass => pass.finding)) {
+        return { ...base, note: `The study needs at least ${MIN_SAMPLE} ticks before it can read this market.` };
+    }
+
+    const best_attempt = iterations
+        .filter(pass => pass.finding)
+        .sort((a, b) => b.score - a.score)[0];
+
+    if (history_for_market.length) {
+        const recall = history_for_market[0];
+        return {
+            ...base,
+            status: 'recalled',
+            recall,
+            note: `No live pass cleared ${SCORE_FLOOR}% (best ${best_attempt.score}% on ${
+                best_attempt.label
+            }), so the study recalls its recorded ${recall.label} read at ${recall.score}% from ${time_label(
+                recall.recorded_at
+            )}.`,
+        };
+    }
+
+    return {
+        ...base,
+        status: 'short',
+        note: `No pass cleared ${SCORE_FLOOR}%: best was ${best_attempt.label} at ${
+            best_attempt.score
+        }% over ${best_attempt.window} ticks. The next pass tries all three strategies again and records a read as soon as one clears the floor.`,
+    };
+};
+
+const time_label = (stamp: number): string => {
+    const minutes = Math.max(0, Math.round((Date.now() - stamp) / 60000));
+    if (minutes < 1) return 'a moment ago';
+    if (minutes < 60) return `${minutes}m ago`;
+    return `${Math.round(minutes / 60)}h ago`;
+};
+
+/** The archive record for a study that cleared the floor. */
+export const pattern_record = (
+    study: MarketPatternStudy,
+    recorded_at = Date.now()
+): ArchivePattern | null => {
+    if (study.status !== 'cleared' || !study.chosen || !study.chosen_pass) return null;
+    return {
+        symbol: study.symbol,
+        short: study.short,
+        trade_type: study.chosen.trade_type,
+        label: study.chosen.label,
+        contract_type: study.chosen.contract_type,
+        entry_digit: study.chosen.entry_digit,
+        score: study.chosen.confidence,
+        strategy: study.chosen_pass.label,
+        predicted_outcome: study.chosen.predicted_outcome,
+        pattern: study.chosen.pattern,
+        sample: study.chosen.sample,
+        recorded_at,
+    };
 };

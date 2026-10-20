@@ -45,7 +45,7 @@ describe('the Master tab', () => {
         expect(await screen.findByText('Market board')).toBeInTheDocument();
 
         // The lead card names the strongest reading the engine produced.
-        expect(screen.getAllByText(/V10 · Over 5/).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/V10 · Over 4/).length).toBeGreaterThan(0);
 
         // Every allowed family is offered as a filter, no others.
         ['Over / Under', 'Even / Odd', 'Rise / Fall', 'Only Ups / Only Downs'].forEach(label => {
@@ -74,6 +74,19 @@ describe('the Master tab', () => {
 
         // The patterns panel now reads the newly selected market's own findings.
         expect(await screen.findByText(/Patterns it read on V25/)).toBeInTheDocument();
+    });
+
+    it('studies one market\'s patterns against a score floor, and can recall them', async () => {
+        render(<Master />);
+
+        expect(await screen.findByText('Pattern study')).toBeInTheDocument();
+        expect(await screen.findByText(/Floor/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: 'Study this market' })).toBeInTheDocument();
+
+        const select = (await screen.findByLabelText('Pattern study market')) as HTMLSelectElement;
+        fireEvent.change(select, { target: { value: 'R_25' } });
+
+        expect(await screen.findByText(/Past patterns on V25/)).toBeInTheDocument();
     });
 
     it('refreshes the findings on demand', async () => {

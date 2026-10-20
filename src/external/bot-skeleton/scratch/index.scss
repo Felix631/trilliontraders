@@ -48,12 +48,13 @@ $colour_toolboxSelected: $black;
         fill: #333 !important;
     }
 
-    // The live workspace and the read-only preview keep the light canvas: the
-    // blocks are the same grey either way, and a black canvas behind them was
-    // the one place the dark theme changed how a bot is drawn.
+    // The bot builder is housed on a dark canvas in the dark theme. The blocks
+    // themselves are untouched — same grey fills, same labels — because only the
+    // surface they sit on follows the theme; a white sheet behind a dark app was
+    // the one thing that did not read as dark mode.
     .zelos-renderer.zelos_renderer-theme .blocklyMainBackground,
     .load-strategy__container .blocklyMainBackground {
-        fill: #fff !important;
+        fill: #101820 !important;
     }
 
     // White-filled blocks would disappear on that canvas, so they take the

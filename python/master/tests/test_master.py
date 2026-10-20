@@ -70,10 +70,11 @@ class PatternsTest(unittest.TestCase):
         self.assertEqual(analysis["status"], "ready")
         finding = analysis["findings"]["over_under"]
         self.assertEqual(finding["contract_type"], "DIGITOVER")
-        self.assertEqual(finding["prediction"], 5)
-        self.assertEqual(finding["entry_digit"], 5)
+        # Over 4 is the only over barrier the engine quotes.
+        self.assertEqual(finding["prediction"], 4)
+        self.assertEqual(finding["entry_digit"], 4)
         self.assertGreaterEqual(finding["confidence"], 90)
-        self.assertIn("above 5", finding["pattern"])
+        self.assertIn("above 4", finding["pattern"])
 
     def test_low_band_market_reads_as_an_under_entry(self):
         digits = cycle([0, 1, 2, 3], 90)
