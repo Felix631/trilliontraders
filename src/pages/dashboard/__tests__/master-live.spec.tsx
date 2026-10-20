@@ -116,7 +116,7 @@ describe('the live Master study', () => {
     });
 
     it('holds the read when the tape shifts underneath it', async () => {
-        render(<Master />);
+        const { container } = render(<Master />);
 
         expect(await screen.findByRole('heading', { name: /V10 · Over 4/ })).toBeInTheDocument();
 
@@ -134,6 +134,14 @@ describe('the live Master study', () => {
         // ...but the card keeps the read it settled on instead of hopping to V25.
         expect(await screen.findByRole('heading', { name: /V10 · Over 4/ })).toBeInTheDocument();
         expect(screen.queryByRole('heading', { name: /V25 · Over 4/ })).toBeNull();
+
+        // The market board is held the same way: V10 still reads Over 4 even
+        // though the live tape is now all 1s, which would read Under 5.
+        const v10_card = Array.from(container.querySelectorAll('.master__card')).find(card =>
+            card.textContent?.includes('V10')
+        );
+        expect(v10_card?.textContent).toContain('Over 4');
+        expect(v10_card?.textContent).not.toContain('Under 5');
     });
 
     it('runs the study again on demand', async () => {

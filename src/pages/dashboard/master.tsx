@@ -105,6 +105,15 @@ interface SettledRead {
     at: number;
 }
 
+/** One market's direction for all four trade types, frozen at analysis time. */
+interface BoardRead {
+    findings: Partial<Record<MasterTradeType, LiveFinding | MasterFinding>>;
+    best: LiveFinding | MasterFinding | null;
+    sample: number;
+}
+
+type SettledBoard = Record<string, BoardRead>;
+
 /** Stable empty lists, so the study memos do not restart on every render. */
 const NO_MARKETS: MasterMarket[] = [];
 const NO_PATTERNS: ArchivePattern[] = [];
@@ -257,6 +266,11 @@ const Master = () => {
     // The recommendation is held, not re-picked on every tick: it only moves on
     // a manual refresh or when the trader switches market himself.
     const [settled, setSettled] = React.useState<SettledRead | null>(null);
+    // The board's directions are frozen the same way: the trade-type reads only
+    // move when an analysis runs, never tick by tick.
+    const [board_reads, setBoardReads] = React.useState<SettledBoard | null>(null);
+    // Two pages under the Master tab: the desk and the pattern study.
+    const [view, setView] = React.useState<'desk' | 'patterns'>('desk');
     // The market whose patterns the study lab works on, chosen by the trader.
     const [pattern_symbol, setPatternSymbol] = React.useState<string | null>(null);
     const [pattern_archive, setPatternArchive] = React.useState<Record<string, ArchivePattern[]>>(() =>
@@ -374,6 +388,36 @@ const Master = () => {
         return map;
     }, [studies]);
 
+    /**
+     * Freeze every market's four directions and the strength they are ranked by.
+     * The board renders this snapshot, not the live studies, so a trade-type
+     * recommendation cannot flip from one tick to the next: it changes only when
+     * an analysis (first read, Refresh findings or Analyze again) runs.
+     */
+    const snapshot_board = (tape: TapeStudy[] = studies): SettledBoard => {
+        const next: SettledBoard = {};
+        market_meta.forEach(market => {
+            const study = tape.find(entry => entry.symbol === market.symbol);
+            const report_market = markets.find(entry => entry.symbol === market.symbol);
+            if (study?.ready) {
+                next[market.symbol] = {
+                    findings: study.findings,
+                    best: study.best,
+                    sample: study.sample,
+                };
+            } else if (report_market) {
+                next[market.symbol] = {
+                    findings: report_market.findings,
+                    best: report_market.best,
+                    sample: report_market.sample,
+                };
+            } else {
+                next[market.symbol] = { findings: {}, best: null, sample: 0 };
+            }
+        });
+        return next;
+    };
+
     const live_picks = React.useMemo(() => rank_picks(studies), [studies]);
     const report_picks = report?.top_picks || [];
     const picks = live_picks.length ? live_picks : report_picks;
@@ -396,6 +440,10 @@ const Master = () => {
     const filters_match = (market: MarketMeta) => {
         if (family !== 'all' && market.family !== family) return false;
         if (trade_type === 'all') return true;
+        // Filter on the frozen board when it exists, so a card does not pop in
+        // and out as the tape moves under a trade-type filter.
+        const frozen = board_reads?.[market.symbol];
+        if (frozen) return Boolean(frozen.findings[trade_type]);
         const study = study_by_symbol[market.symbol];
         if (study?.ready && study.findings[trade_type]) return true;
         const report_market = markets.find(entry => entry.symbol === market.symbol);
@@ -437,6 +485,7 @@ const Master = () => {
             live: true,
             at: Date.now(),
         });
+        setBoardReads(snapshot_board(studies));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settled, loading, studies]);
 
@@ -518,6 +567,8 @@ const Master = () => {
         : (focus_report?.digits?.runs ?? ({} as Record<string, number>));
 
     const scored = (market: MarketMeta) => {
+        const frozen = board_reads?.[market.symbol];
+        if (frozen?.best) return frozen.best.confidence * 10 + Math.max(0, frozen.best.edge);
         const study = study_by_symbol[market.symbol];
         if (study?.ready && study.best) return study.best.confidence * 10 + Math.max(0, study.best.edge);
         const report_market = markets.find(entry => entry.symbol === market.symbol);
@@ -626,6 +677,7 @@ const Master = () => {
             });
         }
 
+        setBoardReads(snapshot_board(tape));
         record_pattern_now();
         setScanning(true);
         setThorough(true);
@@ -745,6 +797,33 @@ const Master = () => {
                     </div>
                 )}
 
+                {/* Two pages under the Master tab: the desk and the pattern study. */}
+                <nav className='master__tabs' role='tablist' aria-label={localize('Master pages')}>
+                    {(['desk', 'patterns'] as const).map(tab => (
+                        <button
+                            key={tab}
+                            type='button'
+                            role='tab'
+                            id={`master-tab-${tab}`}
+                            aria-selected={view === tab}
+                            aria-controls={`master-panel-${tab}`}
+                            className={classNames('master__tab', { 'is-active': view === tab })}
+                            onClick={() => setView(tab)}
+                        >
+                            {tab === 'desk' ? localize('Desk') : localize('Patterns')}
+                        </button>
+                    ))}
+                </nav>
+
+                <div
+                    key={view}
+                    className='master__page'
+                    role='tabpanel'
+                    id={`master-panel-${view}`}
+                    aria-labelledby={`master-tab-${view}`}
+                >
+                    {view === 'desk' && (
+                        <>
                 <section className='master__stats'>
                     <div className='master__stat'>
                         <span className='master__stat-value'>
@@ -1210,8 +1289,11 @@ const Master = () => {
                         </div>
                     </div>
                 </section>
+                        </>
+                    )}
 
                 {/* ---- What the engine studied ---------------------------------- */}
+                {view === 'patterns' && (
                 <section className='master__memory'>
                     <div className='master__section-head'>
                         <h2>{localize('Studied patterns')}</h2>
@@ -1433,8 +1515,10 @@ const Master = () => {
                         )}
                     </div>
                 </section>
+                )}
 
                 {/* ---- Full board ---------------------------------------------- */}
+                {view === 'desk' && (
                 <section className='master__board'>
                     <div className='master__section-head'>
                         <h2>{localize('Market board')}</h2>
@@ -1490,13 +1574,19 @@ const Master = () => {
                         {sorted_board.map(market => {
                             const study = study_by_symbol[market.symbol];
                             const report_market = markets.find(entry => entry.symbol === market.symbol);
-                            const reads = (study?.ready ? study.findings : report_market?.findings) || {};
-                            const best = (study?.ready ? study.best : report_market?.best) || null;
+                            // Directions come from the frozen board: they hold until
+                            // the next analysis, whatever the tape does meanwhile.
+                            const frozen = board_reads?.[market.symbol];
+                            const live_reads = (study?.ready ? study.findings : report_market?.findings) || {};
+                            const live_best = (study?.ready ? study.best : report_market?.best) || null;
+                            const reads = frozen ? frozen.findings : live_reads;
+                            const best = frozen ? frozen.best : live_best;
+                            const sample = frozen?.sample ?? study?.sample ?? report_market?.sample ?? 0;
                             const live_digit =
                                 feed.history[market.symbol]?.slice(-1)[0] ?? report_market?.last_digit ?? null;
                             const live_quote = feed.quotes[market.symbol];
                             const digits = study?.ready ? study.digits : report_market?.digits;
-                            const ready = Boolean(study?.ready || report_market?.status === 'ready');
+                            const ready = Boolean(best);
                             return (
                                 <article
                                     key={market.symbol}
@@ -1585,7 +1675,9 @@ const Master = () => {
                                         </>
                                     ) : (
                                         <p className='master__card-warming'>
-                                            {localize('Warming up — the study wants at least 30 ticks.')}
+                                            {sample >= MIN_SAMPLE
+                                                ? localize('No edge on the last analysis — refresh to re-read the tape.')
+                                                : localize('Warming up — the study wants at least 30 ticks.')}
                                         </p>
                                     )}
                                 </article>
@@ -1598,6 +1690,8 @@ const Master = () => {
                         )}
                     </div>
                 </section>
+                )}
+                </div>
 
                 <footer className='master__footer'>
                     <span>

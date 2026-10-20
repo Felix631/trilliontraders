@@ -41,8 +41,12 @@ describe('the Master tab', () => {
         expect(await screen.findByText('Live recommendation')).toBeInTheDocument();
         expect(await screen.findByText('Digit hitmap')).toBeInTheDocument();
         expect(await screen.findByText('Movement read')).toBeInTheDocument();
-        expect(await screen.findByText('Studied patterns')).toBeInTheDocument();
         expect(await screen.findByText('Market board')).toBeInTheDocument();
+        // The pattern study lives on its own page, not in the desk scroll.
+        expect(screen.queryByText('Studied patterns')).toBeNull();
+        fireEvent.click(screen.getByRole('tab', { name: 'Patterns' }));
+        expect(await screen.findByText('Studied patterns')).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('tab', { name: 'Desk' }));
 
         // The lead card names the strongest reading the engine produced.
         expect(screen.getAllByText(/V10 · Over 4/).length).toBeGreaterThan(0);
@@ -72,13 +76,15 @@ describe('the Master tab', () => {
         const selector = (await screen.findByLabelText('Market under the lens')) as HTMLSelectElement;
         fireEvent.change(selector, { target: { value: 'R_25' } });
 
-        // The patterns panel now reads the newly selected market's own findings.
+        // The patterns page reads the newly selected market's own findings.
+        fireEvent.click(screen.getByRole('tab', { name: 'Patterns' }));
         expect(await screen.findByText(/Patterns it read on V25/)).toBeInTheDocument();
     });
 
     it('studies one market\'s patterns against a score floor, and can recall them', async () => {
         render(<Master />);
 
+        fireEvent.click(await screen.findByRole('tab', { name: 'Patterns' }));
         expect(await screen.findByText('Pattern study')).toBeInTheDocument();
         expect(await screen.findByText(/Floor/)).toBeInTheDocument();
         expect(await screen.findByRole('button', { name: 'Study this market' })).toBeInTheDocument();

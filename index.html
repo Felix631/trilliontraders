@@ -42,18 +42,19 @@
                 font-size: 62.5%;
             }
             /*
-             * Pre-React cover only — same canvas as the boot splash teardown, no brand
-             * title. Avoids brand-name flash before the app bundle mounts.
+             * Pre-React cover only — the Aurora Deep canvas the app itself uses
+             * (ink #050b1c under the blue → cyan → emerald spectrum), no brand
+             * title. Avoids a different palette flashing before the app mounts.
              */
             #df-boot-splash {
-                --df-boot-theme: #8b0000;
                 position: fixed;
                 inset: 0;
                 z-index: 99999;
                 background:
-                    radial-gradient(1200px 700px at 20% 10%, color-mix(in srgb, var(--df-boot-theme) 55%, transparent), transparent 60%),
-                    radial-gradient(1000px 600px at 80% 90%, color-mix(in srgb, #efbf04 55%, transparent), transparent 60%),
-                    #1a0000;
+                    radial-gradient(1100px 650px at 18% 8%, rgba(37, 99, 235, 0.42), transparent 62%),
+                    radial-gradient(950px 600px at 84% 88%, rgba(16, 185, 129, 0.34), transparent 64%),
+                    radial-gradient(900px 560px at 58% 42%, rgba(34, 211, 238, 0.2), transparent 62%),
+                    #050b1c;
             }
             #df-boot-splash[data-done='1'] {
                 display: none;

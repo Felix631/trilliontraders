@@ -74,7 +74,13 @@ windows per market — and recomputes every recommendation.
 The recommendation is **held**: it is settled once when the tape first has a
 read, and only moves when the trader runs `Refresh findings` / `Analyze again`
 or picks another market from the recommendation dropdown. Auto-study is off by
-default.
+default. The **market board** is held the same way — every market's four
+trade-type directions and the order they are ranked in are frozen at analysis
+time, so a card cannot flip direction between ticks.
+
+The page is split into two tabs: **Desk** (stats, live recommendation, the
+market under the lens, the market board) and **Patterns** (lessons, the reads
+for the lens market, and the per-market pattern study).
 
 Below the board, the **pattern study** works on one market the trader selects.
 It iterates three strategies (full window, recent half, and the settlements

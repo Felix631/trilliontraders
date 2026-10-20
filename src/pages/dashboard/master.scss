@@ -43,6 +43,8 @@
             linear-gradient(135deg, rgba(79, 140, 255, 0.14), transparent 46%),
             linear-gradient(135deg, var(--master-panel), var(--master-panel-alt));
         box-shadow: var(--master-shadow);
+        // Same entrance as the app's other page headers.
+        animation: ux-rise var(--ux-t-slow, 0.5s) var(--ux-ease, ease) both;
     }
 
     &__hero-copy {
@@ -64,7 +66,52 @@
         font-size: var(--text-size-xl);
         line-height: 1.1;
         letter-spacing: -0.02em;
-        color: var(--app-text-title);
+        // The same heading colour the rest of the pages use.
+        color: var(--ux-text);
+    }
+
+    // ---- Desk / Patterns ----------------------------------------------------
+    &__tabs {
+        display: inline-flex;
+        align-self: flex-start;
+        gap: 0.3rem;
+        padding: 0.3rem;
+        border: 1px solid var(--master-line);
+        border-radius: 999px;
+        background: var(--master-inset);
+    }
+
+    &__tab {
+        padding: 0.42rem 1.4rem;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--app-text-muted);
+        font-size: var(--text-size-xxs);
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+            color var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
+            background var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
+            border-color var(--ux-t-fast, 0.16s) var(--ux-ease, ease);
+
+        &:hover {
+            color: var(--ux-text);
+        }
+
+        &.is-active {
+            background: var(--master-accent);
+            border-color: var(--master-accent);
+            color: var(--master-ink);
+        }
+    }
+
+    // The panel rises in with the same motion the app uses everywhere.
+    &__page {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        animation: ux-rise var(--ux-t-mid, 0.28s) var(--ux-ease, ease) both;
     }
 
     &__subtitle {
@@ -297,7 +344,7 @@
         background: var(--master-panel);
         padding: 0.8rem 1.1rem;
         font-size: var(--text-size-xxs);
-        color: var(--text-general);
+        color: var(--ux-text-dim);
 
         strong {
             color: var(--app-text-title);
@@ -767,7 +814,7 @@
         background: var(--master-panel);
         border: 1px solid var(--master-line);
         font-size: var(--text-size-xxs);
-        color: var(--text-general);
+        color: var(--ux-text-dim);
         font-variant-numeric: tabular-nums;
 
         &.is-latest {
@@ -808,7 +855,7 @@
             border: 1px solid transparent;
             border-radius: 0.6rem;
             background: transparent;
-            color: var(--text-general);
+            color: var(--ux-text-dim);
             font-size: var(--text-size-xxxs);
             text-align: left;
             cursor: pointer;
@@ -1107,7 +1154,7 @@
             gap: 0.35rem;
             font-size: var(--text-size-xxxs);
             line-height: 1.5;
-            color: var(--text-general);
+            color: var(--ux-text-dim);
         }
     }
 
@@ -1152,7 +1199,7 @@
         border: 1px solid var(--master-line);
         background: var(--master-panel);
         font-size: var(--text-size-xxxs);
-        color: var(--text-general);
+        color: var(--ux-text-dim);
         font-variant-numeric: tabular-nums;
 
         &.is-latest {
@@ -1206,7 +1253,7 @@
         margin: 0;
         font-size: var(--text-size-xxxs);
         line-height: 1.5;
-        color: var(--text-general);
+        color: var(--ux-text-dim);
     }
 
     &__runs {
@@ -1268,7 +1315,7 @@
     &__filter {
         border: 1px solid var(--master-line);
         background: var(--master-inset);
-        color: var(--text-general);
+        color: var(--ux-text-dim);
         font-size: var(--text-size-xxxs);
         padding: 0.38rem 0.9rem;
         border-radius: 999px;
@@ -1406,7 +1453,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: var(--text-size-xxxs);
-            color: var(--text-general);
+            color: var(--ux-text-dim);
 
             &.is-dim {
                 opacity: 0.45;
@@ -1494,7 +1541,7 @@
         background: var(--master-panel);
         border: 1px solid var(--master-line);
         font-size: var(--text-size-xxs);
-        color: var(--text-general);
+        color: var(--ux-text-dim);
     }
 
     &__patterns li {
@@ -1527,7 +1574,7 @@
         margin: 0.25rem 0 0;
         font-size: var(--text-size-xxxs);
         line-height: 1.5;
-        color: var(--text-general);
+        color: var(--ux-text-dim);
     }
 
     &__accuracy {
@@ -1628,7 +1675,7 @@
         margin: 0.4rem 0 0.6rem;
         font-size: var(--text-size-xxxs);
         line-height: 1.5;
-        color: var(--text-general);
+        color: var(--ux-text-dim);
     }
 
     &__lab-call {
