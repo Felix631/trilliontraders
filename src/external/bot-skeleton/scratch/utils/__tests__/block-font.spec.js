@@ -106,8 +106,8 @@ describe('block text sizing and contrast', () => {
         expect(isDarkColour('#e5e5e5')).toBe(false);
         expect(isDarkColour('#ffffff')).toBe(false);
 
-        // Root blocks navy, and the black workspace of the dark theme → light
-        // labels, because dark grey on these is what could not be read.
+        // Root blocks navy, and any near-black fill a saved block may carry →
+        // light labels, because dark grey on these is what could not be read.
         expect(isDarkColour('#064e72')).toBe(true);
         expect(isDarkColour('#0e0e0e')).toBe(true);
 
@@ -117,7 +117,7 @@ describe('block text sizing and contrast', () => {
         expect(isDarkColour('BLUE')).toBe(false);
     });
 
-    it('paints the labels white on a block that is itself dark', () => {
+    it('paints the labels white on a block that is itself dark, in both themes', () => {
         const sheet = readSource('index.scss');
         const hook = readSource('hooks/block_svg.js');
 
@@ -128,13 +128,29 @@ describe('block text sizing and contrast', () => {
         expect(hook).toMatch(/addClass\(group, 'block--on-dark'\)/);
         expect(hook).toMatch(/removeClass\(group, 'block--on-dark'\)/);
 
-        const dark = sheet.slice(sheet.indexOf('.theme--dark'), sheet.indexOf('.flyout .injectionDiv'));
+        // Bot blocks look the same in both themes, so the dark-block labels are
+        // not scoped to .theme--dark: they follow the block's fill instead.
+        const theme_start = sheet.indexOf('.theme--dark');
+        const shared_start = sheet.indexOf('White labels on a dark block');
+        const theme = sheet.slice(theme_start, shared_start);
+        const shared = sheet.slice(shared_start);
 
-        // Dark block → white labels (white on black).
-        expect(dark).toMatch(/\.block--on-dark \.blocklyEditableText > text[\s\S]{0,160}?fill:\s*#fff !important/);
-        expect(dark).toMatch(/\.block--on-dark \.blocklyText[^{]*\{[^}]*fill:\s*#fff/);
+        expect(theme).not.toMatch(/\.block--on-dark \.blocklyText/);
+        expect(shared).toMatch(/\.block--on-dark \.blocklyEditableText > text[\s\S]{0,160}?fill:\s*#fff !important/);
+        expect(shared).toMatch(/\.block--on-dark \.blocklyText[^{]*\{[^}]*fill:\s*#fff/);
         // Light grey block → the dark labels that are readable on it.
-        expect(dark).toMatch(/:not\(\.block--on-dark\) \.blocklyEditableText > text[\s\S]{0,600}?fill:\s*#333/);
+        expect(theme).toMatch(/:not\(\.block--on-dark\) \.blocklyEditableText > text[\s\S]{0,600}?fill:\s*#333/);
+    });
+
+    it('keeps the bot-builder canvas light in the dark theme', () => {
+        const sheet = readSource('index.scss');
+        const theme = sheet.slice(sheet.indexOf('.theme--dark'), sheet.indexOf('White labels on a dark block'));
+
+        // The blocks are the same grey in both themes, so the canvas behind them
+        // must not turn black in the dark theme — that was the one visible
+        // difference in how a strategy was drawn.
+        expect(theme).toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*#fff !important/);
+        expect(theme).not.toMatch(/\.blocklyMainBackground[^{]*\{\s*fill:\s*\$black/);
     });
 
     it('keeps the collapsed function title dark: it sits on a light block', () => {

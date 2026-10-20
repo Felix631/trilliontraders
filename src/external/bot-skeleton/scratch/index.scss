@@ -20,18 +20,14 @@ $colour_toolboxSelected: $black;
     }
 
     /*
-     * The label colour follows the block it is drawn on, not the theme.
-     *
-     * setColors() paints every ordinary block the same light grey in both
-     * themes, so their labels have to stay dark — --text-prominent (which the
-     * renderer's field text inherits) turns white in this theme, which is what
-     * made those labels disappear. The root blocks are the exception: they keep
-     * the dark navy fill from Colours.RootBlock, and a dark grey label on a
-     * near-black block is unreadable.
-     *
-     * block_svg.js tags a block whose own fill is dark with `block--on-dark`, so
-     * the grey blocks get the dark labels below and the dark blocks get the
-     * white ones underneath, without either rule leaking into the other.
+     * In the dark theme the bot blocks are drawn exactly as they are in light
+     * mode — the same light canvas, the same grey blocks, the same labels — so
+     * a strategy never looks different because of the theme. That is why the
+     * canvas below is white here too, and why only the field text has to be
+     * pinned: --text-prominent (which the renderer's field text inherits)
+     * turns white in this theme, which made the labels vanish on the grey
+     * blocks. `block--on-dark` (the navy root blocks) keeps its own white labels
+     * in both themes, outside this block.
      */
     .blocklyDraggable:not(.block--on-dark) .blocklyNonEditableText > text,
     .blocklyDraggable:not(.block--on-dark) .blocklyEditableText > text,
@@ -52,38 +48,19 @@ $colour_toolboxSelected: $black;
         fill: #333 !important;
     }
 
-    /*
-     * White on black: every label on a dark block, including the field values
-     * and the collapsed function title. This is what makes the navy root blocks
-     * readable — their text used to be #333 on #064e72.
-     */
-    .block--on-dark .blocklyText,
-    .block--on-dark .blocklyNonEditableText > text,
-    .block--on-dark .blocklyEditableText > text,
-    .block--on-dark .blocklyDropdownText,
-    .block--on-dark .header__title {
-        fill: #fff !important;
-        color: #fff !important;
-    }
-
-    /* The white pill behind a drop-down would swallow the white option text. */
-    .block--on-dark rect.blocklyFieldRect {
-        fill: rgb(255 255 255 / 16%) !important;
-        stroke: rgb(255 255 255 / 34%) !important;
-    }
-
-    // Field icons are dark glyphs; on a dark block they follow the labels.
-    .block--on-dark .blocklyEditableText > image,
-    .block--on-dark .blocklyNonEditableText > image {
-        filter: invert(1);
-    }
-
+    // The live workspace and the read-only preview keep the light canvas: the
+    // blocks are the same grey either way, and a black canvas behind them was
+    // the one place the dark theme changed how a bot is drawn.
     .zelos-renderer.zelos_renderer-theme .blocklyMainBackground,
-    .load-strategy__container .blocklyMainBackground,
+    .load-strategy__container .blocklyMainBackground {
+        fill: #fff !important;
+    }
+
+    // White-filled blocks would disappear on that canvas, so they take the
+    // ordinary block grey instead of the theme black they used to be given.
     .blocklyPath[fill='#fff'],
-    .blocklyVariableGet .blocklyPath,
-    .blocklyOutlinePath {
-        fill: $black !important;
+    .blocklyVariableGet .blocklyPath {
+        fill: #e5e5e5 !important;
     }
 
     .flyout .zelos-renderer.classic-theme .blocklyMainBackground {
@@ -98,6 +75,36 @@ $colour_toolboxSelected: $black;
     .flyout .zelos-renderer.classic-theme .blocklyEditableText > image {
         filter: invert(0);
     }
+}
+
+/*
+ * White labels on a dark block.
+ *
+ * The root blocks keep the navy fill from Colours.RootBlock in both themes,
+ * while every ordinary block is the light grey from setColors(). The label
+ * colour therefore follows the block's own fill, not the theme: block_svg.js
+ * tags a dark-filled block with `block--on-dark` and this rule paints its
+ * labels — fields, drop-downs and the collapsed function title — white.
+ */
+.block--on-dark .blocklyText,
+.block--on-dark .blocklyNonEditableText > text,
+.block--on-dark .blocklyEditableText > text,
+.block--on-dark .blocklyDropdownText,
+.block--on-dark .header__title {
+    fill: #fff !important;
+    color: #fff !important;
+}
+
+// The white pill behind a drop-down would swallow the white option text.
+.block--on-dark rect.blocklyFieldRect {
+    fill: rgb(255 255 255 / 16%) !important;
+    stroke: rgb(255 255 255 / 34%) !important;
+}
+
+// Field icons are dark glyphs; on a dark block they follow the labels.
+.block--on-dark .blocklyEditableText > image,
+.block--on-dark .blocklyNonEditableText > image {
+    filter: invert(1);
 }
 
 .flyout .injectionDiv {
