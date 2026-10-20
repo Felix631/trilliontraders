@@ -43,9 +43,11 @@ interface WidgetPosition {
 }
 
 const POSITION_KEY = 'tt_ily_ai_position';
-/** Width of the expanded panel — dragging clamps against this so the panel
- *  can never open off the side of the screen. */
+/** Width of the expanded panel — used to slide the panel sideways so it stays
+ *  on screen wherever the pill has been dragged. */
 const PANEL_WIDTH = 340;
+/** Gap kept between the widget and the edge of the screen. */
+const EDGE_GAP = 8;
 
 const read_position = (): WidgetPosition | null => {
     try {
@@ -149,6 +151,12 @@ const ILoveYouAI = () => {
     // Open the panel below the pill when the widget sits in the upper half of
     // the screen, so the panel is never pushed off the top edge.
     const panel_below = !!position && position.y < window.innerHeight / 2;
+    // Once dragged, the panel anchors to the widget's left edge. Near the right
+    // end of the screen that would push it off the viewport, so slide it left
+    // until both its edges are on screen (`EDGE_GAP` from each side).
+    const panel_left = position
+        ? Math.min(0, Math.max(EDGE_GAP - position.x, window.innerWidth - PANEL_WIDTH - EDGE_GAP - position.x))
+        : 0;
 
     const apply_ticks = (value: number) => {
         const next = clampTicks(value);
@@ -187,9 +195,10 @@ const ILoveYouAI = () => {
         const drag = drag_ref.current;
         const el = root_ref.current;
         if (!drag || !el) return;
-        // Keep the widget — and its (wider) panel, which anchors to the widget's
-        // left edge once dragged — fully on screen.
-        const max_x = Math.max(0, window.innerWidth - Math.max(el.offsetWidth, PANEL_WIDTH));
+        // The pill itself can reach either end of the screen. The panel does not
+        // clamp the drag any more — it slides sideways instead (see
+        // `panel_left`), so the widget is never stuck short of the edge.
+        const max_x = Math.max(0, window.innerWidth - el.offsetWidth);
         const max_y = Math.max(0, window.innerHeight - el.offsetHeight);
         const x = Math.min(Math.max(0, event.clientX - drag.dx), max_x);
         const y = Math.min(Math.max(0, event.clientY - drag.dy), max_y);
@@ -229,6 +238,25 @@ const ILoveYouAI = () => {
         }
         set_open(current => !current);
     };
+
+    // A resized window must not strand the widget (or its stored position)
+    // outside the viewport.
+    React.useEffect(() => {
+        if (!position) return undefined;
+        const keep_on_screen = () => {
+            const el = root_ref.current;
+            const width = el?.offsetWidth || 220;
+            const height = el?.offsetHeight || 44;
+            set_position(current => {
+                if (!current) return current;
+                const x = Math.min(Math.max(0, current.x), Math.max(0, window.innerWidth - width));
+                const y = Math.min(Math.max(0, current.y), Math.max(0, window.innerHeight - height));
+                return x === current.x && y === current.y ? current : { x, y };
+            });
+        };
+        window.addEventListener('resize', keep_on_screen);
+        return () => window.removeEventListener('resize', keep_on_screen);
+    }, [position !== null]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // The panel no longer opens on hover, so it needs a keyboard way out.
     React.useEffect(() => {
@@ -295,7 +323,10 @@ const ILoveYouAI = () => {
                 <span className={classNames('ilyai__pill-dot', { 'ilyai__pill-dot--on': feed.status === 'live' })} />
             </button>
 
-            <section className='ilyai__panel'>
+            <section
+                className='ilyai__panel'
+                style={position ? { left: `${panel_left}px` } : undefined}
+            >
                 <header
                     className='ilyai__head'
                     onPointerDown={start_drag}
