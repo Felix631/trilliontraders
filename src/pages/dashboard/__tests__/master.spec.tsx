@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fs from 'fs';
 import path from 'path';
 import Master from '../master';
@@ -8,12 +8,15 @@ jest.mock('@/hooks/useMarketFeed', () => ({
     useMarketFeed: () => ({
         status: 'live',
         error: null,
-        history: { R_10: [1, 2, 3] },
-        quotes: { R_10: 1000.125 },
+        history: { R_10: [1, 2, 3], R_25: [4, 5, 6] },
+        quotes: { R_10: 1000.125, R_25: 2000.5 },
         quote_history: {},
         rescan: jest.fn(),
     }),
-    MARKET_SYMBOLS: [{ value: 'R_10', label: 'Volatility 10 Index', short: 'V10' }],
+    MARKET_SYMBOLS: [
+        { value: 'R_10', label: 'Volatility 10 Index', short: 'V10' },
+        { value: 'R_25', label: 'Volatility 25 Index', short: 'V25' },
+    ],
 }));
 
 const report = JSON.parse(
@@ -31,14 +34,18 @@ describe('the Master tab', () => {
         }) as unknown as typeof fetch;
     });
 
-    it('renders the engine findings and the market board', async () => {
+    it('leads with the engine recommendation, then the hitmap and movement read', async () => {
         render(<Master />);
 
         expect(screen.getByRole('heading', { name: 'Master' })).toBeInTheDocument();
-
-        expect(await screen.findByText('Best finding per market, ranked across the engine run.')).toBeInTheDocument();
+        expect(await screen.findByText('Live recommendation')).toBeInTheDocument();
+        expect(await screen.findByText('Digit hitmap')).toBeInTheDocument();
+        expect(await screen.findByText('Movement read')).toBeInTheDocument();
+        expect(await screen.findByText('Studied patterns')).toBeInTheDocument();
         expect(await screen.findByText('Market board')).toBeInTheDocument();
-        expect(await screen.findByText('Strongest readings')).toBeInTheDocument();
+
+        // The lead card names the strongest reading the engine produced.
+        expect(screen.getAllByText(/V10 · Over 5/).length).toBeGreaterThan(0);
 
         // Every allowed family is offered as a filter, no others.
         ['Over / Under', 'Even / Odd', 'Rise / Fall', 'Only Ups / Only Downs'].forEach(label => {
@@ -48,6 +55,40 @@ describe('the Master tab', () => {
         // The report's markets are rendered, with their short names.
         expect(screen.getAllByText('V10').length).toBeGreaterThan(0);
         expect(screen.getAllByText('J100').length).toBeGreaterThan(0);
+    });
+
+    it('names the digit extremes dominant and weak, never hot or cold', async () => {
+        render(<Master />);
+
+        expect((await screen.findAllByText(/Dominant/)).length).toBeGreaterThan(0);
+        expect((await screen.findAllByText(/Weak/)).length).toBeGreaterThan(0);
+        expect(screen.queryByText(/^Hot/)).toBeNull();
+        expect(screen.queryByText(/^Cold/)).toBeNull();
+    });
+
+    it('studies the selected market: its hitmap, patterns and digit trail', async () => {
+        render(<Master />);
+
+        const selector = (await screen.findByLabelText('Market under the lens')) as HTMLSelectElement;
+        fireEvent.change(selector, { target: { value: 'R_25' } });
+
+        // The patterns panel now reads the newly selected market's own findings.
+        expect(await screen.findByText(/Patterns it read on V25/)).toBeInTheDocument();
+    });
+
+    it('refreshes the findings on demand', async () => {
+        render(<Master />);
+
+        const button = await screen.findByRole('button', { name: 'Refresh findings' });
+        // It is disabled while the first load runs, so wait for it to settle.
+        await waitFor(() => expect(button).toBeEnabled());
+        const calls_before = (global.fetch as jest.Mock).mock.calls.length;
+
+        fireEvent.click(button);
+
+        await waitFor(() =>
+            expect((global.fetch as jest.Mock).mock.calls.length).toBeGreaterThan(calls_before)
+        );
     });
 
     it('flags a demo report as a sample run', async () => {

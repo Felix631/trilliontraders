@@ -11,6 +11,10 @@ import './master.scss';
  * reads and the self-learning memory) and fetched from the live engine service
  * when it is running, or from the committed report it writes. The browser only
  * renders the findings and the live tape; it never re-implements the engine.
+ *
+ * The page is laid out as the engine thinks: the lead recommendation first,
+ * then the digit hitmap and the movement reads for one selected market, then
+ * what the engine has learned from past patterns, then the full board.
  */
 
 type TradeType = 'over_under' | 'even_odd' | 'rise_fall' | 'only_ups_downs';
@@ -31,6 +35,18 @@ interface MasterFinding {
     weight?: number;
 }
 
+interface MasterDigits {
+    /** Engine key names for the strongest / weakest digit on the tape. */
+    hot: { digit: number; pct: number };
+    cold: { digit: number; pct: number };
+    missing: number[];
+    runs: Record<string, number>;
+    /** Recency-weighted share per digit (0–1), newest tape last. */
+    probabilities?: number[];
+    /** The last 30 settlement digits, oldest first. */
+    digits?: number[];
+}
+
 interface MasterMarket {
     symbol: string;
     name: string;
@@ -42,12 +58,7 @@ interface MasterMarket {
     status: 'ready' | 'warming' | 'no-data';
     findings: Partial<Record<TradeType, MasterFinding>>;
     best: MasterFinding | null;
-    digits: {
-        hot: { digit: number; pct: number };
-        cold: { digit: number; pct: number };
-        missing: number[];
-        runs: Record<string, number>;
-    } | null;
+    digits: MasterDigits | null;
     memory: { reads: number; settled: number; wins: number; losses: number; accuracy: number | null };
 }
 
@@ -78,6 +89,8 @@ const TRADE_TYPES: Array<{ id: TradeType; label: string }> = [
 
 const LIVE_ENGINE_URL = 'http://127.0.0.1:8765/report.json';
 const STATIC_REPORT_URL = '/master/report.json';
+/** How often the tab re-reads the engine report while auto-study is on. */
+const AUTO_STUDY_MS = 45_000;
 
 const fetchJson = async (url: string, timeout_ms = 8000): Promise<MasterReport> => {
     const controller = new AbortController();
@@ -103,6 +116,26 @@ const timeAgo = (iso: string | null): string => {
 
 const digitText = (value: number | null | undefined) => (value == null ? '–' : String(value));
 
+/** The ten-digit share of the tape, from the engine or from its digit trail. */
+const hitmapFor = (market: MasterMarket | null): number[] => {
+    const given = market?.digits?.probabilities;
+    if (Array.isArray(given) && given.length === 10) return given;
+
+    const trail = market?.digits?.digits || [];
+    if (!trail.length) return new Array(10).fill(0);
+    const counts = new Array(10).fill(0);
+    trail.forEach(digit => {
+        counts[digit] = (counts[digit] || 0) + 1;
+    });
+    return counts.map(count => count / trail.length);
+};
+
+const confidenceLabel = (confidence: number) => {
+    if (confidence >= 80) return localize('High conviction');
+    if (confidence >= 65) return localize('Building');
+    return localize('Thin edge');
+};
+
 const Master = () => {
     const feed = useMarketFeed(300);
     const [report, setReport] = React.useState<MasterReport | null>(null);
@@ -111,6 +144,9 @@ const Master = () => {
     const [error, setError] = React.useState<string | null>(null);
     const [family, setFamily] = React.useState<'all' | 'volatility' | 'jump'>('all');
     const [trade_type, setTradeType] = React.useState<'all' | TradeType>('all');
+    const [selected, setSelected] = React.useState<string | null>(null);
+    const [auto_study, setAutoStudy] = React.useState(true);
+    const [checked_at, setCheckedAt] = React.useState<number | null>(null);
 
     const load = React.useCallback(async () => {
         setLoading(true);
@@ -135,12 +171,21 @@ const Master = () => {
             }
         } finally {
             setLoading(false);
+            setCheckedAt(Date.now());
         }
     }, []);
 
     React.useEffect(() => {
         load();
     }, [load]);
+
+    // The engine studies on its own loop; the tab just re-reads its latest
+    // report on the same rhythm so the findings stay current while it is open.
+    React.useEffect(() => {
+        if (!auto_study) return undefined;
+        const timer = setInterval(() => load(), AUTO_STUDY_MS);
+        return () => clearInterval(timer);
+    }, [auto_study, load]);
 
     const settled = report
         ? report.markets.reduce(
@@ -154,13 +199,54 @@ const Master = () => {
     const settled_total = settled.wins + settled.losses;
     const settled_accuracy = settled_total ? Math.round((settled.wins / settled_total) * 100) : null;
 
-    const markets = (report?.markets || []).filter(market => {
+    const markets = report?.markets || [];
+    const filters_match = (market: MasterMarket) => {
         if (family !== 'all' && market.family !== family) return false;
         if (trade_type === 'all') return true;
         return Boolean(market.findings[trade_type]);
+    };
+
+    const board = markets.filter(filters_match);
+    const picks = (report?.top_picks || []).filter(pick => {
+        if (family !== 'all' && pick.family !== family) return false;
+        if (trade_type === 'all') return true;
+        return pick.trade_type === trade_type;
     });
+    const lead = picks[0] || null;
+
+    const ready_markets = markets.filter(market => market.status === 'ready');
+    const focus_market =
+        markets.find(market => market.symbol === selected) ||
+        markets.find(market => market.symbol === lead?.symbol) ||
+        ready_markets[0] ||
+        markets[0] ||
+        null;
+
+    const hitmap = hitmapFor(focus_market);
+    const hitmap_peak = Math.max(...hitmap, 0.0001);
+    const dominant_digit = focus_market?.digits?.hot.digit ?? null;
+    const weakest_digit = focus_market?.digits?.cold.digit ?? null;
+    const focus_trail = (focus_market?.digits?.digits || []).slice(-30);
+    const live_trail = focus_market ? (feed.history[focus_market.symbol] || []).slice(-18) : [];
+    const focus_live_digit = focus_market ? feed.history[focus_market.symbol]?.slice(-1)[0] : undefined;
+    const focus_live_quote = focus_market ? feed.quotes[focus_market.symbol] : undefined;
 
     const is_sample = report ? report.source !== 'deriv' : false;
+    const lead_live_digit = lead ? feed.history[lead.symbol]?.slice(-1)[0] : undefined;
+
+    const scored = (market: MasterMarket) =>
+        market.best
+            ? market.best.confidence * 10 + Math.max(0, market.best.edge)
+            : market.memory.accuracy
+              ? market.memory.accuracy * 100
+              : 0;
+    const sorted_board = [...board].sort((a, b) => scored(b) - scored(a));
+
+    const movement_reads = focus_market
+        ? (['rise_fall', 'only_ups_downs'] as TradeType[])
+              .map(id => focus_market.findings[id])
+              .filter((finding): finding is MasterFinding => Boolean(finding))
+        : [];
 
     return (
         <div className='master'>
@@ -171,11 +257,11 @@ const Master = () => {
                         <h1 className='master__title'>{localize('Master')}</h1>
                         <p className='master__subtitle'>
                             {localize(
-                                'Studies every volatility and jump index on its own tape, remembers what it read and how it settled, and turns the hidden psychology of the flow into over/under, even/odd, rise/fall and only-ups/downs directions.'
+                                'Master studies every volatility and jump index on its own tape, recognises the movement behind the digits, remembers how each read settled and recommends the market its pattern is strongest on right now.'
                             )}
                         </p>
                         <div className='master__hero-chips'>
-                            <span className={classNames('master__chip', 'master__chip--engine')}>
+                            <span className='master__chip master__chip--engine'>
                                 {report ? `master-python v${report.version}` : localize('Python engine')}
                             </span>
                             <span className='master__chip'>
@@ -200,14 +286,32 @@ const Master = () => {
                             </span>
                             <span className='master__score-label'>{localize('Average confidence')}</span>
                         </div>
-                        <button
-                            type='button'
-                            className='master__btn'
-                            onClick={load}
-                            disabled={loading}
-                        >
-                            {loading ? localize('Studying…') : localize('Refresh findings')}
-                        </button>
+                        <div className='master__actions'>
+                            <button
+                                type='button'
+                                className='master__btn'
+                                onClick={load}
+                                disabled={loading}
+                                aria-label={localize('Refresh findings')}
+                            >
+                                <span className={classNames('master__btn-icon', { 'is-spinning': loading })} />
+                                {loading ? localize('Studying…') : localize('Refresh findings')}
+                            </button>
+                            <button
+                                type='button'
+                                className={classNames('master__auto', { 'is-on': auto_study })}
+                                aria-pressed={auto_study}
+                                onClick={() => setAutoStudy(value => !value)}
+                            >
+                                <span className='master__auto-dot' />
+                                {auto_study ? localize('Auto-study on') : localize('Auto-study off')}
+                            </button>
+                            <span className='master__checked'>
+                                {checked_at
+                                    ? `${localize('checked')} ${new Date(checked_at).toLocaleTimeString()}`
+                                    : localize('not checked yet')}
+                            </span>
+                        </div>
                     </div>
                 </header>
 
@@ -234,16 +338,14 @@ const Master = () => {
                         <span className='master__stat-value'>
                             {report ? `${report.summary.markets_ready}/${report.summary.markets_total}` : '—'}
                         </span>
-                        <span className='master__stat-label'>{localize('Markets analysed')}</span>
+                        <span className='master__stat-label'>{localize('Markets studied')}</span>
                     </div>
                     <div className='master__stat'>
                         <span className='master__stat-value'>{report ? report.summary.findings : '—'}</span>
                         <span className='master__stat-label'>{localize('Findings')}</span>
                     </div>
                     <div className='master__stat'>
-                        <span className='master__stat-value'>
-                            {report ? report.summary.memory_rounds : '—'}
-                        </span>
+                        <span className='master__stat-value'>{report ? report.summary.memory_rounds : '—'}</span>
                         <span className='master__stat-label'>{localize('Study rounds')}</span>
                     </div>
                     <div className='master__stat'>
@@ -258,50 +360,352 @@ const Master = () => {
                     </div>
                 </section>
 
-                <section className='master__picks'>
-                    <div className='master__section-head'>
-                        <h2>{localize('Strongest readings')}</h2>
-                        <span>{localize('Best finding per market, ranked across the engine run.')}</span>
+                {/* ---- The live recommendation ---------------------------------- */}
+                <section className='master__lead'>
+                    <div className='master__lead-head'>
+                        <div>
+                            <span className='master__kicker'>{localize('Live recommendation')}</span>
+                            <h2 className='master__lead-title'>
+                                {lead
+                                    ? `${lead.short} · ${lead.label}`
+                                    : localize('Waiting for the engine to finish a round')}
+                            </h2>
+                        </div>
+                        {lead && (
+                            <span className='master__lead-live'>
+                                <span className={classNames('master__pulse', { 'is-live': feed.status === 'live' })} />
+                                {localize('last digit')}{' '}
+                                <strong>
+                                    {lead_live_digit != null ? lead_live_digit : digitText(lead.entry_digit)}
+                                </strong>
+                            </span>
+                        )}
                     </div>
-                    <div className='master__picks-grid'>
-                        {(report?.top_picks || []).slice(0, 4).map(pick => (
-                            <article
-                                key={`${pick.symbol}-${pick.trade_type}`}
-                                className='master__pick'
-                            >
-                                <div className='master__pick-head'>
-                                    <span className='master__pick-market'>{pick.short}</span>
-                                    <span className='master__pick-family'>
-                                        {pick.family === 'jump' ? localize('Jump') : localize('Volatility')}
+
+                    {lead ? (
+                        <div className='master__lead-body'>
+                            <div className='master__dial'>
+                                <div
+                                    className='master__ring'
+                                    style={{ '--ring': `${lead.confidence * 3.6}deg` } as React.CSSProperties}
+                                >
+                                    <div className='master__ring-inner'>
+                                        <span className='master__ring-value'>{lead.confidence}%</span>
+                                        <span className='master__ring-label'>{confidenceLabel(lead.confidence)}</span>
+                                    </div>
+                                </div>
+                                <span className='master__dial-market'>{lead.name}</span>
+                                <span className='master__dial-contract'>
+                                    {lead.contract_type}
+                                    {lead.entry_digit != null ? ` · ${localize('entry')} ${lead.entry_digit}` : ''}
+                                </span>
+                            </div>
+
+                            <div className='master__lead-copy'>
+                                <div className='master__lead-tags'>
+                                    <span className='master__tag'>
+                                        {TRADE_TYPES.find(item => item.id === lead.trade_type)?.label ||
+                                            lead.trade_type}
+                                    </span>
+                                    <span className='master__tag'>
+                                        {lead.family === 'jump' ? localize('Jump') : localize('Volatility')}
+                                    </span>
+                                    <span className='master__tag'>
+                                        {localize('edge')} {lead.edge}%
+                                    </span>
+                                    <span className='master__tag'>
+                                        {localize('hit rate')} {lead.win_rate}%
                                     </span>
                                 </div>
-                                <div className='master__pick-signal'>
-                                    <span className='master__digit'>{digitText(pick.entry_digit)}</span>
-                                    <span className='master__pick-label'>{pick.label}</span>
-                                    <span className='master__pick-confidence'>{pick.confidence}%</span>
-                                </div>
-                                <p className='master__pick-pattern'>{pick.pattern}</p>
-                                <p className='master__pick-psych'>{pick.psychology}</p>
+                                <p className='master__lead-pattern'>{lead.pattern}</p>
+                                <p className='master__lead-psych'>{lead.psychology}</p>
                                 <div className='master__bar'>
-                                    <span style={{ width: `${pick.confidence}%` }} />
+                                    <span style={{ width: `${lead.confidence}%` }} />
                                 </div>
-                            </article>
-                        ))}
-                        {!report && !loading && (
-                            <p className='master__empty'>
-                                {localize('The engine has not produced a report yet.')}
-                            </p>
-                        )}
+                                <span className='master__lead-note'>
+                                    {localize('Pattern recognised on')} {lead.short} {localize('· studied round')}{' '}
+                                    {report?.summary.memory_rounds ?? '—'}
+                                </span>
+                            </div>
+
+                            <div className='master__tape'>
+                                <span className='master__tape-title'>{localize('Live tape')}</span>
+                                <div className='master__tape-digits'>
+                                    {(feed.history[lead.symbol] || []).slice(-12).map((digit, index) => (
+                                        <span
+                                            key={`${digit}-${index}`}
+                                            className={classNames('master__tape-digit', {
+                                                'is-latest': index === 11,
+                                            })}
+                                        >
+                                            {digit}
+                                        </span>
+                                    ))}
+                                    {!feed.history[lead.symbol]?.length && (
+                                        <span className='master__tape-empty'>{localize('connecting…')}</span>
+                                    )}
+                                </div>
+                                <span className='master__tape-quote'>
+                                    {feed.quotes[lead.symbol] != null
+                                        ? Number(feed.quotes[lead.symbol]).toFixed(4)
+                                        : '—'}
+                                </span>
+                                <span className='master__tape-title'>{localize('Next best')}</span>
+                                <ul className='master__alt'>
+                                    {picks.slice(1, 4).map(pick => (
+                                        <li key={`${pick.symbol}-${pick.trade_type}`}>
+                                            <button
+                                                type='button'
+                                                onClick={() => setSelected(pick.symbol)}
+                                                className={classNames({
+                                                    'is-selected': pick.symbol === focus_market?.symbol,
+                                                })}
+                                            >
+                                                <span>{pick.short}</span>
+                                                <span className='master__alt-label'>{pick.label}</span>
+                                                <span className='master__alt-conf'>{pick.confidence}%</span>
+                                            </button>
+                                        </li>
+                                    ))}
+                                    {picks.length < 2 && (
+                                        <li className='master__alt-empty'>{localize('No second read yet.')}</li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className='master__empty'>
+                            {localize(
+                                'The engine has not produced a report yet. Run "npm run master:scan" (or let the autonomous loop study) and refresh the findings.'
+                            )}
+                        </p>
+                    )}
+                </section>
+
+                {/* ---- Hitmap + movement for one market ------------------------- */}
+                <section className='master__focus'>
+                    <div className='master__focus-head'>
+                        <div className='master__focus-id'>
+                            <span className='master__kicker'>{localize('Market under the lens')}</span>
+                            <select
+                                className='master__select'
+                                value={focus_market?.symbol || ''}
+                                onChange={event => setSelected(event.target.value)}
+                                aria-label={localize('Market under the lens')}
+                            >
+                                {markets.map(market => (
+                                    <option key={market.symbol} value={market.symbol}>
+                                        {market.short} · {market.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='master__focus-meta'>
+                            <span>
+                                {localize('last digit')}{' '}
+                                <strong>
+                                    {focus_live_digit != null
+                                        ? focus_live_digit
+                                        : digitText(focus_market?.last_digit)}
+                                </strong>
+                            </span>
+                            <span>
+                                {localize('quote')}{' '}
+                                <strong>
+                                    {focus_live_quote != null
+                                        ? Number(focus_live_quote).toFixed(4)
+                                        : focus_market?.last_quote != null
+                                          ? Number(focus_market.last_quote).toFixed(4)
+                                          : '—'}
+                                </strong>
+                            </span>
+                            <span>
+                                {localize('sample')} <strong>{focus_market?.sample ?? 0}</strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className='master__focus-grid'>
+                        <div className='master__panel'>
+                            <div className='master__panel-head'>
+                                <h3>{localize('Digit hitmap')}</h3>
+                                <span>{localize('Where the last digit has been hitting')}</span>
+                            </div>
+                            <div className='master__hitmap'>
+                                {hitmap.map((share, digit) => (
+                                    <div
+                                        key={digit}
+                                        className={classNames('master__hitbar', {
+                                            'is-dominant': digit === dominant_digit,
+                                            'is-weak': digit === weakest_digit,
+                                        })}
+                                    >
+                                        <span className='master__hitbar-pct'>{Math.round(share * 100)}</span>
+                                        <div className='master__hitbar-track'>
+                                            <div
+                                                className='master__hitbar-fill'
+                                                style={{
+                                                    height: `${Math.max(
+                                                        6,
+                                                        Math.round((share / hitmap_peak) * 100)
+                                                    )}%`,
+                                                }}
+                                            />
+                                        </div>
+                                        <span className='master__hitbar-digit'>{digit}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='master__hitmeta'>
+                                <span className='master__pill master__pill--dominant'>
+                                    {localize('Dominant')} {digitText(dominant_digit)}
+                                </span>
+                                <span className='master__pill master__pill--weak'>
+                                    {localize('Weak')} {digitText(weakest_digit)}
+                                </span>
+                                <span className='master__pill'>
+                                    {localize('Missing')}{' '}
+                                    {focus_market?.digits?.missing.length
+                                        ? focus_market.digits.missing.join(', ')
+                                        : '—'}
+                                </span>
+                            </div>
+                            <div className='master__trail'>
+                                <span className='master__trail-label'>{localize('Last hits')}</span>
+                                <div className='master__trail-digits'>
+                                    {(live_trail.length ? live_trail : focus_trail).slice(-16).map((digit, index) => (
+                                        <span
+                                            key={`${digit}-${index}`}
+                                            className={classNames('master__trail-digit', {
+                                                'is-latest': index === (live_trail.length || focus_trail.length) - 1,
+                                            })}
+                                        >
+                                            {digit}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='master__panel'>
+                            <div className='master__panel-head'>
+                                <h3>{localize('Movement read')}</h3>
+                                <span>{localize('How the tape is travelling, not just settling')}</span>
+                            </div>
+                            {movement_reads.length ? (
+                                <div className='master__movement'>
+                                    {movement_reads.map(finding => (
+                                        <article key={finding.trade_type} className='master__movement-card'>
+                                            <div className='master__movement-top'>
+                                                <span className='master__movement-type'>
+                                                    {TRADE_TYPES.find(item => item.id === finding.trade_type)?.label}
+                                                </span>
+                                                <span className='master__movement-direction'>{finding.label}</span>
+                                                <span className='master__movement-conf'>
+                                                    {finding.confidence}%
+                                                </span>
+                                            </div>
+                                            <p className='master__movement-pattern'>{finding.pattern}</p>
+                                            <div className='master__bar master__bar--thin'>
+                                                <span style={{ width: `${finding.confidence}%` }} />
+                                            </div>
+                                        </article>
+                                    ))}
+                                    <div className='master__runs'>
+                                        <span>
+                                            {localize('up run')}{' '}
+                                            <strong>{focus_market?.digits?.runs?.high ?? 0}</strong>
+                                        </span>
+                                        <span>
+                                            {localize('down run')}{' '}
+                                            <strong>{focus_market?.digits?.runs?.low ?? 0}</strong>
+                                        </span>
+                                        <span>
+                                            {localize('even run')}{' '}
+                                            <strong>{focus_market?.digits?.runs?.even ?? 0}</strong>
+                                        </span>
+                                        <span>
+                                            {localize('odd run')}{' '}
+                                            <strong>{focus_market?.digits?.runs?.odd ?? 0}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className='master__empty'>
+                                    {localize('The engine has no movement read for this market yet.')}
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </section>
 
+                {/* ---- What the engine studied ---------------------------------- */}
+                <section className='master__memory'>
+                    <div className='master__section-head'>
+                        <h2>{localize('Studied patterns')}</h2>
+                        <span>{localize('Past rounds, the lessons they left and the reads that moved.')}</span>
+                    </div>
+                    <div className='master__memory-grid'>
+                        <div className='master__panel master__panel--inset'>
+                            <h3 className='master__panel-title'>{localize('Lessons from settled reads')}</h3>
+                            {report && report.lessons.length > 0 ? (
+                                <ul className='master__lessons'>
+                                    {report.lessons.map(lesson => (
+                                        <li key={lesson}>{lesson}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className='master__empty'>
+                                    {localize(
+                                        'No settled outcomes yet. Feed results back with "python3 -m master record --market R_50 --trade-type over_under --outcome won" and Master will start weighting its own reads.'
+                                    )}
+                                </p>
+                            )}
+                            {settled_total > 0 && (
+                                <div className='master__accuracy'>
+                                    {settled.wins} {localize('won')} · {settled.losses} {localize('lost')} ·{' '}
+                                    {settled_accuracy}% {localize('accuracy')}
+                                </div>
+                            )}
+                        </div>
+                        <div className='master__panel master__panel--inset'>
+                            <h3 className='master__panel-title'>
+                                {localize('Patterns it read on')} {focus_market?.short || ''}
+                            </h3>
+                            {focus_market && Object.keys(focus_market.findings).length ? (
+                                <ul className='master__patterns'>
+                                    {TRADE_TYPES.map(item => {
+                                        const finding = focus_market.findings[item.id];
+                                        if (!finding) return null;
+                                        return (
+                                            <li key={item.id}>
+                                                <div className='master__pattern-head'>
+                                                    <span>{item.label}</span>
+                                                    <span className='master__pattern-call'>{finding.label}</span>
+                                                    <span className='master__pattern-conf'>
+                                                        {finding.confidence}%
+                                                    </span>
+                                                </div>
+                                                <p className='master__pattern-text'>{finding.pattern}</p>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ) : (
+                                <p className='master__empty'>
+                                    {localize('No findings for this market in the current report.')}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </section>
+
+                {/* ---- Full board ---------------------------------------------- */}
                 <section className='master__board'>
                     <div className='master__section-head'>
                         <h2>{localize('Market board')}</h2>
                         <span>
-                            {localize(
-                                'Every allowed market, with the engine direction for all four trade types.'
-                            )}
+                            {localize('Every allowed market, with the engine direction for all four trade types.')}
                         </span>
                     </div>
                     <div className='master__filters'>
@@ -349,12 +753,27 @@ const Master = () => {
                     </div>
 
                     <div className='master__grid'>
-                        {markets.map(market => {
+                        {sorted_board.map(market => {
                             const live_digit = feed.history[market.symbol]?.slice(-1)[0];
                             const live_quote = feed.quotes[market.symbol];
                             const best = market.best;
                             return (
-                                <article key={market.symbol} className='master__card'>
+                                <article
+                                    key={market.symbol}
+                                    className={classNames('master__card', {
+                                        'is-selected': focus_market?.symbol === market.symbol,
+                                    })}
+                                    role='button'
+                                    tabIndex={0}
+                                    aria-pressed={focus_market?.symbol === market.symbol}
+                                    onClick={() => setSelected(market.symbol)}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter' || event.key === ' ') {
+                                            event.preventDefault();
+                                            setSelected(market.symbol);
+                                        }
+                                    }}
+                                >
                                     <div className='master__card-head'>
                                         <div>
                                             <span className='master__card-market'>{market.short}</span>
@@ -391,12 +810,13 @@ const Master = () => {
                                                 {TRADE_TYPES.map(item => {
                                                     const finding = market.findings[item.id];
                                                     if (!finding) return null;
-                                                    const selected = trade_type === 'all' || trade_type === item.id;
+                                                    const is_selected =
+                                                        trade_type === 'all' || trade_type === item.id;
                                                     return (
                                                         <li
                                                             key={item.id}
                                                             className={classNames({
-                                                                'is-dim': !selected,
+                                                                'is-dim': !is_selected,
                                                             })}
                                                         >
                                                             <span className='master__direction-type'>
@@ -412,24 +832,17 @@ const Master = () => {
                                                     );
                                                 })}
                                             </ul>
-                                            {best.psychology && (
-                                                <p className='master__card-psych'>{best.psychology}</p>
-                                            )}
                                             {market.digits && (
                                                 <div className='master__card-digits'>
-                                                    <span>
-                                                        {localize('Hot')} {market.digits.hot.digit} ·{' '}
+                                                    <span className='master__pill master__pill--dominant'>
+                                                        {localize('Dominant')} {market.digits.hot.digit}
+                                                        {' · '}
                                                         {market.digits.hot.pct}%
                                                     </span>
-                                                    <span>
-                                                        {localize('Cold')} {market.digits.cold.digit} ·{' '}
+                                                    <span className='master__pill master__pill--weak'>
+                                                        {localize('Weak')} {market.digits.cold.digit}
+                                                        {' · '}
                                                         {market.digits.cold.pct}%
-                                                    </span>
-                                                    <span>
-                                                        {localize('Missing')}{' '}
-                                                        {market.digits.missing.length
-                                                            ? market.digits.missing.join(', ')
-                                                            : '—'}
                                                     </span>
                                                 </div>
                                             )}
@@ -444,42 +857,12 @@ const Master = () => {
                                 </article>
                             );
                         })}
-                        {!markets.length && report && (
+                        {!board.length && report && (
                             <p className='master__empty'>
                                 {localize('No market matches this filter in the current report.')}
                             </p>
                         )}
                     </div>
-                </section>
-
-                <section className='master__memory'>
-                    <div className='master__section-head'>
-                        <h2>{localize('What Master has learned')}</h2>
-                        <span>
-                            {localize(
-                                'Settled outcomes adjust the confidence of each market and trade type.'
-                            )}
-                        </span>
-                    </div>
-                    {report && report.lessons.length > 0 ? (
-                        <ul className='master__lessons'>
-                            {report.lessons.map(lesson => (
-                                <li key={lesson}>{lesson}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className='master__empty'>
-                            {localize(
-                                'No settled outcomes yet. Feed results back with "python3 -m master record --market R_50 --trade-type over_under --outcome won" and Master will start weighting its own reads.'
-                            )}
-                        </p>
-                    )}
-                    {settled_total > 0 && (
-                        <div className='master__accuracy'>
-                            {settled.wins} {localize('won')} · {settled.losses} {localize('lost')} ·{' '}
-                            {settled_accuracy}% {localize('accuracy')}
-                        </div>
-                    )}
                 </section>
 
                 <footer className='master__footer'>

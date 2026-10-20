@@ -107,6 +107,7 @@ const AppWrapper = observer(() => {
         'analyzer',
         'scanner',
         'i-love-you',
+        'master',
         'instant_fill',
         'speed_bot',
         'bulk_trader',
@@ -114,7 +115,6 @@ const AppWrapper = observer(() => {
         'chart',
         'tutorial',
         'dtrader',
-        'master',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -509,6 +509,21 @@ const AppWrapper = observer(() => {
                             <div
                                 label={
                                     <>
+                                        <LabelPairedCircleStarCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Master' />
+                                    </>
+                                }
+                                id='id-master'
+                            >
+                                <Master />
+                            </div>
+                            <div
+                                label={
+                                    <>
                                         <LabelPairedWalletSignalCaptionRegularIcon
                                             height='24px'
                                             width='24px'
@@ -623,21 +638,6 @@ const AppWrapper = observer(() => {
                                 id='id-dtrader'
                             >
                                 <DTrader />
-                            </div>
-                            <div
-                                label={
-                                    <>
-                                        <LabelPairedCircleStarCaptionRegularIcon
-                                            height='24px'
-                                            width='24px'
-                                            fill='var(--text-general)'
-                                        />
-                                        <Localize i18n_default_text='Master' />
-                                    </>
-                                }
-                                id='id-master'
-                            >
-                                <Master />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}
