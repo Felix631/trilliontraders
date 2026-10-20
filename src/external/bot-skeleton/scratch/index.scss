@@ -14,23 +14,21 @@ $colour_toolboxHover: #fff;
 $colour_toolboxSelected: $black;
 
 .theme--dark {
-    .blocklyDropDownDiv {
-        background-color: rgb(194 194 194) !important;
-        border-color: rgb(194 194 194) !important;
-    }
-
     /*
-     * In the dark theme the bot blocks are drawn exactly as they are in light
-     * mode — the same light canvas, the same grey blocks, the same labels — so
-     * a strategy never looks different because of the theme. That is why the
-     * canvas below is white here too, and why only the field text has to be
-     * pinned: --text-prominent (which the renderer's field text inherits)
-     * turns white in this theme, which made the labels vanish on the grey
-     * blocks. `block--on-dark` (the navy root blocks) keeps its own white labels
-     * in both themes, outside this block.
+     * The bot itself is drawn exactly as it is in light mode. Only the surface
+     * it is housed on follows the theme (the canvas below), so every block, its
+     * fills, icons and pop-ups keep the light-mode rendering.
+     *
+     * The one thing that has to be pinned is the block text: the renderer
+     * inherits --text-prominent, which turns white in this theme and would
+     * vanish on the light grey blocks. #333 is the light theme's own
+     * --text-prominent, so the labels are the same colour in both themes.
+     * `block--on-dark` (the navy root blocks) keeps its own white labels in both
+     * themes, outside this block.
      */
     .blocklyDraggable:not(.block--on-dark) .blocklyNonEditableText > text,
     .blocklyDraggable:not(.block--on-dark) .blocklyEditableText > text,
+    .blocklyDraggable:not(.block--on-dark) .blocklyEditableText > .blocklyEditableLabel,
     .blocklyDraggable:not(.block--on-dark) .header__title {
         // !important because the renderer-scoped rule in this sheet is more
         // specific than this one and would otherwise keep the white.
@@ -48,33 +46,17 @@ $colour_toolboxSelected: $black;
         fill: #333 !important;
     }
 
-    // The bot builder is housed on a dark canvas in the dark theme. The blocks
-    // themselves are untouched — same grey fills, same labels — because only the
-    // surface they sit on follows the theme; a white sheet behind a dark app was
-    // the one thing that did not read as dark mode.
+    // The bot builder is housed on a dark canvas in the dark theme. Nothing
+    // inside the canvas is re-coloured — the blocks keep the light-mode fills,
+    // white-filled blocks stay white and the field icons keep the same filter —
+    // because only the surface they sit on follows the theme.
     .zelos-renderer.zelos_renderer-theme .blocklyMainBackground,
     .load-strategy__container .blocklyMainBackground {
         fill: #101820 !important;
     }
 
-    // White-filled blocks would disappear on that canvas, so they take the
-    // ordinary block grey instead of the theme black they used to be given.
-    .blocklyPath[fill='#fff'],
-    .blocklyVariableGet .blocklyPath {
-        fill: #e5e5e5 !important;
-    }
-
     .flyout .zelos-renderer.classic-theme .blocklyMainBackground {
         fill: #151816 !important;
-    }
-
-    .zelos-renderer.zelos_renderer-theme .blocklyEditableText > image,
-    .zelos-renderer.zelos_renderer-theme .blocklyNonEditableText > image {
-        filter: unset;
-    }
-
-    .flyout .zelos-renderer.classic-theme .blocklyEditableText > image {
-        filter: invert(0);
     }
 }
 

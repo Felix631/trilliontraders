@@ -155,6 +155,20 @@ describe('block text sizing and contrast', () => {
         expect(canvas_rule[1].trim()).toBe('fill: #101820 !important;');
     });
 
+    it('draws the blocks themselves exactly as in light mode', () => {
+        const sheet = readSource('index.scss');
+        const theme = sheet.slice(sheet.indexOf('.theme--dark'), sheet.indexOf('White labels on a dark block'));
+
+        // The dark theme is allowed to change the surface the bot sits on and to
+        // pin the field labels to the light theme's own text colour. It must not
+        // re-colour any block fill, icon or pop-up — those are identical in both
+        // themes, so a strategy is drawn the same way whatever the theme.
+        expect(theme).not.toMatch(/\.blocklyPath\[fill=/);
+        expect(theme).not.toMatch(/\.blocklyVariableGet/);
+        expect(theme).not.toMatch(/\.blockly(Editable|NonEditable)Text > image/);
+        expect(theme).not.toMatch(/\.blocklyDropDownDiv/);
+    });
+
     it('keeps the collapsed function title dark: it sits on a light block', () => {
         const sheet = readSource('index.scss');
         const body = ruleBody(sheet, '.header__title');

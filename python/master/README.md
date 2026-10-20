@@ -79,7 +79,7 @@ default.
 Below the board, the **pattern study** works on one market the trader selects.
 It iterates three strategies (full window, recent half, and the settlements
 that followed the last digit), keeps the strongest read, and refuses to offer
-anything under `SCORE_FLOOR` (72%). When no live pass clears the floor it
+anything under `SCORE_FLOOR` (60%). When no live pass clears the floor it
 recalls the strongest pattern it recorded for that market earlier; recorded
 patterns live in `localStorage` under `tt_master_patterns`.
 

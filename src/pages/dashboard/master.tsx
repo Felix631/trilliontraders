@@ -490,8 +490,8 @@ const Master = () => {
     const focus_reads = (focus_study?.ready ? focus_study.findings : focus_report?.findings) || {};
 
     // ---- The pattern lab: one market the trader picks, studied until a read
-    // clears the 72% floor. When nothing live clears it, the recorded patterns
-    // for that market are recalled instead of quoting a weak read.
+    // clears its score floor. When nothing live clears it, the recorded
+    // patterns for that market are recalled instead of quoting a weak read.
     const pattern_meta: MarketMeta | null =
         market_meta.find(market => market.symbol === pattern_symbol) || focus_meta;
     const pattern_tape = pattern_meta ? pattern_archive[pattern_meta.symbol] || NO_PATTERNS : NO_PATTERNS;

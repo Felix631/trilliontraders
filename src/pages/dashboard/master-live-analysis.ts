@@ -615,7 +615,7 @@ export const rank_picks = (studies: TapeStudy[]): Array<LiveFinding & { symbol: 
 // a weak tape never becomes a weak recommendation.
 
 /** The minimum score a studied pattern must carry before it is offered. */
-export const SCORE_FLOOR = 72;
+export const SCORE_FLOOR = 60;
 const ARCHIVE_KEY = 'tt_master_patterns';
 const ARCHIVE_PER_MARKET = 12;
 

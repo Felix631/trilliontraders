@@ -167,9 +167,10 @@ describe('the studied patterns', () => {
         write_pattern_archive([record]);
         expect(read_pattern_archive().R_50?.[0]?.label).toBe(record.label);
 
-        // A mild 55/45 tape: there is a read, but it cannot reach 72%.
+        // A mild ~53/47 tape, spread evenly so recency cannot turn the tail into
+        // a strong one-sided read: there is a read, but it cannot reach the floor.
         const mild = Array.from({ length: 200 }, (_, index) =>
-            index % 100 < 55 ? 5 + (index % 5) : index % 5
+            index % 17 < 9 ? 5 + (index % 5) : index % 5
         );
         const recalled = study_patterns(
             market,
