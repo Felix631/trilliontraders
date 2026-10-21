@@ -4,8 +4,11 @@
  * Stake → Buy, with the 0-9 last-digit rail under the chart.
  */
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { placeTrade } from '@/hooks/useDerivTrade';
 import DTrader from '../dtrader';
+
+const mocked_place_trade = placeTrade as unknown as jest.Mock;
 
 const digits = Array.from({ length: 120 }, (_, index) => index % 10);
 
@@ -50,6 +53,10 @@ const choices = (container: HTMLElement) =>
     Array.from(container.querySelectorAll('.dtrader__digit-choice')) as HTMLElement[];
 
 const pick_contract = (name: RegExp) => fireEvent.click(screen.getByRole('button', { name }));
+
+beforeEach(() => {
+    mocked_place_trade.mockReset();
+});
 
 describe('the DTrader digit rail', () => {
     it('shows all ten last digits under the chart', () => {
@@ -126,6 +133,48 @@ describe('the DTrader order panel', () => {
 
         expect(screen.getByLabelText('Duration ticks')).toBeInTheDocument();
         expect(screen.queryByText('Last Digit Prediction')).toBeNull();
+    });
+});
+
+describe('the bought contract', () => {
+    it('says how many ticks the contract takes, and how many are left', async () => {
+        let settle_trade: (value: unknown) => void = () => undefined;
+        mocked_place_trade.mockImplementation((params, source, on_progress) => {
+            // The contract is open and has taken 2 of its 5 ticks.
+            on_progress?.({ tick_count: 2, ticks_total: 5 });
+            return new Promise(resolve => {
+                settle_trade = resolve;
+            });
+        });
+
+        render(<DTrader />);
+        fireEvent.click(screen.getByRole('tab', { name: 'Rise/Fall' }));
+        fireEvent.click(screen.getByRole('button', { name: /^Buy/ }));
+
+        // The tick count comes from the contract itself, not the feed.
+        expect(await screen.findByText('2 / 5 ticks')).toBeInTheDocument();
+        expect(screen.getByText('3 ticks')).toBeInTheDocument();
+        expect(screen.getByText('Open')).toBeInTheDocument();
+
+        await act(async () => {
+            settle_trade({ is_win: true, profit: 1, payout: 2, simulated: true });
+        });
+
+        expect(await screen.findByText('5 / 5 ticks')).toBeInTheDocument();
+        expect(screen.getByText('Settled')).toBeInTheDocument();
+    });
+
+    it('shows a one-tick digit contract as a single tick', async () => {
+        mocked_place_trade.mockImplementation((params, source, on_progress) => {
+            on_progress?.({ tick_count: 0, ticks_total: 1 });
+            return new Promise(() => undefined);
+        });
+
+        render(<DTrader />);
+        fireEvent.click(screen.getByRole('button', { name: /^Buy/ }));
+
+        expect(await screen.findByText('0 / 1 tick')).toBeInTheDocument();
+        expect(screen.getByText('1 tick')).toBeInTheDocument();
     });
 });
 

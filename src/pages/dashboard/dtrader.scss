@@ -852,6 +852,100 @@
         max-width: 46rem;
     }
 
+    // ---- The bought contract: how many ticks it runs for ------------------
+    &__contract-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 1rem 1.2rem;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-left: 3px solid var(--ux-gold, var(--site-accent));
+        border-radius: var(--ux-r-md, 1.2rem);
+        background: var(--ux-panel, var(--app-card-background));
+        animation: ux-rise var(--ux-t-mid, 0.28s) var(--ux-ease, ease) both;
+
+        &.is-win {
+            border-left-color: var(--ux-emerald, var(--brand-success));
+        }
+
+        &.is-loss {
+            border-left-color: var(--ux-rose, var(--text-loss-danger));
+        }
+    }
+
+    &__contract-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+    }
+
+    &__contract-card-title {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__contract-card-status {
+        padding: 0.15rem 0.7rem;
+        border: 1px solid var(--ux-border-strong, var(--app-border-color));
+        border-radius: var(--ux-r-pill, 999rem);
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ux-text-dim, var(--app-text-title));
+    }
+
+    &__contract-card-rows {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        gap: 0.7rem;
+    }
+
+    &__contract-card-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+
+        span {
+            font-size: var(--text-size-xxxs);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ux-text-mute, var(--app-text-muted));
+        }
+
+        strong {
+            font-size: var(--text-size-xs);
+            font-weight: bold;
+            color: var(--ux-text, var(--app-text-title));
+            font-variant-numeric: tabular-nums;
+            overflow-wrap: anywhere;
+        }
+
+        .dtrader__contract-ticks {
+            color: var(--ux-gold, var(--site-accent));
+        }
+    }
+
+    &__contract-progress {
+        height: 0.35rem;
+        border-radius: 999rem;
+        background: var(--ux-divider, rgba(148, 163, 184, 0.2));
+        overflow: hidden;
+
+        span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-emerald, #10b981));
+            transition: width var(--ux-t-mid, 0.3s) var(--ux-ease, ease);
+        }
+    }
+
     &__result {
         border-radius: var(--ux-r-sm, 1rem);
         padding: 0.7rem 1rem;

@@ -33,6 +33,14 @@ export type TTradeResult = {
     error?: string;
 };
 
+/** How far an open contract has run through its tick duration. */
+export type TTradeProgress = {
+    /** Ticks the contract has already taken. */
+    tick_count: number;
+    /** Ticks the contract was bought for. */
+    ticks_total: number;
+};
+
 /** The page that asked for the order — kept for labelling, not for gating. */
 export type TTradeSource =
     | 'speed_bot'
@@ -184,8 +192,17 @@ const normalise_prediction = (contract_type: string, prediction?: number): numbe
 /** Errors worth a second attempt — the quote simply moved or dipped. */
 const RETRYABLE = ['PriceMoved', 'InvalidContractProposal', 'ContractBuyValidationError', 'DisconnectError'];
 
-/** Place a real trade and wait for settlement. Throws on API errors. */
-export const placeRealTrade = async (params: TContractParams): Promise<TTradeResult> => {
+/**
+ * Place a real trade and wait for settlement. Throws on API errors.
+ *
+ * `on_progress` reports the contract's tick count while it is open, so the page
+ * that placed it can say which tick of the contract it is on instead of just
+ * showing a spinner.
+ */
+export const placeRealTrade = async (
+    params: TContractParams,
+    on_progress?: (progress: TTradeProgress) => void
+): Promise<TTradeResult> => {
     const api = await wait_for_api();
     if (!api) throw new Error(localize('API connection not available'));
 
@@ -196,6 +213,9 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
     const prediction = is_parity_contract(params.contract_type)
         ? undefined
         : normalise_prediction(params.contract_type, params.prediction);
+    // A digit contract settles on the next tick, so any other duration is
+    // refused with "Invalid duration" — always ask for one tick.
+    const ticks_total = is_digit ? 1 : Math.max(1, Math.round(Number(params.duration) || 1));
 
     const quote_and_buy = async (): Promise<any> => {
         const request: Record<string, unknown> = {
@@ -204,9 +224,7 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
             basis: 'stake',
             contract_type: params.contract_type,
             currency: accountCurrency(),
-            // A digit contract settles on the next tick, so any other duration is
-            // refused with "Invalid duration" — always ask for one tick.
-            duration: is_digit ? 1 : Math.max(1, Math.round(Number(params.duration) || 1)),
+            duration: ticks_total,
             duration_unit: is_digit ? 't' : params.duration_unit,
             symbol: params.symbol,
         };
@@ -247,6 +265,9 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
 
     const contract_id = buy.buy.contract_id;
 
+    // The contract is live: report the ticks it has to take before settlement.
+    on_progress?.({ tick_count: 0, ticks_total });
+
     // Poll the open contract until it is sold (settled).
     const deadline =
         Date.now() + (is_digit ? 60 : (Number(params.duration) || 1) * 5 + 60) * 1000;
@@ -256,6 +277,14 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
         // eslint-disable-next-line no-await-in-loop
         const poc = await send({ proposal_open_contract: 1, contract_id });
         if (poc?.error) throw poc;
+        const open_contract = poc?.proposal_open_contract;
+        if (open_contract && !open_contract.is_sold) {
+            // `tick_count` is how many ticks the contract has taken so far.
+            on_progress?.({
+                tick_count: Number(open_contract.tick_count) || 0,
+                ticks_total,
+            });
+        }
         if (poc?.proposal_open_contract?.is_sold) {
             const profit = Number(poc.proposal_open_contract.profit) || 0;
             return {
@@ -278,12 +307,22 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
  * Digit Killer, the Scanner, I Love You, Instant Fill, the Bulk Trader and the
  * Speed Bot all place the same real order.
  */
-export const placeTrade = async (params: TContractParams, _source?: TTradeSource): Promise<TTradeResult> => {
+export const placeTrade = async (
+    params: TContractParams,
+    _source?: TTradeSource,
+    on_progress?: (progress: TTradeProgress) => void
+): Promise<TTradeResult> => {
+    const ticks_total = isDigitContract(params.contract_type)
+        ? 1
+        : Math.max(1, Math.round(Number(params.duration) || 1));
     if (!isAuthorized()) {
-        return simulate(normalise_stake(params.stake), params.contract_type, params.prediction);
+        const result = simulate(normalise_stake(params.stake), params.contract_type, params.prediction);
+        // A simulated contract settles at once: it ran the whole duration.
+        on_progress?.({ tick_count: ticks_total, ticks_total });
+        return result;
     }
     try {
-        return await placeRealTrade(params);
+        return await placeRealTrade(params, on_progress);
     } catch (e) {
         return {
             is_win: false,

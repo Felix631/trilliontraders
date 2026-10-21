@@ -31,6 +31,7 @@ describe('the shared trade engine', () => {
             .mockResolvedValueOnce({ buy: { contract_id: 4242 } })
             .mockResolvedValueOnce(settle());
 
+        const progress: Array<{ tick_count: number; ticks_total: number }> = [];
         const result = await placeTrade(
             {
                 symbol: 'R_100',
@@ -40,8 +41,12 @@ describe('the shared trade engine', () => {
                 duration_unit: 't',
                 prediction: 5,
             },
-            'dtrader'
+            'dtrader',
+            update => progress.push(update)
         );
+
+        // The open contract is announced with the ticks it was bought for.
+        expect(progress[0]).toEqual({ tick_count: 0, ticks_total: 1 });
 
         expect(result.error).toBeUndefined();
         expect(result.simulated).toBe(false);

@@ -177,8 +177,14 @@ const DTrader = () => {
     const [is_fullscreen, setIsFullscreen] = React.useState(false);
     const [show_trade_types, setShowTradeTypes] = React.useState(false);
     const [trade_state, setTradeState] = React.useState<{
-        busy: boolean; message: string | null; is_win: boolean | null;
-    }>({ busy: false, message: null, is_win: null });
+        busy: boolean;
+        message: string | null;
+        is_win: boolean | null;
+        /** The contract that was bought, and how many ticks it has to take. */
+        contract_label: string | null;
+        ticks: number;
+        tick_count: number;
+    }>({ busy: false, message: null, is_win: null, contract_label: null, ticks: 0, tick_count: 0 });
 
     const chartWrapRef = React.useRef<HTMLDivElement>(null);
     const typesRef = React.useRef<HTMLDivElement>(null);
@@ -261,7 +267,17 @@ const DTrader = () => {
 
     const buy = async () => {
         if (trade_state.busy) return;
-        setTradeState({ busy: true, message: localize('Placing order…'), is_win: null });
+        const label = contractLabel(direction, digit);
+        // The duration this order is bought for — 1 tick on the digit contracts.
+        const contract_ticks = ticks;
+        setTradeState({
+            busy: true,
+            message: localize('Placing order…'),
+            is_win: null,
+            contract_label: label,
+            ticks: contract_ticks,
+            tick_count: 0,
+        });
         const result = await placeTrade({
             symbol,
             contract_type: direction,
@@ -270,12 +286,20 @@ const DTrader = () => {
             duration: needs_prediction ? 1 : Number(duration) || 1,
             duration_unit: 't',
             prediction: needs_prediction ? digit : undefined,
-        }, 'dtrader');
-        setTradeState(
+        }, 'dtrader', progress =>
+            // The engine reports the contract's tick count while it runs.
+            setTradeState(prev => ({
+                ...prev,
+                tick_count: Math.max(prev.tick_count, progress.tick_count),
+            }))
+        );
+        setTradeState(prev =>
             result.error
-                ? { busy: false, message: result.error, is_win: null }
+                ? { ...prev, busy: false, message: result.error, is_win: null, tick_count: 0 }
                 : {
+                    ...prev,
                     busy: false,
+                    tick_count: contract_ticks,
                     message: `${result.is_win ? localize('WON') : localize('LOST')} ${result.profit >= 0 ? '+' : ''}${result.profit.toFixed(2)}${result.simulated ? ` (${localize('demo')})` : ''}${result.contract_id ? ` · ${localize('Contract')} ${result.contract_id}` : ''}`,
                     is_win: result.is_win,
                 }
@@ -580,8 +604,70 @@ const DTrader = () => {
                     </section>
 
                     {trade_state.message && (
-                        <div className={classNames('dtrader__result', { 'is-win': trade_state.is_win === true, 'is-loss': trade_state.is_win === false })}>
-                            {trade_state.message}
+                        <div
+                            className={classNames('dtrader__contract-card', {
+                                'is-open': trade_state.busy,
+                                'is-win': trade_state.is_win === true,
+                                'is-loss': trade_state.is_win === false,
+                            })}
+                        >
+                            <div className='dtrader__contract-card-head'>
+                                <span className='dtrader__contract-card-title'>{localize('Contract')}</span>
+                                <span className='dtrader__contract-card-status'>
+                                    {trade_state.busy
+                                        ? localize('Open')
+                                        : trade_state.is_win === null
+                                          ? localize('Refused')
+                                          : localize('Settled')}
+                                </span>
+                            </div>
+
+                            <div className='dtrader__contract-card-rows'>
+                                <div className='dtrader__contract-card-row'>
+                                    <span>{localize('Contract type')}</span>
+                                    <strong>{trade_state.contract_label ?? contractLabel(direction, digit)}</strong>
+                                </div>
+                                <div className='dtrader__contract-card-row'>
+                                    <span>{localize('Ticks')}</span>
+                                    <strong className='dtrader__contract-ticks'>
+                                        {trade_state.tick_count} / {trade_state.ticks}{' '}
+                                        {trade_state.ticks === 1 ? localize('tick') : localize('ticks')}
+                                    </strong>
+                                </div>
+                                {trade_state.busy && (
+                                    <div className='dtrader__contract-card-row'>
+                                        <span>{localize('Settles in')}</span>
+                                        <strong>
+                                            {Math.max(0, trade_state.ticks - trade_state.tick_count)}{' '}
+                                            {trade_state.ticks - trade_state.tick_count === 1
+                                                ? localize('tick')
+                                                : localize('ticks')}
+                                        </strong>
+                                    </div>
+                                )}
+                                <div className='dtrader__contract-card-row'>
+                                    <span>{localize('Stake')}</span>
+                                    <strong>{stake.toFixed(2)} {currency}</strong>
+                                </div>
+                            </div>
+
+                            {trade_state.busy && (
+                                <div className='dtrader__contract-progress' aria-hidden='true'>
+                                    <span
+                                        style={{
+                                            width: `${
+                                                trade_state.ticks
+                                                    ? Math.min(100, (trade_state.tick_count / trade_state.ticks) * 100)
+                                                    : 0
+                                            }%`,
+                                        }}
+                                    />
+                                </div>
+                            )}
+
+                            <div className={classNames('dtrader__result', { 'is-win': trade_state.is_win === true, 'is-loss': trade_state.is_win === false })}>
+                                {trade_state.message}
+                            </div>
                         </div>
                     )}
                 </div>
