@@ -5,6 +5,26 @@ import { localize } from '@deriv-com/translations';
 import { observer as globalObserver } from '../../../utils/observer';
 import { error as logError } from './broadcast';
 
+/**
+ * The barrier a High/Low contract needs.
+ *
+ * Higher wins above the entry spot and Lower wins below it, so when both are
+ * traded under one offset (the "both" contract type) the two legs need opposite
+ * signs. Sending the same "+0.5" to both made Deriv refuse the Lower leg with
+ * "Invalid barrier.". Absolute barriers (no +/-) and every other contract type
+ * are left untouched.
+ */
+export const barrierForContractType = (contract_type, barrier) => {
+    if (contract_type !== 'HIGHER' && contract_type !== 'LOWER') return barrier;
+    if (typeof barrier !== 'string') return barrier;
+
+    const text = barrier.trim();
+    const sign = text[0];
+    if ((sign !== '+' && sign !== '-') || text.length < 2) return barrier;
+
+    return `${contract_type === 'HIGHER' ? '+' : '-'}${text.slice(1)}`;
+};
+
 export const tradeOptionToProposal = (trade_option, purchase_reference) =>
     trade_option.contractTypes.map(type => {
         const proposal = {
@@ -28,7 +48,7 @@ export const tradeOptionToProposal = (trade_option, purchase_reference) =>
         if (!['TICKLOW', 'TICKHIGH'].includes(type) && trade_option.prediction !== undefined) {
             proposal.barrier = trade_option.prediction;
         } else if (trade_option.barrierOffset !== undefined) {
-            proposal.barrier = trade_option.barrierOffset;
+            proposal.barrier = barrierForContractType(type, trade_option.barrierOffset);
         }
         if (trade_option.secondBarrierOffset !== undefined) {
             proposal.barrier2 = trade_option.secondBarrierOffset;
@@ -64,7 +84,7 @@ export const tradeOptionToBuy = (contract_type, trade_option) => {
     if (!['TICKLOW', 'TICKHIGH'].includes(contract_type) && trade_option.prediction !== undefined) {
         buy.parameters.barrier = trade_option.prediction;
     } else if (trade_option.barrierOffset !== undefined) {
-        buy.parameters.barrier = trade_option.barrierOffset;
+        buy.parameters.barrier = barrierForContractType(contract_type, trade_option.barrierOffset);
     }
     if (trade_option.secondBarrierOffset !== undefined) {
         buy.parameters.barrier2 = trade_option.secondBarrierOffset;

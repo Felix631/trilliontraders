@@ -21,6 +21,7 @@ jest.mock('../../utils/broadcast', () => ({
 }));
 
 const { api_base } = require('../../../api/api-base');
+const { barrierForContractType } = require('../../utils/helpers');
 const Purchase = require('../Purchase').default;
 
 class Base {}
@@ -45,6 +46,23 @@ const make_engine = () => {
 
 const accepted = (buy, contract_id) => ({
     buy: { contract_id, transaction_id: contract_id + 100, buy_price: 0.5, ...buy },
+});
+
+describe('the barrier each leg of a high/low pair sends', () => {
+    it('puts Higher above the spot and Lower below it', () => {
+        // The same "both" offset used to go to both legs, and Deriv refused the
+        // Lower one with "Invalid barrier.".
+        expect(barrierForContractType('HIGHER', '+0.5')).toBe('+0.5');
+        expect(barrierForContractType('LOWER', '+0.5')).toBe('-0.5');
+        expect(barrierForContractType('LOWER', '-0.5')).toBe('-0.5');
+        expect(barrierForContractType('HIGHER', '-0.5')).toBe('+0.5');
+
+        // Absolute barriers are already the right level for either side.
+        expect(barrierForContractType('HIGHER', '1234.56')).toBe('1234.56');
+        expect(barrierForContractType('LOWER', '1234.56')).toBe('1234.56');
+        // Other contract types keep the barrier they were given.
+        expect(barrierForContractType('CALL', '+0.5')).toBe('+0.5');
+    });
 });
 
 describe('the two-contract purchase', () => {
