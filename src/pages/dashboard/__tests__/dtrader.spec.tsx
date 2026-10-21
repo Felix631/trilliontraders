@@ -1,7 +1,7 @@
 /**
- * DTrader is laid out like dtrader.deriv.com: market bar → chart → the 0-9
- * last-digit rail → trade panel. The rail is one rail for every trade type, so
- * Even/Odd and Over/Under read the digits exactly the way Matches does.
+ * DTrader follows the official DTrader order: trade type carousel → contract
+ * type list → Duration (Ticks) → Last Digit Prediction (two rows of five) →
+ * Stake → Buy, with the 0-9 last-digit rail under the chart.
  */
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -46,6 +46,11 @@ jest.mock('@/components/trading-view-chart/trading-view', () => ({
 const tiles = (container: HTMLElement) =>
     Array.from(container.querySelectorAll('.dtrader__digit-tile')) as HTMLElement[];
 
+const choices = (container: HTMLElement) =>
+    Array.from(container.querySelectorAll('.dtrader__digit-choice')) as HTMLElement[];
+
+const pick_contract = (name: RegExp) => fireEvent.click(screen.getByRole('button', { name }));
+
 describe('the DTrader digit rail', () => {
     it('shows all ten last digits under the chart', () => {
         const { container } = render(<DTrader />);
@@ -72,7 +77,55 @@ describe('the DTrader digit rail', () => {
 
         expect(tiles(container)[3]).toHaveAttribute('aria-pressed', 'true');
         expect(tiles(container)[9]).toHaveAttribute('aria-pressed', 'false');
-        expect(container.querySelector('.dtrader__prediction-value')?.textContent).toBe('3');
+        expect(container.querySelector('.dtrader__digit-choice.is-selected')?.textContent).toBe('3');
+    });
+});
+
+describe('the DTrader order panel', () => {
+    it('lists the trade type carousel and both contract families', () => {
+        render(<DTrader />);
+
+        expect(screen.getByRole('tab', { name: 'Rise/Fall' })).toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'Digits' })).toBeInTheDocument();
+        // Digits is the default family, so its six contract types are listed.
+        ['Matches', 'Differs', 'Even', 'Odd', 'Over', 'Under'].forEach(label => {
+            expect(screen.getAllByRole('button', { name: new RegExp(`^${label}`) }).length).toBeGreaterThan(0);
+        });
+    });
+
+    it('offers the last-digit prediction as two rows of five', () => {
+        const { container } = render(<DTrader />);
+
+        expect(screen.getByText('Last Digit Prediction')).toBeInTheDocument();
+        expect(container.querySelectorAll('.dtrader__digit-row')).toHaveLength(2);
+        expect(choices(container)).toHaveLength(10);
+        // The default prediction, 9, is selected in the grid.
+        expect(container.querySelector('.dtrader__digit-choice.is-selected')?.textContent).toBe('9');
+    });
+
+    it('drops the prediction grid for Even/Odd, which takes no barrier', () => {
+        const { container } = render(<DTrader />);
+
+        pick_contract(/^Even/);
+
+        expect(screen.queryByText('Last Digit Prediction')).toBeNull();
+        expect(choices(container)).toHaveLength(0);
+    });
+
+    it('fixes the duration at one tick for digit contracts', () => {
+        render(<DTrader />);
+
+        expect(screen.getByText('Digit contracts settle on the very next tick.')).toBeInTheDocument();
+        expect(screen.queryByLabelText('Duration ticks')).toBeNull();
+    });
+
+    it('shows a ticks slider for Rise/Fall', () => {
+        render(<DTrader />);
+
+        fireEvent.click(screen.getByRole('tab', { name: 'Rise/Fall' }));
+
+        expect(screen.getByLabelText('Duration ticks')).toBeInTheDocument();
+        expect(screen.queryByText('Last Digit Prediction')).toBeNull();
     });
 });
 
@@ -80,18 +133,18 @@ describe('the DTrader rail across trade types', () => {
     it('rings the digits that win an Over barrier', () => {
         const { container } = render(<DTrader />);
 
-        fireEvent.click(screen.getByRole('tab', { name: 'Over/Under' }));
+        pick_contract(/^Over/);
         fireEvent.click(tiles(container)[2]);
 
         // Barrier 2 is set, so 3 4 5 6 7 8 9 win the contract.
-        expect(container.querySelector('.dtrader__prediction-value')?.textContent).toBe('2');
+        expect(container.querySelector('.dtrader__digit-choice.is-selected')?.textContent).toBe('2');
         expect(container.querySelectorAll('.dtrader__digit-tile.is-win')).toHaveLength(7);
     });
 
     it('rings the parity digits for Even/Odd', () => {
         const { container } = render(<DTrader />);
 
-        fireEvent.click(screen.getByRole('tab', { name: 'Even/Odd' }));
+        pick_contract(/^Even/);
 
         const win = Array.from(container.querySelectorAll('.dtrader__digit-tile.is-win'));
         expect(win).toHaveLength(5);
@@ -101,12 +154,14 @@ describe('the DTrader rail across trade types', () => {
     it('cannot trade a barrier a direction does not offer', () => {
         const { container } = render(<DTrader />);
 
-        fireEvent.click(screen.getByRole('tab', { name: 'Over/Under' }));
+        pick_contract(/^Over/);
 
         // Over cannot take 9 as a barrier, Under cannot take 0.
         expect(tiles(container)[9]).toBeDisabled();
-        fireEvent.click(screen.getByRole('button', { name: /^Under/ }));
+        expect(choices(container)[9]).toBeDisabled();
+        pick_contract(/^Under/);
         expect(tiles(container)[0]).toBeDisabled();
+        expect(choices(container)[0]).toBeDisabled();
     });
 
     it('keeps the rail live for Rise/Fall', () => {
