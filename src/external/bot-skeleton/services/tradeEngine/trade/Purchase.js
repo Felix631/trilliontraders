@@ -203,9 +203,11 @@ export default Engine =>
                 first_quote = this.selectProposal(first_type);
                 second_quote = this.selectProposal(second_type);
             } catch (error) {
-                // Only one side could be priced: buy that one instead of skipping
-                // the trade entirely. The other proposal is logged by Proposal.js.
-                return this.purchase(first_type);
+                // Never buy a single leg of a pair. An unhedged order is not what
+                // the block asked for, and buying it silently is what made a bad
+                // barrier look like "the bot only takes one trade". Surface the
+                // reason the second leg could not be priced instead.
+                throw error;
             }
 
             this.isSold = false;

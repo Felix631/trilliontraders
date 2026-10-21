@@ -21,7 +21,7 @@ jest.mock('../../utils/broadcast', () => ({
 }));
 
 const { api_base } = require('../../../api/api-base');
-const { barrierForContractType } = require('../../utils/helpers');
+const { barrierForContractType, tradeOptionToProposal } = require('../../utils/helpers');
 const Purchase = require('../Purchase').default;
 
 class Base {}
@@ -62,6 +62,24 @@ describe('the barrier each leg of a high/low pair sends', () => {
         expect(barrierForContractType('LOWER', '1234.56')).toBe('1234.56');
         // Other contract types keep the barrier they were given.
         expect(barrierForContractType('CALL', '+0.5')).toBe('+0.5');
+    });
+
+    it('prices the whole Higher/Lower pair with mirrored barriers', () => {
+        const proposals = tradeOptionToProposal(
+            {
+                contractTypes: ['HIGHER', 'LOWER'],
+                barrierOffset: '+0.5',
+                symbol: 'R_100',
+                amount: 1,
+                basis: 'stake',
+                duration: 5,
+                duration_unit: 't',
+            },
+            'ref'
+        );
+
+        expect(proposals[0]).toMatchObject({ contract_type: 'HIGHER', barrier: '+0.5' });
+        expect(proposals[1]).toMatchObject({ contract_type: 'LOWER', barrier: '-0.5' });
     });
 });
 
@@ -149,6 +167,20 @@ describe('the two-contract purchase', () => {
         engine.data.contract = { profit: 0.5 };
         engine.pair = { secondary: 222, secondary_profit: 0.5 };
         expect(await engine.getPairResult()).toBe('win');
+    });
+
+    it('refuses to buy a single leg when the other cannot be priced', async () => {
+        const engine = make_engine();
+        engine.selectProposal = jest.fn(contract_type => {
+            if (contract_type === 'LOWER') throw { error: { code: 'InvalidBarrier', message: 'Invalid barrier.' } };
+            return { id: 'p1', askPrice: 0.5 };
+        });
+
+        await expect(engine.purchasePair('HIGHER', 'LOWER')).rejects.toMatchObject({
+            error: { message: 'Invalid barrier.' },
+        });
+        // No unhedged order was placed.
+        expect(api_base.api.send).not.toHaveBeenCalled();
     });
 
     it('falls back to the single contract when no pair was bought', async () => {
