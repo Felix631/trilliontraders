@@ -209,6 +209,8 @@ export const ToolboxItems = () =>
             <Category id='trade_results' name={localize('Restart trading conditions')}>
                 <Block type='after_purchase' />
                 <Block type='trade_again' />
+                {/* Result of the pair bought with the Purchase two contracts block. */}
+                <Block type='pair_result' />
             </Category>
             <Category id='strategy_control' name={localize('Strategy control')}>
                 <Block type='strategy_concept_block_apply'>

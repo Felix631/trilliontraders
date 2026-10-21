@@ -16,6 +16,9 @@ export default Engine =>
                 return Promise.resolve();
             }
 
+            // A single purchase is not a pair any more.
+            this.pair = null;
+
             // A strategy imported from another builder can arrive with its
             // contract-type dropdown empty (the options are filled in from the
             // trade definition when the block is drawn, not when the XML is
@@ -233,6 +236,11 @@ export default Engine =>
             }
 
             const [primary, secondary] = bought;
+            // Remember the pair so its result can be read once both settle.
+            this.pair = {
+                secondary: secondary ? secondary.buy.contract_id : null,
+                secondary_profit: null,
+            };
             this.handlePurchaseReceived(primary.buy, primary.contract_type);
             if (secondary) {
                 this.trackSecondContract(secondary.buy);
@@ -261,11 +269,35 @@ export default Engine =>
                     // the socket may already be gone; nothing left to follow
                 }
 
+                if (this.pair) {
+                    this.pair.secondary_profit = Number(contract.profit) || 0;
+                }
                 this.updateTotals(contract);
                 broadcastContract({ accountID: api_base.account_info.loginid, ...contract });
             });
 
             api_base.pushSubscription(subscription);
+        }
+
+        /**
+         * How the pair did: "loss" only when both contracts lost, otherwise
+         * "win". Waits for the second contract to settle, since the two
+         * settlements arrive a moment apart even though they share a tick.
+         */
+        async getPairResult() {
+            const primary_profit = Number(this.data?.contract?.profit) || 0;
+            if (!this.pair) {
+                return primary_profit > 0 ? 'win' : 'loss';
+            }
+
+            const deadline = Date.now() + 10000;
+            while (this.pair.secondary && this.pair.secondary_profit === null && Date.now() < deadline) {
+                // eslint-disable-next-line no-await-in-loop
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            const secondary_profit = Number(this.pair.secondary_profit) || 0;
+            return primary_profit > 0 || secondary_profit > 0 ? 'win' : 'loss';
         }
 
         getPurchaseReference = () => purchase_reference;

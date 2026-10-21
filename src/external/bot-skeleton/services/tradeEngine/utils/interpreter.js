@@ -142,6 +142,12 @@ const Interpreter = () => {
             'purchasePair',
             createAsync(js_interpreter, bot_interface.purchasePair)
         );
+        // Result of the pair — "loss" only when both contracts lost.
+        js_interpreter.setProperty(
+            pseudo_bot_interface,
+            'getPairResult',
+            createAsync(js_interpreter, bot_interface.getPairResult)
+        );
         js_interpreter.setProperty(
             pseudo_bot_interface,
             'sellAtMarket',

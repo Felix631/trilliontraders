@@ -34,7 +34,7 @@ const KNOWN_CREATORS = new Set([    'mkorean', 'money8gg', 'traderkit', 'osam', 
     'binarypro', 'derivbots', 'superfree', 'orstac',
     'new-bots', 'tradesclub', 'binarylab', 'tradepool',
     // Community bots grouped by the trade type they trade.
-    'over-under', 'even-odd', 'matches-differs', 'rise-fall',
+    'over-under', 'even-odd', 'matches-differs', 'rise-fall', 'higherlower',
     'ends-between-outside', 'stays-in-outside',
 ]);
 

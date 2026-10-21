@@ -114,6 +114,33 @@ describe('the two-contract purchase', () => {
         expect(api_base.api.send).toHaveBeenCalledWith({ buy: 'PUT', price: 0.5 });
     });
 
+    it('reads the pair as a loss only when both contracts lost', async () => {
+        const engine = make_engine();
+
+        // Both lost.
+        engine.data.contract = { profit: -1 };
+        engine.pair = { secondary: 222, secondary_profit: -1 };
+        expect(await engine.getPairResult()).toBe('loss');
+
+        // One won, one lost: not a pair loss, so no recovery stake.
+        engine.data.contract = { profit: -1 };
+        engine.pair = { secondary: 222, secondary_profit: 2 };
+        expect(await engine.getPairResult()).toBe('win');
+
+        // Both won.
+        engine.data.contract = { profit: 0.5 };
+        engine.pair = { secondary: 222, secondary_profit: 0.5 };
+        expect(await engine.getPairResult()).toBe('win');
+    });
+
+    it('falls back to the single contract when no pair was bought', async () => {
+        const engine = make_engine();
+        engine.data.contract = { profit: -1 };
+        expect(await engine.getPairResult()).toBe('loss');
+        engine.data.contract = { profit: 0.4 };
+        expect(await engine.getPairResult()).toBe('win');
+    });
+
     it('does nothing when the bot is not in its purchase step', async () => {
         const engine = make_engine();
         engine.store = { getState: () => ({ scope: 'DURING_PURCHASE' }), dispatch: jest.fn() };

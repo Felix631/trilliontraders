@@ -5595,6 +5595,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "globaltrades/globaltrades-GT-Sequence-Rotator-xml"
     },
     {
+        "id": "higher-lower-pair-martingale-1-4",
+        "name": "higher lower pair martingale 1 4",
+        "creator": "higherlower",
+        "file": "higherlower/higher-lower-pair-martingale-1-4-xml"
+    },
+    {
         "id": "isaacmrdollars-DigitPilot-AI",
         "name": "DigitPilot AI",
         "creator": "isaacmrdollars",
@@ -12141,6 +12147,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbotzone",
         "label": "dbotzone",
+        "count": 1
+    },
+    {
+        "id": "higherlower",
+        "label": "higherlower",
         "count": 1
     },
     {
