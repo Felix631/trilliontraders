@@ -29,10 +29,14 @@ const DigitShares = ({
     stats,
     last_digit,
     size = 'md',
+    win_digits,
 }: {
     stats: DigitStat[];
     last_digit: number | null;
     size?: 'sm' | 'md';
+    /** Digits that settle the current selection as a win — ringed in green.
+     *  Optional: pages that only study frequencies leave it undefined. */
+    win_digits?: number[];
 }) => {
     // Compute ranks: sort by count descending, then map digit → rank.
     const ranked = React.useMemo(() => {
@@ -49,13 +53,14 @@ const DigitShares = ({
                 const is_last = last_digit === digit;
                 const rank = ranked.get(digit) ?? 5;
                 const colorCls = is_last ? '' : rankColorClass(rank, DIGIT_COUNT);
+                const is_win = Array.isArray(win_digits) && win_digits.includes(digit);
 
                 return (
                     <div key={digit} className='digit-shares__item'>
                         <div
                             className={classNames(
                                 'digit-shares__circle',
-                                { 'is-last': is_last },
+                                { 'is-last': is_last, 'is-win': is_win },
                                 colorCls
                             )}
                             style={{ '--share-angle': `${angle}deg` } as React.CSSProperties}

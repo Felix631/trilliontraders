@@ -85,6 +85,15 @@ $digit-amber: var(--ux-gold, #f5b544);
             );
         }
 
+        // ---- Winning side of the current contract (opt-in via win_digits) --
+        &.is-win {
+            box-shadow: 0 0 0 1px color-mix(in srgb, $digit-green 70%, transparent);
+
+            .digit-shares__digit {
+                color: $digit-green;
+            }
+        }
+
         // ---- Last digit: neutral (pointer touched) ----------------
         &.is-last {
             box-shadow: 0 0 0.6rem color-mix(in srgb, var(--ux-gold, #f5b544) 65%, transparent);

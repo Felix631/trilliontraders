@@ -30,6 +30,9 @@ const SYMBOLS = [
 
 const LOOKBACKS = [50, 100, 250, 500];
 
+/** Digits 0-9, in order. */
+const DIGITS = Array.from({ length: 10 }, (_, index) => index);
+
 // Intensity = the minimum winning percentage a signal must reach to be
 // classified STRONG. Below that it is a WEAK signal.
 const INTENSITY_LEVELS = [
@@ -188,12 +191,6 @@ const MatchesAnalysis = () => {
                 </div>
             </div>
 
-            <div className='matches-analysis__shares'>
-                <DigitShares stats={stats} last_digit={last_digit} size='md' />
-                <span className='matches-analysis__shares-legend'>
-                    {localize('Rank colours: green = most appearing → blue → amber → silver → red = least appearing. The triangle marks the live last digit.')}
-                </span>
-            </div>
         </>
     );
 
@@ -396,6 +393,61 @@ const MatchesAnalysis = () => {
         </>
     );
 
+    /**
+     * The 0-9 last-digit rail — one rail for every analysis mode, not just
+     * matches. Even/Odd and Over/Under read it exactly the way matches does,
+     * with the winning digits of the current signal ringed.
+     */
+    const render_digits = () => {
+        let win_digits: number[] = [];
+        let caption = localize('Last digits sampled over the selected window.');
+
+        if (mode === 'match') {
+            win_digits = top_digits;
+            caption = top_digits.length
+                ? localize('The match signal plays digit {{digits}} — ringed below.', {
+                      digits: top_digits.join(' · '),
+                  })
+                : localize('Waiting for enough ticks to rank the digits.');
+        } else if (mode === 'overunder' && best !== null && sample_size > 0) {
+            win_digits = DIGITS.filter(d => (best.type === 'over' ? d > best.threshold : d < best.threshold));
+            caption =
+                best.type === 'over'
+                    ? localize('Over {{n}} wins on last digits {{digits}} — ringed below.', {
+                          n: String(best.threshold),
+                          digits: win_digits.join(' · '),
+                      })
+                    : localize('Under {{n}} wins on last digits {{digits}} — ringed below.', {
+                          n: String(best.threshold),
+                          digits: win_digits.join(' · '),
+                      });
+        } else if (mode === 'evenodd' && sample_size > 0) {
+            win_digits = DIGITS.filter(d => (even_odd.signal === 'even' ? d % 2 === 0 : d % 2 === 1));
+            caption = localize('{{signal}} wins on last digits {{digits}} — ringed below.', {
+                signal: even_odd.signal === 'even' ? localize('Even') : localize('Odd'),
+                digits: win_digits.join(' · '),
+            });
+        }
+
+        return (
+            <div className='matches-analysis__shares'>
+                <div className='matches-analysis__shares-head'>
+                    <span className='matches-analysis__shares-title'>{localize('Last digits 0 – 9')}</span>
+                    <span className='matches-analysis__shares-caption'>{caption}</span>
+                </div>
+                <DigitShares
+                    stats={stats}
+                    last_digit={last_digit}
+                    size='md'
+                    win_digits={win_digits}
+                />
+                <span className='matches-analysis__shares-legend'>
+                    {localize('Rank colours: green = most appearing → blue → amber → silver → red = least appearing. The triangle marks the live last digit, and a green ring marks a digit that wins the current signal.')}
+                </span>
+            </div>
+        );
+    };
+
     const recent_class_for = (digit: number): string => {
         if (mode === 'overunder') {
             if (best === null || sample_size === 0) return '';
@@ -505,6 +557,7 @@ const MatchesAnalysis = () => {
                         {mode === 'match' && render_match()}
                         {mode === 'overunder' && render_over_under()}
                         {mode === 'evenodd' && render_even_odd()}
+                        {render_digits()}
                     </div>
 
                     <div className='matches-analysis__aside'>
