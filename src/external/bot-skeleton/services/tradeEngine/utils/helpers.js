@@ -11,18 +11,25 @@ import { error as logError } from './broadcast';
  * Higher wins above the entry spot and Lower wins below it, so when both are
  * traded under one offset (the "both" contract type) the two legs need opposite
  * signs. Sending the same "+0.5" to both made Deriv refuse the Lower leg with
- * "Invalid barrier.". Absolute barriers (no +/-) and every other contract type
- * are left untouched.
+ * "Invalid barrier.". Higher/Lower comes through as CALL/PUT, so both the plain
+ * and the CALL/PUT names are handled. Absolute barriers (no +/-) and every other
+ * contract type are left untouched.
  */
+const LOWER_SIDE_CONTRACTS = ['LOWER', 'PUT'];
+const UPPER_SIDE_CONTRACTS = ['HIGHER', 'CALL'];
+
 export const barrierForContractType = (contract_type, barrier) => {
-    if (contract_type !== 'HIGHER' && contract_type !== 'LOWER') return barrier;
+    // Higher/Lower is encoded as CALL (higher) / PUT (lower) in this engine.
+    const is_upper = UPPER_SIDE_CONTRACTS.includes(contract_type);
+    const is_lower = LOWER_SIDE_CONTRACTS.includes(contract_type);
+    if (!is_upper && !is_lower) return barrier;
     if (typeof barrier !== 'string') return barrier;
 
     const text = barrier.trim();
     const sign = text[0];
     if ((sign !== '+' && sign !== '-') || text.length < 2) return barrier;
 
-    return `${contract_type === 'HIGHER' ? '+' : '-'}${text.slice(1)}`;
+    return `${is_lower ? '-' : '+'}${text.slice(1)}`;
 };
 
 export const tradeOptionToProposal = (trade_option, purchase_reference) =>

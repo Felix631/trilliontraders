@@ -60,8 +60,11 @@ describe('the barrier each leg of a high/low pair sends', () => {
         // Absolute barriers are already the right level for either side.
         expect(barrierForContractType('HIGHER', '1234.56')).toBe('1234.56');
         expect(barrierForContractType('LOWER', '1234.56')).toBe('1234.56');
-        // Other contract types keep the barrier they were given.
+        // Higher/Lower is sent as CALL/PUT by this engine, so the same mirroring
+        // has to apply to those codes too — otherwise the Lower leg is priced above spot.
         expect(barrierForContractType('CALL', '+0.5')).toBe('+0.5');
+        expect(barrierForContractType('PUT', '+0.5')).toBe('-0.5');
+        expect(barrierForContractType('PUT', '0.5')).toBe('0.5');
     });
 
     it('prices the whole Higher/Lower pair with mirrored barriers', () => {
@@ -80,6 +83,21 @@ describe('the barrier each leg of a high/low pair sends', () => {
 
         expect(proposals[0]).toMatchObject({ contract_type: 'HIGHER', barrier: '+0.5' });
         expect(proposals[1]).toMatchObject({ contract_type: 'LOWER', barrier: '-0.5' });
+    });
+
+    it('prices the Higher/Lower pair the engine actually sends (CALL / PUT)', () => {
+        const proposals = tradeOptionToProposal({
+            amount: 1,
+            basis: 'stake',
+            contractTypes: ['CALL', 'PUT'],
+            currency: 'USD',
+            duration: 5,
+            duration_unit: 't',
+            barrierOffset: '+0.5',
+        });
+
+        expect(proposals[0]).toMatchObject({ contract_type: 'CALL', barrier: '+0.5' });
+        expect(proposals[1]).toMatchObject({ contract_type: 'PUT', barrier: '-0.5' });
     });
 });
 
