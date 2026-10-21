@@ -154,6 +154,7 @@ const MatchesAnalysis = () => {
                     top_digit !== null ? last_digit_matched : null,
                     localize('matched signal')
                 )}
+                {render_digits()}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Match signal')}</span>
                     <div className='matches-analysis__signal-head'>
@@ -235,6 +236,7 @@ const MatchesAnalysis = () => {
         <>
             <div className='matches-analysis__signal'>
                 {render_last_tick(best_hit, localize('hit signal'))}
+                {render_digits()}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Over / Under signal')}</span>
                     <div className='matches-analysis__signal-head'>
@@ -313,6 +315,7 @@ const MatchesAnalysis = () => {
         <>
             <div className='matches-analysis__signal'>
                 {render_last_tick(parity_hit, localize('hit signal'))}
+                {render_digits()}
                 <div className='matches-analysis__signal-main'>
                     <span className='matches-analysis__signal-label'>{localize('Even / Odd signal')}</span>
                     <div className='matches-analysis__signal-head'>
@@ -430,7 +433,7 @@ const MatchesAnalysis = () => {
         }
 
         return (
-            <div className='matches-analysis__shares'>
+            <div className='matches-analysis__shares matches-analysis__shares--between'>
                 <div className='matches-analysis__shares-head'>
                     <span className='matches-analysis__shares-title'>{localize('Last digits 0 – 9')}</span>
                     <span className='matches-analysis__shares-caption'>{caption}</span>
@@ -557,7 +560,6 @@ const MatchesAnalysis = () => {
                         {mode === 'match' && render_match()}
                         {mode === 'overunder' && render_over_under()}
                         {mode === 'evenodd' && render_even_odd()}
-                        {render_digits()}
                     </div>
 
                     <div className='matches-analysis__aside'>

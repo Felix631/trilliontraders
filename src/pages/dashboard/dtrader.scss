@@ -1,12 +1,10 @@
 @use 'components/shared/styles/mixins' as *;
 
-// DTrader — manual trading desk in the Aurora Deep language, laid out like
-// dtrader.deriv.com: market bar → chart → 0-9 last-digit rail → trade panel.
+// DTrader — the manual trading desk, in the DTrader shape: the trade-type
+// carousel and the order form on the left, the chart and the 0-9 last-digit
+// rail on the right. Styled in the app's Aurora Deep language.
 .dtrader {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     height: 100%;
     padding: 1.2rem 1.6rem 1.6rem;
     box-sizing: border-box;
@@ -17,7 +15,173 @@
         padding: 1rem;
     }
 
-    // ---- Market bar -------------------------------------------------------
+    &__workspace {
+        display: grid;
+        grid-template-columns: 34rem minmax(0, 1fr);
+        gap: 1rem;
+        align-items: start;
+
+        @include mobile-or-tablet-screen {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    // ---- Left: the order form --------------------------------------------
+    &__panel {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-radius: var(--ux-r-lg, 1.8rem);
+        background: var(--ux-panel, var(--app-card-background));
+        box-shadow: var(--ux-shadow-card, none);
+        overflow: hidden;
+
+        @include desktop-screen {
+            position: sticky;
+            top: 0;
+        }
+    }
+
+    &__panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 1rem 1.2rem 0.6rem;
+    }
+
+    &__panel-eyebrow {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__mode {
+        padding: 0.15rem 0.7rem;
+        border-radius: var(--ux-r-pill, 999rem);
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        color: var(--ux-text-mute, var(--app-text-muted));
+
+        &--live {
+            border-color: color-mix(in srgb, var(--ux-emerald, #10b981) 55%, transparent);
+            background: color-mix(in srgb, var(--ux-emerald, #10b981) 14%, transparent);
+            color: var(--ux-emerald, var(--brand-success));
+        }
+    }
+
+    // The trade-type carousel: one card per contract family.
+    &__types {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.5rem;
+        padding: 0 1rem 1rem;
+    }
+
+    &__family {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.8rem 0.3rem 0.7rem;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-radius: var(--ux-r-sm, 1rem);
+        background: var(--ux-panel-inset, transparent);
+        color: var(--ux-text-dim, var(--text-general));
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        line-height: 1.25;
+        text-align: center;
+        cursor: pointer;
+        transition:
+            border-color var(--ux-t-fast, 0.16s) ease,
+            background-color var(--ux-t-fast, 0.16s) ease,
+            color var(--ux-t-fast, 0.16s) ease,
+            transform var(--ux-t-fast, 0.16s) var(--ux-ease, ease);
+
+        &:hover {
+            transform: translateY(-0.1rem);
+            border-color: var(--ux-border-strong, var(--site-accent));
+            color: var(--ux-text, var(--app-text-title));
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--ux-blue-bright, var(--site-accent));
+            outline-offset: 2px;
+        }
+
+        &.is-active {
+            border-color: var(--ux-emerald, var(--site-accent));
+            background: color-mix(in srgb, var(--ux-emerald, #10b981) 14%, transparent);
+            color: var(--ux-text, var(--app-text-title));
+            box-shadow: 0 0 0 1px color-mix(in srgb, var(--ux-emerald, #10b981) 35%, transparent);
+        }
+    }
+
+    &__family-label {
+        display: block;
+    }
+
+    &__type-icon {
+        width: 2.4rem;
+        height: 2.4rem;
+        color: inherit;
+        opacity: 0.9;
+    }
+
+    &__panel-body {
+        display: flex;
+        flex-direction: column;
+        background: var(--ux-panel-inset, rgba(3, 6, 22, 0.35));
+        border-top: 1px solid var(--ux-divider, rgba(148, 163, 184, 0.15));
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 1.1rem 1.2rem;
+        border-bottom: 1px solid var(--ux-divider, rgba(148, 163, 184, 0.15));
+    }
+
+    &__section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+    }
+
+    &__section-title {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__unit {
+        padding: 0.15rem 0.7rem;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-radius: var(--ux-r-pill, 999rem);
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        color: var(--ux-text-dim, var(--app-text-title));
+    }
+
+    // ---- Right: market bar, chart and digit rail -------------------------
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 0;
+        min-height: 0;
+    }
+
     &__topbar {
         display: flex;
         align-items: center;
@@ -45,9 +209,9 @@
     }
 
     &__market select {
-        min-width: 24rem;
-        max-width: 30rem;
-        padding: 0.55rem 0.8rem;
+        min-width: 22rem;
+        max-width: 28rem;
+        padding: 0.5rem 0.8rem;
         border: 1px solid var(--ux-border, var(--app-border-color));
         border-radius: var(--ux-r-xs, 0.8rem);
         background: var(--ux-panel-inset, var(--app-card-background));
@@ -123,7 +287,7 @@
     &__topbar-actions {
         display: flex;
         align-items: center;
-        gap: 0.8rem;
+        gap: 0.6rem;
         margin-left: auto;
     }
 
@@ -147,28 +311,6 @@
             color: var(--ux-text, var(--app-text-title));
             background: var(--ux-hover, rgba(79, 140, 255, 0.14));
         }
-    }
-
-    // ---- Board: chart + panel --------------------------------------------
-    &__board {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 33rem;
-        gap: 1rem;
-        align-items: start;
-        flex: 1;
-        min-height: 0;
-
-        @include mobile-or-tablet-screen {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    &__main {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        min-width: 0;
-        min-height: 0;
     }
 
     &__chart {
@@ -206,13 +348,344 @@
         }
     }
 
-    &__chart-toolbar {
-        position: absolute;
-        top: 0.8rem;
-        left: 0.8rem;
-        z-index: 2;
+    // ---- Contract direction cards ----------------------------------------
+    &__contracts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+    }
+
+    &__contract {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        align-items: flex-start;
+        padding: 0.75rem 0.85rem;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-radius: var(--ux-r-sm, 1rem);
+        background: var(--ux-panel-inset, transparent);
+        color: var(--ux-text-dim, var(--text-general));
+        cursor: pointer;
+        text-align: left;
+        transition:
+            border-color var(--ux-t-fast, 0.16s) ease,
+            background-color var(--ux-t-fast, 0.16s) ease;
+
+        &:hover {
+            border-color: var(--ux-border-strong, var(--site-accent));
+        }
+
+        &.is-active {
+            border-color: var(--ux-emerald, var(--site-accent));
+            background: color-mix(in srgb, var(--ux-emerald, #10b981) 14%, transparent);
+        }
+    }
+
+    &__contract-name {
+        font-size: var(--text-size-xxs);
+        font-weight: bold;
+        color: var(--ux-text, var(--app-text-title));
+    }
+
+    &__contract-hint {
+        font-size: var(--text-size-xxxs);
+        line-height: 1.4;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    // ---- Duration --------------------------------------------------------
+    &__duration-note {
+        margin: 0;
+        font-size: var(--text-size-xxxs);
+        line-height: 1.5;
+        color: var(--ux-text-dim, var(--app-text-muted));
+    }
+
+    &__ticks {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.25rem;
+    }
+
+    &__tick {
+        flex: 1;
+        min-width: 0;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 1px solid var(--ux-border, rgba(148, 163, 184, 0.4));
+        background: transparent;
+        color: var(--ux-text-dim, var(--app-text-muted));
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+        padding: 0;
+        transition:
+            border-color var(--ux-t-fast, 0.16s) ease,
+            background-color var(--ux-t-fast, 0.16s) ease,
+            color var(--ux-t-fast, 0.16s) ease;
+
+        &:hover {
+            border-color: var(--ux-border-strong, var(--site-accent));
+        }
+
+        &.is-active {
+            border-color: var(--ux-gold, var(--site-accent));
+            background: var(--ux-gold, var(--site-accent));
+            color: var(--ux-ink-950, #1c1206);
+            box-shadow: 0 0 0.5rem color-mix(in srgb, var(--ux-gold, #f5b544) 55%, transparent);
+        }
+    }
+
+    &__ticks-label {
+        text-align: center;
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        color: var(--ux-text-dim, var(--app-text-title));
+    }
+
+    // ---- Prediction / barrier --------------------------------------------
+    &__prediction {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+    }
+
+    &__prediction-label {
+        font-size: var(--text-size-xxxs);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__prediction-value {
+        font-size: var(--text-size-l);
+        line-height: 1;
+        color: var(--ux-gold, var(--site-accent));
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__prediction-share {
+        font-size: var(--text-size-xxxs);
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__prediction-nudge {
         display: flex;
         gap: 0.4rem;
+
+        button {
+            flex: 1;
+            padding: 0.35rem 0;
+            border: 1px solid var(--ux-border, var(--app-border-color));
+            border-radius: var(--ux-r-xs, 0.8rem);
+            background: transparent;
+            color: var(--ux-text-dim, var(--text-general));
+            font-size: var(--text-size-xs);
+            cursor: pointer;
+
+            &:hover {
+                border-color: var(--ux-blue-bright, var(--site-accent));
+                color: var(--ux-text, var(--app-text-title));
+            }
+        }
+    }
+
+    // ---- Stake -----------------------------------------------------------
+    &__basis {
+        display: flex;
+        gap: 0.3rem;
+
+        button {
+            padding: 0.25rem 0.7rem;
+            border: 1px solid var(--ux-border, var(--app-border-color));
+            border-radius: var(--ux-r-pill, 999rem);
+            background: transparent;
+            color: var(--ux-text-dim, var(--text-general));
+            font-size: var(--text-size-xxxs);
+            font-weight: bold;
+            cursor: pointer;
+
+            &.is-active {
+                border-color: var(--ux-blue-bright, var(--site-accent));
+                background: color-mix(in srgb, var(--ux-blue, #2563eb) 22%, transparent);
+                color: var(--ux-text, var(--app-text-title));
+            }
+        }
+    }
+
+    &__amount {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        border: 1px solid var(--ux-border, var(--app-border-color));
+        border-radius: var(--ux-r-sm, 1rem);
+        padding: 0.35rem 0.5rem;
+        background: var(--ux-panel-inset, transparent);
+
+        button {
+            background: transparent;
+            border: none;
+            color: var(--ux-text-dim, var(--text-general));
+            font-size: var(--text-size-m);
+            cursor: pointer;
+            width: 2.2rem;
+            border-radius: var(--ux-r-xs, 0.8rem);
+
+            &:hover {
+                color: var(--ux-blue-bright, var(--site-accent));
+            }
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            color: var(--ux-text, var(--app-text-title));
+            font-size: var(--text-size-s);
+            font-weight: bold;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+
+            &:focus {
+                outline: none;
+            }
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                appearance: none;
+                margin: 0;
+            }
+
+            appearance: textfield;
+        }
+    }
+
+    &__currency {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        color: var(--ux-text-mute, var(--app-text-muted));
+    }
+
+    &__quick-stakes {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+
+        button {
+            flex: 1;
+            min-width: 4rem;
+            padding: 0.35rem 0;
+            border: 1px solid var(--ux-border, var(--app-border-color));
+            border-radius: var(--ux-r-pill, 999rem);
+            background: transparent;
+            color: var(--ux-text-dim, var(--app-text-muted));
+            font-size: var(--text-size-xxxs);
+            font-variant-numeric: tabular-nums;
+            cursor: pointer;
+
+            &:hover {
+                border-color: var(--ux-border-strong, var(--site-accent));
+                color: var(--ux-text, var(--app-text-title));
+            }
+
+            &.is-active {
+                border-color: var(--ux-gold, var(--site-accent));
+                color: var(--ux-gold, var(--site-accent));
+                background: color-mix(in srgb, var(--ux-gold, #f5b544) 12%, transparent);
+            }
+        }
+    }
+
+    // ---- Payout / net profit / buy ---------------------------------------
+    &__totals {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        padding: 1rem 1.2rem;
+    }
+
+    &__total-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: var(--text-size-xxxs);
+        color: var(--ux-text-mute, var(--app-text-muted));
+
+        strong {
+            color: var(--ux-emerald, var(--brand-success));
+            font-size: var(--text-size-s);
+            font-variant-numeric: tabular-nums;
+
+            &.is-loss {
+                color: var(--text-loss-danger);
+            }
+        }
+    }
+
+    &__buy {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.8rem;
+        margin: 0 1.2rem 0.6rem;
+        padding: 0.85rem 1.1rem;
+        border: none;
+        border-radius: var(--ux-r-md, 1.4rem);
+        background: var(--ux-grad-mint, var(--site-accent));
+        color: var(--ux-ink-950, #052e2b);
+        cursor: pointer;
+        text-align: left;
+        transition:
+            transform var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
+            filter var(--ux-t-fast, 0.16s) ease;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-1px);
+            filter: brightness(1.06);
+        }
+
+        &:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        &.is-busy {
+            filter: saturate(0.7);
+        }
+    }
+
+    &__buy-label {
+        font-size: var(--text-size-s);
+        font-weight: bolder;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    &__buy-meta {
+        font-size: var(--text-size-xxxs);
+        font-weight: bold;
+        opacity: 0.75;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__buy-payout {
+        font-size: var(--text-size-xs);
+        font-weight: bolder;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__buy-note {
+        margin: 0 1.2rem 1.1rem;
+        font-size: var(--text-size-xxxs);
+        line-height: 1.4;
+        color: var(--ux-text-mute, var(--app-text-muted));
     }
 
     // ---- 0-9 last-digit rail (under the chart) ---------------------------
@@ -440,364 +913,6 @@
         &.is-loss {
             background: color-mix(in srgb, var(--ux-rose, #f43f5e) 18%, transparent);
             color: var(--ux-coral, var(--text-loss-danger));
-        }
-    }
-
-    // ---- Trade panel ------------------------------------------------------
-    &__panel {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--ux-border, var(--app-border-color));
-        border-radius: var(--ux-r-lg, 1.8rem);
-        background: var(--ux-panel-2, var(--app-card-background));
-        box-shadow: var(--ux-shadow-card, none);
-        overflow: hidden;
-    }
-
-    &__panel-block {
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-        padding: 1.1rem 1.2rem;
-        border-bottom: 1px solid var(--ux-divider, rgba(148, 163, 184, 0.15));
-
-        &:last-child {
-            border-bottom: none;
-        }
-
-        &--order {
-            gap: 0.8rem;
-            background: var(--ux-panel-inset, rgba(3, 6, 22, 0.35));
-        }
-    }
-
-    &__panel-title {
-        font-size: var(--text-size-xxxs);
-        font-weight: bold;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--ux-text-mute, var(--app-text-muted));
-    }
-
-    &__families {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.4rem;
-    }
-
-    &__family {
-        padding: 0.55rem 0.4rem;
-        border: 1px solid var(--ux-border, var(--app-border-color));
-        border-radius: var(--ux-r-xs, 0.8rem);
-        background: transparent;
-        color: var(--ux-text-dim, var(--text-general));
-        font-size: var(--text-size-xxxs);
-        font-weight: bold;
-        cursor: pointer;
-        transition:
-            border-color var(--ux-t-fast, 0.16s) ease,
-            background-color var(--ux-t-fast, 0.16s) ease,
-            color var(--ux-t-fast, 0.16s) ease;
-
-        &:hover {
-            border-color: var(--ux-border-strong, var(--site-accent));
-            color: var(--ux-text, var(--app-text-title));
-        }
-
-        &.is-active {
-            border-color: var(--ux-blue-bright, var(--site-accent));
-            background: var(--ux-grad-royal, var(--site-accent));
-            color: var(--ux-text, #fff);
-            box-shadow: var(--ux-glow-blue, none);
-        }
-    }
-
-    &__contracts {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
-    }
-
-    &__contract {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-        align-items: flex-start;
-        padding: 0.7rem 0.8rem;
-        border: 1px solid var(--ux-border, var(--app-border-color));
-        border-radius: var(--ux-r-sm, 1rem);
-        background: var(--ux-panel-inset, transparent);
-        color: var(--ux-text-dim, var(--text-general));
-        cursor: pointer;
-        text-align: left;
-        transition:
-            border-color var(--ux-t-fast, 0.16s) ease,
-            background-color var(--ux-t-fast, 0.16s) ease;
-
-        &:hover {
-            border-color: var(--ux-border-strong, var(--site-accent));
-        }
-
-        &.is-active {
-            border-color: var(--ux-emerald, var(--site-accent));
-            background: color-mix(in srgb, var(--ux-emerald, #10b981) 14%, transparent);
-        }
-    }
-
-    &__contract-name {
-        font-size: var(--text-size-xxs);
-        font-weight: bold;
-        color: var(--ux-text, var(--app-text-title));
-    }
-
-    &__contract-hint {
-        font-size: var(--text-size-xxxs);
-        line-height: 1.4;
-        color: var(--ux-text-mute, var(--app-text-muted));
-    }
-
-    &__duration-note {
-        margin: 0;
-        font-size: var(--text-size-xxxs);
-        line-height: 1.5;
-        color: var(--ux-text-dim, var(--app-text-muted));
-    }
-
-    &__ticks {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.25rem;
-    }
-
-    &__tick {
-        flex: 1;
-        min-width: 0;
-        aspect-ratio: 1;
-        border-radius: 50%;
-        border: 1px solid var(--ux-border, rgba(148, 163, 184, 0.4));
-        background: transparent;
-        color: var(--ux-text-dim, var(--app-text-muted));
-        font-size: var(--text-size-xxxs);
-        font-weight: bold;
-        font-variant-numeric: tabular-nums;
-        cursor: pointer;
-        padding: 0;
-        transition:
-            border-color var(--ux-t-fast, 0.16s) ease,
-            background-color var(--ux-t-fast, 0.16s) ease,
-            color var(--ux-t-fast, 0.16s) ease;
-
-        &:hover {
-            border-color: var(--ux-border-strong, var(--site-accent));
-        }
-
-        &.is-active {
-            border-color: var(--ux-gold, var(--site-accent));
-            background: var(--ux-gold, var(--site-accent));
-            color: var(--ux-ink-950, #1c1206);
-            box-shadow: 0 0 0.5rem color-mix(in srgb, var(--ux-gold, #f5b544) 55%, transparent);
-        }
-    }
-
-    &__ticks-label {
-        text-align: center;
-        font-size: var(--text-size-xxxs);
-        font-weight: bold;
-        color: var(--ux-text-dim, var(--app-text-title));
-    }
-
-    &__prediction {
-        display: flex;
-        align-items: baseline;
-        gap: 0.6rem;
-        flex-wrap: wrap;
-    }
-
-    &__prediction-label {
-        font-size: var(--text-size-xxxs);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--ux-text-mute, var(--app-text-muted));
-    }
-
-    &__prediction-value {
-        font-size: var(--text-size-l);
-        line-height: 1;
-        color: var(--ux-gold, var(--site-accent));
-        font-variant-numeric: tabular-nums;
-    }
-
-    &__prediction-share {
-        font-size: var(--text-size-xxxs);
-        color: var(--ux-text-mute, var(--app-text-muted));
-    }
-
-    &__prediction-nudge {
-        display: flex;
-        gap: 0.4rem;
-
-        button {
-            flex: 1;
-            padding: 0.35rem 0;
-            border: 1px solid var(--ux-border, var(--app-border-color));
-            border-radius: var(--ux-r-xs, 0.8rem);
-            background: transparent;
-            color: var(--ux-text-dim, var(--text-general));
-            font-size: var(--text-size-xs);
-            cursor: pointer;
-
-            &:hover {
-                border-color: var(--ux-blue-bright, var(--site-accent));
-                color: var(--ux-text, var(--app-text-title));
-            }
-        }
-    }
-
-    &__basis {
-        display: flex;
-        gap: 0.4rem;
-
-        button {
-            flex: 1;
-            padding: 0.45rem 0;
-            border: 1px solid var(--ux-border, var(--app-border-color));
-            border-radius: var(--ux-r-xs, 0.8rem);
-            background: transparent;
-            color: var(--ux-text-dim, var(--text-general));
-            font-size: var(--text-size-xxxs);
-            font-weight: bold;
-            cursor: pointer;
-
-            &.is-active {
-                border-color: var(--ux-blue-bright, var(--site-accent));
-                background: color-mix(in srgb, var(--ux-blue, #2563eb) 22%, transparent);
-                color: var(--ux-text, var(--app-text-title));
-            }
-        }
-    }
-
-    &__amount {
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-        border: 1px solid var(--ux-border, var(--app-border-color));
-        border-radius: var(--ux-r-sm, 1rem);
-        padding: 0.25rem 0.5rem;
-        background: var(--ux-panel-inset, transparent);
-
-        button {
-            background: transparent;
-            border: none;
-            color: var(--ux-text-dim, var(--text-general));
-            font-size: var(--text-size-m);
-            cursor: pointer;
-            width: 2.2rem;
-            border-radius: var(--ux-r-xs, 0.8rem);
-
-            &:hover {
-                color: var(--ux-blue-bright, var(--site-accent));
-            }
-        }
-
-        input {
-            flex: 1;
-            min-width: 0;
-            background: transparent;
-            border: none;
-            color: var(--ux-text, var(--app-text-title));
-            font-size: var(--text-size-s);
-            font-weight: bold;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-
-            &:focus {
-                outline: none;
-            }
-
-            // Strip the browser's spinner — the −/+ buttons own the stepping.
-            &::-webkit-outer-spin-button,
-            &::-webkit-inner-spin-button {
-                appearance: none;
-                margin: 0;
-            }
-
-            appearance: textfield;
-        }
-    }
-
-    &__currency {
-        font-size: var(--text-size-xxxs);
-        font-weight: bold;
-        color: var(--ux-text-mute, var(--app-text-muted));
-    }
-
-    &__quick-stakes {
-        display: flex;
-        gap: 0.3rem;
-        flex-wrap: wrap;
-
-        button {
-            flex: 1;
-            min-width: 4.2rem;
-            padding: 0.35rem 0;
-            border: 1px solid var(--ux-border, var(--app-border-color));
-            border-radius: var(--ux-r-pill, 999rem);
-            background: transparent;
-            color: var(--ux-text-dim, var(--app-text-muted));
-            font-size: var(--text-size-xxxs);
-            font-variant-numeric: tabular-nums;
-            cursor: pointer;
-
-            &:hover {
-                border-color: var(--ux-border-strong, var(--site-accent));
-                color: var(--ux-text, var(--app-text-title));
-            }
-
-            &.is-active {
-                border-color: var(--ux-gold, var(--site-accent));
-                color: var(--ux-gold, var(--site-accent));
-                background: color-mix(in srgb, var(--ux-gold, #f5b544) 12%, transparent);
-            }
-        }
-    }
-
-    &__payout {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        font-size: var(--text-size-xxxs);
-        color: var(--ux-text-mute, var(--app-text-muted));
-
-        strong {
-            color: var(--ux-emerald, var(--brand-success));
-            font-size: var(--text-size-s);
-            font-variant-numeric: tabular-nums;
-        }
-    }
-
-    &__buy {
-        border: none;
-        background: var(--ux-grad-mint, var(--site-accent));
-        color: var(--ux-ink-950, #052e2b);
-        font-weight: bolder;
-        font-size: var(--text-size-s);
-        letter-spacing: 0.02em;
-        border-radius: var(--ux-r-md, 1.4rem);
-        padding: 0.85rem 0;
-        cursor: pointer;
-        transition:
-            transform var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
-            filter var(--ux-t-fast, 0.16s) ease;
-
-        &:hover:not(:disabled) {
-            transform: translateY(-1px);
-            filter: brightness(1.06);
-        }
-
-        &:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
         }
     }
 

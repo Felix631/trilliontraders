@@ -49,7 +49,6 @@ const SpeedBot = () => {
                 const params = cfg.contract_params();
                 params.stake = next_stake.current;
                 // eslint-disable-next-line no-await-in-loop
-                // The Speed Bot is the one page allowed to place orders.
                 const result = await placeTrade(params, 'speed_bot');
                 if (cancelled) return;
                 // A refused order used to be swallowed, which left the bot

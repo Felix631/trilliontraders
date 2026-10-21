@@ -2,16 +2,15 @@ import { api_base } from '@/external/bot-skeleton/services/api/api-base';
 import { localize } from '@deriv-com/translations';
 
 /**
- * Shared trading engine for the Quick Trade tools.
+ * Shared trading engine for every trade page.
  *
- * When the app is authorised (Deriv login), trades are placed for real through
+ * When the app is authorised (Deriv login), an order is placed for real through
  * the app's existing WebSocket: proposal → buy → proposal_open_contract until
- * settlement. When not authorised, tools fall back to simulation with realistic
- * contract odds so everything stays usable in demo mode.
+ * settlement. When not authorised, the pages fall back to simulation with
+ * realistic contract odds so everything stays usable in demo mode.
  *
- * Trading is deliberately narrow: the Speed Bot page is the only page that can
- * place an order (see `placeTrade`). The other pages keep their full analysis
- * and tooling, but their trade actions are refused and say so.
+ * Every page that offers a Buy button places the same order — the Speed Bot is
+ * no longer the only page allowed to trade.
  */
 
 export type TContractParams = {
@@ -34,13 +33,7 @@ export type TTradeResult = {
     error?: string;
 };
 
-/**
- * Which page is asking to trade.
- *
- * The caller has to name itself, so adding a new trade action means choosing a
- * side explicitly instead of quietly inheriting the ability to place orders —
- * only `TRADING_SOURCE` is allowed through (see `placeTrade`).
- */
+/** The page that asked for the order — kept for labelling, not for gating. */
 export type TTradeSource =
     | 'speed_bot'
     | 'dtrader'
@@ -50,15 +43,6 @@ export type TTradeSource =
     | 'digit_killer'
     | 'instant_fill'
     | 'bulk_trader';
-
-/** The one page allowed to place trades — the Speed Bot. */
-export const TRADING_SOURCE: TTradeSource = 'speed_bot';
-
-/**
- * Shown by every page whose trade action is refused. Resolved per call rather
- * than at import time, so it is translated with the language in use.
- */
-export const tradingDisabledMessage = () => localize('Trading is available from the Speed Bot page only.');
 
 export const isAuthorized = (): boolean => {
     try {
@@ -76,16 +60,58 @@ export const accountCurrency = (): string => {
     }
 };
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * Wait for the app's WebSocket to be usable.
+ *
+ * `api_base.api` is set as soon as the DerivAPI wrapper exists, which is before
+ * the socket opens. Sending a proposal into a socket that is still connecting
+ * rejects with a DisconnectError, so wait for readyState OPEN (1) as well.
+ */
 const wait_for_api = async (): Promise<any | null> => {
     let api = api_base.api;
     let attempts = 0;
     while (!api && attempts < 40) {
         // eslint-disable-next-line no-await-in-loop
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await sleep(250);
         attempts += 1;
         api = api_base.api;
     }
+    if (!api) return null;
+
+    let socket_attempts = 0;
+    while (api?.connection?.readyState !== 1 && socket_attempts < 40) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(250);
+        socket_attempts += 1;
+    }
     return api;
+};
+
+/**
+ * Deriv's API rejects with a plain object (`{ error: { code, message } }`), not
+ * an `Error`, so `e.message` is empty and every failure read as a generic
+ * "Trade failed". Pull the real message out of whichever shape arrived.
+ */
+type TRejection = {
+    error?: { code?: string; message?: string; details?: Record<string, unknown> };
+    message?: string;
+    name?: string;
+};
+
+const rejection_code = (e: unknown): string | undefined => {
+    const value = e as TRejection;
+    return value?.error?.code ?? value?.name;
+};
+
+const error_message = (e: unknown): string => {
+    if (typeof e === 'string' && e) return e;
+    const value = e as TRejection;
+    if (value?.error?.message) return value.error.message;
+    if (value?.error?.code) return value.error.code;
+    if (value?.message) return value.message;
+    return localize('Trade failed');
 };
 
 /** Win probability used by the simulator, mirroring real contract odds. */
@@ -130,59 +156,106 @@ const DIGIT_CONTRACT_TYPES = [
 export const isDigitContract = (contract_type: string): boolean =>
     DIGIT_CONTRACT_TYPES.includes(contract_type);
 
+/** Even/Odd take no barrier — sending one makes the proposal invalid. */
+const is_parity_contract = (contract_type: string): boolean =>
+    contract_type === 'DIGITEVEN' || contract_type === 'DIGITODD';
+
+/** Stakes travel in account currency, so they must be a whole number of cents. */
+const normalise_stake = (stake: number): number => {
+    const value = Number(stake);
+    if (!Number.isFinite(value) || value <= 0) return 0.35;
+    return Math.round(Math.max(0.35, value) * 100) / 100;
+};
+
+/**
+ * Keep the digit inside the range the contract actually offers: Over takes
+ * 0-8, Under takes 1-9 and Match/Differs take any of 0-9. Sending Over 9 is
+ * refused by the API, which used to look like a broken Buy button.
+ */
+const normalise_prediction = (contract_type: string, prediction?: number): number | undefined => {
+    if (prediction === undefined || prediction === null || Number.isNaN(Number(prediction))) return undefined;
+    let digit = Math.round(Number(prediction));
+    digit = Math.max(0, Math.min(9, digit));
+    if (contract_type === 'DIGITOVER') digit = Math.min(digit, 8);
+    if (contract_type === 'DIGITUNDER') digit = Math.max(digit, 1);
+    return digit;
+};
+
+/** Errors worth a second attempt — the quote simply moved or dipped. */
+const RETRYABLE = ['PriceMoved', 'InvalidContractProposal', 'ContractBuyValidationError', 'DisconnectError'];
+
 /** Place a real trade and wait for settlement. Throws on API errors. */
 export const placeRealTrade = async (params: TContractParams): Promise<TTradeResult> => {
     const api = await wait_for_api();
-    if (!api) throw new Error('API connection not available');
-
-    const is_digit = isDigitContract(params.contract_type);
-
-    const request: Record<string, unknown> = {
-        proposal: 1,
-        amount: params.stake,
-        basis: 'stake',
-        contract_type: params.contract_type,
-        currency: accountCurrency(),
-        // A digit contract settles on the next tick, so any other duration is
-        // refused with "Invalid duration" — always ask for one tick.
-        duration: is_digit ? 1 : params.duration,
-        duration_unit: params.duration_unit,
-        symbol: params.symbol,
-    };
-    if (params.prediction !== undefined) {
-        // The digit travels as `barrier` *and* as `selected_tick`, exactly the
-        // pair the bot engine sends (services/tradeEngine/utils/helpers.js).
-        // Without it the proposal for Over/Under, Match/Differs and the
-        // higher/lower types is rejected, so no order was ever placed.
-        request.barrier = String(params.prediction);
-        request.selected_tick = params.prediction;
-    }
+    if (!api) throw new Error(localize('API connection not available'));
 
     const send = (req: unknown): Promise<any> => api.send(req) as unknown as Promise<any>;
 
-    const proposal = await send(request);
-    if (proposal?.error) throw new Error(proposal.error.message || 'Proposal failed');
-    if (!proposal?.proposal?.id) throw new Error('The proposal came back without an id');
+    const is_digit = isDigitContract(params.contract_type);
+    const stake = normalise_stake(params.stake);
+    const prediction = is_parity_contract(params.contract_type)
+        ? undefined
+        : normalise_prediction(params.contract_type, params.prediction);
 
-    // `buy.price` has to be the quoted ask price, not the stake that asked for
-    // the quote — they differ by the payout rounding and Deriv rejects a buy
-    // whose price does not match.
-    const buy = await send({
-        buy: proposal.proposal.id,
-        price: proposal.proposal.ask_price ?? params.stake,
-    });
-    if (buy?.error) throw new Error(buy.error.message || 'Buy failed');
+    const quote_and_buy = async (): Promise<any> => {
+        const request: Record<string, unknown> = {
+            proposal: 1,
+            amount: stake,
+            basis: 'stake',
+            contract_type: params.contract_type,
+            currency: accountCurrency(),
+            // A digit contract settles on the next tick, so any other duration is
+            // refused with "Invalid duration" — always ask for one tick.
+            duration: is_digit ? 1 : Math.max(1, Math.round(Number(params.duration) || 1)),
+            duration_unit: is_digit ? 't' : params.duration_unit,
+            symbol: params.symbol,
+        };
+        if (prediction !== undefined) {
+            // The digit travels as `barrier` *and* as `selected_tick`, exactly the
+            // pair the bot engine sends (services/tradeEngine/utils/helpers.js).
+            // It is a number there too — the API refuses a barrier string on the
+            // digit contracts.
+            request.barrier = prediction;
+            request.selected_tick = prediction;
+        }
+
+        const proposal = await send(request);
+        if (proposal?.error) throw proposal;
+        if (!proposal?.proposal?.id) throw new Error(localize('The proposal came back without an id'));
+
+        // `buy.price` has to be the quoted ask price, not the stake that asked for
+        // the quote — they differ by the payout rounding and Deriv rejects a buy
+        // whose price does not match.
+        const buy = await send({
+            buy: proposal.proposal.id,
+            price: proposal.proposal.ask_price ?? stake,
+        });
+        if (buy?.error) throw buy;
+        return buy;
+    };
+
+    let buy: any;
+    try {
+        buy = await quote_and_buy();
+    } catch (e) {
+        // A moved quote (or a socket that dropped between the quote and the buy)
+        // is normal on 1-tick digit contracts: quote again and retry once.
+        if (!RETRYABLE.includes(rejection_code(e) || '')) throw e;
+        await wait_for_api();
+        buy = await quote_and_buy();
+    }
 
     const contract_id = buy.buy.contract_id;
 
     // Poll the open contract until it is sold (settled).
-    const deadline = Date.now() + (params.duration_unit === 't' ? params.duration * 5 + 60 : params.duration + 60) * 1000;
+    const deadline =
+        Date.now() + (is_digit ? 60 : (Number(params.duration) || 1) * 5 + 60) * 1000;
     while (Date.now() < deadline) {
         // eslint-disable-next-line no-await-in-loop
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await sleep(1000);
         // eslint-disable-next-line no-await-in-loop
         const poc = await send({ proposal_open_contract: 1, contract_id });
-        if (poc?.error) throw new Error(poc.error.message || 'Contract lookup failed');
+        if (poc?.error) throw poc;
         if (poc?.proposal_open_contract?.is_sold) {
             const profit = Number(poc.proposal_open_contract.profit) || 0;
             return {
@@ -194,28 +267,21 @@ export const placeRealTrade = async (params: TContractParams): Promise<TTradeRes
             };
         }
     }
-    throw new Error('Contract settlement timed out');
+    throw new Error(localize('Contract settlement timed out'));
 };
 
 /**
  * Place a trade with automatic fallback:
  * authorised → real order; otherwise → simulation.
  *
- * Refuses every page but the Speed Bot — real orders *and* simulations, so the
- * other pages place nothing at all. They surface this in the message area they
- * already show a trade's outcome in.
+ * Every trade page goes through here, so a Buy button on DTrader, the Analyzer,
+ * Digit Killer, the Scanner, I Love You, Instant Fill, the Bulk Trader and the
+ * Speed Bot all place the same real order.
  */
-export const placeTrade = async (params: TContractParams, source: TTradeSource): Promise<TTradeResult> => {
-    if (source !== TRADING_SOURCE) {
-        return {
-            is_win: false,
-            profit: 0,
-            payout: 0,
-            simulated: false,
-            error: tradingDisabledMessage(),
-        };
+export const placeTrade = async (params: TContractParams, _source?: TTradeSource): Promise<TTradeResult> => {
+    if (!isAuthorized()) {
+        return simulate(normalise_stake(params.stake), params.contract_type, params.prediction);
     }
-    if (!isAuthorized()) return simulate(params.stake, params.contract_type, params.prediction);
     try {
         return await placeRealTrade(params);
     } catch (e) {
@@ -224,7 +290,7 @@ export const placeTrade = async (params: TContractParams, source: TTradeSource):
             profit: 0,
             payout: 0,
             simulated: false,
-            error: e instanceof Error ? e.message : 'Trade failed',
+            error: error_message(e),
         };
     }
 };

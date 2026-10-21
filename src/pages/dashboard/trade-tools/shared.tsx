@@ -160,7 +160,14 @@ export const useTradeConfig = () => {
             stake: Number(stake) || 0,
             duration: Number(duration) || 1,
             duration_unit: 't' as const,
-            prediction: needs_digit(family) ? digit : undefined,
+            // Over only takes 0-8 and Under only 1-9; the API refuses the rest.
+            prediction: needs_digit(family)
+                ? family === 'OVERUNDER'
+                    ? direction === 'DIGITOVER'
+                        ? Math.min(digit, 8)
+                        : Math.max(digit, 1)
+                    : digit
+                : undefined,
         }),
         [symbol, direction, stake, duration, family, digit]
     );

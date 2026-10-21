@@ -10,7 +10,8 @@ import './dtrader.scss';
 /**
  * DTrader — the manual trading desk, laid out like dtrader.deriv.com:
  *
- *   market bar → chart → last-digit rail (0-9) → trade panel
+ *   trade-type carousel → direction → duration → stake → payout → buy
+ *   with the chart and the 0-9 last-digit rail on the right
  *
  * The digit rail lives *under* the chart, one tile per digit 0-9, each with its
  * live share of the window and the live last digit marked. It is the same rail
@@ -30,10 +31,10 @@ const WINDOW_SIZE = 120;
 const TAPE_SIZE = 24;
 
 const CONTRACT_FAMILIES = [
-    { value: 'MATCHDIFF', label: 'Matches/Differs' },
-    { value: 'EVODD', label: 'Even/Odd' },
-    { value: 'OVERUNDER', label: 'Over/Under' },
-    { value: 'CALLPUT', label: 'Rise/Fall' },
+    { value: 'MATCHDIFF', label: 'Matches/Differs', icon: 'target' },
+    { value: 'EVODD', label: 'Even/Odd', icon: 'parity' },
+    { value: 'OVERUNDER', label: 'Over/Under', icon: 'barrier' },
+    { value: 'CALLPUT', label: 'Rise/Fall', icon: 'trend' },
 ];
 
 const TRADE_TYPES_INFO = [
@@ -108,6 +109,60 @@ const winningDigits = (direction: string, digit: number): number[] => {
     }
 };
 
+/** The contract this selection buys, in words, for the Buy button. */
+const contractLabel = (direction: string, digit: number): string => {
+    switch (direction) {
+        case 'DIGITMATCH':
+            return `${localize('Matches')} ${digit}`;
+        case 'DIGITDIFF':
+            return `${localize('Differs')} ${digit}`;
+        case 'DIGITEVEN':
+            return localize('Even');
+        case 'DIGITODD':
+            return localize('Odd');
+        case 'DIGITOVER':
+            return `${localize('Over')} ${digit}`;
+        case 'DIGITUNDER':
+            return `${localize('Under')} ${digit}`;
+        case 'CALL':
+            return localize('Rise');
+        case 'PUT':
+            return localize('Fall');
+        default:
+            return direction;
+    }
+};
+
+/** Small line icons for the trade-type carousel — the DTrader card icons. */
+const TypeIcon = ({ name }: { name: string }) => {
+    const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const };
+    return (
+        <svg className='dtrader__type-icon' viewBox='0 0 24 24' aria-hidden='true' focusable='false'>
+            {name === 'target' && (
+                <>
+                    <circle cx='12' cy='12' r='8.2' {...common} />
+                    <circle cx='12' cy='12' r='4.2' {...common} />
+                    <circle cx='12' cy='12' r='1' fill='currentColor' />
+                </>
+            )}
+            {name === 'parity' && (
+                <>
+                    <circle cx='8' cy='8.6' r='4.2' {...common} />
+                    <circle cx='16' cy='15.4' r='4.2' {...common} />
+                </>
+            )}
+            {name === 'barrier' && (
+                <>
+                    <path d='M4 10.5h16' {...common} strokeDasharray='2.5 2.5' />
+                    <path d='M12 5.5v5M9.4 8.1 12 5.5l2.6 2.6' {...common} />
+                    <path d='M12 18.5v-5M9.4 15.9 12 18.5l2.6-2.6' {...common} />
+                </>
+            )}
+            {name === 'trend' && <path d='M4 17.5 9.5 11l3.6 3.2L20 6.5M15.6 6.5H20v4.4' {...common} />}
+        </svg>
+    );
+};
+
 /** Map Deriv symbol to TradingView symbol. */
 const tvSymbolMap: Record<string, string> = {
     R_10: 'DERIV:R_10', R_25: 'DERIV:R_25', R_50: 'DERIV:R_50',
@@ -146,6 +201,7 @@ const DTrader = () => {
     const last_quote = feed.quotes[symbol] ?? (quotes.length ? quotes[quotes.length - 1] : null);
     const prev_quote = quotes.length > 1 ? quotes[quotes.length - 2] : null;
     const change = last_quote != null && prev_quote != null ? last_quote - prev_quote : null;
+    const active_market = MARKET_SYMBOLS.find(m => m.value === symbol);
 
     const digit_stats = React.useMemo(() => {
         const sample = (feed.history[symbol] || []).slice(-WINDOW_SIZE);
@@ -172,6 +228,8 @@ const DTrader = () => {
     const probability = win_probability(direction, is_digit_trade ? digit : 5);
     const stake = amount_basis === 'stake' ? Number(amount) || 0 : (Number(amount) || 0) / (payout_multiplier(probability) || 1);
     const payout = stake * payout_multiplier(probability);
+    const net_profit = payout - stake;
+    const currency = accountCurrency();
 
     const pickFamily = (value: string) => {
         setFamily(value);
@@ -188,6 +246,11 @@ const DTrader = () => {
     const pickDigit = (value: number) => {
         if (!is_tradable_digit(family, direction, value)) return;
         setDigit(value);
+    };
+
+    const nudgeStake = (step: number) => {
+        setAmountBasis('stake');
+        setAmount(current => Math.max(0.35, Math.round((Number(current) || 0) + step)));
     };
 
     const toggleFullscreen = () => {
@@ -211,7 +274,8 @@ const DTrader = () => {
         setTradeState({ busy: true, message: localize('Placing order…'), is_win: null });
         const result = await placeTrade({
             symbol, contract_type: direction,
-            stake: Math.max(0.35, stake), duration: Number(duration) || 1,
+            stake: Math.max(0.35, Math.round(stake * 100) / 100),
+            duration: is_digit_trade ? 1 : Number(duration) || 1,
             duration_unit: 't', prediction: is_digit_trade ? digit : undefined,
         }, 'dtrader');
         setTradeState(
@@ -219,7 +283,7 @@ const DTrader = () => {
                 ? { busy: false, message: result.error, is_win: null }
                 : {
                     busy: false,
-                    message: `${result.is_win ? localize('WON') : localize('LOST')} ${result.profit >= 0 ? '+' : ''}${result.profit.toFixed(2)}${result.simulated ? ` (${localize('demo')})` : ''}`,
+                    message: `${result.is_win ? localize('WON') : localize('LOST')} ${result.profit >= 0 ? '+' : ''}${result.profit.toFixed(2)}${result.simulated ? ` (${localize('demo')})` : ''}${result.contract_id ? ` · ${localize('Contract')} ${result.contract_id}` : ''}`,
                     is_win: result.is_win,
                 }
         );
@@ -232,46 +296,225 @@ const DTrader = () => {
 
     return (
         <div className='dtrader'>
-            <div className='dtrader__topbar'>
-                <label className='dtrader__market'>
-                    <span className='dtrader__market-label'>{localize('Market')}</span>
-                    <select value={symbol} onChange={e => setSymbol(e.target.value)} aria-label={localize('Market')}>
-                        {MARKET_SYMBOLS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
-                    </select>
-                </label>
-
-                <div className='dtrader__market-quote'>
-                    <strong>{last_quote != null ? Number(last_quote).toFixed(4) : '—'}</strong>
-                    {change != null && (
-                        <span className={change >= 0 ? 'is-up' : 'is-down'}>
-                            {change >= 0 ? '▲' : '▼'} {Math.abs(change).toFixed(4)}
+            <div className='dtrader__workspace'>
+                {/* ---- Left: trade parameters, exactly where DTrader puts them ---- */}
+                <aside className='dtrader__panel' aria-label={localize('Trade parameters')}>
+                    <div className='dtrader__panel-head'>
+                        <span className='dtrader__panel-eyebrow'>{localize('Trade type')}</span>
+                        <span className={classNames('dtrader__mode', { 'dtrader__mode--live': isAuthorized() })}>
+                            {isAuthorized() ? localize('LIVE') : localize('DEMO')}
                         </span>
-                    )}
-                </div>
+                    </div>
 
-                <div className='dtrader__last-tick'>
-                    <span className='dtrader__last-tick-label'>{localize('Last tick')}</span>
-                    <span className='dtrader__last-tick-digit'>{last_digit === null ? '—' : last_digit}</span>
-                </div>
+                    <div className='dtrader__types' role='tablist' aria-label={localize('Trade type')}>
+                        {CONTRACT_FAMILIES.map(item => (
+                            <button
+                                key={item.value}
+                                type='button'
+                                role='tab'
+                                aria-selected={family === item.value}
+                                className={classNames('dtrader__family', { 'is-active': family === item.value })}
+                                onClick={() => pickFamily(item.value)}
+                            >
+                                <TypeIcon name={item.icon} />
+                                <span className='dtrader__family-label'>{item.label}</span>
+                            </button>
+                        ))}
+                    </div>
 
-                <div className='dtrader__topbar-actions'>
-                    <button type='button' className='dtrader__chart-btn' onClick={() => setShowTradeTypes(true)}>
-                        {localize('Explore Trade Types')}
-                    </button>
-                    <span className={classNames('qt-panel__badge', { 'qt-panel__badge--live': isAuthorized() })}>
-                        {isAuthorized() ? localize('LIVE') : localize('DEMO')}
-                    </span>
-                </div>
-            </div>
+                    <div className='dtrader__panel-body'>
+                        <div className='dtrader__section'>
+                            <div className='dtrader__contracts'>
+                                {DIRECTIONS[family].map(item => (
+                                    <button
+                                        key={item.value}
+                                        type='button'
+                                        className={classNames('dtrader__contract', { 'is-active': direction === item.value })}
+                                        aria-pressed={direction === item.value}
+                                        onClick={() => pickDirection(item.value)}
+                                    >
+                                        <span className='dtrader__contract-name'>{item.label}</span>
+                                        <span className='dtrader__contract-hint'>{item.hint}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
-            <div className='dtrader__board'>
+                        {is_digit_trade && (
+                            <div className='dtrader__section'>
+                                <div className='dtrader__prediction'>
+                                    <span className='dtrader__prediction-label'>{prediction_label}</span>
+                                    <strong className='dtrader__prediction-value'>{digit}</strong>
+                                    <span className='dtrader__prediction-share'>
+                                        {sample_size
+                                            ? localize('{{percentage}}% of the window', { percentage: selected_share.toFixed(1) })
+                                            : ''}
+                                    </span>
+                                </div>
+                                <div className='dtrader__prediction-nudge'>
+                                    <button
+                                        type='button'
+                                        aria-label={localize('Previous digit')}
+                                        onClick={() => setDigit(current => normaliseDigit(family, direction, Math.max(0, current - 1)))}
+                                    >
+                                        ‹
+                                    </button>
+                                    <button
+                                        type='button'
+                                        aria-label={localize('Next digit')}
+                                        onClick={() => setDigit(current => normaliseDigit(family, direction, Math.min(9, current + 1)))}
+                                    >
+                                        ›
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className='dtrader__section'>
+                            <div className='dtrader__section-head'>
+                                <span className='dtrader__section-title'>{localize('Duration')}</span>
+                                <span className='dtrader__unit'>{localize('Ticks')}</span>
+                            </div>
+                            {is_digit_trade ? (
+                                <p className='dtrader__duration-note'>
+                                    {localize('Digit contracts settle on the very next tick — duration is fixed at 1 tick.')}
+                                </p>
+                            ) : (
+                                <>
+                                    <div className='dtrader__ticks'>
+                                        {TICKS.map(t => (
+                                            <button
+                                                key={t}
+                                                type='button'
+                                                className={classNames('dtrader__tick', { 'is-active': duration === t })}
+                                                aria-pressed={duration === t}
+                                                aria-label={localize('{{count}} ticks', { count: String(t) })}
+                                                onClick={() => setDuration(t)}
+                                            >
+                                                {t}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <span className='dtrader__ticks-label'>
+                                        {localize('{{count}} ticks', { count: String(duration) })}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+
+                        <div className='dtrader__section'>
+                            <div className='dtrader__section-head'>
+                                <span className='dtrader__section-title'>{localize('Stake')}</span>
+                                <div className='dtrader__basis'>
+                                    <button type='button' className={classNames({ 'is-active': amount_basis === 'stake' })} onClick={() => setAmountBasis('stake')}>{localize('Stake')}</button>
+                                    <button type='button' className={classNames({ 'is-active': amount_basis === 'payout' })} onClick={() => setAmountBasis('payout')}>{localize('Payout')}</button>
+                                </div>
+                            </div>
+                            <div className='dtrader__amount'>
+                                <button type='button' aria-label={localize('Decrease stake')} onClick={() => nudgeStake(-1)}>−</button>
+                                <input
+                                    type='number'
+                                    min='0.35'
+                                    step='1'
+                                    value={amount}
+                                    onChange={e => setAmount(e.target.value)}
+                                    aria-label={localize('Stake amount')}
+                                />
+                                <span className='dtrader__currency'>{currency}</span>
+                                <button type='button' aria-label={localize('Increase stake')} onClick={() => nudgeStake(1)}>+</button>
+                            </div>
+                            <div className='dtrader__quick-stakes'>
+                                {QUICK_STAKES.map(value => (
+                                    <button
+                                        key={value}
+                                        type='button'
+                                        className={classNames({ 'is-active': Number(amount) === value })}
+                                        onClick={() => {
+                                            setAmountBasis('stake');
+                                            setAmount(value);
+                                        }}
+                                    >
+                                        {value}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className='dtrader__totals'>
+                            <div className='dtrader__total-row'>
+                                <span>{localize('Payout')}</span>
+                                <strong>{payout.toFixed(2)} {currency}</strong>
+                            </div>
+                            <div className='dtrader__total-row'>
+                                <span>{localize('Net profit')}</span>
+                                <strong className={classNames({ 'is-loss': net_profit < 0 })}>
+                                    {net_profit >= 0 ? '+' : ''}{net_profit.toFixed(2)} {currency}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <button
+                            type='button'
+                            className={classNames('dtrader__buy', { 'is-busy': trade_state.busy })}
+                            disabled={trade_state.busy || !stake}
+                            onClick={buy}
+                        >
+                            <span className='dtrader__buy-label'>
+                                {trade_state.busy ? localize('Placing…') : localize('Buy')}
+                            </span>
+                            <span className='dtrader__buy-meta'>
+                                {contractLabel(direction, digit)}
+                                {' · '}
+                                {is_digit_trade ? localize('1 tick') : localize('{{count}} ticks', { count: String(duration) })}
+                            </span>
+                            <span className='dtrader__buy-payout'>{payout.toFixed(2)} {currency}</span>
+                        </button>
+
+                        <p className='dtrader__buy-note'>
+                            {active_market?.label ?? symbol}
+                            {' · '}
+                            {isAuthorized()
+                                ? localize('Live order on your Deriv account')
+                                : localize('Demo mode — log in to place real orders')}
+                        </p>
+                    </div>
+                </aside>
+
+                {/* ---- Right: market bar, chart and the 0-9 digit rail ---- */}
                 <div className='dtrader__main'>
-                    <div className='dtrader__chart' ref={chartWrapRef}>
-                        <div className='dtrader__chart-toolbar'>
+                    <div className='dtrader__topbar'>
+                        <label className='dtrader__market'>
+                            <span className='dtrader__market-label'>{localize('Market')}</span>
+                            <select value={symbol} onChange={e => setSymbol(e.target.value)} aria-label={localize('Market')}>
+                                {MARKET_SYMBOLS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                            </select>
+                        </label>
+
+                        <div className='dtrader__market-quote'>
+                            <strong>{last_quote != null ? Number(last_quote).toFixed(4) : '—'}</strong>
+                            {change != null && (
+                                <span className={change >= 0 ? 'is-up' : 'is-down'}>
+                                    {change >= 0 ? '▲' : '▼'} {Math.abs(change).toFixed(4)}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className='dtrader__last-tick'>
+                            <span className='dtrader__last-tick-label'>{localize('Last digit')}</span>
+                            <span className='dtrader__last-tick-digit'>{last_digit === null ? '—' : last_digit}</span>
+                        </div>
+
+                        <div className='dtrader__topbar-actions'>
+                            <button type='button' className='dtrader__chart-btn' onClick={() => setShowTradeTypes(true)}>
+                                {localize('Explore Trade Types')}
+                            </button>
                             <button type='button' className='dtrader__chart-btn' onClick={toggleFullscreen}>
-                                {is_fullscreen ? '⤢ Exit Fullscreen' : '⛶ Fullscreen'}
+                                {is_fullscreen ? localize('Exit Fullscreen') : localize('Fullscreen')}
                             </button>
                         </div>
+                    </div>
+
+                    <div className='dtrader__chart' ref={chartWrapRef}>
                         <DTraderChart symbol={symbol} />
                     </div>
 
@@ -355,131 +598,6 @@ const DTrader = () => {
                         </div>
                     )}
                 </div>
-
-                <aside className='dtrader__panel'>
-                    <div className='dtrader__panel-block'>
-                        <div className='dtrader__panel-title'>{localize('Trade type')}</div>
-                        <div className='dtrader__families' role='tablist' aria-label={localize('Trade type')}>
-                            {CONTRACT_FAMILIES.map(item => (
-                                <button
-                                    key={item.value}
-                                    type='button'
-                                    role='tab'
-                                    aria-selected={family === item.value}
-                                    className={classNames('dtrader__family', { 'is-active': family === item.value })}
-                                    onClick={() => pickFamily(item.value)}
-                                >
-                                    {item.label}
-                                </button>
-                            ))}
-                        </div>
-                        <div className='dtrader__contracts'>
-                            {DIRECTIONS[family].map(item => (
-                                <button
-                                    key={item.value}
-                                    type='button'
-                                    className={classNames('dtrader__contract', { 'is-active': direction === item.value })}
-                                    aria-pressed={direction === item.value}
-                                    onClick={() => pickDirection(item.value)}
-                                >
-                                    <span className='dtrader__contract-name'>{item.label}</span>
-                                    <span className='dtrader__contract-hint'>{item.hint}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='dtrader__panel-block'>
-                        <div className='dtrader__panel-title'>{localize('Duration')}</div>
-                        {is_digit_trade ? (
-                            <p className='dtrader__duration-note'>
-                                {localize('Digit contracts settle on the very next tick — duration is fixed at 1 tick.')}
-                            </p>
-                        ) : (
-                            <>
-                                <div className='dtrader__ticks'>
-                                    {TICKS.map(t => (
-                                        <button
-                                            key={t}
-                                            type='button'
-                                            className={classNames('dtrader__tick', { 'is-active': duration === t })}
-                                            aria-pressed={duration === t}
-                                            aria-label={localize('{{count}} ticks', { count: String(t) })}
-                                            onClick={() => setDuration(t)}
-                                        >
-                                            {t}
-                                        </button>
-                                    ))}
-                                </div>
-                                <span className='dtrader__ticks-label'>
-                                    {localize('{{count}} ticks', { count: String(duration) })}
-                                </span>
-                            </>
-                        )}
-                    </div>
-
-                    {is_digit_trade && (
-                        <div className='dtrader__panel-block'>
-                            <div className='dtrader__prediction'>
-                                <span className='dtrader__prediction-label'>{prediction_label}</span>
-                                <strong className='dtrader__prediction-value'>{digit}</strong>
-                                <span className='dtrader__prediction-share'>
-                                    {sample_size
-                                        ? localize('{{percentage}}% of the window', { percentage: selected_share.toFixed(1) })
-                                        : ''}
-                                </span>
-                            </div>
-                            <div className='dtrader__prediction-nudge'>
-                                <button
-                                    type='button'
-                                    aria-label={localize('Previous digit')}
-                                    onClick={() => setDigit(current => normaliseDigit(family, direction, Math.max(0, current - 1)))}
-                                >
-                                    ‹
-                                </button>
-                                <button
-                                    type='button'
-                                    aria-label={localize('Next digit')}
-                                    onClick={() => setDigit(current => normaliseDigit(family, direction, Math.min(9, current + 1)))}
-                                >
-                                    ›
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className='dtrader__panel-block dtrader__panel-block--order'>
-                        <div className='dtrader__basis'>
-                            <button type='button' className={classNames({ 'is-active': amount_basis === 'stake' })} onClick={() => setAmountBasis('stake')}>{localize('Stake')}</button>
-                            <button type='button' className={classNames({ 'is-active': amount_basis === 'payout' })} onClick={() => setAmountBasis('payout')}>{localize('Payout')}</button>
-                        </div>
-                        <div className='dtrader__amount'>
-                            <button type='button' aria-label={localize('Decrease stake')} onClick={() => setAmount(v => Math.max(0.35, (Number(v) || 0) - 10))}>−</button>
-                            <input type='number' min='0.35' step='1' value={amount} onChange={e => setAmount(e.target.value)} aria-label={localize('Stake amount')} />
-                            <span className='dtrader__currency'>{accountCurrency()}</span>
-                            <button type='button' aria-label={localize('Increase stake')} onClick={() => setAmount(v => (Number(v) || 0) + 10)}>+</button>
-                        </div>
-                        <div className='dtrader__quick-stakes'>
-                            {QUICK_STAKES.map(value => (
-                                <button
-                                    key={value}
-                                    type='button'
-                                    className={classNames({ 'is-active': Number(amount) === value })}
-                                    onClick={() => setAmount(value)}
-                                >
-                                    {value}
-                                </button>
-                            ))}
-                        </div>
-                        <div className='dtrader__payout'>
-                            <span>{localize('Payout')}</span>
-                            <strong>{payout.toFixed(2)} {accountCurrency()}</strong>
-                        </div>
-                        <button type='button' className='dtrader__buy' disabled={trade_state.busy || !stake} onClick={buy}>
-                            {trade_state.busy ? localize('Placing…') : localize('Buy')}
-                        </button>
-                    </div>
-                </aside>
             </div>
 
             {show_trade_types && (

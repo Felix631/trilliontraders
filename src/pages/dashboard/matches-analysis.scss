@@ -557,6 +557,12 @@
         background: var(--general-section-1);
         border: 1px solid var(--general-section-6);
 
+        // The rail sits between the last-tick readout and the signal block,
+        // so it takes a row of its own inside that flex row.
+        &--between {
+            flex: 1 1 100%;
+        }
+
         &-head {
             display: flex;
             flex-direction: column;
