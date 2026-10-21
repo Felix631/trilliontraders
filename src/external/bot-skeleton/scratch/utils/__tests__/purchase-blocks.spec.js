@@ -14,15 +14,21 @@ const {
     isRequiredBlockPresent,
     purchaseCode,
     multiPurchaseCode,
+    pairPurchaseCode,
 } = require('../purchase-blocks');
 
 describe('the purchase block family', () => {
     it('knows the step under every name the library uses, canonical first', () => {
         expect(PURCHASE_BLOCK_TYPES[0]).toBe('purchase');
 
-        ['apollo_purchase', 'apollo_purchase2', 'ceo_purchase', 'mon_purchase', 'purchase_with_prediction'].forEach(
-            type => expect(isPurchaseBlockType(type)).toBe(true)
-        );
+        [
+            'apollo_purchase',
+            'apollo_purchase2',
+            'ceo_purchase',
+            'mon_purchase',
+            'purchase_with_prediction',
+            'purchase_pair',
+        ].forEach(type => expect(isPurchaseBlockType(type)).toBe(true));
 
         // The structural blocks around the step are not the step.
         ['before_purchase', 'during_purchase', 'after_purchase', 'trade_definition'].forEach(type =>
@@ -72,6 +78,18 @@ describe('the purchase block family', () => {
 
         // No contract type means no order at all — never `Bot.purchase('')`.
         expect(purchaseCode('')).toBe('');
+    });
+
+    it('generates the two-contract purchase the interpreter can parse', () => {
+        const pair = pairPurchaseCode('CALL', 'PUT');
+        expect(pair).toBe("Bot.purchasePair('CALL', 'PUT');\n");
+        expect(pair.endsWith('\n')).toBe(true);
+        expect(() => parses(pair)).not.toThrow();
+
+        // One blank side is passed through: the engine then buys the chosen side.
+        expect(pairPurchaseCode('DIGITOVER', '')).toBe("Bot.purchasePair('DIGITOVER', '');\n");
+        // Nothing chosen at all places no order.
+        expect(pairPurchaseCode('', '')).toBe('');
     });
 
     it('generates the Apollo multi-contract purchase the interpreter can parse', () => {

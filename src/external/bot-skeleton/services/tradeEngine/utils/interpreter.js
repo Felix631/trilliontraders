@@ -136,6 +136,12 @@ const Interpreter = () => {
             'purchase',
             createAsync(js_interpreter, bot_interface.purchase)
         );
+        // Two contracts in one step — the Purchase-two-contracts block.
+        js_interpreter.setProperty(
+            pseudo_bot_interface,
+            'purchasePair',
+            createAsync(js_interpreter, bot_interface.purchasePair)
+        );
         js_interpreter.setProperty(
             pseudo_bot_interface,
             'sellAtMarket',

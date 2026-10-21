@@ -161,6 +161,11 @@ export const ToolboxItems = () =>
             <Category id='purchase_conditions' name={localize('Purchase conditions')}>
                 <Block type='before_purchase' />
                 <Block type='purchase' />
+                {/* Two contracts in one step: Rise and Fall together, for example. */}
+                <Block type='purchase_pair'>
+                    <Field name='PURCHASE_LIST'>CALL</Field>
+                    <Field name='PURCHASE_LIST_SECOND'>PUT</Field>
+                </Block>
                 <Block type='apollo_purchase2' />
                 {/* Apollo purchase — the multi-contract step from the Apollo build of
                     this library. It belongs next to Purchase: a strategy whose buy step

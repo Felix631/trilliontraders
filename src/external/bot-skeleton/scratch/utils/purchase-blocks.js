@@ -22,6 +22,8 @@
 /** Every type name that places an order — the canonical one first. */
 export const PURCHASE_BLOCK_TYPES = [
     'purchase',
+    // Buys two contracts in the same step (e.g. Rise and Fall together).
+    'purchase_pair',
     // Purchases imported from other bot builders (registered in this build).
     'apollo_purchase',
     'apollo_purchase2',
@@ -61,6 +63,19 @@ export const purchaseCode = (contract_type, prediction) => {
  * type is kept as an empty string on purpose: the trade engine then buys the
  * contract chosen in Trade parameters instead of sending an invalid order.
  */
+/**
+ * Runtime call for the two-contract purchase step.
+ *
+ * Both types travel together, so the engine prices them and sends both orders in
+ * one go. A blank side is passed through as an empty string: the engine then
+ * falls back to a single purchase of the side that was chosen instead of sending
+ * an invalid order.
+ */
+export const pairPurchaseCode = (first_contract_type, second_contract_type) => {
+    if (!first_contract_type && !second_contract_type) return '';
+    return `Bot.purchasePair('${first_contract_type || ''}', '${second_contract_type || ''}');\n`;
+};
+
 export const multiPurchaseCode = (contract_type, multiple_contracts = false, quantity = 1) => {
     const count = Math.min(Math.max(parseInt(quantity, 10) || 1, 1), 50);
     return `Bot.apolloPurchase('${contract_type || ''}', ${Boolean(multiple_contracts)}, ${count});\n`;
