@@ -1,0 +1,385 @@
+@use 'components/shared/styles/mixins' as *;
+@use 'components/shared/styles/constants' as *;
+
+/*
+ * The desktop modal renders into #modal_root, but the full-page modal used on
+ * phones and tablets renders inline (MobileFullPageModal does not portal), so
+ * its content lives under .load-strategy__wrapper instead. Scope the modal
+ * content to either shell, or the Local tab is unstyled on mobile — the same
+ * raw stack of icon/text/button the desktop tab had before these rules moved
+ * here.
+ */
+#modal_root,
+.load-strategy__wrapper {
+    .load-strategy {
+        &__recent {
+            display: flex;
+            gap: 1.6rem;
+
+            &__files {
+                width: 35%;
+                overflow: auto;
+                height: 100%;
+                margin: 0.2rem 0;
+            }
+
+            &__empty {
+                @include flex-center;
+
+                align-items: center;
+                flex-direction: column;
+
+                &-icon {
+                    margin-bottom: 1.6rem;
+                }
+
+                &-title {
+                    margin-bottom: 0.8rem;
+                    font-size: var(--text-size-s);
+                    font-weight: bold;
+                    line-height: 2.4rem;
+                }
+
+                &-description {
+                    margin-bottom: 1.6rem;
+                    font-size: var(--text-size-xs);
+                    line-height: 2rem;
+                }
+
+                &-expand {
+                    margin-bottom: 0.8rem;
+                    color: var(--brand-red-coral);
+                    font-size: var(--text-size-xs);
+                    font-weight: bold;
+                    cursor: pointer;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+                &-explanation {
+                    font-size: var(--text-size-xxs);
+                    text-align: left;
+                    opacity: 0;
+
+                    &-list {
+                        margin-top: 0.8rem;
+                    }
+
+                    &--show {
+                        opacity: 1;
+                        width: fit-content;
+                    }
+                }
+            }
+
+            &-item {
+                grid-template-columns: 1fr 0.6fr;
+                position: relative;
+                display: grid;
+                grid-template-areas: ('text location');
+                padding: 1rem 0.8rem;
+                align-items: center;
+                text-align: center;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &:not(:last-child) {
+                    border-bottom: solid 1px var(--border-divider);
+                }
+
+                &--selected {
+                    background-color: var(--general-section-2);
+                }
+
+                &-text {
+                    height: unset;
+                    flex-direction: column;
+                    text-align: start;
+                    padding-right: 0.8rem;
+                }
+
+                &-title {
+                    font-size: var(--text-size-xs);
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &-time {
+                    font-size: var(--text-size-xxs);
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &-saved {
+                    margin-inline-start: 1rem;
+                    font-size: var(--text-size-xs);
+                    line-height: 1.43;
+                    word-break: break-word;
+                }
+
+                &-location {
+                    @include flex-center(flex-start);
+
+                    width: 100%;
+                    word-break: break-word;
+                    color: var(--text-general);
+                    height: 100%;
+                }
+            }
+
+            &__preview {
+                width: 65%;
+                flex-basis: 65%;
+                display: flex;
+                flex-direction: column;
+
+                .load-strategy__preview-workspace {
+                    height: calc(100% - 5.2rem);
+                    min-height: unset;
+                    margin: 0;
+                }
+
+                &-title {
+                    margin: 1.5rem 0;
+                    margin-left: 0;
+                }
+
+                &__title {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        &__container {
+            display: flex;
+            flex-direction: column;
+            height: calc(80vh - 15rem);
+            min-height: 0;
+
+            @include mobile-or-tablet-screen {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            > * {
+                flex: 1 1 auto;
+                min-height: 0;
+                margin-top: 0.8rem;
+
+                @include mobile-or-tablet-screen {
+                    // The full-page modal already pads the tab; an extra gap
+                    // would push the drop zone past its (clipped) container.
+                    margin-top: 0;
+                }
+            }
+
+            &--has-footer {
+                height: calc(80vh - 21rem);
+                margin-top: -1rem;
+
+                @include mobile-or-tablet-screen {
+                    height: 100%;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        &__title {
+            margin: 1.5rem;
+        }
+    }
+
+    .load-strategy__preview-workspace {
+        min-height: unset;
+        height: unset;
+        margin: 0;
+    }
+
+    /* ----------------------------------------------------------------------
+     * Local tab — the drop zone, and the preview of a file picked from it.
+     *
+     * These are the rules the official Deriv bot ships for the same markup.
+     * They used to be carried by `pages/dashboard/bot-list/index.scss`, a
+     * sheet the bot builder never loads, so the tab rendered as raw stacked
+     * elements — a 128px icon, two lines of text and the button jammed against
+     * the left edge of an unbordered area — and a loaded XML preview collapsed
+     * to nothing. Keep them here, with the component that owns them.
+     * -------------------------------------------------------------------- */
+    .load-strategy {
+        &__local {
+            &-dropzone {
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                min-height: 0;
+                padding: 1.6rem 0 0;
+
+                @include mobile-or-tablet-screen {
+                    // Match the official full-page tab: the drop zone fills the
+                    // page, with the banner sitting edge to edge above it.
+                    height: 100%;
+                    padding: 1.6rem;
+                }
+
+                /* The banner is a sibling of the drop area here, and its own
+                   sheet pulls it up over the padding above. */
+                .load-strategy__section_message {
+                    flex: none;
+                    align-self: stretch;
+                    margin-top: 0;
+                }
+
+                &-area {
+                    @include flex-center;
+
+                    flex: 1 1 auto;
+                    flex-direction: column;
+                    box-sizing: border-box;
+                    height: auto;
+                    min-height: 0;
+                    padding: 1.6rem;
+                    overflow: auto;
+                    text-align: center;
+                    border: dashed 0.2rem var(--border-normal);
+                    border-radius: $BORDER_RADIUS;
+                }
+            }
+
+            &-icon {
+                margin-bottom: 1.6rem;
+            }
+
+            &-title {
+                margin-bottom: 0.8rem;
+                color: var(--text-prominent);
+                font-size: var(--text-size-s);
+            }
+
+            &-description {
+                margin-bottom: 1.6rem;
+                color: var(--text-less-prominent);
+                font-size: var(--text-size-xs);
+            }
+
+            &-preview {
+                display: flex;
+                flex: 1 1 auto;
+                flex-direction: column;
+                position: relative;
+                min-height: 0;
+
+                .load-strategy__preview-workspace {
+                    flex: 1 1 auto;
+                    height: auto;
+                    min-height: 0;
+                    margin: 0 0 1.6rem;
+                }
+
+                @include mobile-or-tablet-screen {
+                    padding: 1.6rem;
+                    height: calc(100% - 7.4rem); // - footer height
+                    &--active {
+                        height: calc(70% - 7.4rem);
+                    }
+
+                    .load-strategy__preview-workspace {
+                        margin: 0;
+                    }
+                }
+
+                &-close {
+                    position: absolute;
+                    top: 0;
+                    inset-inline-end: 0;
+                    z-index: 99;
+                    padding: 2.5rem;
+                    border-bottom-left-radius: 50%;
+                    cursor: pointer;
+
+                    &:hover svg {
+                        fill: var(--brand-red-coral);
+                    }
+                }
+            }
+
+            &-footer {
+                display: flex;
+                justify-content: flex-end;
+                padding: 1.6rem;
+                border-top: 1px solid var(--general-section-1);
+            }
+        }
+
+        &__preview-workspace {
+            padding: 1.5rem;
+            border: solid 1px var(--border-normal);
+            border-radius: $BORDER_RADIUS;
+            height: calc(100vh - 30.4rem);
+            position: relative;
+            overflow: hidden;
+            margin-inline-end: 1.6rem;
+            margin-bottom: 1.6rem;
+
+            &-controls {
+                padding: 0.7rem 0.5rem;
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                inset-inline-end: 1.6rem;
+                bottom: 1.6rem;
+                border-radius: 3rem;
+                background-color: var(--general-section-1);
+                box-shadow: 0.2rem 0.2rem 0.5rem var(--shadow-menu);
+                z-index: 4;
+            }
+
+            &-icon {
+                margin: 0.5rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+/* The full-page modal the Local tab opens in on phones and tablets. */
+.load-strategy__wrapper {
+    width: 100%;
+
+    .dc-mobile-full-page-modal {
+        width: 100%;
+
+        &__body {
+            height: 100%;
+        }
+
+        .google-drive-label {
+            width: 100%;
+        }
+    }
+
+    @include mobile-or-tablet-screen {
+        position: fixed;
+        top: 4rem;
+        z-index: 10;
+
+        .dc-tabs {
+            height: 100%;
+            display: unset;
+            flex: 1;
+
+            &__content {
+                height: calc(100% - 4rem);
+            }
+        }
+    }
+}

@@ -1,0 +1,110 @@
+{
+    "brand_name": "Trillion Trades",
+    "brand_domain": "trilliontrades.com",
+    "brand_hostname": {
+        "staging": "staging.trilliontrades.com",
+        "production": "trilliontrades.com"
+    },
+    "domain_name": "TrillionTrades.com",
+    "colors": {
+        "primary": "#0047ab",
+        "secondary": "#071225",
+        "tertiary": "#4f8cff",
+        "success": "#10b981",
+        "danger": "#ef4444",
+        "warning": "#f5b544",
+        "info": "#22d3ee",
+        "neutral": "#6b7280",
+        "black": "#071225",
+        "white": "#ffffff",
+        "grey": {
+            "50": "#f8fafc",
+            "100": "#f1f5f9",
+            "200": "#e2e8f0",
+            "300": "#cbd5e1",
+            "400": "#94a3b8",
+            "500": "#64748b",
+            "600": "#475569",
+            "700": "#334155",
+            "800": "#0a1830",
+            "900": "#071225"
+        }
+    },
+    "typography": {
+        "font_family": {
+            "primary": "Poppins",
+            "secondary": "Georgia, 'Times New Roman', Times, serif",
+            "monospace": "'Courier New', Courier, monospace"
+        },
+        "font_sizes": {
+            "xs": "0.75rem",
+            "sm": "0.875rem",
+            "base": "1rem",
+            "lg": "1.125rem",
+            "xl": "1.25rem",
+            "2xl": "1.5rem",
+            "3xl": "1.875rem",
+            "4xl": "2.25rem"
+        }
+    },
+    "color_variants": {
+        "light_variants": [
+            100,
+            200,
+            300,
+            400,
+            500
+        ],
+        "dark_variants": [
+            600,
+            700,
+            800,
+            900
+        ],
+        "opacity_variants": [
+            10,
+            20,
+            30,
+            40,
+            50,
+            60,
+            70,
+            80,
+            90
+        ]
+    },
+    "theme_config": {
+        "enable_dynamic_themes": true,
+        "auto_generate_variants": true,
+        "css_variable_prefix": "--brand"
+    },
+    "platform": {
+        "name": "Trillion Trades",
+        "footer": {
+            "enable_language_settings": false,
+            "enable_theme_toggle": true
+        },
+        "hostname": {
+            "production": {
+                "com": "trilliontrades.com"
+            },
+            "staging": {
+                "com": "staging.trilliontrades.com"
+            }
+        },
+        "auth2_url": {
+            "production": "https://auth.deriv.com/oauth2/",
+            "staging": "https://staging-auth.deriv.com/oauth2/"
+        },
+        "derivws": {
+            "url": {
+                "staging": "https://staging-api.derivws.com/trading/v1/",
+                "production": "https://api.derivws.com/trading/v1/"
+            },
+            "directories": {
+                "options": "options/",
+                "derivatives": "derivatives/"
+            }
+        }
+    }
+}

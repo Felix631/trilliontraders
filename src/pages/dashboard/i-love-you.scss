@@ -1,0 +1,1198 @@
+// "i love you" desk.
+//
+// The desk aliases the shared Aurora tokens instead of carrying its own opaque
+// palette, so it now follows the application theme (light and dark) exactly like
+// the Analyzer and Analysis Tool tabs. The hardcoded values are only fallbacks
+// for the case where the token sheet is missing; the page background is
+// transparent so the shared canvas shows through like every other tab.
+
+.ily {
+    --ily-bg: transparent;
+    --ily-card: var(--ux-panel, #14212f);
+    --ily-card-2: var(--ux-panel-2, #17283a);
+    --ily-border: var(--ux-border, #2a4055);
+    --ily-border-strong: var(--ux-border-strong, #3a5670);
+    --ily-text: var(--ux-text, #e9f2fa);
+    --ily-dim: var(--ux-text-dim, #a8bdd4);
+    --ily-inset: var(--ux-panel-inset, #0f1c2a);
+    --ily-teal: var(--ux-emerald, #00d4aa);
+    --ily-cyan: var(--ux-cyan, #22d3ee);
+    --ily-amber: var(--ux-gold, #fbbf24);
+    --ily-green: var(--ux-emerald, #22e0a1);
+    --ily-red: var(--ux-coral, #f87171);
+    --ily-violet: var(--ux-violet, #a855f7);
+    --ily-radius: var(--ux-r-md, 14px);
+
+    // Fill the whole tab panel: the shared tab content is a flex row, so the
+    // page has to grow along the main axis or it collapses to its content
+    // width and only covers part of the screen.
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--ily-bg);
+    color: var(--ily-text);
+    padding: 14px;
+    box-sizing: border-box;
+    font-family: var(--brand-font-primary), system-ui, -apple-system, sans-serif;
+
+    // ---- Header ----------------------------------------------------------
+    &__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--ux-grad-aurora, linear-gradient(135deg, #0047ab, #22d3ee));
+        font-size: 20px;
+        box-shadow: var(--ux-glow-blue, 0 0 16px rgba(79, 140, 255, 0.45));
+    }
+
+    &__title {
+        margin: 0;
+        // The heading uses the app's shared display type — the same animated
+        // aurora gradient as the Analyzer / Analysis Tool / trade-tool titles
+        // (see `.ily__title` in `_ux-kit-core.scss`). Only the box is set here so
+        // the colour and its animation stay in one place.
+        display: inline-block;
+    }
+
+    &__tagline {
+        margin: 2px 0 0;
+        font-size: 11px;
+        color: var(--ily-dim);
+    }
+
+    &__chips {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__account {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--ily-border);
+        background: var(--ily-card);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ily-text);
+
+        b {
+            margin-left: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--ily-dim);
+        }
+    }
+
+    &__account-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ily-teal);
+    }
+
+    &__active {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: var(--ily-dim);
+        border: 1px solid var(--ily-border);
+        background: var(--ily-card);
+
+        &--on {
+            color: var(--ily-green);
+            border-color: rgba(34, 224, 161, 0.5);
+            background: rgba(34, 224, 161, 0.1);
+        }
+    }
+
+    // ---- Mode tabs -------------------------------------------------------
+    &__tabs {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    &__tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        background: var(--ily-card);
+        color: var(--ily-dim);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s ease;
+
+        &:hover {
+            color: var(--ily-text);
+            border-color: var(--ily-border);
+        }
+
+        &--active {
+            background: var(--ux-grad-aurora, linear-gradient(135deg, #0047ab, #22d3ee));
+            color: var(--ux-text-on-accent, #ffffff);
+            box-shadow: var(--ux-glow-blue, 0 0 18px rgba(79, 140, 255, 0.32));
+        }
+
+        &--ready::after {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ily-green);
+            margin-left: 2px;
+            animation: ily-pulse 1.2s infinite;
+        }
+    }
+
+    &__scan {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ily-dim);
+    }
+
+    &__scan-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ily-cyan);
+        animation: ily-pulse 1.4s infinite;
+    }
+
+    &__blurb {
+        margin: 0 0 12px;
+        font-size: 11.5px;
+        line-height: 1.55;
+        color: var(--ily-dim);
+        max-width: 90rem;
+    }
+
+    // ---- Recommendation --------------------------------------------------
+    &__reco {
+        position: relative;
+        border: 1px solid var(--ily-border);
+        border-radius: var(--ily-radius);
+        background: var(--ux-panel-2, #101d2b);
+        padding: 14px 16px;
+        margin-bottom: 14px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px 16px;
+        align-items: center;
+        box-shadow: var(--ux-shadow-card, none);
+    }
+
+    &__reco-label {
+        grid-column: 1 / -1;
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ily-cyan);
+    }
+
+    &__reco-main {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+    }
+
+    &__reco-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        font-size: 17px;
+        font-weight: 800;
+        color: #06111a;
+    }
+
+    &__reco-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+
+        strong {
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        span {
+            font-size: 11px;
+            color: var(--ily-dim);
+        }
+    }
+
+    &__reco-meter {
+        margin-left: auto;
+        text-align: right;
+        min-width: 120px;
+
+        > span {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--ily-amber);
+        }
+    }
+
+    &__meter {
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(127, 151, 173, 0.18);
+        overflow: hidden;
+        margin-top: 4px;
+
+        > i {
+            display: block;
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
+            transition: width 0.45s ease;
+
+            &.ily__meter-ok {
+                background: linear-gradient(90deg, var(--ily-teal), var(--ily-green));
+            }
+        }
+    }
+
+    &__reco-note {
+        grid-column: 1 / -1;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--ily-amber);
+
+        &--ok {
+            color: var(--ily-green);
+        }
+    }
+
+    &__reco-empty {
+        grid-column: 1 / -1;
+        font-size: 13px;
+        color: var(--ily-dim);
+    }
+
+    // ---- Panels ----------------------------------------------------------
+    &__panel {
+        border: 1px solid var(--ily-border);
+        border-radius: var(--ily-radius);
+        background: var(--ily-card);
+        padding: 12px 14px;
+        min-width: 0;
+    }
+
+    &__panel-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        h3 {
+            margin: 0;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ily-text);
+        }
+
+        span {
+            font-size: 10.5px;
+            color: var(--ily-dim);
+        }
+    }
+
+    // ---- Ranked list -----------------------------------------------------
+    &__ranked {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: 22px 1fr auto auto;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 10px;
+        border-radius: 10px;
+        background: var(--ily-card-2);
+        border: 1px solid transparent;
+
+        // Recommended rows are outlined in cyan, not green.
+        &--ok {
+            border-color: rgba(34, 211, 238, 0.35);
+        }
+    }
+
+    &__row-rank {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--ily-dim);
+    }
+
+    &__row-name {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+
+        strong {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 9.5px;
+            color: var(--ily-dim);
+        }
+    }
+
+    &__row-entry {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 12px;
+        color: #06111a;
+        background: var(--ily-violet);
+        white-space: nowrap;
+    }
+
+    &__row-rate {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--ily-text);
+        font-variant-numeric: tabular-nums;
+        min-width: 62px;
+        text-align: right;
+
+        i {
+            font-style: normal;
+            margin-left: 4px;
+        }
+
+        i.ily__row-tick {
+            color: var(--ily-green);
+        }
+    }
+
+    // ---- Controls --------------------------------------------------------
+    &__controls {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ily-dim);
+
+            input {
+                width: 82px;
+                padding: 6px 8px;
+                border-radius: 8px;
+                border: 1px solid var(--ily-border);
+                background: var(--ily-bg);
+                color: var(--ily-text);
+                font-size: 12px;
+                outline: none;
+
+                &:focus {
+                    border-color: var(--ily-teal);
+                }
+            }
+        }
+    }
+
+    &__btn {
+        padding: 8px 14px;
+        border-radius: 9px;
+        border: 1px solid var(--ily-border);
+        background: var(--ily-card-2);
+        color: var(--ily-text);
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--ily-teal);
+        }
+    }
+
+    // ---- Volatility cards ------------------------------------------------
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 14px;
+        padding-bottom: 8px;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 14px;
+        border-radius: var(--ily-radius);
+        border: 1px solid var(--ily-border);
+        background: var(--ux-panel, #14212f);
+        box-shadow: var(--ux-shadow-card, none);
+        transition:
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
+
+        // Par-clearing markets are marked with the cyan accent. No green fill
+        // or glow is painted over the card — green here means an Over/win
+        // result only, never "this box is special".
+        &--ready {
+            border-color: var(--ily-cyan);
+            box-shadow: 0 0 18px rgba(34, 211, 238, 0.16);
+        }
+    }
+
+    &__card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    &__card-id {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        strong {
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 10px;
+            color: var(--ily-cyan);
+        }
+    }
+
+    &__card-asset {
+        font-size: 15px;
+    }
+
+    &__card-live {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+    }
+
+    &__spark {
+        width: 86px;
+        height: 26px;
+
+        // The momentum line is drawn in the desk's cyan (coral when falling)
+        // so no green is painted across the card head.
+        polyline {
+            stroke: var(--ily-cyan);
+        }
+
+        &--down polyline {
+            stroke: #fb7185;
+        }
+
+        &--empty {
+            display: block;
+            width: 86px;
+            height: 26px;
+        }
+    }
+
+    &__live {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--ily-dim);
+
+        i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ily-dim);
+        }
+
+        &--on {
+            color: var(--ily-cyan);
+
+            i {
+                background: var(--ily-cyan);
+                box-shadow: 0 0 6px var(--ily-cyan);
+                animation: ily-pulse 1.2s infinite;
+            }
+        }
+    }
+
+    &__card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 0 2px;
+    }
+
+    &__circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        font-size: 40px;
+        font-weight: 800;
+        color: #fff;
+        background: var(--ily-violet);
+        box-shadow:
+            inset 0 -6px 18px rgba(0, 0, 0, 0.28),
+            0 0 26px rgba(168, 85, 247, 0.34);
+    }
+
+    &__card-entry {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ily-dim);
+    }
+
+    &__card-conf {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ily-amber);
+
+        b {
+            font-weight: 800;
+        }
+    }
+
+    &__card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    &__card-last {
+        color: var(--ily-dim);
+
+        b {
+            color: var(--ily-text);
+        }
+    }
+
+    &__card-eta {
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: var(--ily-dim);
+
+        &--ready {
+            color: var(--ily-cyan);
+            animation: ily-pulse 1.1s infinite;
+        }
+    }
+
+    &__card-trade {
+        margin-top: 2px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--ily-green), #0f9e73);
+        color: #04211b;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+
+        &:disabled {
+            background: var(--ily-inset, #20364a);
+            color: var(--ily-dim);
+            cursor: not-allowed;
+        }
+    }
+
+    &__card-msg {
+        font-size: 10.5px;
+        font-weight: 700;
+        text-align: center;
+        color: var(--ily-amber);
+
+        &--win {
+            color: var(--ily-green);
+        }
+
+        &--loss {
+            color: var(--ily-red);
+        }
+    }
+
+    &__error {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(248, 113, 113, 0.4);
+        background: rgba(248, 113, 113, 0.08);
+        color: var(--ily-red);
+        font-size: 12px;
+    }
+
+    // ---- Accent badge colours -------------------------------------------
+    & .ily__badge--over,
+    & .ily__badge--up {
+        background: linear-gradient(135deg, #34d399, #0f9e73);
+    }
+
+    & .ily__badge--under,
+    & .ily__badge--down {
+        background: linear-gradient(135deg, #fb7185, #e11d48);
+    }
+
+    & .ily__badge--even {
+        background: linear-gradient(135deg, #22e0a1, #12b981);
+    }
+
+    & .ily__badge--odd {
+        background: linear-gradient(135deg, var(--ux-gold, #f5b544), var(--ux-amber, #f59e0b));
+    }
+
+    & .ily__circle.ily__badge--over,
+    & .ily__circle.ily__badge--under,
+    & .ily__circle.ily__badge--even,
+    & .ily__circle.ily__badge--odd,
+    & .ily__circle.ily__badge--up,
+    & .ily__circle.ily__badge--down {
+        color: #fff;
+    }
+
+    @keyframes ily-pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.45;
+        }
+    }
+}
+
+// ---- Full-width layout helpers --------------------------------------------
+.ily {
+    // The recommended list is a compact digest, not a full-width slab.
+    &__panel--wide {
+        margin-bottom: 14px;
+        padding: 10px 12px;
+        max-width: 60rem;
+    }
+
+    &__ranked-empty {
+        font-size: 11px;
+        color: var(--ily-dim);
+        padding: 4px 2px;
+    }
+
+    &__ticks-hint {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ily-dim);
+    }
+
+    &__reco-both {
+        font-size: 11px;
+        color: var(--ily-dim);
+
+        b {
+            font-weight: 800;
+            color: var(--ily-text);
+        }
+    }
+
+    &__card-both {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 2px;
+    }
+
+    &__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 800;
+        color: #05201a;
+        white-space: nowrap;
+    }
+}
+
+// Accent backgrounds for the badges are also consumed by the floating AI
+// widget, which lives outside the `.ily` subtree.
+.ily__badge--over,
+.ily__badge--up {
+    background: linear-gradient(135deg, #34d399, #0f9e73);
+}
+
+.ily__badge--under,
+.ily__badge--down {
+    background: linear-gradient(135deg, #fb7185, #e11d48);
+}
+
+.ily__badge--even {
+    background: linear-gradient(135deg, #22e0a1, #12b981);
+}
+
+.ily__badge--odd {
+    background: linear-gradient(135deg, var(--ux-gold, #f5b544), var(--ux-amber, #f59e0b));
+}
+
+// ---------------------------------------------------------------------------
+// Floating "i love you" AI market scan.
+// Left fixed at app-shell level so it stays on top of every page and tab.
+// ---------------------------------------------------------------------------
+.ilyai {
+    // Aliases the shared Aurora tokens so the floating scan follows the app
+    // theme (light and dark) exactly like the desk does.
+    --ilyai-bg: var(--ux-panel-solid, #0d1a28);
+    --ilyai-card: var(--ux-panel, #16283a);
+    --ilyai-border: var(--ux-border, #233a50);
+    --ilyai-inset: var(--ux-panel-inset, #0f1c2a);
+    --ilyai-text: var(--ux-text, #e9f2fa);
+    --ilyai-dim: var(--ux-text-dim, #a8bdd4);
+    --ilyai-teal: var(--ux-emerald, #00d4aa);
+    --ilyai-cyan: var(--ux-cyan, #22d3ee);
+    --ilyai-green: var(--ux-emerald, #22e0a1);
+    --ilyai-amber: var(--ux-gold, #fbbf24);
+    --ilyai-red: var(--ux-coral, #f87171);
+
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    font-family: var(--brand-font-primary), system-ui, -apple-system, sans-serif;
+
+    &__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 999px;
+        background: var(--ux-panel-2, linear-gradient(135deg, #12202e, #0d1a28));
+        box-shadow: var(--ux-shadow-lift, 0 8px 26px rgba(0, 0, 0, 0.45));
+        color: var(--ilyai-text);
+        // The pill doubles as the drag handle for the whole widget.
+        cursor: grab;
+        touch-action: none;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            border-color: var(--ilyai-teal);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.28);
+            transform: translateY(-1px);
+        }
+    }
+
+    &__pill-icon {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    &__pill-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+
+        b {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 10px;
+            color: var(--ilyai-dim);
+            font-variant-numeric: tabular-nums;
+            // The recommendation reads as one line, never as a wrapped pair.
+            white-space: nowrap;
+        }
+    }
+
+    &__pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ilyai-dim);
+
+        &--on {
+            background: var(--ilyai-cyan);
+            box-shadow: 0 0 7px var(--ilyai-cyan);
+            animation: ily-pulse 1.4s infinite;
+        }
+    }
+
+    &__panel {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 10px);
+        width: 340px;
+        max-height: min(72vh, 600px);
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 16px;
+        background: var(--ilyai-bg);
+        color: var(--ilyai-text);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+        pointer-events: none;
+        transition:
+            opacity 0.18s ease,
+            transform 0.18s ease;
+    }
+
+    &--open &__panel {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+    }
+
+    // ---- Dragging --------------------------------------------------------
+    // Applied once the user has moved the widget: the panel anchors to the
+    // widget's own left edge, and flips below the pill when the widget sits in
+    // the top half of the screen, so it is never pushed off an edge.
+    &--dragged {
+        right: auto;
+        bottom: auto;
+
+        .ilyai__panel {
+            right: auto;
+            left: 0;
+        }
+    }
+
+    &--panel-below .ilyai__panel {
+        bottom: auto;
+        top: calc(100% + 10px);
+    }
+
+    &--dragging {
+        user-select: none;
+    }
+
+    &__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+        // The header is the second drag handle, so the panel can be moved while
+        // it is open.
+        cursor: grab;
+        touch-action: none;
+
+        h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--ilyai-text);
+        }
+
+        p {
+            margin: 2px 0 0;
+            font-size: 10.5px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__live {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--ilyai-dim);
+
+        i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ilyai-dim);
+        }
+
+        &--on {
+            color: var(--ilyai-cyan);
+
+            i {
+                background: var(--ilyai-cyan);
+                box-shadow: 0 0 6px var(--ilyai-cyan);
+                animation: ily-pulse 1.2s infinite;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ilyai-dim);
+        }
+
+        input {
+            width: 72px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--ilyai-border);
+            background: var(--ilyai-inset, #0a1420);
+            color: var(--ilyai-text);
+            font-size: 12px;
+            outline: none;
+
+            &:focus {
+                border-color: var(--ilyai-teal);
+            }
+        }
+    }
+
+    &__counting {
+        font-size: 10px;
+        color: var(--ilyai-dim);
+    }
+
+    &__best {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--ilyai-border);
+        background: var(--ilyai-card);
+        margin-bottom: 10px;
+
+        &--ready {
+            border-color: var(--ilyai-cyan);
+            box-shadow: 0 0 18px rgba(34, 211, 238, 0.16);
+        }
+    }
+
+    &__best-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 800;
+        color: #05201a;
+        flex: 0 0 auto;
+    }
+
+    &__best-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+
+        strong {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: var(--ilyai-text);
+        }
+
+        > span {
+            font-size: 10px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__best-both b {
+        color: var(--ilyai-text);
+    }
+
+    &__best-conf {
+        margin-left: auto;
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--ilyai-amber);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__empty,
+    &__row-empty {
+        font-size: 11px;
+        color: var(--ilyai-dim);
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 9px;
+        border-radius: 9px;
+        background: var(--ilyai-card);
+    }
+
+    &__row-name {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+        min-width: 0;
+
+        strong {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 9px;
+            color: var(--ilyai-dim);
+        }
+    }
+
+    &__row-entry {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #05201a;
+        white-space: nowrap;
+    }
+
+    &__row-rate {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--ilyai-text);
+        font-variant-numeric: tabular-nums;
+        min-width: 52px;
+        text-align: right;
+    }
+
+    &__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 9.5px;
+        color: var(--ilyai-dim);
+    }
+
+    &__rescan {
+        padding: 4px 10px;
+        border: 1px solid var(--ilyai-border);
+        border-radius: 999px;
+        background: var(--ux-panel-inset, transparent);
+        color: var(--ilyai-text);
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--ilyai-teal);
+        }
+    }
+
+    &__note {
+        margin: 10px 0 0;
+        font-size: 9.5px;
+        line-height: 1.5;
+        color: var(--ilyai-dim);
+    }
+}

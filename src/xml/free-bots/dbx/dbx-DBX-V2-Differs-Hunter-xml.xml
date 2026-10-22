@@ -1,0 +1,229 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="var_Stake_dbxd1">Stake</variable>
+    <variable id="var_Prediction_dbxd2">Prediction</variable>
+    <variable id="var_Switch_dbxd3">Switch</variable>
+    <variable id="var_ColdDigit_dbxd4">ColdDigit</variable>
+  </variables>
+  <block type="trade_definition" id="td_dbx_f1" deletable="false" x="0" y="60">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="mkt_dbx_f2" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ100V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="tt_dbx_f3" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">matchesdiffers</field>
+            <next>
+              <block type="trade_definition_contracttype" id="ct_dbx_f4" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITDIFF</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="ci_dbx_f5" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="rs_dbx_f6" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="re_dbx_f7" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="set_dbx_g1">
+        <field name="VAR" id="var_Stake_dbxd1">Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="num_dbx_g2">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="set_dbx_g3">
+            <field name="VAR" id="var_Prediction_dbxd2">Prediction</field>
+            <value name="VALUE">
+              <block type="math_number" id="num_dbx_g4">
+                <field name="NUM">4</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="set_dbx_g5">
+                <field name="VAR" id="var_Switch_dbxd3">Switch</field>
+                <value name="VALUE">
+                  <block type="logic_boolean" id="bool_dbx_g6">
+                    <field name="BOOL">TRUE</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="set_dbx_g7">
+                    <field name="VAR" id="var_ColdDigit_dbxd4">ColdDigit</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="num_dbx_g8">
+                        <field name="NUM">4</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="to_dbx_h1">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="dur_dbx_h2">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="amt_dbx_h3">
+            <field name="NUM">2</field>
+          </shadow>
+          <block type="variables_get" id="get_dbx_h4">
+            <field name="VAR" id="var_Stake_dbxd1">Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="pred_dbx_h5">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="get_dbx_h6">
+            <field name="VAR" id="var_Prediction_dbxd2">Prediction</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="bp_dbx_i1" deletable="false" x="0" y="640">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="if_dbx_i2">
+        <value name="IF0">
+          <block type="logic_compare" id="cmp_dbx_i3">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="get_dbx_i4">
+                <field name="VAR" id="var_Switch_dbxd3">Switch</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_boolean" id="bool_dbx_i5">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="set_dbx_i6">
+            <field name="VAR" id="var_ColdDigit_dbxd4">ColdDigit</field>
+            <value name="VALUE">
+              <block type="math_on_list" id="mol_dbx_i7">
+                <mutation op="ANTIMODE"></mutation>
+                <field name="OP">ANTIMODE</field>
+                <value name="LIST">
+                  <block type="stat_list" id="sl_dbx_i8"></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="if_dbx_i9">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="cmp_dbx_ia">
+                    <field name="OP">NEQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="get_dbx_ib">
+                        <field name="VAR" id="var_ColdDigit_dbxd4">ColdDigit</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="get_dbx_ic">
+                        <field name="VAR" id="var_Prediction_dbxd2">Prediction</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="set_dbx_id">
+                    <field name="VAR" id="var_Prediction_dbxd2">Prediction</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="get_dbx_ie">
+                        <field name="VAR" id="var_ColdDigit_dbxd4">ColdDigit</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="variables_set" id="set_dbx_if">
+                    <field name="VAR" id="var_Prediction_dbxd2">Prediction</field>
+                    <value name="VALUE">
+                      <block type="math_on_list" id="mol_dbx_ig">
+                        <mutation op="RANDOM"></mutation>
+                        <field name="OP">RANDOM</field>
+                        <value name="LIST">
+                          <block type="stat_list" id="sl_dbx_ih"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+      <next>
+        <block type="purchase" id="pur_dbx_ii">
+          <field name="PURCHASE_LIST">DIGITDIFF</field>
+        </block>
+      </next>
+    </statement>
+  </block>
+  <block type="after_purchase" id="ap_dbx_j1" x="714" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="if_dbx_j2">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="ck_dbx_j3">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="set_dbx_j4">
+            <field name="VAR" id="var_Switch_dbxd3">Switch</field>
+            <value name="VALUE">
+              <block type="logic_boolean" id="bool_dbx_j5">
+                <field name="BOOL">FALSE</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="set_dbx_j6">
+            <field name="VAR" id="var_Switch_dbxd3">Switch</field>
+            <value name="VALUE">
+              <block type="logic_boolean" id="bool_dbx_j7">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="ta_dbx_j8"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

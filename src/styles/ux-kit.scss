@@ -1,0 +1,9 @@
+/**
+ * Aurora Deep kit — entry point.
+ *
+ * The kit is imported as the *last* static import in `src/main.tsx` so its CSS
+ * is emitted after every page and component stylesheet. That ordering is what
+ * lets the kit re-express the existing markup (headings, cards, actions,
+ * meters, tab chrome) in one visual language without fighting per-page rules.
+ */
+@use './ux-kit-core' as *;

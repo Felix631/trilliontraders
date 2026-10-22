@@ -1,0 +1,258 @@
+<xml data-bot-copyright-notice="Copyright notice: preserve all copyright and license notices." data-automated-extraction-notice="Automated extraction grants no additional rights. Do not remove attribution or bypass applicable terms." xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="STEP_SWITCH_ON">STEP INDEX SWITCH ON/OFF</variable>
+    <variable id="NEXT_STEP_INDEX">NEXT STEP INDEX</variable>
+    <variable id="MARTINGALE_ON">MARTINGALE ON/OFF</variable>
+    <variable id="CURRENT_STAKE">CURRENT STAKE</variable>
+    <variable id="BOT_PASSWORD">BOT PASSWORD</variable>
+    <variable id="BASE_STAKE">BASE STAKE</variable>
+    <variable id="MARTINGALE_MULTIPLIER">MARTINGALE MULTIPLIER</variable>
+  </variables>
+  <block type="trade_definition" id="lZchY2^FPvvwasd^cE%N" deletable="false" x="0" y="0">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="ldlbD_4HG%J|hfWoS[Dk" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ50V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="XFwMVD6xgo1pL.Lt9;qW" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">matchesdiffers</field>
+            <next>
+              <block type="trade_definition_contracttype" id="ycjqqx+|_njY@E27P]eR" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITMATCH</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="C*(YYrZLVfl@6?(si?=r" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="|a#huW1ib~W[i-N^rFng" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="^hv[-eprXL?6?Rbt*L(%" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="set_step_switch_on">
+        <field name="VAR" id="STEP_SWITCH_ON">STEP INDEX SWITCH ON/OFF</field>
+        <value name="VALUE">
+          <block type="logic_boolean" id="step_switch_false">
+            <field name="BOOL">FALSE</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="set_next_step_index">
+            <field name="VAR" id="NEXT_STEP_INDEX">NEXT STEP INDEX</field>
+            <value name="VALUE">
+              <block type="text" id="next_step_index_text">
+                <field name="TEXT">stpRNG2</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="set_martingale_on">
+                <field name="VAR" id="MARTINGALE_ON">MARTINGALE ON/OFF</field>
+                <value name="VALUE">
+                  <block type="logic_boolean" id="martingale_false">
+                    <field name="BOOL">FALSE</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="set_base_stake">
+                    <field name="VAR" id="BASE_STAKE">BASE STAKE</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="base_stake_num">
+                        <field name="NUM">5</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="set_current_stake">
+                        <field name="VAR" id="CURRENT_STAKE">CURRENT STAKE</field>
+                        <value name="VALUE">
+                          <block type="variables_get" id="get_base_stake_init">
+                            <field name="VAR" id="BASE_STAKE">BASE STAKE</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="set_martingale_multiplier">
+                            <field name="VAR" id="MARTINGALE_MULTIPLIER">MARTINGALE MULTIPLIER</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="martingale_mult_num">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="set_bot_password_visible">
+                                <field name="VAR" id="BOT_PASSWORD">BOT PASSWORD</field>
+                                <value name="VALUE">
+                                  <block type="text" id="bot_password_empty_text">
+                                    <field name="TEXT"></field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="Pb;=sH/1*Pe2ZCQ2S8jR">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="|Eqh_hy^%vnU5v5}C_8G">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="kASZ93jhW9LG9=,!GJBD">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="wQ_Dd_o#tq3@ronUD:JC" inline="true">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="during_purchase" id="WkmT:}_}ziNNey5|8/L3" x="714" y="0">
+    <statement name="DURING_PURCHASE_STACK">
+      <block type="controls_if" id="F751K}gE*L?]?du:*isn">
+        <value name="IF0">
+          <block type="check_sell" id=":#6EX8@%nzRS0W2tAHCZ"></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="aO;Lr#IJY21]B1zJxmZ!" x="714" y="232">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="martingale_if_on_fixed">
+        <value name="IF0">
+          <block type="logic_compare" id="martingale_on_equals_true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="get_martingale_on_if_fixed">
+                <field name="VAR" id="MARTINGALE_ON">MARTINGALE ON/OFF</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_boolean" id="martingale_true_check">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="controls_if" id="martingale_result_check">
+            <value name="IF0">
+              <block type="contract_check_result" id="check_contract_lost">
+                <field name="CHECK_RESULT">loss</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="set_stake_martingale_loss">
+                <field name="VAR" id="CURRENT_STAKE">CURRENT STAKE</field>
+                <value name="VALUE">
+                  <block type="math_arithmetic" id="current_stake_times_mult">
+                    <field name="OP">MULTIPLY</field>
+                    <value name="A">
+                      <block type="variables_get" id="get_current_stake_loss">
+                        <field name="VAR" id="CURRENT_STAKE">CURRENT STAKE</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="get_martingale_multiplier_loss">
+                        <field name="VAR" id="MARTINGALE_MULTIPLIER">MARTINGALE MULTIPLIER</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="martingale_win_reset_check">
+                <value name="IF0">
+                  <block type="contract_check_result" id="check_contract_won">
+                    <field name="CHECK_RESULT">win</field>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="reset_stake_after_win">
+                    <field name="VAR" id="CURRENT_STAKE">CURRENT STAKE</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="get_base_stake_reset">
+                        <field name="VAR" id="BASE_STAKE">BASE STAKE</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="RNm.@=b,I;~qBUcE{6Tj"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="}N)Ma#grABFfBDS;ykma" deletable="false" x="0" y="923">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="password_gate_if">
+        <value name="IF0">
+          <block type="logic_compare" id="password_equals_required">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id="get_bot_password_before_purchase">
+                <field name="VAR" id="BOT_PASSWORD">BOT PASSWORD</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="text" id="required_bot_password_hidden">
+                <field name="TEXT"></field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="purchase" id="f[xY1dy3=q7=o=vCuziP">
+            <field name="PURCHASE_LIST">DIGITMATCH</field>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="text_print" id="step_switch_note" disabled="true" x="0" y="1190">
+    <value name="TEXT">
+      <shadow type="text" id="step_switch_note_text">
+        <field name="TEXT">STEP INDEX SWITCH is visible only. Deriv DBot market selection is static; choose Step Index in the market dropdown or duplicate the bot per Step Index.</field>
+      </shadow>
+    </value>
+  </block>
+  <block type="text_print" id="martingale_note" disabled="true" x="0" y="1294">
+    <value name="TEXT">
+      <shadow type="text" id="martingale_note_text">
+        <field name="TEXT">MARTINGALE: turn MARTINGALE ON/OFF TRUE, edit BASE STAKE and MARTINGALE MULTIPLIER. AMOUNT uses CURRENT STAKE.</field>
+      </shadow>
+    </value>
+  </block>
+</xml>

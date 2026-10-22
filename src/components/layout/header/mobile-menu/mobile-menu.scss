@@ -1,0 +1,281 @@
+.mobile-menu {
+    height: 100%;
+
+    // The top-left menu control. On mobile/tablet this is the ONLY way to reach
+    // the dark/light switch (the footer that carries the desktop toggle is
+    // desktop-only), so it gets a real hit area, a hover/press affordance and a
+    // colour that survives both themes. The header band stays navy in light and
+    // dark, so the three bars have to stay white in both.
+    &__toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding-inline: 0.8rem;
+
+        &-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: none;
+            width: 3.6rem;
+            height: 3.6rem;
+            padding: 0;
+            border: 0;
+            border-radius: 1rem;
+            background: transparent;
+            color: var(--text-colored-background, #ffffff);
+            cursor: pointer;
+            transition:
+                background var(--ux-t-fast, 0.16s) var(--ux-ease, ease),
+                transform var(--ux-t-fast, 0.16s) var(--ux-ease, ease);
+
+            svg,
+            svg path {
+                fill: currentColor;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.16);
+                transform: translateY(-0.1rem);
+            }
+
+            &:active {
+                transform: translateY(0) scale(0.96);
+            }
+
+            &:focus-visible {
+                outline: 0.2rem solid var(--ux-blue-bright, #4f8cff);
+                outline-offset: 0.2rem;
+            }
+        }
+    }
+
+    &__footer {
+        justify-content: center;
+        height: 4rem;
+    }
+
+    &__header {
+        display: flex;
+        padding-inline-end: 1.6rem;
+        padding-inline-start: 0.4rem;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        &__language {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+
+            svg > g > path,
+            svg > path {
+                fill: var(--text-prominent) !important;
+            }
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        &__platform {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--general-section-1);
+            min-height: 7rem;
+            cursor: pointer;
+        }
+
+        .deriv-context-menu {
+            box-shadow: none !important;
+        }
+
+        &__items {
+            position: relative;
+            height: 100%;
+            padding-top: 1rem;
+
+            &--padding {
+                padding-inline-start: 4.8rem;
+                padding-inline-end: 1.6rem;
+            }
+
+            &--bottom-border {
+                border-bottom: 1px solid var(--general-section-1);
+            }
+
+            &__item {
+                height: 5.6rem;
+                cursor: pointer;
+                width: 100%;
+
+                // Dark / light switch. The vendored @deriv-com/ui switch paints its
+                // track from `--du-light-*` / `--du-system-dark-*` variables that
+                // this build never defines, so it silently fell back to flat vendor
+                // greys, and the override below moved the knob 1.8rem inside a
+                // 4.4rem track — visibly off-centre with barely distinguishable
+                // on/off states. The control is pinned to the workspace palette
+                // here instead of the vendor variables.
+                .deriv-toggle-switch {
+                    --tt-switch-off: #64748b;
+                    --tt-switch-knob: #ffffff;
+
+                    display: inline-flex;
+                    position: relative;
+                    flex: none;
+                    margin-inline-start: auto;
+                    margin-inline-end: 1.2rem;
+                    width: 4.6rem;
+                    min-width: 4.6rem;
+                    height: 2.6rem;
+
+                    // Full-bleed hidden checkbox: the whole switch is the tap target.
+                    > input {
+                        position: absolute;
+                        inset: 0;
+                        z-index: 1;
+                        width: 100%;
+                        height: 100%;
+                        margin: 0;
+                        opacity: 0;
+                        cursor: pointer;
+                    }
+
+                    &__slider {
+                        position: absolute;
+                        inset: 0;
+                        border: 0.1rem solid rgba(255, 255, 255, 0.28);
+                        border-radius: var(--ux-r-pill, 999rem);
+                        background: var(--tt-switch-off);
+                        transition:
+                            background var(--ux-t-mid, 0.28s) var(--ux-ease, ease),
+                            border-color var(--ux-t-mid, 0.28s) var(--ux-ease, ease);
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            left: 0.3rem;
+                            bottom: 0.3rem;
+                            width: 1.8rem;
+                            height: 1.8rem;
+                            border-radius: 50%;
+                            background: var(--tt-switch-knob);
+                            box-shadow: 0 0.1rem 0.3rem rgba(2, 6, 23, 0.45);
+                            transition: transform var(--ux-t-mid, 0.28s) var(--ux-ease, ease);
+                        }
+                    }
+
+                    // 4.6rem track − 0.2rem borders − 0.3rem inset − 1.8rem knob
+                    // − 0.3rem inset = 2rem of travel, so the knob lands flush.
+                    input:checked + .deriv-toggle-switch__slider {
+                        background: var(
+                            --ux-grad-aurora,
+                            linear-gradient(120deg, #0047ab 0%, #2563eb 38%, #22d3ee 74%, #10b981 100%)
+                        );
+                        border-color: transparent;
+
+                        &::before {
+                            transform: translateX(2rem);
+                        }
+                    }
+
+                    input:focus-visible + .deriv-toggle-switch__slider {
+                        box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--ux-blue-bright, #4f8cff) 32%, transparent);
+                    }
+                }
+
+                &--active {
+                    .deriv-text {
+                        color: var(--text-prominent);
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            &--right-margin {
+                margin-inline-end: 1.6rem;
+            }
+
+            &--chevron {
+                position: absolute;
+                right: 1.5rem;
+            }
+
+            &__icons {
+                g > path,
+                path {
+                    fill: var(--text-prominent);
+                }
+            }
+        }
+    }
+
+    &__language-drawer {
+        padding-inline-start: 0.8rem;
+        padding-inline-end: 0.8rem;
+
+        button {
+            height: auto;
+        }
+
+        .languages-modal__body-button {
+            // No flag icons are shown, so the button hugs the language title.
+            height: auto;
+            width: 133px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+
+            // Flag SVG icons are intentionally not shown - only language names are displayed
+            svg {
+                display: none;
+            }
+
+            .deriv-text {
+                color: var(--text-prominent) !important;
+            }
+
+            &-selected {
+                border: 1px solid var(--brand-blue, var(--brand-secondary));
+                border-radius: 4px;
+            }
+        }
+    }
+
+    &__back-btn {
+        display: flex;
+        align-items: center;
+        padding: 3.2rem;
+        padding-top: 2rem;
+        cursor: pointer;
+
+        span {
+            margin-inline-start: 1.6rem;
+        }
+    }
+
+    .deriv-drawer__container {
+        background: var(--general-main-1);
+    }
+
+    // The toggle sits on the navy header chrome, not on a themed panel, so it
+    // keeps the chrome colour (white) in BOTH themes rather than following
+    // `--text-prominent`, which flips to near-black in light mode.
+    &__toggle button svg path,
+    &__toggle svg path {
+        fill: var(--text-colored-background, #ffffff);
+    }
+
+    &__back-btn,
+    .deriv-drawer__header__close-btn {
+        button > svg > path,
+        svg > path {
+            fill: var(--text-prominent);
+        }
+    }
+}

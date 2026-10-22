@@ -1,0 +1,640 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="var_stake_1001">stake</variable>
+    <variable id="var_martingale_1002">martingale</variable>
+    <variable id="var_prediction_1003">prediction</variable>
+    <variable id="var_initialstake_1007">initial stake</variable>
+    <variable id="var_prediction2_1004">prediction 2</variable>
+    <variable id="var_takeprofit_1005">take profit</variable>
+    <variable id="var_stoploss_1006">stop loss</variable>
+  </variables>
+  <block type="trade_definition" id="block_tradedef_1001" deletable="false" x="0" y="0">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="block_market_1001" deletable="false" movable="false">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_change_after="true" has_trades_input="false"></mutation>
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ10V</field>
+        <field name="TRADE_ALL_VOLATILITY">TRUE</field>
+        <field name="CHANGE_AFTER_LIST">CONDITIONS</field>
+        <field name="MULTI_CONTRACT_SWITCHING">FALSE</field>
+        <next>
+          <block type="trade_definition_tradetype" id="block_tradetype_1001" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="block_contracttype_1001" deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="block_candleinterval_1001" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="block_restartbuysell_1001" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="block_restartonerror_1001" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="block_setstake_1001">
+        <field name="VAR" id="var_stake_1001">stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="block_numstake_1001">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="block_setmartingale_1001">
+            <field name="VAR" id="var_martingale_1002">martingale</field>
+            <value name="VALUE">
+              <block type="math_number" id="block_nummartingale_1001">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="block_setprediction_1001">
+                <field name="VAR" id="var_prediction_1003">prediction</field>
+                <value name="VALUE">
+                  <block type="math_number" id="block_numprediction_1001">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="block_setprediction2_1001">
+                    <field name="VAR" id="var_prediction2_1004">prediction 2</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="block_numprediction2_1001">
+                        <field name="NUM">7</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="block_settakeprofit_1001">
+                        <field name="VAR" id="var_takeprofit_1005">take profit</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="block_numtakeprofit_1001">
+                            <field name="NUM">100</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="block_setstoploss_1001">
+                            <field name="VAR" id="var_stoploss_1006">stop loss</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="block_numstoploss_1001">
+                                <field name="NUM">100</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="block_setinitialstake_1001">
+                                <field name="VAR" id="var_initialstake_1007">initial stake</field>
+                                <value name="VALUE">
+                                  <block type="variables_get" id="block_getstake_1001">
+                                    <field name="VAR" id="var_stake_1001">stake</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="block_tradeoptions_1001">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="block_duration_1001">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="block_amount_1001">
+            <field name="NUM">0.5</field>
+          </shadow>
+          <block type="variables_get" id="block_getstake_1002">
+            <field name="VAR" id="var_stake_1001">stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="block_predictionshadow_1001" inline="true">
+            <field name="NUM">2</field>
+          </shadow>
+          <block type="variables_get" id="block_getprediction_1001">
+            <field name="VAR" id="var_prediction_1003">prediction</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="during_purchase" id="block_duringpurchase_1001" x="714" y="0">
+    <statement name="DURING_PURCHASE_STACK">
+      <block type="controls_if" id="block_ifcheck_1001">
+        <value name="IF0">
+          <block type="check_sell" id="block_checksell_1001"></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="block_afterpurchase_1001" x="714" y="232">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="block_ifresult_1001">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="block_checkresult_1001">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="block_resetstake_1001">
+            <field name="VAR" id="var_stake_1001">stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="block_getinitialstake_1001">
+                <field name="VAR" id="var_initialstake_1007">initial stake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="block_increasestake_1001">
+            <field name="VAR" id="var_stake_1001">stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="block_multiplystake_1001">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="block_multiplya_1001">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="block_getstake_1003">
+                    <field name="VAR" id="var_stake_1001">stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="block_multiplyb_1001">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="block_getmartingale_1001">
+                    <field name="VAR" id="var_martingale_1002">martingale</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="controls_if" id="block_ifprofit_1001">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="block_takeprofitcompare_1001">
+                <field name="OP">GTE</field>
+                <value name="A">
+                  <block type="total_profit" id="block_totalprofit_1001"></block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="block_gettakeprofit_1001">
+                    <field name="VAR" id="var_takeprofit_1005">take profit</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="text_print" id="block_printtakeprofit_1001">
+                <value name="TEXT">
+                  <shadow type="text" id="block_takeprofittext_1001">
+                    <field name="TEXT">take profit hit</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="logic_compare" id="block_stoplosscompare_1001">
+                <field name="OP">LT</field>
+                <value name="A">
+                  <block type="total_profit" id="block_totalprofit_1002"></block>
+                </value>
+                <value name="B">
+                  <block type="math_arithmetic" id="block_negatestoploss_1001">
+                    <field name="OP">MULTIPLY</field>
+                    <value name="A">
+                      <shadow type="math_number" id="block_negatestoplossa_1001">
+                        <field name="NUM">1</field>
+                      </shadow>
+                      <block type="variables_get" id="block_getstoploss_1001">
+                        <field name="VAR" id="var_stoploss_1006">stop loss</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <shadow type="math_number" id="block_negatestoplossb_1001">
+                        <field name="NUM">-1</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="text_print" id="block_printstoploss_1001">
+                <value name="TEXT">
+                  <shadow type="text" id="block_stoplosstext_1001">
+                    <field name="TEXT">stop loss hit</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="trade_again" id="block_tradeagain_1001"></block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="block_beforepurchase_1001" deletable="false" x="0" y="1042">
+    <field name="IS_BOT_PROTECTED">FALSE</field>
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="block_ifentry_1001">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+        <value name="IF0">
+          <block type="logic_operation" id="ov2_and_final" collapsed="true">
+            <field name="OP">AND</field>
+            <value name="A">
+              <block type="logic_operation" id="ov2_and_pl" collapsed="true">
+                <field name="OP">AND</field>
+                <value name="A">
+                  <block type="logic_operation" id="ov2_and_d012" collapsed="true">
+                    <field name="OP">AND</field>
+                    <value name="A">
+                      <block type="logic_operation" id="ov2_and_d01" collapsed="true">
+                        <field name="OP">AND</field>
+                        <value name="A">
+                          <block type="logic_compare" id="ov2_d0cmp">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                              <block type="digit_percentage" id="ov2_d0pct" collapsed="true">
+                                <value name="DIGIT">
+                                  <shadow type="math_number" id="ov2_d0val">
+                                    <field name="NUM">0</field>
+                                  </shadow>
+                                </value>
+                                <value name="COUNT">
+                                  <shadow type="math_number" id="ov2_d0count">
+                                    <field name="NUM">100</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="ov2_d0threshold">
+                                <field name="NUM">10.2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_compare" id="ov2_d1cmp">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                              <block type="digit_percentage" id="ov2_d1pct" collapsed="true">
+                                <value name="DIGIT">
+                                  <shadow type="math_number" id="ov2_d1val">
+                                    <field name="NUM">1</field>
+                                  </shadow>
+                                </value>
+                                <value name="COUNT">
+                                  <shadow type="math_number" id="ov2_d1count">
+                                    <field name="NUM">100</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="ov2_d1threshold">
+                                <field name="NUM">10.2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_compare" id="ov2_d2cmp">
+                        <field name="OP">LT</field>
+                        <value name="A">
+                          <block type="digit_percentage" id="ov2_d2pct" collapsed="true">
+                            <value name="DIGIT">
+                              <shadow type="math_number" id="ov2_d2val">
+                                <field name="NUM">2</field>
+                              </shadow>
+                            </value>
+                            <value name="COUNT">
+                              <shadow type="math_number" id="ov2_d2count">
+                                <field name="NUM">100</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="ov2_d2threshold">
+                            <field name="NUM">10.2</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_operation" id="ov2_or_ld012" collapsed="true">
+                    <field name="OP">OR</field>
+                    <value name="A">
+                      <block type="logic_operation" id="ov2_or_ld01" collapsed="true">
+                        <field name="OP">OR</field>
+                        <value name="A">
+                          <block type="logic_compare" id="ov2_ld0cmp">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="last_digit" id="ov2_ld_0001"></block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="ov2_ld0val">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_compare" id="ov2_ld1cmp">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="last_digit" id="ov2_ld_0002"></block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="ov2_ld1val">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_compare" id="ov2_ld2cmp">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                          <block type="last_digit" id="ov2_ld_0003"></block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="ov2_ld2val">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_compare" id="ov2_mostfreqcmp" collapsed="true">
+                <field name="OP">GTE</field>
+                <value name="A">
+                  <block type="digit_frequency_rank" id="ov2_mostfreq" collapsed="true">
+                    <field name="RANK">most</field>
+                    <value name="COUNT">
+                      <shadow type="math_number" id="ov2_mostfreqcount">
+                        <field name="NUM">100</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="ov2_mostfreqthreshold">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="purchase" id="block_purchaseover_1001" inline="false">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+            <value name="BARRIER_OFFSET">
+              <shadow type="math_number" id="block_barrieroffsetover_1001" inline="true">
+                <field name="NUM">0.1</field>
+              </shadow>
+            </value>
+            <value name="SECONDBARRIER_OFFSET">
+              <shadow type="math_number" id="block_secondbarrieroffsetover_1001" inline="true">
+                <field name="NUM">-0.1</field>
+              </shadow>
+            </value>
+            <value name="PREDICTION">
+              <block type="variables_get" id="block_getprediction_1002">
+                <field name="VAR" id="var_prediction_1003">prediction</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_operation" id="un7_and_final" collapsed="true">
+            <field name="OP">AND</field>
+            <value name="A">
+              <block type="logic_operation" id="un7_and_pl" collapsed="true">
+                <field name="OP">AND</field>
+                <value name="A">
+                  <block type="logic_operation" id="un7_and_d789" collapsed="true">
+                    <field name="OP">AND</field>
+                    <value name="A">
+                      <block type="logic_operation" id="un7_and_d78" collapsed="true">
+                        <field name="OP">AND</field>
+                        <value name="A">
+                          <block type="logic_compare" id="un7_d7cmp">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                              <block type="digit_percentage" id="un7_d7pct" collapsed="true">
+                                <value name="DIGIT">
+                                  <shadow type="math_number" id="un7_d7val">
+                                    <field name="NUM">7</field>
+                                  </shadow>
+                                </value>
+                                <value name="COUNT">
+                                  <shadow type="math_number" id="un7_d7count">
+                                    <field name="NUM">100</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="un7_d7threshold">
+                                <field name="NUM">10.2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_compare" id="un7_d8cmp">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                              <block type="digit_percentage" id="un7_d8pct" collapsed="true">
+                                <value name="DIGIT">
+                                  <shadow type="math_number" id="un7_d8val">
+                                    <field name="NUM">8</field>
+                                  </shadow>
+                                </value>
+                                <value name="COUNT">
+                                  <shadow type="math_number" id="un7_d8count">
+                                    <field name="NUM">100</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="un7_d8threshold">
+                                <field name="NUM">10.2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_compare" id="un7_d9cmp">
+                        <field name="OP">LT</field>
+                        <value name="A">
+                          <block type="digit_percentage" id="un7_d9pct" collapsed="true">
+                            <value name="DIGIT">
+                              <shadow type="math_number" id="un7_d9val">
+                                <field name="NUM">9</field>
+                              </shadow>
+                            </value>
+                            <value name="COUNT">
+                              <shadow type="math_number" id="un7_d9count">
+                                <field name="NUM">100</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="un7_d9threshold">
+                            <field name="NUM">10.2</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_operation" id="un7_or_ld789" collapsed="true">
+                    <field name="OP">OR</field>
+                    <value name="A">
+                      <block type="logic_operation" id="un7_or_ld78" collapsed="true">
+                        <field name="OP">OR</field>
+                        <value name="A">
+                          <block type="logic_compare" id="un7_ld7cmp">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="last_digit" id="un7_ld_0001"></block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="un7_ld7val">
+                                <field name="NUM">7</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_compare" id="un7_ld8cmp">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="last_digit" id="un7_ld_0002"></block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="un7_ld8val">
+                                <field name="NUM">8</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_compare" id="un7_ld9cmp">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                          <block type="last_digit" id="un7_ld_0003"></block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="un7_ld9val">
+                            <field name="NUM">9</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_compare" id="un7_mostfreqcmp" collapsed="true">
+                <field name="OP">LTE</field>
+                <value name="A">
+                  <block type="digit_frequency_rank" id="un7_mostfreq" collapsed="true">
+                    <field name="RANK">most</field>
+                    <value name="COUNT">
+                      <shadow type="math_number" id="un7_mostfreqcount">
+                        <field name="NUM">100</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="un7_mostfreqthreshold">
+                    <field name="NUM">6</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="purchase" id="block_purchaseunder_1001" inline="false">
+            <field name="PURCHASE_LIST">DIGITUNDER</field>
+            <value name="BARRIER_OFFSET">
+              <shadow type="math_number" id="block_barrieroffsetunder_1001" inline="true">
+                <field name="NUM">0.1</field>
+              </shadow>
+            </value>
+            <value name="SECONDBARRIER_OFFSET">
+              <shadow type="math_number" id="block_secondbarrieroffsetunder_1001" inline="true">
+                <field name="NUM">-0.1</field>
+              </shadow>
+            </value>
+            <value name="PREDICTION">
+              <block type="variables_get" id="block_getprediction2_1001">
+                <field name="VAR" id="var_prediction2_1004">prediction 2</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+<block type="platform_signature" deletable="false" x="2000" y="0"></block>
+</xml>

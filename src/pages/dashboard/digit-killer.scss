@@ -1,0 +1,753 @@
+// Digit Killer palette — shared with the `.dk-theme` overlay applied to the
+// Analyzer / Analysis Tool tabs so all analysis pages share one look.
+%dk-palette {
+    // Page palette — aliased to the shared Aurora Deep spectrum so this desk
+    // reads as part of the same product as every other tab.
+    --dk-bg: var(--ux-canvas, #050b1c);
+    --dk-card: var(--ux-panel-solid, #0a1a38);
+    --dk-card-hover: var(--ux-panel-2, #0d2146);
+    --dk-border: var(--ux-border, rgba(96, 165, 250, 0.18));
+    --dk-text: var(--ux-text, #eaf1ff);
+    --dk-text-dim: var(--ux-text-dim, #9fb4d8);
+    --dk-accent: var(--ux-cyan, #22d3ee);
+    --dk-accent-glow: color-mix(in srgb, var(--ux-cyan, #22d3ee) 15%, transparent);
+    --dk-danger: var(--ux-rose, #f43f5e);
+    --dk-warning: var(--ux-gold, #f5b544);
+    --dk-info: var(--ux-blue-bright, #4f8cff);
+    --dk-silver: var(--ux-text-mute, #6b83ab);
+    --dk-ready: var(--ux-emerald, #10b981);
+    --dk-watching: var(--ux-blue-bright, #4f8cff);
+    --dk-idle: var(--ux-text-mute, #6b83ab);
+    --dk-radius: var(--ux-r-sm, 10px);
+    --dk-radius-sm: var(--ux-r-xs, 8px);
+}
+
+.dk,
+.dk-theme {
+    @extend %dk-palette;
+}
+
+.dk {
+    background: var(--dk-bg);
+    color: var(--dk-text);
+    min-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    font-family: var(--brand-font-primary), system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+
+    // ---- Header -----------------------------------------------------------
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    &__title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dk-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__subtitle {
+        font-size: 12px;
+        color: var(--dk-text-dim);
+        margin: 4px 0 0;
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--dk-text-dim);
+
+        &--live .dk__status-dot {
+            background: var(--dk-ready);
+            box-shadow: 0 0 6px var(--dk-ready);
+        }
+
+        &--error .dk__status-dot {
+            background: var(--dk-danger);
+        }
+    }
+
+    &__status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--dk-idle);
+        animation: dk-pulse 2s infinite;
+    }
+
+    &__window {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--dk-text-dim);
+    }
+
+    &__ticks-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        input[type='number'] {
+            width: 64px;
+            background: var(--dk-card);
+            color: var(--dk-text);
+            border: 1px solid var(--dk-border);
+            border-radius: var(--dk-radius-sm);
+            padding: 5px 8px;
+            font-size: 12px;
+            font-variant-numeric: tabular-nums;
+            text-align: center;
+            outline: none;
+
+            &:focus {
+                border-color: var(--dk-accent);
+            }
+        }
+
+        select {
+            background: var(--dk-card);
+            color: var(--dk-text);
+            border: 1px solid var(--dk-border);
+            border-radius: var(--dk-radius-sm);
+            padding: 5px 8px;
+            font-size: 12px;
+            outline: none;
+            cursor: pointer;
+        }
+    }
+
+    &__btn {
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        color: var(--dk-text);
+        padding: 5px 12px;
+        border-radius: var(--dk-radius-sm);
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+
+        &:hover {
+            background: var(--dk-card-hover);
+            border-color: var(--dk-accent);
+        }
+    }
+
+    // ---- Settings ---------------------------------------------------------
+    &__settings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px 16px;
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        border-radius: var(--dk-radius);
+        padding: 12px 16px;
+        margin-bottom: 16px;
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--dk-text-dim);
+
+            input[type='number'] {
+                background: var(--dk-bg);
+                border: 1px solid var(--dk-border);
+                color: var(--dk-text);
+                padding: 5px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                outline: none;
+
+                &:focus {
+                    border-color: var(--dk-accent);
+                }
+            }
+        }
+    }
+
+    // ---- Strategy tabs ----------------------------------------------------
+    &__tabs {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        margin-bottom: 12px;
+
+        &::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--dk-border);
+            border-radius: 2px;
+        }
+    }
+
+    &__tab {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        color: var(--dk-text-dim);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        &:hover {
+            color: var(--dk-text);
+            border-color: var(--dk-accent);
+        }
+
+        &--active {
+            background: var(--dk-accent-glow);
+            border-color: var(--dk-accent);
+            color: var(--dk-accent);
+            font-weight: 600;
+        }
+
+        &--ready {
+            border-color: var(--dk-ready);
+            color: var(--dk-ready);
+            animation: dk-glow 1.5s infinite;
+        }
+    }
+
+    // ---- Strategy description ---------------------------------------------
+    &__desc {
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        border-radius: var(--dk-radius);
+        padding: 10px 14px;
+        margin-bottom: 14px;
+        font-size: 12px;
+        color: var(--dk-text-dim);
+        line-height: 1.5;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        strong {
+            color: var(--dk-text);
+        }
+    }
+
+    &__desc-ready {
+        font-style: normal;
+        margin-left: auto;
+        color: var(--dk-ready);
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    // ---- Volatility market boxes ------------------------------------------
+    &__markets {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+        gap: 14px;
+        padding-bottom: 8px;
+    }
+
+    &__market {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: var(--dk-card);
+        border: 1px solid var(--dk-border);
+        border-radius: 14px;
+        padding: 14px;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+        &--ready {
+            border-color: var(--dk-ready);
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.14);
+        }
+
+        &--watching {
+            border-color: var(--dk-watching);
+        }
+    }
+
+    &__market-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    &__market-id {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        strong {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dk-text);
+        }
+
+        span {
+            font-size: 10.5px;
+            color: var(--dk-text-dim);
+        }
+    }
+
+    &__market-last {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        position: relative;
+        padding: 2px 10px;
+    }
+
+    &__market-digit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        font-weight: 800;
+        background: var(--dk-accent-glow);
+        color: var(--dk-accent);
+        border: 2px solid var(--dk-accent);
+        box-shadow: 0 0 12px rgba(0, 212, 170, 0.25);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Upward-pointing triangular pointer under the last digit.
+    &__market-pointer {
+        width: 0;
+        height: 0;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 9px solid var(--dk-accent);
+        animation: dk-pointer-bob 1s ease-in-out infinite alternate;
+    }
+
+    &__market-quote {
+        font-size: 10px;
+        color: var(--dk-text-dim);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // ---- DigitShares theming inside the dark box ---------------------------
+    .digit-shares {
+        gap: 0.35rem;
+
+        &--sm &__circle {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        &--sm &__pct {
+            font-size: 0.7rem;
+        }
+
+        &__circle {
+            &::before {
+                background: var(--dk-card);
+            }
+
+            &.is-last {
+                box-shadow: 0 0 0.55rem rgba(0, 212, 170, 0.7);
+
+                &::before {
+                    background: var(--dk-accent-glow);
+                }
+
+                .digit-shares__digit {
+                    color: var(--dk-accent);
+                }
+            }
+        }
+
+        &__digit {
+            color: var(--dk-text);
+            font-size: 0.78rem;
+        }
+
+        &__pct {
+            color: var(--dk-text-dim);
+            font-size: 0.62rem;
+        }
+
+        &__pointer {
+            border-bottom-color: var(--dk-accent);
+        }
+    }
+
+    // ---- Probability entries ----------------------------------------------
+    &__entries {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex: 1 1 auto;
+    }
+
+    &__entries-empty {
+        font-size: 11px;
+        color: var(--dk-text-dim);
+        padding: 8px 2px;
+    }
+
+    &__entry {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &-label {
+            flex: 0 0 58px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--dk-text);
+        }
+
+        &-bar {
+            flex: 1 1 auto;
+            height: 7px;
+            border-radius: 4px;
+            background: rgba(148, 163, 184, 0.16);
+            overflow: hidden;
+        }
+
+        &-fill {
+            display: block;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.45s ease, background 0.3s ease;
+
+            &--low {
+                background: var(--dk-idle);
+            }
+
+            &--mid {
+                background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
+            }
+
+            &--mid-high {
+                background: linear-gradient(90deg, var(--dk-accent), #22d3ee);
+            }
+
+            &--high {
+                background: linear-gradient(90deg, var(--dk-ready), var(--dk-accent));
+            }
+        }
+
+        &-prob {
+            flex: 0 0 40px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+
+            &--low {
+                color: var(--dk-idle);
+            }
+
+            &--mid {
+                color: var(--dk-warning);
+            }
+
+            &--mid-high {
+                color: #22d3ee;
+            }
+
+            &--high {
+                color: var(--dk-ready);
+            }
+        }
+
+        &-target {
+            flex: 0 0 auto;
+            font-size: 8.5px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 2px 6px;
+            border-radius: 9px;
+            background: rgba(148, 163, 184, 0.14);
+            color: var(--dk-text-dim);
+        }
+
+        &--ready .dk__entry-target {
+            background: rgba(16, 185, 129, 0.16);
+            color: var(--dk-ready);
+            animation: dk-glow 1.5s infinite;
+        }
+
+        &--watching {
+            .dk__entry-label {
+                color: var(--dk-info);
+            }
+        }
+    }
+
+    // ---- Market footer: confidence + time-to-trade ------------------------
+    &__market-foot {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        align-items: end;
+        padding-top: 2px;
+    }
+
+    &__market-conf {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        > span {
+            font-size: 9.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dk-text-dim);
+        }
+
+        strong {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &__market-time {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+
+        > span {
+            font-size: 9.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dk-text-dim);
+        }
+
+        strong {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dk-text);
+
+            &.dk__market-time--ready {
+                color: var(--dk-ready);
+                animation: dk-pulse 1s infinite;
+            }
+        }
+    }
+
+    // ---- Shared confidence styles -----------------------------------------
+    &__confidence-value {
+        &--low {
+            color: var(--dk-idle);
+        }
+
+        &--mid {
+            color: var(--dk-warning);
+        }
+
+        &--mid-high {
+            color: #22d3ee;
+        }
+
+        &--high {
+            color: var(--dk-ready);
+        }
+    }
+
+    &__conf-bar {
+        height: 4px;
+        background: rgba(148, 163, 184, 0.16);
+        border-radius: 2px;
+        overflow: hidden;
+        width: 100%;
+
+        span {
+            display: block;
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease, background 0.3s ease;
+
+            &.dk__conf-fill--low {
+                background: var(--dk-idle);
+            }
+
+            &.dk__conf-fill--mid {
+                background: linear-gradient(90deg, var(--ux-gold, #f5b544), var(--ux-coral, #fb7185));
+            }
+
+            &.dk__conf-fill--mid-high {
+                background: linear-gradient(90deg, var(--dk-accent), #22d3ee);
+            }
+
+            &.dk__conf-fill--high {
+                background: linear-gradient(90deg, var(--dk-ready), var(--dk-accent));
+            }
+        }
+    }
+
+    // ---- Trade Now --------------------------------------------------------
+    &__trade-now {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, var(--dk-ready), #059669);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        transition: all 0.2s;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        &:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: var(--dk-idle);
+        }
+    }
+
+    &__trade-result {
+        margin-top: 2px;
+        padding: 9px;
+        border-radius: var(--dk-radius-sm);
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+
+        &--win {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--dk-ready);
+            border: 1px solid var(--dk-ready);
+        }
+
+        &--loss {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--dk-danger);
+            border: 1px solid var(--dk-danger);
+        }
+
+        &--pending {
+            background: color-mix(in srgb, var(--ux-gold, #f5b544) 15%, transparent);
+            color: var(--dk-warning);
+            border: 1px solid var(--dk-warning);
+        }
+    }
+
+    @keyframes dk-pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    @keyframes dk-glow {
+        0%,
+        100% {
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 13px rgba(16, 185, 129, 0.45);
+        }
+    }
+
+    @keyframes dk-pointer-bob {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(2.5px);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Shared Analysis theme overlay (`.dk-theme`) — applied on the Analyzer and
+// Analysis Tool tab wrappers so every analysis page shares the Digit Killer
+// look: dark navy panels, teal accents, consistent text.
+// ---------------------------------------------------------------------------
+.dk-theme {
+    --general-main-1: var(--dk-bg);
+    --general-section-1: var(--dk-card);
+    --general-section-6: var(--dk-border);
+    --general-main-2: var(--dk-card);
+    --text-prominent: var(--dk-text);
+    --text-general: var(--dk-text);
+    --text-less-prominent: var(--dk-text-dim);
+    --border-normal: var(--dk-border);
+    --border-hover: var(--dk-accent);
+    --button-primary-default: var(--dk-accent);
+    --button-primary-hover: var(--dk-accent);
+    --text-profit-success: var(--dk-ready);
+    --text-loss-danger: var(--dk-danger);
+    --site-accent: var(--dk-accent);
+    --site-accent-hover: #0abf9c;
+    --site-accent-soft: rgba(0, 212, 170, 0.12);
+    --site-border: var(--dk-border);
+    --site-info: #38bdf8;
+    --app-page-background: var(--dk-bg);
+    --app-card-background: var(--dk-card);
+    --app-border-color: var(--dk-border);
+    --app-text-title: var(--dk-text);
+    --app-text-muted: var(--dk-text-dim);
+    --brand-success: var(--dk-ready);
+    --brand-warning: var(--dk-warning);
+
+    background: var(--dk-bg);
+    color: var(--dk-text);
+    height: 100%;
+    min-height: 0;
+
+    .digit-shares__circle::before {
+        background: var(--app-card-background);
+    }
+}

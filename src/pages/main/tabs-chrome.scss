@@ -1,0 +1,13 @@
+// Tab-chrome hardening.
+//
+// Tall tab pages used to be able to bleed over the main navigation row, which
+// made the tabs hard to see and hard to click once a content-heavy tab was
+// open. Lifting the tab-list wrapper into its own stacking layer keeps the
+// header painted above every tab's content, no matter how tall that content is.
+.main__container {
+    .dc-tabs__list--header--main__tabs {
+        position: relative;
+        z-index: 20;
+        flex: 0 0 auto;
+    }
+}

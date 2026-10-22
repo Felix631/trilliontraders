@@ -1,0 +1,710 @@
+<xml data-bot-copyright-notice="Copyright notice: preserve all copyright and license notices." data-automated-extraction-notice="Automated extraction grants no additional rights. Do not remove attribution or bypass applicable terms." xmlns="http://www.w3.org/1999/xhtml" collection="false" is_dbot="true">
+  <variables>
+    <variable type="" id="v_stake" islocal="false" iscloud="false">stake</variable>
+    <variable type="" id="v_initial" islocal="false" iscloud="false">initial stake</variable>
+    <variable type="" id="v_mult" islocal="false" iscloud="false">recovery multiplier</variable>
+    <variable type="" id="v_maxstake" islocal="false" iscloud="false">max stake</variable>
+    <variable type="" id="v_tp" islocal="false" iscloud="false">take profit</variable>
+    <variable type="" id="v_sl" islocal="false" iscloud="false">stop loss</variable>
+    <variable type="" id="v_sample" islocal="false" iscloud="false">sample size</variable>
+    <variable type="" id="v_tol" islocal="false" iscloud="false">redbar tolerance</variable>
+    <variable type="" id="v_pred" islocal="false" iscloud="false">prediction</variable>
+    <variable type="" id="v_counts" islocal="false" iscloud="false">digit counts</variable>
+    <variable type="" id="v_i" islocal="false" iscloud="false">i</variable>
+    <variable type="" id="v_digit" islocal="false" iscloud="false">digit</variable>
+    <variable type="" id="v_low" islocal="false" iscloud="false">lowest count</variable>
+    <variable type="" id="v_cand" islocal="false" iscloud="false">redbar candidates</variable>
+  </variables>
+  <block type="trade_definition" id="td_main" deletable="false" x="0" y="0">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="td_market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">R_100</field>
+        <next>
+          <block type="trade_definition_tradetype" id="td_tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">matchesdiffers</field>
+            <next>
+              <block type="trade_definition_contracttype" id="td_contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITMATCH</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="td_candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="td_restartbs" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="td_restarterr" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="init_1">
+        <field name="VAR" id="v_initial">initial stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="n_init">
+            <field name="NUM">0.35</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="init_2">
+            <field name="VAR" id="v_stake">stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="g_init_1">
+                <field name="VAR" id="v_initial">initial stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="init_3">
+                <field name="VAR" id="v_mult">recovery multiplier</field>
+                <value name="VALUE">
+                  <block type="math_number" id="n_mult">
+                    <field name="NUM">1.18</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="init_4">
+                    <field name="VAR" id="v_maxstake">max stake</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="n_maxstake">
+                        <field name="NUM">20</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="init_5">
+                        <field name="VAR" id="v_tp">take profit</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="n_tp">
+                            <field name="NUM">10</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="init_6">
+                            <field name="VAR" id="v_sl">stop loss</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="n_sl">
+                                <field name="NUM">20</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="init_7">
+                                <field name="VAR" id="v_sample">sample size</field>
+                                <value name="VALUE">
+                                  <block type="math_number" id="n_sample">
+                                    <field name="NUM">50</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="init_8">
+                                    <field name="VAR" id="v_tol">redbar tolerance</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="n_tol">
+                                        <field name="NUM">1</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="variables_set" id="init_9">
+                                        <field name="VAR" id="v_pred">prediction</field>
+                                        <value name="VALUE">
+                                          <block type="math_number" id="n_pred">
+                                            <field name="NUM">0</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="td_options">
+        <mutation has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <field name="CURRENCY_LIST">USD</field>
+        <value name="DURATION">
+          <shadow type="math_number" id="s_dur">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number" id="s_amt">
+            <field name="NUM">0.35</field>
+          </shadow>
+          <block type="variables_get" id="g_stake_opt">
+            <field name="VAR" id="v_stake">stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="s_pred">
+            <field name="NUM">0</field>
+          </shadow>
+          <block type="variables_get" id="g_pred_opt">
+            <field name="VAR" id="v_pred">prediction</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="bp_main" deletable="false" x="0" y="700">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="bp_if_ready">
+        <value name="IF0">
+          <block type="logic_compare" id="cmp_ready">
+            <field name="OP">GTE</field>
+            <value name="A">
+              <block type="lists_length" id="len_digits">
+                <value name="VALUE">
+                  <block type="lastDigitList" id="ldl_1"></block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="variables_get" id="g_sample_1">
+                <field name="VAR" id="v_sample">sample size</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="bp_1">
+            <field name="VAR" id="v_counts">digit counts</field>
+            <value name="VALUE">
+              <block type="lists_repeat" id="rep_counts">
+                <value name="ITEM">
+                  <block type="math_number" id="n_zero">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="NUM">
+                  <block type="math_number" id="n_ten">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_for" id="for_count">
+                <field name="VAR" id="v_i">i</field>
+                <value name="FROM">
+                  <block type="math_number" id="n_from1">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <value name="TO">
+                  <block type="variables_get" id="g_sample_2">
+                    <field name="VAR" id="v_sample">sample size</field>
+                  </block>
+                </value>
+                <value name="BY">
+                  <block type="math_number" id="n_by1">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="variables_set" id="set_digit">
+                    <field name="VAR" id="v_digit">digit</field>
+                    <value name="VALUE">
+                      <block type="lists_getIndex" id="get_tick_digit">
+                        <mutation statement="false" at="true"></mutation>
+                        <field name="MODE">GET</field>
+                        <field name="WHERE">FROM_END</field>
+                        <value name="VALUE">
+                          <block type="lastDigitList" id="ldl_2"></block>
+                        </value>
+                        <value name="AT">
+                          <block type="variables_get" id="g_i_1">
+                            <field name="VAR" id="v_i">i</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="lists_setIndex" id="set_count">
+                        <mutation at="true"></mutation>
+                        <field name="MODE">SET</field>
+                        <field name="WHERE">FROM_START</field>
+                        <value name="LIST">
+                          <block type="variables_get" id="g_counts_1">
+                            <field name="VAR" id="v_counts">digit counts</field>
+                          </block>
+                        </value>
+                        <value name="AT">
+                          <block type="math_arithmetic" id="ar_idx">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                              <shadow type="math_number" id="sh_a1">
+                                <field name="NUM">0</field>
+                              </shadow>
+                              <block type="variables_get" id="g_digit_1">
+                                <field name="VAR" id="v_digit">digit</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <shadow type="math_number" id="sh_b1">
+                                <field name="NUM">1</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="math_arithmetic" id="ar_inc">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                              <shadow type="math_number" id="sh_a2">
+                                <field name="NUM">0</field>
+                              </shadow>
+                              <block type="lists_getIndex" id="get_count_cur">
+                                <mutation statement="false" at="true"></mutation>
+                                <field name="MODE">GET</field>
+                                <field name="WHERE">FROM_START</field>
+                                <value name="VALUE">
+                                  <block type="variables_get" id="g_counts_2">
+                                    <field name="VAR" id="v_counts">digit counts</field>
+                                  </block>
+                                </value>
+                                <value name="AT">
+                                  <block type="math_arithmetic" id="ar_idx2">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                      <shadow type="math_number" id="sh_a3">
+                                        <field name="NUM">0</field>
+                                      </shadow>
+                                      <block type="variables_get" id="g_digit_2">
+                                        <field name="VAR" id="v_digit">digit</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <shadow type="math_number" id="sh_b3">
+                                        <field name="NUM">1</field>
+                                      </shadow>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <shadow type="math_number" id="sh_b2">
+                                <field name="NUM">1</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="variables_set" id="bp_2">
+                    <field name="VAR" id="v_low">lowest count</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="g_sample_3">
+                        <field name="VAR" id="v_sample">sample size</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="controls_for" id="for_low">
+                        <field name="VAR" id="v_i">i</field>
+                        <value name="FROM">
+                          <block type="math_number" id="n_from2">
+                            <field name="NUM">1</field>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="math_number" id="n_to10a">
+                            <field name="NUM">10</field>
+                          </block>
+                        </value>
+                        <value name="BY">
+                          <block type="math_number" id="n_by2">
+                            <field name="NUM">1</field>
+                          </block>
+                        </value>
+                        <statement name="DO">
+                          <block type="controls_if" id="if_low">
+                            <value name="IF0">
+                              <block type="logic_compare" id="cmp_low">
+                                <field name="OP">LT</field>
+                                <value name="A">
+                                  <block type="lists_getIndex" id="get_count_low">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="g_counts_3">
+                                        <field name="VAR" id="v_counts">digit counts</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="variables_get" id="g_i_2">
+                                        <field name="VAR" id="v_i">i</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="variables_get" id="g_low_1">
+                                    <field name="VAR" id="v_low">lowest count</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="variables_set" id="set_low">
+                                <field name="VAR" id="v_low">lowest count</field>
+                                <value name="VALUE">
+                                  <block type="lists_getIndex" id="get_count_low2">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="g_counts_4">
+                                        <field name="VAR" id="v_counts">digit counts</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="variables_get" id="g_i_3">
+                                        <field name="VAR" id="v_i">i</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="variables_set" id="bp_3">
+                            <field name="VAR" id="v_cand">redbar candidates</field>
+                            <value name="VALUE">
+                              <block type="math_number" id="n_zero2">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="controls_for" id="for_pick">
+                                <field name="VAR" id="v_i">i</field>
+                                <value name="FROM">
+                                  <block type="math_number" id="n_from3">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                                <value name="TO">
+                                  <block type="math_number" id="n_to10b">
+                                    <field name="NUM">10</field>
+                                  </block>
+                                </value>
+                                <value name="BY">
+                                  <block type="math_number" id="n_by3">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                                <statement name="DO">
+                                  <block type="controls_if" id="if_pick">
+                                    <value name="IF0">
+                                      <block type="logic_compare" id="cmp_pick">
+                                        <field name="OP">LTE</field>
+                                        <value name="A">
+                                          <block type="lists_getIndex" id="get_count_pick">
+                                            <mutation statement="false" at="true"></mutation>
+                                            <field name="MODE">GET</field>
+                                            <field name="WHERE">FROM_START</field>
+                                            <value name="VALUE">
+                                              <block type="variables_get" id="g_counts_5">
+                                                <field name="VAR" id="v_counts">digit counts</field>
+                                              </block>
+                                            </value>
+                                            <value name="AT">
+                                              <block type="variables_get" id="g_i_4">
+                                                <field name="VAR" id="v_i">i</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_arithmetic" id="ar_tol">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                              <shadow type="math_number" id="sh_a4">
+                                                <field name="NUM">0</field>
+                                              </shadow>
+                                              <block type="variables_get" id="g_low_2">
+                                                <field name="VAR" id="v_low">lowest count</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <shadow type="math_number" id="sh_b4">
+                                                <field name="NUM">0</field>
+                                              </shadow>
+                                              <block type="variables_get" id="g_tol_1">
+                                                <field name="VAR" id="v_tol">redbar tolerance</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <statement name="DO0">
+                                      <block type="variables_set" id="inc_cand">
+                                        <field name="VAR" id="v_cand">redbar candidates</field>
+                                        <value name="VALUE">
+                                          <block type="math_arithmetic" id="ar_cand">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                              <shadow type="math_number" id="sh_a5">
+                                                <field name="NUM">0</field>
+                                              </shadow>
+                                              <block type="variables_get" id="g_cand_1">
+                                                <field name="VAR" id="v_cand">redbar candidates</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <shadow type="math_number" id="sh_b5">
+                                                <field name="NUM">1</field>
+                                              </shadow>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="controls_if" id="if_reservoir">
+                                            <value name="IF0">
+                                              <block type="logic_compare" id="cmp_res">
+                                                <field name="OP">EQ</field>
+                                                <value name="A">
+                                                  <block type="math_random_int" id="rand_pick">
+                                                    <value name="FROM">
+                                                      <shadow type="math_number" id="sh_rf">
+                                                        <field name="NUM">1</field>
+                                                      </shadow>
+                                                    </value>
+                                                    <value name="TO">
+                                                      <shadow type="math_number" id="sh_rt">
+                                                        <field name="NUM">1</field>
+                                                      </shadow>
+                                                      <block type="variables_get" id="g_cand_2">
+                                                        <field name="VAR" id="v_cand">redbar candidates</field>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <value name="B">
+                                                  <block type="math_number" id="n_one_res">
+                                                    <field name="NUM">1</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <statement name="DO0">
+                                              <block type="variables_set" id="set_pred">
+                                                <field name="VAR" id="v_pred">prediction</field>
+                                                <value name="VALUE">
+                                                  <block type="math_arithmetic" id="ar_pred">
+                                                    <field name="OP">MINUS</field>
+                                                    <value name="A">
+                                                      <shadow type="math_number" id="sh_a6">
+                                                        <field name="NUM">0</field>
+                                                      </shadow>
+                                                      <block type="variables_get" id="g_i_5">
+                                                        <field name="VAR" id="v_i">i</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="B">
+                                                      <shadow type="math_number" id="sh_b6">
+                                                        <field name="NUM">1</field>
+                                                      </shadow>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </statement>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </statement>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="notify" id="notify_pred">
+                                    <field name="NOTIFICATION_TYPE">info</field>
+                                    <field name="NOTIFICATION_SOUND">silent</field>
+                                    <value name="MESSAGE">
+                                      <shadow type="text" id="sh_txt1">
+                                        <field name="TEXT">abc</field>
+                                      </shadow>
+                                      <block type="variables_get" id="g_pred_1">
+                                        <field name="VAR" id="v_pred">prediction</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="purchase" id="purchase_1">
+                                        <field name="PURCHASE_LIST">DIGITMATCH</field>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="ap_main" deletable="false" x="900" y="0">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="ap_if_result">
+        <mutation else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="check_win">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="ap_reset">
+            <field name="VAR" id="v_stake">stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="g_init_2">
+                <field name="VAR" id="v_initial">initial stake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="ap_martingale">
+            <field name="VAR" id="v_stake">stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="ar_mart">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="sh_a7">
+                    <field name="NUM">0</field>
+                  </shadow>
+                  <block type="variables_get" id="g_stake_1">
+                    <field name="VAR" id="v_stake">stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="sh_b7">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="g_mult_1">
+                    <field name="VAR" id="v_mult">recovery multiplier</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_if" id="ap_if_maxstake">
+                <value name="IF0">
+                  <block type="logic_compare" id="cmp_maxstake">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="variables_get" id="g_stake_2">
+                        <field name="VAR" id="v_stake">stake</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="g_maxstake_1">
+                        <field name="VAR" id="v_maxstake">max stake</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="ap_reset2">
+                    <field name="VAR" id="v_stake">stake</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="g_init_3">
+                        <field name="VAR" id="v_initial">initial stake</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="controls_if" id="ap_if_continue">
+            <value name="IF0">
+              <block type="logic_operation" id="and_limits">
+                <field name="OP">AND</field>
+                <value name="A">
+                  <block type="logic_compare" id="cmp_tp">
+                    <field name="OP">LT</field>
+                    <value name="A">
+                      <block type="total_profit" id="tp_1"></block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="g_tp_1">
+                        <field name="VAR" id="v_tp">take profit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_compare" id="cmp_sl">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="total_profit" id="tp_2"></block>
+                    </value>
+                    <value name="B">
+                      <block type="math_arithmetic" id="ar_negsl">
+                        <field name="OP">MINUS</field>
+                        <value name="A">
+                          <shadow type="math_number" id="sh_a8">
+                            <field name="NUM">0</field>
+                          </shadow>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="sh_b8">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="variables_get" id="g_sl_1">
+                            <field name="VAR" id="v_sl">stop loss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="trade_again" id="ta_1"></block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

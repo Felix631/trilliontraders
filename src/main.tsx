@@ -1,0 +1,37 @@
+import { configure } from 'mobx';
+// Hide the pre-React boot splash as soon as the bundle executes (side-effect import).
+import './utils/boot-splash';
+import ReactDOM from 'react-dom/client';
+import { AuthWrapper } from './app/AuthWrapper';
+// Removed AnalyticsInitializer import - analytics dependency removed
+// See migrate-docs/ANALYTICS_IMPLEMENTATION_GUIDE.md for re-implementation
+import {
+    applyBrandFontFromConfig,
+    applyDocumentTitle,
+    applyFaviconFromLogo,
+    applyPrimaryColorFromConfig,
+} from './utils/document-branding';
+import { performVersionCheck } from './utils/version-check';
+import './styles/index.scss';
+// Aurora Deep kit — imported last so its rules win the cascade over the
+// per-page stylesheets pulled in by the app tree above.
+import './styles/ux-kit.scss';
+
+// Configure MobX to handle multiple instances in production builds
+configure({ isolateGlobalState: true });
+
+// Perform version check FIRST - before any other operations
+performVersionCheck();
+
+// Apply deploy-time document branding (tab title, favicon, web font, and primary color).
+applyDocumentTitle();
+applyFaviconFromLogo();
+applyBrandFontFromConfig();
+applyPrimaryColorFromConfig();
+
+// Removed AnalyticsInitializer() call - analytics dependency removed
+
+// App Builder preview branding (incl. PREVIEW_READY handshake) is handled by the
+// src/preview/ listener, mounted from app-content only in the preview deployment
+// (NEXT_PUBLIC_APP_BUILD === 'true') and stripped from standalone partner deploys.
+ReactDOM.createRoot(document.getElementById('root')!).render(<AuthWrapper />);

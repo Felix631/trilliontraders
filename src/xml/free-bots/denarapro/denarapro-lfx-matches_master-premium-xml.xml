@@ -1,0 +1,174 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="mm_stake">Stake</variable>
+    <variable id="mm_initialStake">initialStake</variable>
+    <variable id="mm_martingale">Martingale</variable>
+  </variables>
+  <block type="trade_definition" id="mm_trade_def" deletable="false" x="0" y="60">
+    <field name="PARAM_LABEL">NONE</field>
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="mm_market" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ50V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="mm_tradetype" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">matchesdiffers</field>
+            <next>
+              <block type="trade_definition_contracttype" id="mm_contracttype" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITMATCH</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="mm_candle" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="mm_restart" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="mm_restarterror" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="mm_set_stake">
+        <field name="VAR" id="mm_stake">Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="mm_stake_val">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="mm_set_initial">
+            <field name="VAR" id="mm_initialStake">initialStake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="mm_copy_stake">
+                <field name="VAR" id="mm_stake">Stake</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="mm_set_martingale">
+                <field name="VAR" id="mm_martingale">Martingale</field>
+                <value name="VALUE">
+                  <block type="math_number" id="mm_martingale_val">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="notify" id="mm_startup_notify">
+                    <field name="NOTIFICATION_TYPE">info</field>
+                    <field name="NOTIFICATION_SOUND">silent</field>
+                    <value name="MESSAGE">
+                      <shadow type="text" id="mm_notify_shadow">
+                        <field name="TEXT">Matches Mover loaded</field>
+                      </shadow>
+                      <block type="text" id="mm_notify_text">
+                        <field name="TEXT">Matches Mover — Red bar reverse MATCHES strategy (4 ticks). Turn Athena off.</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="mm_tradeoptions">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <field name="CURRENCY_LIST">USD</field>
+        <value name="DURATION">
+          <shadow type="math_number" id="mm_dur_shadow">
+            <field name="NUM">4</field>
+          </shadow>
+          <block type="math_number" id="mm_dur_val">
+            <field name="NUM">4</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number" id="mm_amt_shadow">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="mm_amt_var">
+            <field name="VAR" id="mm_stake">Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="mm_pred_shadow">
+            <field name="NUM">0</field>
+          </shadow>
+          <block type="math_number" id="mm_pred_val">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="mm_before_purchase" deletable="false" x="0" y="560">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="strategy_red_bar_reverse_matches_apply" id="mm_strategy">
+        <next>
+          <block type="purchase" id="mm_purchase">
+            <field name="PURCHASE_LIST">DIGITMATCH</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="mm_after_purchase" x="720" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="mm_win_check">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="mm_check_win">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="mm_reset_stake">
+            <field name="VAR" id="mm_stake">Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="mm_get_initial">
+                <field name="VAR" id="mm_initialStake">initialStake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="mm_martingale_stake">
+            <field name="VAR" id="mm_stake">Stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="mm_multiply_stake">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <block type="variables_get" id="mm_get_stake_loss">
+                    <field name="VAR" id="mm_stake">Stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="mm_get_martingale">
+                    <field name="VAR" id="mm_martingale">Martingale</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="mm_trade_again"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

@@ -1,0 +1,161 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="y)BE|l7At6oT)ur0Ts1">Stake</variable>
+    <variable id="w-u|Aa@hixY}obmTs2">initialStake</variable>
+    <variable id=".5ELQ4[J.e4czkTs3">Martingale</variable>
+  </variables>
+  <block type="trade_definition" id="tsTradeDef001" deletable="false" x="0" y="60">
+    <field name="PARAM_LABEL">NONE</field>
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="tsMarket001" deletable="false" movable="false">
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">1HZ50V</field>
+        <next>
+          <block type="trade_definition_tradetype" id="tsTradeType001" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">overunder</field>
+            <next>
+              <block type="trade_definition_contracttype" id="tsContract001" deletable="false" movable="false">
+                <field name="TYPE_LIST">DIGITOVER</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="tsCandle001" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="tsRestartBuy001" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="tsRestartErr001" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set" id="tsSetStake001">
+        <field name="VAR" id="y)BE|l7At6oT)ur0Ts1">Stake</field>
+        <value name="VALUE">
+          <block type="math_number" id="tsStakeNum001">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="tsSetInit001">
+            <field name="VAR" id="w-u|Aa@hixY}obmTs2">initialStake</field>
+            <value name="VALUE">
+              <block type="math_number" id="tsInitNum001">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="tsSetMart001">
+                <field name="VAR" id=".5ELQ4[J.e4czkTs3">Martingale</field>
+                <value name="VALUE">
+                  <block type="math_number" id="tsMartNum001">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="tsTradeOpts001">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="true"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number" id="tsDurShadow001">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="math_number" id="tsDurVal001">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number" id="tsAmtShadow001">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="tsAmtVar001">
+            <field name="VAR" id="y)BE|l7At6oT)ur0Ts1">Stake</field>
+          </block>
+        </value>
+        <value name="PREDICTION">
+          <shadow type="math_number_positive" id="tsPredShadow001">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="math_number_positive" id="tsPredVal001">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="tsBeforePurchase001" deletable="false" x="0" y="520">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="purchase" id="tsPurchase001">
+        <field name="PURCHASE_LIST">DIGITOVER</field>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="tsAfterPurchase001" x="720" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="controls_if" id="tsWinCheck001">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+        <value name="IF0">
+          <block type="contract_check_result" id="tsCheckWin001">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="tsWinReset001">
+            <field name="VAR" id="y)BE|l7At6oT)ur0Ts1">Stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="tsWinInitGet001">
+                <field name="VAR" id="w-u|Aa@hixY}obmTs2">initialStake</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="tsLossDouble001">
+            <field name="VAR" id="y)BE|l7At6oT)ur0Ts1">Stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="tsLossMult001">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <shadow type="math_number" id="tsMultAShadow001">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="variables_get" id="tsMultStake001">
+                    <field name="VAR" id="y)BE|l7At6oT)ur0Ts1">Stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <shadow type="math_number" id="tsMultBShadow001">
+                    <field name="NUM">2</field>
+                  </shadow>
+                  <block type="variables_get" id="tsMultMart001">
+                    <field name="VAR" id=".5ELQ4[J.e4czkTs3">Martingale</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="trade_again" id="tsTradeAgain001"></block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

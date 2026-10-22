@@ -1,0 +1,747 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="yKZJoZOXVM,K5xW:br4H">Strategy Type</variable>
+    <variable id="L@/b)sz/N}%09a72BPX;">Stake</variable>
+    <variable id="kaNuTZZg#6WA.4h*oV^=">Run Count</variable>
+    <variable id="c5=hz$~!=]^.)CA:21Zd">Martangle</variable>
+    <variable id="|Ag{[(Qw/K$g1v=k)zNh">No. of Win {Take Profit}</variable>
+    <variable id="is-FMy]az2Q0g8j+I|5%">Initial Stake</variable>
+    <variable id="YRKV/X%{~Sd^HeY^n4wx">text</variable>
+    <variable id="2]oO6`(1|9(H8I5QalfU">Stop Loss</variable>
+    <variable id=".y;h9Tk8uf./r@9$[8(b">Use Martingale</variable>
+  </variables>
+  <block type="trade_definition" id="A#/;j,6f#0U+1=7ki!yj" deletable="false" x="0" y="60">
+    <statement name="TRADE_OPTIONS">
+      <block type="trade_definition_market" id="0ELN3?|#ps4EznJW[wVy" deletable="false" movable="false">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" vh_enabled="false" vh_max_steps="1" vh_min_trades="1" vh_stake="0.35"></mutation>
+        <field name="MARKET_LIST">synthetic_index</field>
+        <field name="SUBMARKET_LIST">random_index</field>
+        <field name="SYMBOL_LIST">R_25</field>
+        <field name="ALTERNATE_MARKETS">FALSE</field>
+        <field name="ALTERNATE_EVERY">1</field>
+        <field name="MULTI_MARKET">FALSE</field>
+        <field name="VH_ENABLED">FALSE</field>
+        <field name="VH_SETTINGS_BTN">VH Settings</field>
+        <next>
+          <block type="trade_definition_tradetype" id="7XER:rs*DLM{4#?`]WL(" deletable="false" movable="false">
+            <field name="TRADETYPECAT_LIST">digits</field>
+            <field name="TRADETYPE_LIST">evenodd</field>
+            <next>
+              <block type="trade_definition_contracttype" id="M;#hw*QCtpdU/aI@JuW." deletable="false" movable="false">
+                <field name="TYPE_LIST">both</field>
+                <next>
+                  <block type="trade_definition_candleinterval" id="(zk[8HvV{m/E!b`4h.pI" deletable="false" movable="false">
+                    <field name="CANDLEINTERVAL_LIST">60</field>
+                    <next>
+                      <block type="trade_definition_restartbuysell" id="(p_/[v`wG3a+kxi/|zH|" deletable="false" movable="false">
+                        <field name="TIME_MACHINE_ENABLED">FALSE</field>
+                        <next>
+                          <block type="trade_definition_restartonerror" id="gWB7E75:@%A{2I3G,LEQ" deletable="false" movable="false">
+                            <field name="RESTARTONERROR">TRUE</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="INITIALIZATION">
+      <block type="variables_set_option" id="7/8wSYLK,yP`Sg8efF=.">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+        <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+        <field name="OPTION">If last 2 Digits are Even trade Even and Vice Versa</field>
+        <next>
+          <block type="variables_set" id="~V7e1m3KG|r8(6Z}kEYO">
+            <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+            <value name="VALUE">
+              <block type="math_number" id="NXTESPL-dgp,uEC?MS{L">
+                <field name="NUM">0.5</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="yHqo22iH_xRzc,vSq^r]">
+                <field name="VAR" id="c5=hz$~!=]^.)CA:21Zd">Martangle</field>
+                <value name="VALUE">
+                  <block type="math_number" id="Ho(2Mt~+G07UT|gMt.7)">
+                    <field name="NUM">2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="suyO~vvnT3;Q(:E-pBQ7">
+                    <field name="VAR" id="|Ag{[(Qw/K$g1v=k)zNh">No. of Win {Take Profit}</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="uJG:nXJwJz3pqsI%as9n">
+                        <field name="NUM">8</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="V^l4B)1rr18uay7t|#y]">
+                        <field name="VAR" id="2]oO6`(1|9(H8I5QalfU">Stop Loss</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="iy7vhkZMo!$WjGePxUnp">
+                            <field name="NUM">30</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set" id="utbpf.ZG81%QCB|b@alh">
+                            <field name="VAR" id=".y;h9Tk8uf./r@9$[8(b">Use Martingale</field>
+                            <value name="VALUE">
+                              <block type="logic_boolean" id="B5g~v+qeB9XG8A+4WEHL">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" id="_-f4m{R~cP`bU+7P^|Be" collapsed="true">
+                                <field name="VAR" id="is-FMy]az2Q0g8j+I|5%">Initial Stake</field>
+                                <value name="VALUE">
+                                  <block type="variables_get" id="jE}g)qAH%-B$CBPy`LFc">
+                                    <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="variables_set" id="{)Sj!A,7AMu7#7Ipm`f_" collapsed="true">
+                                    <field name="VAR" id="kaNuTZZg#6WA.4h*oV^=">Run Count</field>
+                                    <value name="VALUE">
+                                      <block type="math_number" id="X*uF(GC=z8]q.Wz8LVhg">
+                                        <field name="NUM">0</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="SUBMARKET">
+      <block type="trade_definition_tradeoptions" id="ZX}~CNjTLNB`G}x2}_$8">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" has_first_barrier="false" has_second_barrier="false" has_prediction="false"></mutation>
+        <field name="DURATIONTYPE_LIST">t</field>
+        <value name="DURATION">
+          <shadow type="math_number_positive" id="cIkks,]*FLjcfZb2crUZ">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="AMOUNT">
+          <shadow type="math_number_positive" id="2g`WGIcgV/XT+J-vXw34">
+            <field name="NUM">1</field>
+          </shadow>
+          <block type="variables_get" id="jXlZ2R)![);/:3VaXFDa">
+            <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="after_purchase" id="(^qi7LaqxU`[;j[JOf%`" collapsed="true" x="714" y="60">
+    <statement name="AFTERPURCHASE_STACK">
+      <block type="notify" id="V)B}6tbmCVg?Ix_M*+0/" collapsed="true">
+        <field name="NOTIFICATION_TYPE">success</field>
+        <field name="NOTIFICATION_SOUND">silent</field>
+        <value name="MESSAGE">
+          <shadow type="text" id="4HX}FM6w)^x6LibZn^At">
+            <field name="TEXT">abc</field>
+          </shadow>
+          <block type="variables_get" id="qg{CeQ=A=[*mkIqjdsA9">
+            <field name="VAR" id="kaNuTZZg#6WA.4h*oV^=">Run Count</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id=",%V@C))a-7h$1iVQ3.]l" collapsed="true">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+            <value name="IF0">
+              <block type="contract_check_result" id="`3UmoRHO^YE_^CfmrKIR">
+                <field name="CHECK_RESULT">win</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="variables_set" id="F,6Wc#FQwt!kT](pd#PP">
+                <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+                <value name="VALUE">
+                  <block type="variables_get" id="=aOe[T_mV#.iZR6n3Oj,">
+                    <field name="VAR" id="is-FMy]az2Q0g8j+I|5%">Initial Stake</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="math_change" id="3d(A8iqj0?[dy{RyzcQg">
+                    <field name="VAR" id="kaNuTZZg#6WA.4h*oV^=">Run Count</field>
+                    <value name="DELTA">
+                      <shadow type="math_number" id="p^Q[=Ia6CZw?/LrAZS[)">
+                        <field name="NUM">1</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="controls_if" id="XGnxfvO}}Yb:s^rJ@hTS">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="M{=7*w]J$uDx[FL%J.[g">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="variables_get" id="BQb-b9;+xklt-D%R5%BA">
+                        <field name="VAR" id=".y;h9Tk8uf./r@9$[8(b">Use Martingale</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="logic_boolean" id="69S:X_hK-(-Z@,+9O[Ea">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="variables_set" id="T@*tC_F%5zGGgH(O:tY?">
+                    <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+                    <value name="VALUE">
+                      <block type="math_arithmetic" id="aEc8P{YMMpv,z(bO_)bC">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                          <shadow type="math_number" id=";RTPO!3?{1w6v/Z4-zXi">
+                            <field name="NUM">2</field>
+                          </shadow>
+                          <block type="variables_get" id="@d#A^[KvZ=6;4ar1LEa^">
+                            <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <shadow type="math_number" id="L]Yfa.JY*IZnaX9yE[OE">
+                            <field name="NUM">1</field>
+                          </shadow>
+                          <block type="variables_get" id="VSLc}/Gpb/:4L;z~kx#_">
+                            <field name="VAR" id="c5=hz$~!=]^.)CA:21Zd">Martangle</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="variables_set" id="-tL_w@e?;#:^r!PvRiSx">
+                    <field name="VAR" id="L@/b)sz/N}%09a72BPX;">Stake</field>
+                    <value name="VALUE">
+                      <block type="variables_get" id="sIvz|e7c*yz?lGI)OU|t">
+                        <field name="VAR" id="is-FMy]az2Q0g8j+I|5%">Initial Stake</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="controls_if" id="(_A)U})Z#q1M-|1NWArN" collapsed="true">
+                <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1" else="1"></mutation>
+                <value name="IF0">
+                  <block type="logic_compare" id="#Wtl;*Jf6q~|KaUWHb9P">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="variables_get" id="i}|7?6ulO}RF90O`HCW?">
+                        <field name="VAR" id="kaNuTZZg#6WA.4h*oV^=">Run Count</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="@/KbtsDZiHT,3TF7wdK-">
+                        <field name="VAR" id="|Ag{[(Qw/K$g1v=k)zNh">No. of Win {Take Profit}</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_join" id="ei.a*.7Ewl5~lXCar44a">
+                    <field name="VARIABLE" id="YRKV/X%{~Sd^HeY^n4wx">text</field>
+                    <statement name="STACK">
+                      <block type="text_statement" id="`d;D:_3?FWg|Z2p[~I~0">
+                        <value name="TEXT">
+                          <shadow type="text" id="/9[PfJ)Li7(`@l`%r1Mp">
+                            <field name="TEXT">You have successfully hit the </field>
+                          </shadow>
+                        </value>
+                        <next>
+                          <block type="text_statement" id="/w0R=-)Zb4Wix#Cu(@-.">
+                            <value name="TEXT">
+                              <shadow type="text" id="2e_FJux1}YFV+?T7Wd6K">
+                                <field name="TEXT"></field>
+                              </shadow>
+                              <block type="variables_get" id="m]2d#s6#e$Lo2kCqWOAB">
+                                <field name="VAR" id="|Ag{[(Qw/K$g1v=k)zNh">No. of Win {Take Profit}</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="text_statement" id="1Eb047ggmL-tB:4%VU!e">
+                                <value name="TEXT">
+                                  <shadow type="text" id="~oh_9DP9tz~={[9y+4#p">
+                                    <field name="TEXT"> Winning Runs.                               Total Profit Accumulated: </field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="text_statement" id="up9kQR{HX:xCuo]fMFcN">
+                                    <value name="TEXT">
+                                      <shadow type="text" id="_|4]cbL,SyDrDnGawKbY">
+                                        <field name="TEXT"></field>
+                                      </shadow>
+                                      <block type="total_profit" id="g8[kTt/mJOBm^ZNIS]/t"></block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="text_print" id="@v8WcZ||FY{FUP`StW!0">
+                        <value name="TEXT">
+                          <shadow type="text" id="*vK$Q8+#c6JRxl3uiL#K">
+                            <field name="TEXT">Session Completed!!!</field>
+                          </shadow>
+                          <block type="variables_get" id=";;|j]49TY0tE?1u;1#5C">
+                            <field name="VAR" id="YRKV/X%{~Sd^HeY^n4wx">text</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="logic_compare" id="nxOAs7L-pD#|M)JgPu:S">
+                    <field name="OP">LTE</field>
+                    <value name="A">
+                      <block type="total_profit" id="9y1,uTwPtVZeX?Aoz^$1"></block>
+                    </value>
+                    <value name="B">
+                      <block type="math_single" id="eQn5=+-q@mR@Kw9?{XDJ">
+                        <field name="OP">NEG</field>
+                        <value name="NUM">
+                          <shadow type="math_number" id="^xCu}{o)v|?{P$#Axwk3">
+                            <field name="NUM">9</field>
+                          </shadow>
+                          <block type="variables_get" id="*lWiga[U=~M:3QI+#T=I">
+                            <field name="VAR" id="2]oO6`(1|9(H8I5QalfU">Stop Loss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="text_print" id="nH_3y8aG(M{[aX3=I[3w">
+                    <value name="TEXT">
+                      <shadow type="text" id="CrUgTBg!%^X,A[dN-U.g">
+                        <field name="TEXT">Sorry!!! Stop Loss Hit</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="trade_again" id="tb|5z)8[MTxNZ`:%-k+e"></block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="before_purchase" id="licmPn={lrajX{,il-1Y" collapsed="true" deletable="false" x="0" y="1154">
+    <statement name="BEFOREPURCHASE_STACK">
+      <block type="controls_if" id="7=GFbOP$8lEu3wpvo!~}">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="8"></mutation>
+        <value name="IF0">
+          <block type="variables_is_option" id=")PO83PWj$Ttig{n`ZN6C">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 2 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="controls_if" id="kXMbGkddyuo:c1nJY1^t">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="~BZw5,Q*.#wLT+*W?8,p">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="R]a{2q!s$dkM]6|y.[Dn">
+                    <field name="NUM">2</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="@;|s7C5]q~MY0KYRr%Qk">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="m0{MU6#27{JkR.fwW$|s">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="z:Bd!t@;L[!pT%wV`)W{">
+                    <field name="NUM">2</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="v#Aywvb+6BKom*YwMlYS">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="variables_is_option" id=":%VV?:NF|T~}8,OO%OmC">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 3 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="controls_if" id="?;w2K[!%QTzO%rdEs!,0">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="S)~$*Rc5^n:IDFsuiveC">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="2#AhENEc%QEsh$}S7v{X">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="HLq#0B{Vv!:U$kViN3o.">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="CE?)ADUy7j=Sj:chjis7">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="kY{gPJm,+(lW@qXrL,SI">
+                    <field name="NUM">3</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="d!`?Ej,shIkvv#{0X+c5">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF2">
+          <block type="variables_is_option" id="%hf)lagcB#1GoOgqUz(g">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 4 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO2">
+          <block type="controls_if" id="#(yYc1OmezFnM!$$b$pZ">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="s!*1V[u45i+r2a.bG}*8">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="l-mo4D0I~0jRzrK@!d12">
+                    <field name="NUM">4</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="+|DgGm{C}_ktfb;yn4Ca">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="*6z~c9V6TB}U5PiP56{r">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="U$aAc29rm[{Wp[=m},Ok">
+                    <field name="NUM">4</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="Ru?cAPX=$]S-}t4.jxNn">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF3">
+          <block type="variables_is_option" id="@D+KZs[p^oRs{ec,b=}p">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 5 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO3">
+          <block type="controls_if" id="U498r0THZ3Tobk05=)cx">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="vvFFW`W)JM1u[?mFj]x;">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="}N)u%OXJ~zWK9v}c%$y%">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="J%Hjyb~3bJ!,p$GhY6fr">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="og,N?GUBkow:b|spN(B+">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="A1rnvV=m0/_,9[WFdqS5">
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="Tc$A$ElBcd)^ACYeu%`=">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF4">
+          <block type="variables_is_option" id="v;l;K}ekw,4l/7Jf9k@@">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 6 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO4">
+          <block type="controls_if" id="sW[kNg9aYOVI^$It5)^F">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="lky4m!7uLFolR$)pA{,8">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="*CMVE|g#DUw`2O8}qyMs">
+                    <field name="NUM">6</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="R-Eob?2=1GcvD/qx@Bm5">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="BzBE!8)vnmv!EpT+.ea`">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="A{;||YYNb!BE@^~]raVC">
+                    <field name="NUM">6</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id=".ipT^1QBV?Wys|uPJxG/">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF5">
+          <block type="variables_is_option" id="q:dC*#,uT.A#4gg86HS[">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 7 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO5">
+          <block type="controls_if" id="x{_bHAz]H_bX,h)MMMTI">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="]R.)~,3Cs0Y_wP@6X%P4">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="SvjuA%RFW|zFAVv$kJi5">
+                    <field name="NUM">7</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="`3,7A4U^W!,.$Rv8iKBk">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="TV#^A:P,A@j4/@bH4G(i">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="zGFW5#7?qg7b);MN!gC-">
+                    <field name="NUM">7</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="sA%KH1}dZ.C+|C%sw634">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF6">
+          <block type="variables_is_option" id="X(OndjRV+r(G#w^d^%Q;">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If last 8 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO6">
+          <block type="controls_if" id="3/)L=wSB9r,ps.:ZRL8s">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="%li)Is9SI{5z2qfZ~Rpa">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="ptyHM+N!*lty|L@#Ho|3">
+                    <field name="NUM">8</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="4^-,WQk5ZQjMPa^wcZg/">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="w3i@#ZTG)p__9PQdIu%7">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="HSj{p`,q4|ev;1e/(;U*">
+                    <field name="NUM">8</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="e}5()gF/*W_MwANkemV1">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF7">
+          <block type="variables_is_option" id="VEYP@r!1x7u_76mrhT/G">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If the 9 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO7">
+          <block type="controls_if" id="mZ-~Ms|-cSi~#=h|ixkE">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id=")YV%Cvt[_7)x=toDKN/L">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="$/B|Nzqsp46=Etc^P$%j">
+                    <field name="NUM">9</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="p9lO)HHjtKrvYGe$_S=f">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="m^3rnuBBt#dDvcMyhlo)">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="|;:/u@+X!fnHv:)BW@RP">
+                    <field name="NUM">9</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="T1A8fj}aMK:j+$pVLjMe">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <value name="IF8">
+          <block type="variables_is_option" id="4?LG;}Xq{`lZKzzIR:w,">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" options="%5B%5B%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%202%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%203%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%204%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%205%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%206%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%207%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20last%208%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%209%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%2C%5B%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%2C%22If%20the%2010%20Digits%20are%20Even%20trade%20Even%20and%20Vice%20Versa%22%5D%5D"></mutation>
+            <field name="VAR" id="yKZJoZOXVM,K5xW:br4H">Strategy Type</field>
+            <field name="OPTION">If the 10 Digits are Even trade Even and Vice Versa</field>
+          </block>
+        </value>
+        <statement name="DO8">
+          <block type="controls_if" id="zDsf{V+iGY|sSn%*lwrQ">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
+            <value name="IF0">
+              <block type="last_digits_condition" id="ocq%dXW%50=;`#V491L+">
+                <field name="CONDITION">ALL_EVEN</field>
+                <value name="N">
+                  <shadow type="math_number" id="0z%/R[jB@bY%=}R}KxrA">
+                    <field name="NUM">10</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="apollo_purchase2" id="B37G{eu+8{04t?%Z63*U">
+                <field name="PURCHASE_LIST">DIGITEVEN</field>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="last_digits_condition" id="y#n[@%n7~}-{n0hKHUw3">
+                <field name="CONDITION">ALL_ODD</field>
+                <value name="N">
+                  <shadow type="math_number" id="c`0EoUa[[$9qfhG}-i4y">
+                    <field name="NUM">10</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="apollo_purchase2" id="+aGk]%+8K$x6KbO+ZyyU">
+                <field name="PURCHASE_LIST">DIGITODD</field>
+              </block>
+            </statement>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>
