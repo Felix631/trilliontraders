@@ -109,6 +109,32 @@ describe('the shared trade engine', () => {
         expect(proposal.selected_tick).toBeUndefined();
     });
 
+    it('re-quotes under underlying_symbol when the API rejects the market name', async () => {
+        base.api.send
+            .mockRejectedValueOnce({
+                error: { code: 'InputValidationFailed', message: 'Input validation failed: symbol, underlying_symbol' },
+            })
+            .mockResolvedValueOnce({ proposal: { id: 'p2', ask_price: 1.02 } })
+            .mockResolvedValueOnce({ buy: { contract_id: 5150 } })
+            .mockResolvedValueOnce(settle());
+
+        const result = await placeTrade(
+            { symbol: 'R_100', contract_type: 'CALL', stake: 1, duration: 5, duration_unit: 't' },
+            'speed_bot'
+        );
+
+        expect(result.contract_id).toBe(5150);
+        expect(base.api.send.mock.calls[0][0]).toMatchObject({ symbol: 'R_100' });
+        expect(base.api.send.mock.calls[0][0].underlying_symbol).toBeUndefined();
+        // The retry keeps the whole order and only swaps the market field.
+        expect(base.api.send.mock.calls[1][0]).toMatchObject({
+            proposal: 1,
+            contract_type: 'CALL',
+            underlying_symbol: 'R_100',
+        });
+        expect(base.api.send.mock.calls[1][0].symbol).toBeUndefined();
+    });
+
     it('still simulates when the trader is not logged in', async () => {
         base.is_authorized = false;
 

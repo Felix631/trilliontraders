@@ -113,6 +113,19 @@ const rejection_code = (e: unknown): string | undefined => {
     return value?.error?.code ?? value?.name;
 };
 
+/**
+ * Same order, quoted under the newer field name.
+ *
+ * Some accounts validate the market under `underlying_symbol` only and refuse
+ * the documented `symbol` field with "Input validation failed: symbol,
+ * underlying_symbol", so the proposal is retried once with that name.
+ */
+const is_symbol_rejection = (e: unknown): boolean => {
+    const value = e as TRejection;
+    if (value?.error?.code !== 'InputValidationFailed') return false;
+    return /symbol/i.test(String(value.error?.message ?? ''));
+};
+
 const error_message = (e: unknown): string => {
     if (typeof e === 'string' && e) return e;
     const value = e as TRejection;
@@ -217,7 +230,7 @@ export const placeRealTrade = async (
     // refused with "Invalid duration" — always ask for one tick.
     const ticks_total = is_digit ? 1 : Math.max(1, Math.round(Number(params.duration) || 1));
 
-    const quote_and_buy = async (): Promise<any> => {
+    const quote_and_buy = async (use_symbol_alias = false): Promise<any> => {
         const request: Record<string, unknown> = {
             proposal: 1,
             amount: stake,
@@ -226,7 +239,10 @@ export const placeRealTrade = async (
             currency: accountCurrency(),
             duration: ticks_total,
             duration_unit: is_digit ? 't' : params.duration_unit,
-            symbol: params.symbol,
+            // `symbol` is the documented name, but some accounts' API versions
+            // validate the market only under its newer `underlying_symbol` name
+            // and answer "Input validation failed: symbol, underlying_symbol".
+            [use_symbol_alias ? 'underlying_symbol' : 'symbol']: params.symbol,
         };
         if (prediction !== undefined) {
             // The digit travels as `barrier` *and* as `selected_tick`, exactly the
@@ -256,11 +272,17 @@ export const placeRealTrade = async (
     try {
         buy = await quote_and_buy();
     } catch (e) {
-        // A moved quote (or a socket that dropped between the quote and the buy)
-        // is normal on 1-tick digit contracts: quote again and retry once.
-        if (!RETRYABLE.includes(rejection_code(e) || '')) throw e;
-        await wait_for_api();
-        buy = await quote_and_buy();
+        if (is_symbol_rejection(e)) {
+            // Same order, quoted under the newer field name.
+            await wait_for_api();
+            buy = await quote_and_buy(true);
+        } else {
+            // A moved quote (or a socket that dropped between the quote and the buy)
+            // is normal on 1-tick digit contracts: quote again and retry once.
+            if (!RETRYABLE.includes(rejection_code(e) || '')) throw e;
+            await wait_for_api();
+            buy = await quote_and_buy();
+        }
     }
 
     const contract_id = buy.buy.contract_id;
