@@ -7,6 +7,7 @@ import {
     deriveBotName,
     extractBotFileUrls,
     extractBotPageLinks,
+    fetchSiteBots,
     hashBotXml,
     validateBotXml,
 } from '@/utils/bot-xml-import';
@@ -89,5 +90,52 @@ describe('finding bot files on a page', () => {
 
         expect(hashBotXml(BOT_XML)).toBe(hashBotXml(BOT_XML));
         expect(hashBotXml(BOT_XML)).not.toBe(hashBotXml(`${BOT_XML} `));
+    });
+});
+
+/**
+ * An empty import must say why, because "no bot files were found" reads as a bug
+ * when the real cause is the site itself.
+ */
+describe('explaining a page with no bots', () => {
+    const original_fetch = global.fetch;
+
+    const respond_with = (html: string) => {
+        global.fetch = jest.fn(async () => ({ ok: true, text: async () => html })) as unknown as typeof fetch;
+    };
+
+    afterEach(() => {
+        global.fetch = original_fetch;
+    });
+
+    it('reads a JavaScript-built library as having nothing to download', async () => {
+        respond_with(`<!doctype html><html><body><div id="root"></div>
+            <script src="/static/js/lib-react.js"></script>
+            <script src="/static/js/index.js"></script>
+            <script src="/static/js/8509.js"></script>
+        </body></html>`);
+
+        const { bots, errors } = await fetchSiteBots('https://library.example.com/bots');
+
+        expect(bots).toHaveLength(0);
+        expect(errors[0]).toMatch(/builds its bot list in the browser/i);
+    });
+
+    it('reads a members-only wall as the site withholding its bots', async () => {
+        respond_with('<html><body><h1>Members only</h1><p>Please sign in to download bots.</p></body></html>');
+
+        const { bots, errors } = await fetchSiteBots('https://library.example.com/bots');
+
+        expect(bots).toHaveLength(0);
+        expect(errors[0]).toMatch(/signed-in or paying members/i);
+    });
+
+    it('still gives the plain "nothing here" message for a normal page', async () => {
+        respond_with('<html><body><h1>About us</h1><a href="/terms">Terms</a></body></html>');
+
+        const { bots, errors } = await fetchSiteBots('https://library.example.com/about');
+
+        expect(bots).toHaveLength(0);
+        expect(errors[0]).toMatch(/no bot files were found on that page/i);
     });
 });

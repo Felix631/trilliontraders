@@ -188,6 +188,14 @@ const PROXY_BUILDERS: ((url: string) => string)[] = [
     url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
 ];
 
+/** A plain-language reason, so the user is never shown a bare status code. */
+const describe_download_failure = (response: Response) => {
+    if (response.status === 401 || response.status === 403) return 'the site refused the download';
+    if (response.status === 404) return 'the file is not there any more';
+    if (response.status === 429) return 'the site is rate-limiting downloads';
+    return `the site answered ${response.status}`;
+};
+
 export const fetchTextThroughProxy = async (url: string): Promise<string> => {
     const failures: string[] = [];
 
@@ -196,18 +204,48 @@ export const fetchTextThroughProxy = async (url: string): Promise<string> => {
         try {
             const response = await withTimeout(target);
             if (!response.ok) {
-                failures.push(`${response.status} ${response.statusText}`);
+                failures.push(describe_download_failure(response));
                 continue;
             }
             const text = await response.text();
             if (text && text.length > 20) return text;
-            failures.push('empty response');
+            failures.push('the answer was empty');
         } catch (error) {
-            failures.push(error instanceof Error ? error.message : String(error));
+            const aborted = error instanceof DOMException && error.name === 'AbortError';
+            failures.push(aborted ? 'the site did not answer in time' : 'the request could not be made');
         }
     }
 
-    throw new Error(`Could not download ${url} (${failures.slice(-2).join(', ') || 'network error'})`);
+    const reason = [...new Set(failures)][0] ?? 'the request could not be made';
+    throw new Error(`Could not download ${url} — ${reason}.`);
+};
+
+/**
+ * Why a page produced no strategies.
+ *
+ * "No bot files were found" leaves the user guessing, and the two common causes
+ * are very different: the library is drawn by JavaScript (nothing to read on the
+ * page), or the site withholds its bots from anyone who is not signed in. Both
+ * mean the same thing for us — there is no file to fetch — so say which one it is
+ * and point at the two routes that always work: a direct .xml link, or a file the
+ * user already has.
+ */
+const describe_empty_page = (html: string): string => {
+    if (
+        /access denied|forbidden|unauthori[sz]ed|members?[ -]only|subscribers?[ -]only|premium members?|please (sign|log) ?in|log ?in to (view|download)|sign up to (view|download)|payment required/i.test(
+            html
+        )
+    ) {
+        return 'That page shows its bots only to signed-in or paying members, so there was no bot file to download. Get the bot file from the site (or its owner) and drop it in the box below.';
+    }
+
+    const script_count = html.match(/<script\b/gi)?.length ?? 0;
+    const xml_links = html.match(/(?:href|src)\s*=\s*["'][^"']+\.xml/gi)?.length ?? 0;
+    if (script_count >= 3 && xml_links === 0) {
+        return 'That page builds its bot list in the browser, so its HTML links to no bot files and there is nothing for us to download. Paste a direct .xml link instead, or drop the bot file in the box below.';
+    }
+
+    return 'No bot files were found on that page. Open the page that lists the bots, or paste a direct .xml link, and try again.';
 };
 
 const buildBot = (name: string, xml: string, source_url: string): TImportedBot => ({
@@ -287,7 +325,7 @@ export const fetchSiteBots = async (
     }
 
     if (!bots.length) {
-        errors.unshift('No bot files were found on that page. Open the library page that lists the bots and try again.');
+        errors.unshift(describe_empty_page(page));
     }
 
     return { bots, errors };
