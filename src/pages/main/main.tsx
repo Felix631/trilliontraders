@@ -31,6 +31,7 @@ import {
     setModalStateChangeCallback,
 } from '@/utils/trade-type-modal-handler';
 import {
+    LabelPairedArrowDownToBracketCaptionRegularIcon,
     LabelPairedBasketShoppingCaptionRegularIcon,
     LabelPairedChartLineCaptionRegularIcon,
     LabelPairedChartTrendUpCaptionRegularIcon,
@@ -48,6 +49,7 @@ import { LegacyGuide1pxIcon } from '@deriv/quill-icons/Legacy';
 import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
 import RunPanel from '../../components/run-panel';
+import BotImporter from '../dashboard/bot-importer';
 import BotStore from '../dashboard/bot-store';
 import BulkTrader from '../dashboard/trade-tools/bulk-trader';
 import DTrader from '../dashboard/dtrader';
@@ -115,6 +117,7 @@ const AppWrapper = observer(() => {
         'chart',
         'tutorial',
         'dtrader',
+        'bot-importer',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -638,6 +641,21 @@ const AppWrapper = observer(() => {
                                 id='id-dtrader'
                             >
                                 <DTrader />
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedArrowDownToBracketCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Import Bots' />
+                                    </>
+                                }
+                                id='id-bot-importer'
+                            >
+                                <BotImporter />
                             </div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}

@@ -6,6 +6,7 @@ import Button from '@/components/shared_ui/button';
 import Text from '@/components/shared_ui/text';
 import { useStore } from '@/hooks/useStore';
 import { localize } from '@deriv-com/translations';
+import { DBOT_TABS } from '@/constants/bot-contents';
 import { FREE_BOTS, FREE_BOT_CREATORS } from '@/constants/free-bots-config';
 import './bot-store.scss';
 
@@ -22,8 +23,9 @@ const PAGE_SIZE = 60;
  * local storage (see FreeBotsStore.loadBotXml).
  */
 const BotStore = observer(() => {
-    const { free_bots } = useStore();
-    const { is_loading, loading_bot_id, loadFreeBot } = free_bots;
+    const { free_bots, dashboard } = useStore();
+    const { is_loading, loading_bot_id, loadFreeBot, user_bots, loadUserBot, removeUserBot } = free_bots;
+    const my_bots = user_bots ?? [];
     const [search_value, setSearchValue] = React.useState('');
     const [selected_creator, setSelectedCreator] = React.useState(ALL_CREATORS);
     const [visible_count, setVisibleCount] = React.useState(PAGE_SIZE);
@@ -72,6 +74,72 @@ const BotStore = observer(() => {
                     </div>
                 </div>
             </header>
+
+            {my_bots.length > 0 && (
+                <section className='bot-store__mine'>
+                    <div className='bot-store__mine-head'>
+                        <h3 className='bot-store__mine-title'>
+                            {localize('My bots ({{count}})', { count: String(my_bots.length) })}
+                        </h3>
+                        <Button
+                            tertiary
+                            small
+                            has_effect
+                            text={localize('Import more')}
+                            onClick={() => dashboard.setActiveTab(DBOT_TABS.BOT_IMPORTER)}
+                        />
+                    </div>
+                    <div className='bot-store__grid'>
+                        {my_bots.map(bot => {
+                            const is_bot_loading = loading_bot_id === bot.id;
+                            return (
+                                <article
+                                    key={bot.id}
+                                    className={classNames('bot-store__tile', {
+                                        'bot-store__tile--loading': is_bot_loading,
+                                    })}
+                                >
+                                    <div className='bot-store__tile-top'>
+                                        <span className='bot-store__tile-creator bot-store__tile-creator--mine'>
+                                            {localize('Yours')}
+                                        </span>
+                                        <span className='bot-store__tile-price'>{localize('IMPORTED')}</span>
+                                    </div>
+                                    <Text
+                                        as='p'
+                                        color='prominent'
+                                        size='xs'
+                                        lineHeight='xl'
+                                        weight='bold'
+                                        className='bot-store__tile-name'
+                                    >
+                                        {bot.name}
+                                    </Text>
+                                    <div className='bot-store__tile-foot'>
+                                        <button
+                                            type='button'
+                                            className='bot-store__tile-remove'
+                                            onClick={() => removeUserBot(bot.id)}
+                                        >
+                                            {localize('Remove')}
+                                        </button>
+                                        <Button
+                                            text={is_bot_loading ? localize('Loading') : localize('Load Bot')}
+                                            onClick={() => loadUserBot(bot)}
+                                            primary
+                                            small
+                                            has_effect
+                                            is_loading={is_bot_loading}
+                                            is_disabled={is_loading}
+                                            className='bot-store__tile-button'
+                                        />
+                                    </div>
+                                </article>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
 
             <div className='bot-store__toolbar'>
                 <div className='bot-store__search'>

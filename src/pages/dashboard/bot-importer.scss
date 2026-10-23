@@ -1,0 +1,422 @@
+/**
+ * Bot Importer — the intake tab for strategies that are not in the delivered
+ * Bot Store. Same Aurora language as the shelf: hero band, two intake cards,
+ * findings list, then the shelf of what has been imported.
+ */
+
+.bot-importer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+
+    /* ---- Hero ---------------------------------------------------------- */
+    &__hero {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 20px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-lg);
+        background:
+            linear-gradient(120deg, rgba(0, 71, 171, 0.26), rgba(34, 211, 238, 0.1) 55%, transparent 100%),
+            var(--ux-panel-solid);
+        box-shadow: var(--ux-shadow-card);
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset-inline: 0;
+            top: 0;
+            height: 2px;
+            background: var(--ux-grad-hairline);
+        }
+    }
+
+    &__hero-text {
+        min-width: 0;
+        flex: 1 1 32rem;
+    }
+
+    &__kicker {
+        display: inline-block;
+        margin-bottom: 4px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ux-cyan);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        background: var(--ux-grad-aurora);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    &__subtitle {
+        margin: 6px 0 0;
+        color: var(--ux-text-dim);
+        font-size: 1.25rem;
+        line-height: 1.6;
+        max-width: 72ch;
+    }
+
+    &__hero-stats {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    &__stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 84px;
+        padding: 8px 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-inset);
+
+        strong {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--ux-text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        span {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ux-text-mute);
+        }
+
+        &--accent {
+            border-color: color-mix(in srgb, var(--ux-blue-bright) 40%, transparent);
+
+            strong {
+                color: var(--ux-blue-bright);
+            }
+        }
+    }
+
+    /* ---- Intake cards --------------------------------------------------- */
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        gap: 12px;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-solid);
+        box-shadow: var(--ux-shadow-card);
+    }
+
+    &__card-head {
+        h3 {
+            margin: 0;
+            color: var(--ux-text);
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 4px 0 0;
+            color: var(--ux-text-mute);
+            font-size: 1.1rem;
+            line-height: 1.55;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    &__input {
+        flex: 1 1 16rem;
+        min-width: 0;
+        height: 3.4rem;
+        padding: 0 12px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-sm);
+        background: var(--ux-panel-inset);
+        color: var(--ux-text);
+        font-family: inherit;
+        font-size: 1.2rem;
+
+        &::placeholder {
+            color: var(--ux-text-mute);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--ux-blue-bright);
+            box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--ux-blue-bright) 22%, transparent);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+        }
+    }
+
+    &__submit {
+        flex: 0 0 auto;
+    }
+
+    &__progress {
+        margin: 0;
+        color: var(--ux-cyan);
+        font-size: 1.1rem;
+    }
+
+    /* ---- Dropzone ------------------------------------------------------- */
+    &__dropzone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-height: 13rem;
+        padding: 16px;
+        border: 1px dashed var(--ux-border-strong);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-inset);
+        color: var(--ux-text-dim);
+        text-align: center;
+        cursor: pointer;
+        transition:
+            border-color var(--ux-t-mid) var(--ux-ease),
+            background var(--ux-t-mid) var(--ux-ease),
+            color var(--ux-t-mid) var(--ux-ease);
+
+        svg {
+            color: var(--ux-blue-bright);
+            margin-bottom: 4px;
+        }
+
+        strong {
+            color: var(--ux-text);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        span {
+            font-size: 1.05rem;
+            color: var(--ux-text-mute);
+        }
+
+        &:hover,
+        &:focus-visible {
+            border-color: var(--ux-blue-bright);
+            background: var(--ux-hover);
+            color: var(--ux-text);
+            outline: none;
+        }
+
+        &--active {
+            border-color: var(--ux-emerald);
+            background: color-mix(in srgb, var(--ux-emerald) 12%, transparent);
+            box-shadow: var(--ux-glow-blue);
+        }
+    }
+
+    /* ---- Feedback ------------------------------------------------------- */
+    &__notice {
+        margin: 0;
+        padding: 8px 12px;
+        border: 1px solid color-mix(in srgb, var(--ux-emerald) 40%, transparent);
+        border-radius: var(--ux-r-sm);
+        background: color-mix(in srgb, var(--ux-emerald) 10%, transparent);
+        color: var(--ux-emerald);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    &__errors {
+        padding: 10px 12px;
+        border: 1px solid color-mix(in srgb, #f43f5e 40%, transparent);
+        border-radius: var(--ux-r-sm);
+        background: color-mix(in srgb, #f43f5e 10%, transparent);
+
+        p {
+            margin: 0 0 4px;
+            color: #fda4af;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    /* ---- Findings + library -------------------------------------------- */
+    &__findings,
+    &__library {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px 16px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-md);
+        background: var(--ux-panel-solid);
+        box-shadow: var(--ux-shadow-card);
+    }
+
+    &__findings-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+
+        h3 {
+            margin: 0;
+            color: var(--ux-text);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+    }
+
+    &__findings-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    &__findings-list,
+    &__library-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 36rem;
+        overflow-y: auto;
+    }
+
+    &__finding {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-sm);
+        background: var(--ux-panel-inset);
+        cursor: pointer;
+
+        input {
+            accent-color: var(--ux-blue-bright);
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        &:hover {
+            border-color: var(--ux-border-strong);
+            background: var(--ux-hover);
+        }
+    }
+
+    &__finding-name {
+        color: var(--ux-text);
+        font-size: 1.15rem;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__finding-source {
+        grid-column: 2;
+        color: var(--ux-text-mute);
+        font-size: 0.95rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__library-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-sm);
+        background: var(--ux-panel-inset);
+    }
+
+    &__library-name {
+        flex: 1 1 14rem;
+        min-width: 0;
+        color: var(--ux-text);
+        font-size: 1.15rem;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__library-date {
+        color: var(--ux-text-mute);
+        font-size: 1rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__library-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    &__empty {
+        margin: 0;
+        padding: 20px 12px;
+        border: 1px dashed var(--ux-border);
+        border-radius: var(--ux-r-md);
+        color: var(--ux-text-mute);
+        font-size: 1.1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 1023px) {
+    .bot-importer {
+        padding: 12px;
+
+        &__hero {
+            padding: 14px;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bot-importer__dropzone {
+        transition: none;
+    }
+}

@@ -345,7 +345,11 @@ class APIBase {
             setIsAuthorized(true);
             this.is_authorized = true;
             localStorage.setItem('client_account_details', JSON.stringify(accountList));
-            localStorage.setItem('client.country', balance?.country);
+            // Only cache a real country code — writing `undefined` here left the
+            // header flag with the literal string "undefined" after every login.
+            if (balance?.country) {
+                localStorage.setItem('client.country', balance.country);
+            }
 
             if (balance?.loginid) {
                 localStorage.setItem('active_loginid', balance.loginid);

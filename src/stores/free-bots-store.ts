@@ -1,23 +1,45 @@
 // @ts-nocheck — vendored bot code with known upstream type gaps; see AGENTS.md
+import localForage from 'localforage';
 import { action, makeObservable, observable } from 'mobx';
 import { load } from '@/external/bot-skeleton';
 import { save_types } from '@/external/bot-skeleton/constants/save-type';
 import { DBOT_TABS } from '@/constants/bot-contents';
 import { TFreeBot } from '@/constants/free-bots-config';
+import { hashBotXml, validateBotXml } from '@/utils/bot-xml-import';
 import RootStore from './root-store';
+
+/** A strategy the user brought in themselves — from a site or a file. */
+export type TUserBot = {
+    id: string;
+    name: string;
+    xml: string;
+    added_at: number;
+};
+
+const USER_BOTS_STORAGE_KEY = 'user_bots';
+/** IndexedDB is generous, but a runaway import should not fill it. */
+const MAX_USER_BOTS = 200;
 
 export default class FreeBotsStore {
     root_store: RootStore;
     is_loading = false;
     loading_bot_id: string | null = null;
+    user_bots: TUserBot[] = [];
+    is_user_bots_loaded = false;
 
     constructor(root_store: RootStore) {
         makeObservable(this, {
             is_loading: observable,
             loading_bot_id: observable,
+            user_bots: observable,
+            is_user_bots_loaded: observable,
             loadFreeBot: action,
+            loadUserBot: action,
+            addUserBots: action,
+            removeUserBot: action,
         });
         this.root_store = root_store;
+        this.loadUserBots();
     }
 
     /**
@@ -28,6 +50,84 @@ export default class FreeBotsStore {
     loadFreeBot = async (bot: TFreeBot) => {
         if (this.is_loading) return;
         await this.loadBotXml(`../xml/free-bots/${bot.file}`, bot.name, true, bot.id);
+    };
+
+    /**
+     * The delivered Bot Store can be extended, not replaced: strategies the user
+     * imports are kept beside it in their own shelf and persist across reloads.
+     */
+    loadUserBots = async () => {
+        try {
+            const stored = await localForage.getItem(USER_BOTS_STORAGE_KEY);
+            const list = Array.isArray(stored) ? (stored as TUserBot[]) : [];
+            this.user_bots = list.filter(bot => bot && bot.id && bot.name && bot.xml);
+        } catch (error) {
+            console.error('[TrillionTraders] Could not read the imported bot library:', error);
+        } finally {
+            this.is_user_bots_loaded = true;
+        }
+    };
+
+    private persistUserBots = async () => {
+        try {
+            await localForage.setItem(USER_BOTS_STORAGE_KEY, this.user_bots.slice(0, MAX_USER_BOTS));
+        } catch (error) {
+            console.error('[TrillionTraders] Could not save the imported bot library:', error);
+        }
+    };
+
+    /**
+     * Stores imported strategies. Each XML is validated again here, because this
+     * is the last gate before a file is offered as a runnable bot.
+     */
+    addUserBots = async (entries: { name: string; xml: string }[]) => {
+        const result = { added: 0, skipped: 0, errors: [] as string[] };
+        const next = [...this.user_bots];
+        const known_ids = new Set(next.map(bot => bot.id));
+
+        entries.forEach(entry => {
+            try {
+                const xml = validateBotXml(entry.xml);
+                const id = `user-${hashBotXml(xml)}`;
+                if (known_ids.has(id)) {
+                    result.skipped += 1;
+                    return;
+                }
+                if (next.length >= MAX_USER_BOTS) {
+                    result.errors.push(`${entry.name}: library is full (${MAX_USER_BOTS} bots)`);
+                    return;
+                }
+                known_ids.add(id);
+                next.unshift({
+                    id,
+                    name: (entry.name || 'Imported bot').slice(0, 90),
+                    xml,
+                    added_at: Date.now(),
+                });
+                result.added += 1;
+            } catch (error) {
+                result.errors.push(`${entry.name || 'Bot'}: ${error instanceof Error ? error.message : String(error)}`);
+            }
+        });
+
+        if (result.added) {
+            this.user_bots = next;
+            await this.persistUserBots();
+        }
+
+        return result;
+    };
+
+    removeUserBot = async (id: string) => {
+        const next = this.user_bots.filter(bot => bot.id !== id);
+        if (next.length === this.user_bots.length) return;
+        this.user_bots = next;
+        await this.persistUserBots();
+    };
+
+    loadUserBot = async (bot: TUserBot) => {
+        if (this.is_loading) return;
+        await this.loadBotXml(bot.xml, bot.name, false, bot.id);
     };
 
     /**

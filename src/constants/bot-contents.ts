@@ -32,6 +32,9 @@ export const DBOT_TABS: TDashboardTabIndex = Object.freeze({
     CHART: 11,
     TUTORIAL: 12,
     DTRADER: 13,
+    // Appended after DTrader on purpose: the existing tab indexes are stored in
+    // saved state and linked to by hash, so they must not shift.
+    BOT_IMPORTER: 14,
 });
 
 export const MAX_STRATEGIES = 10;
@@ -53,6 +56,7 @@ export const TAB_IDS = [
     'id-charts',
     'id-tutorials',
     'id-dtrader',
+    'id-bot-importer',
 ];
 
 export const DEBOUNCE_INTERVAL_TIME = 500;

@@ -5,7 +5,11 @@ import { evaluateExpression, modifyContextMenu } from '../../../../utils';
 Blockly.Blocks.tick_delay = {
     init() {
         this.jsonInit(this.definition());
-        const { client } = DBotStore.instance;
+        // The toolbox builds its flyout before the DBot store exists, and tests
+        // build blocks with no store at all. Reading `client` off a null store
+        // threw here, which silently dropped this block from the block menu (and
+        // made every strategy that contains it fail to load).
+        const client = DBotStore.instance?.client;
         if (client && client.is_logged_in) {
             this.workspace_to_code = Blockly.JavaScript.javascriptGenerator.workspaceToCode(Blockly.derivWorkspace);
         }
