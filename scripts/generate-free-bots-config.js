@@ -33,6 +33,11 @@ const KNOWN_CREATORS = new Set([    'mkorean', 'money8gg', 'traderkit', 'osam', 
     'dbotweb',
     'binarypro', 'derivbots', 'superfree', 'orstac',
     'new-bots', 'tradesclub', 'binarylab', 'tradepool',
+    // Bots the owner deposits by hand — every .xml in this folder shows up in
+    // the Bot Store under "Added bots".
+    'added-bots',
+    // Free-bot library mirrored from tradewithmegatone.com.
+    'megatone',
     // Community bots grouped by the trade type they trade.
     'over-under', 'even-odd', 'matches-differs', 'rise-fall', 'higherlower',
     'ends-between-outside', 'stays-in-outside',
@@ -92,9 +97,13 @@ const bots = files.map(file => {
 // Count per creator for filter chips.
 const counts = {};
 for (const b of bots) counts[b.creator] = (counts[b.creator] || 0) + 1;
+
+// Chips are shown as-is, so folders whose name is not already a display name
+// get one here instead of leaking a slug into the Bot Store.
+const CREATOR_LABELS = { 'added-bots': 'Added bots', megatone: 'Mega Traders' };
 const creators = Object.keys(counts)
     .sort((a, b) => counts[b] - counts[a])
-    .map(c => ({ id: c, label: c, count: counts[c] }));
+    .map(c => ({ id: c, label: CREATOR_LABELS[c] || c, count: counts[c] }));
 
 const lines = [];
 lines.push('// AUTO-GENERATED from src/xml/free-bots/*.xml — do not edit by hand.');
