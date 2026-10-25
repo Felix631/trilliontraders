@@ -5799,24 +5799,6 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "martingale-xml"
     },
     {
-        "id": "NOVAPRIME-NOVASTRIKE",
-        "name": "NOVAPRIME NOVASTRIKE",
-        "creator": "megatone",
-        "file": "megatone/NOVAPRIME-NOVASTRIKE"
-    },
-    {
-        "id": "TREDAKIT-01_MONEY8GG_SPEED_BOT",
-        "name": "TREDAKIT 01 MONEY8GG SPEED BOT",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-01_MONEY8GG_SPEED_BOT"
-    },
-    {
-        "id": "TREDAKIT-02_Create_a_Rise_Fall_bot_on_Volatility_50_1s_Index",
-        "name": "TREDAKIT 02 Create a Rise Fall bot on Volatility 50 1s Index",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-02_Create_a_Rise_Fall_bot_on_Volatility_50_1s_Index"
-    },
-    {
         "id": "TREDAKIT-03_5_Recover_Over_Bandwagon",
         "name": "Recover with Megatone",
         "creator": "megatone",
@@ -5827,60 +5809,6 @@ export const FREE_BOTS: TFreeBot[] = [
         "name": "STRADDLE EDGE AI KP",
         "creator": "megatone",
         "file": "megatone/TREDAKIT-04_20_Over_Edge_Money_Bot"
-    },
-    {
-        "id": "TREDAKIT-05_17_3_by_3_Money_Maker",
-        "name": "TREDAKIT 05 17 3 by 3 Money Maker",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-05_17_3_by_3_Money_Maker"
-    },
-    {
-        "id": "TREDAKIT-06_16_Under_6_Recovery_under_5_Bot",
-        "name": "TREDAKIT 06 16 Under 6 Recovery under 5 Bot",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-06_16_Under_6_Recovery_under_5_Bot"
-    },
-    {
-        "id": "TREDAKIT-07_Over_Hit_n_Run",
-        "name": "TREDAKIT 07 Over Hit n Run",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-07_Over_Hit_n_Run"
-    },
-    {
-        "id": "TREDAKIT-08_ODD_MYTH_V3_0",
-        "name": "TREDAKIT 08 ODD MYTH V3 0",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-08_ODD_MYTH_V3_0"
-    },
-    {
-        "id": "TREDAKIT-09_EVEN_ODD_MYTH",
-        "name": "TREDAKIT 09 EVEN ODD MYTH",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-09_EVEN_ODD_MYTH"
-    },
-    {
-        "id": "TREDAKIT-10_EVEN_MYTH_V2_0",
-        "name": "TREDAKIT 10 EVEN MYTH V2 0",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-10_EVEN_MYTH_V2_0"
-    },
-    {
-        "id": "TREDAKIT-11_WEALTH_GENERATOR",
-        "name": "TREDAKIT 11 WEALTH GENERATOR",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-11_WEALTH_GENERATOR"
-    },
-    {
-        "id": "TREDAKIT-12_VENEEFX_ACCOUNT_FLIPPER",
-        "name": "TREDAKIT 12 VENEEFX ACCOUNT FLIPPER",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-12_VENEEFX_ACCOUNT_FLIPPER"
-    },
-    {
-        "id": "TREDAKIT-13_Updated_Over_1_AI_Bot",
-        "name": "TREDAKIT 13 Updated Over 1 AI Bot",
-        "creator": "megatone",
-        "file": "megatone/TREDAKIT-13_Updated_Over_1_AI_Bot"
     },
     {
         "id": "TREDAKIT-STRADDLE_EDGE",
@@ -12197,11 +12125,6 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 16
     },
     {
-        "id": "megatone",
-        "label": "Mega Traders",
-        "count": 15
-    },
-    {
         "id": "isaacmrdollars",
         "label": "isaacmrdollars",
         "count": 13
@@ -12254,6 +12177,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
     {
         "id": "dbotzone",
         "label": "dbotzone",
+        "count": 3
+    },
+    {
+        "id": "megatone",
+        "label": "Mega Traders",
         "count": 3
     },
     {
