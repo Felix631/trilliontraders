@@ -172,6 +172,188 @@ window.Blockly.Blocks.last_digits_condition = {
     },
 };
 
+window.Blockly.Blocks.over_under_analysis = {
+    init() {
+        this.jsonInit(this.definition());
+        this.setInputsInline(true);
+        const digit_input = this.getInput('DIGIT');
+        if (digit_input && !digit_input.connection.targetBlock()) {
+            const block = this.workspace.newBlock('math_number');
+            block.setShadow(true);
+            block.setFieldValue('4', 'NUM');
+            block.outputConnection.connect(digit_input.connection);
+        }
+        const n_input = this.getInput('N');
+        if (n_input && !n_input.connection.targetBlock()) {
+            const block = this.workspace.newBlock('math_number');
+            block.setShadow(true);
+            block.setFieldValue('60', 'NUM');
+            block.outputConnection.connect(n_input.connection);
+        }
+    },
+    definition() {
+        return {
+            ...analysisBlockConfig,
+            message0: localize('%1 %2 in last %3 digits'),
+            args0: [
+                {
+                    type: 'field_dropdown',
+                    name: 'CONDITION_TYPE',
+                    options: [
+                        [localize('Over'), 'OVER'],
+                        [localize('Under or equal'), 'UNDER'],
+                    ],
+                },
+                { type: 'input_value', name: 'DIGIT', check: 'Number' },
+                { type: 'input_value', name: 'N', check: 'Number' },
+            ],
+            output: 'Number',
+            outputShape: window.Blockly.OUTPUT_SHAPE_ROUND,
+            tooltip: localize(
+                'Returns the percentage of the last N ticks whose last digit is over the chosen digit (or under-or-equal, for Under).'
+            ),
+            category: window.Blockly.Categories.Tick_Analysis,
+        };
+    },
+    meta() {
+        return {
+            display_name: localize('Over/Under %'),
+            description: localize('Returns the percentage of last N digits that are over or under a chosen digit'),
+        };
+    },
+    customContextMenu(menu) {
+        modifyContextMenu(menu);
+    },
+};
+
+window.Blockly.JavaScript.javascriptGenerator.forBlock.over_under_analysis = block => {
+    const condition_type = block.getFieldValue('CONDITION_TYPE');
+    const digit = window.Blockly.JavaScript.javascriptGenerator.valueToCode(
+        block,
+        'DIGIT',
+        window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
+    ) || '4';
+    const n = window.Blockly.JavaScript.javascriptGenerator.valueToCode(
+        block,
+        'N',
+        window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
+    ) || '60';
+    const analyze_over_under = window.Blockly.JavaScript.javascriptGenerator.provideFunction_('analyzeOverUnder', [
+        `function ${window.Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_}(digits, type, digit) {`,
+        '  try {',
+        '    if (!digits || !digits.length) return 0;',
+        '    var target = parseInt(digit, 10);',
+        '    if (isNaN(target)) target = 4;',
+        '    var over_count = 0;',
+        '    for (var i = 0; i < digits.length; i++) {',
+        '      if (digits[i] > target) over_count++;',
+        '    }',
+        '    var over_pct = Math.round((over_count / digits.length) * 10000) / 100;',
+        '    var under_pct = Math.round((100 - over_pct) * 100) / 100;',
+        '    Bot.notify({',
+        '      message: "Over/Under Analysis\\n\\n" +',
+        '               (type === "OVER" ? "Over (> " + target + ") 🟢: " + over_pct + "%" : "Under (<= " + target + ") 🔴: " + under_pct + "%") +',
+        '               "\\n\\nBased on last " + digits.length + " ticks",',
+        '      className: "journal__text--information",',
+        '      sound: "silent"',
+        '    });',
+        '    return type === "OVER" ? over_pct : under_pct;',
+        '  } catch (e) {',
+        '    console.error("Over/Under analysis error:", e);',
+        '    return 0;',
+        '  }',
+        '}',
+    ]);
+    return [
+        `${analyze_over_under}(Bot.getLastDigitList().slice(-${n}), '${condition_type}', ${digit})`,
+        window.Blockly.JavaScript.javascriptGenerator.ORDER_FUNCTION_CALL,
+    ];
+};
+
+window.Blockly.Blocks.digit_frequency_analysis = {
+    init() {
+        this.jsonInit(this.definition());
+        this.setInputsInline(true);
+        const n_input = this.getInput('N');
+        if (n_input && !n_input.connection.targetBlock()) {
+            const block = this.workspace.newBlock('math_number');
+            block.setShadow(true);
+            block.setFieldValue('60', 'NUM');
+            block.outputConnection.connect(n_input.connection);
+        }
+    },
+    definition() {
+        return {
+            ...analysisBlockConfig,
+            message0: localize('%1 digit in last %2 digits'),
+            args0: [
+                {
+                    type: 'field_dropdown',
+                    name: 'ANALYSIS_TYPE',
+                    options: [
+                        [localize('Most frequent'), 'MOST_FREQUENT'],
+                        [localize('Second most frequent'), 'SECOND_MOST_FREQUENT'],
+                    ],
+                },
+                { type: 'input_value', name: 'N', check: 'Number' },
+            ],
+            output: 'Number',
+            outputShape: window.Blockly.OUTPUT_SHAPE_ROUND,
+            tooltip: localize('Returns the digit that appears most (or second most) often in the last N ticks'),
+            category: window.Blockly.Categories.Tick_Analysis,
+        };
+    },
+    meta() {
+        return {
+            display_name: localize('Digit frequency'),
+            description: localize('Returns the most or second most frequent last digit from the last N ticks'),
+        };
+    },
+    customContextMenu(menu) {
+        modifyContextMenu(menu);
+    },
+};
+
+window.Blockly.JavaScript.javascriptGenerator.forBlock.digit_frequency_analysis = block => {
+    const analysis_type = block.getFieldValue('ANALYSIS_TYPE');
+    const n = window.Blockly.JavaScript.javascriptGenerator.valueToCode(
+        block,
+        'N',
+        window.Blockly.JavaScript.javascriptGenerator.ORDER_ATOMIC
+    ) || '60';
+    const analyze_digit_frequency = window.Blockly.JavaScript.javascriptGenerator.provideFunction_(
+        'analyzeDigitFrequency',
+        [
+            `function ${window.Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_}(digits, type) {`,
+            '  try {',
+            '    if (!digits || !digits.length) return 0;',
+            '    var counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];',
+            '    for (var i = 0; i < digits.length; i++) {',
+            '      var digit = digits[i];',
+            '      if (digit >= 0 && digit <= 9) counts[digit]++;',
+            '    }',
+            '    var ranked = [];',
+            '    for (var value = 0; value < 10; value++) {',
+            '      ranked.push({ digit: value, count: counts[value] });',
+            '    }',
+            '    ranked.sort(function (a, b) {',
+            '      return b.count - a.count || a.digit - b.digit;',
+            '    });',
+            '    var pick = type === "SECOND_MOST_FREQUENT" ? ranked[1] : ranked[0];',
+            '    return pick ? pick.digit : 0;',
+            '  } catch (e) {',
+            '    console.error("Digit frequency analysis error:", e);',
+            '    return 0;',
+            '  }',
+            '}',
+        ]
+    );
+    return [
+        `${analyze_digit_frequency}(Bot.getLastDigitList().slice(-${n}), '${analysis_type}')`,
+        window.Blockly.JavaScript.javascriptGenerator.ORDER_FUNCTION_CALL,
+    ];
+};
+
 window.Blockly.JavaScript.javascriptGenerator.forBlock.last_digits_condition = block => {
     const n = window.Blockly.JavaScript.javascriptGenerator.valueToCode(
         block,

@@ -5818,13 +5818,13 @@ export const FREE_BOTS: TFreeBot[] = [
     },
     {
         "id": "TREDAKIT-03_5_Recover_Over_Bandwagon",
-        "name": "TREDAKIT 03 5 Recover Over Bandwagon",
+        "name": "Recover with Megatone",
         "creator": "megatone",
         "file": "megatone/TREDAKIT-03_5_Recover_Over_Bandwagon"
     },
     {
         "id": "TREDAKIT-04_20_Over_Edge_Money_Bot",
-        "name": "TREDAKIT 04 20 Over Edge Money Bot",
+        "name": "STRADDLE EDGE AI KP",
         "creator": "megatone",
         "file": "megatone/TREDAKIT-04_20_Over_Edge_Money_Bot"
     },
@@ -5884,7 +5884,7 @@ export const FREE_BOTS: TFreeBot[] = [
     },
     {
         "id": "TREDAKIT-STRADDLE_EDGE",
-        "name": "TREDAKIT STRADDLE EDGE",
+        "name": "STRADDLE EDGE",
         "creator": "megatone",
         "file": "megatone/TREDAKIT-STRADDLE_EDGE"
     },

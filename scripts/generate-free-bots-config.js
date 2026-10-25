@@ -50,6 +50,15 @@ const toDisplay = raw =>
         .replace(/\s+/g, ' ')
         .trim();
 
+// Bots that are published under a hand-written name instead of one derived from
+// the file name (the source library renames these three on its own free-bots
+// shelf, so users know them by these names).
+const NAME_OVERRIDES = {
+    'megatone/TREDAKIT-STRADDLE_EDGE': 'STRADDLE EDGE',
+    'megatone/TREDAKIT-03_5_Recover_Over_Bandwagon': 'Recover with Megatone',
+    'megatone/TREDAKIT-04_20_Over_Edge_Money_Bot': 'STRADDLE EDGE AI KP',
+};
+
 const bots = files.map(file => {
     // file looks like: <chunk>-xml.xml  (chunk = webpack chunk name);
     // the dynamic import keeps the path relative to src/xml/free-bots,
@@ -86,7 +95,7 @@ const bots = files.map(file => {
     }
     return {
         id: chunk,
-        name: toDisplay(rest),
+        name: NAME_OVERRIDES[fileBase] || toDisplay(rest),
         creator,
         // On-disk module base name (incl. the -xml suffix and subfolder)
         // used for the dynamic import: import(`../xml/free-bots/${file}.xml`)

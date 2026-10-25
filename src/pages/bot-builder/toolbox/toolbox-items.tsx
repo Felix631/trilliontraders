@@ -613,6 +613,27 @@ export const ToolboxItems = () =>
                             </Shadow>
                         </Value>
                     </Block>
+                    <Block type='over_under_analysis'>
+                        <Field name='CONDITION_TYPE'>OVER</Field>
+                        <Value name='DIGIT'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>2</Field>
+                            </Shadow>
+                        </Value>
+                        <Value name='N'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>60</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
+                    <Block type='digit_frequency_analysis'>
+                        <Field name='ANALYSIS_TYPE'>MOST_FREQUENT</Field>
+                        <Value name='N'>
+                            <Shadow type='math_number'>
+                                <Field name='NUM'>60</Field>
+                            </Shadow>
+                        </Value>
+                    </Block>
                     <Block type='check_direction' />
                     <Block type='is_candle_black' />
                     <Block type='read_ohlc'>
