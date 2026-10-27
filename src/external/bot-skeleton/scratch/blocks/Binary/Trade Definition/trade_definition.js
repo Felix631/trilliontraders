@@ -159,6 +159,24 @@ window.Blockly.Blocks.trade_definition = {
     },
 };
 
+/**
+ * Reads a field off a block that may not carry it at all.
+ *
+ * A strategy from another builder can arrive without the block, or with a
+ * Market block that predates a setting, and the generator used to take the
+ * whole run down with it (`Cannot read properties of null`). Reading through
+ * here means a missing setting falls back to this build's default instead.
+ */
+const readField = (block, name, fallback = '') => {
+    try {
+        if (!block?.getField?.(name)) return fallback;
+        const value = block.getFieldValue(name);
+        return value === null || value === undefined ? fallback : value;
+    } catch {
+        return fallback;
+    }
+};
+
 window.Blockly.JavaScript.javascriptGenerator.forBlock.trade_definition = block => {
     const { client } = DBotStore.instance;
 
@@ -175,7 +193,7 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.trade_definition = block 
     const restart_on_error_block = block.getChildByType('trade_definition_restartonerror');
     const restart_on_buy_sell_block = block.getChildByType('trade_definition_restartbuysell');
 
-    const symbol = market_block.getFieldValue('SYMBOL_LIST');
+    const symbol = readField(market_block, 'SYMBOL_LIST');
     const trade_type = trade_type_block.getFieldValue('TRADETYPE_LIST');
     const contract_type = contract_type_block.getFieldValue('TYPE_LIST');
     const candle_interval = candle_interval_block.getFieldValue('CANDLEINTERVAL_LIST');
@@ -191,6 +209,30 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.trade_definition = block 
     const initialization = window.Blockly.JavaScript.javascriptGenerator.statementToCode(block, 'INITIALIZATION');
     const trade_options_statement = window.Blockly.JavaScript.javascriptGenerator.statementToCode(block, 'SUBMARKET');
 
+    // The Market block's extra settings (multi-market mode, market sweeping and
+    // the virtual-hook pair). They are only meaningful to the engine, so they
+    // are handed over once, at init, rather than read block by block at run
+    // time. Every read falls back to this build's default, so a strategy whose
+    // Market block predates a setting still generates and runs.
+    const market_settings = {
+        multi_market: readField(market_block, 'MULTI_MARKET', 'FALSE'),
+        alternate_every: readField(market_block, 'ALTERNATE_EVERY', '1'),
+        alternate_markets: readField(market_block, 'ALTERNATE_MARKETS', 'FALSE'),
+        trade_all_volatility: readField(market_block, 'TRADE_ALL_VOLATILITY', 'FALSE'),
+        trade_all_markets: readField(market_block, 'TRADE_ALL_MARKETS', 'FALSE'),
+        market_change_mode: readField(market_block, 'MARKET_CHANGE_MODE', 'EVERY_X_RUNS'),
+        alternate_mode: readField(market_block, 'ALTERNATE_MODE', 'EVERY_X_RUNS'),
+        change_after_list: readField(market_block, 'CHANGE_AFTER_LIST', 'EVERY_X_RUNS'),
+        all_markets_frequency: readField(market_block, 'ALL_MARKETS_FREQUENCY', '1'),
+        multi_contract_switching: readField(market_block, 'MULTI_CONTRACT_SWITCHING', 'FALSE'),
+        vh_enabled: readField(market_block, 'VH_ENABLED', 'FALSE'),
+        vh_max_steps: readField(market_block, 'VH_MAX_STEPS', '1'),
+        vh_min_trades: readField(market_block, 'VH_MIN_TRADES', '1'),
+        vh_stake: readField(market_block, 'VH_STAKE', '0.35'),
+        show_advanced: readField(market_block, 'SHOW_ADVANCED', 'FALSE'),
+        hide_trade_parameters: readField(market_block, 'HIDE_TRADE_PARAMETERS', 'FALSE'),
+    };
+
     const code = `  
     BinaryBotPrivateInit = function BinaryBotPrivateInit() {
         Bot.init('${account}', {
@@ -200,6 +242,7 @@ window.Blockly.JavaScript.javascriptGenerator.forBlock.trade_definition = block 
           shouldRestartOnError: ${should_restart_on_error},
           timeMachineEnabled  : ${should_restart_on_buy_sell},
         });
+        Bot.configureTradeSettings(${JSON.stringify(market_settings)});
         ${initialization.trim()}
     };
       BinaryBotPrivateStart = function BinaryBotPrivateStart() {

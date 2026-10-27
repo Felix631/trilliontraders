@@ -1,5 +1,6 @@
 const getStrategyInterface = tradeEngine => {
     return {
+        configureTradeSettings: (...args) => tradeEngine.configureTradeSettings(...args),
         applyConceptBlock: (...args) => tradeEngine.applyConceptBlock(...args),
         applyContractSequenceDiff0Over12Streak2: (...args) => tradeEngine.applyContractSequenceDiff0Over12Streak2(...args),
         rotateToNextVolatilityMarket: (...args) => tradeEngine.rotateToNextVolatilityMarket(...args),

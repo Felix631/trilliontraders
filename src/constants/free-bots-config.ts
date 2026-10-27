@@ -5811,6 +5811,12 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "megatone/TREDAKIT-04_20_Over_Edge_Money_Bot"
     },
     {
+        "id": "TREDAKIT-STRADDLE_EDGE_V2",
+        "name": "STRADDLE EDGE V2",
+        "creator": "megatone",
+        "file": "megatone/TREDAKIT-STRADDLE_EDGE_V2"
+    },
+    {
         "id": "TREDAKIT-STRADDLE_EDGE",
         "name": "STRADDLE EDGE",
         "creator": "megatone",
@@ -12175,13 +12181,13 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "count": 4
     },
     {
-        "id": "dbotzone",
-        "label": "dbotzone",
-        "count": 3
-    },
-    {
         "id": "megatone",
         "label": "Mega Traders",
+        "count": 4
+    },
+    {
+        "id": "dbotzone",
+        "label": "dbotzone",
         "count": 3
     },
     {

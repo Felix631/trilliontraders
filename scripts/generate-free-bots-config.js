@@ -55,6 +55,9 @@ const toDisplay = raw =>
 // shelf, so users know them by these names).
 const NAME_OVERRIDES = {
     'megatone/TREDAKIT-STRADDLE_EDGE': 'STRADDLE EDGE',
+    // The same strategy with the Market block's multi-market / virtual-hook
+    // settings spelled out, beside the original file.
+    'megatone/TREDAKIT-STRADDLE_EDGE_V2': 'STRADDLE EDGE V2',
     'megatone/TREDAKIT-03_5_Recover_Over_Bandwagon': 'Recover with Megatone',
     'megatone/TREDAKIT-04_20_Over_Edge_Money_Bot': 'STRADDLE EDGE AI KP',
 };

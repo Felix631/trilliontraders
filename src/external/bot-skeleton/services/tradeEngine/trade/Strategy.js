@@ -127,6 +127,8 @@ export default Engine =>
          * Shared helpers
          * ---------------------------------------------------------------- */
         resetStrategyState() {
+            this._tradeSettings = undefined;
+            this._tradesSinceMarketRotation = 0;
             this._contractSeq = undefined;
             this._contractSequenceActive = false;
             this._contractSequenceAwaitingSettlement = false;
@@ -138,6 +140,93 @@ export default Engine =>
             this._conceptLockRemaining = 0;
             this._conceptLockThreshold = null;
             this._nextContractType = null;
+        }
+
+        /* ------------------------------------------------------------------
+         * Market block settings (multi-market mode / virtual hook)
+         * ---------------------------------------------------------------- */
+        /**
+         * Reads the Market block's extra settings, generated once per run as
+         * `Bot.configureTradeSettings({...})`. Values arrive as the strings the
+         * block holds ('TRUE'/'FALSE'/'ENABLE'/'DISABLE', '1', '0.35'), and a
+         * strategy that predates a setting simply does not send it.
+         */
+        async configureTradeSettings(settings = {}) {
+            const isEnabled = value => /^(true|enable)$/i.test(String(value ?? ''));
+            const modes = [settings.market_change_mode, settings.alternate_mode, settings.change_after_list]
+                .filter(mode => mode !== undefined && mode !== null)
+                .map(mode => String(mode).toUpperCase());
+
+            // A bot only sweeps markets when one of its toggles says so, and
+            // never when the market change is left to the strategy's own blocks
+            // (`Only when the strategy asks`).
+            const sweepsMarkets =
+                isEnabled(settings.multi_market) ||
+                isEnabled(settings.trade_all_volatility) ||
+                isEnabled(settings.trade_all_markets);
+
+            // `ALTERNATE_EVERY` is the cadence for the bots that set it; the
+            // sweeping builds use `ALL_MARKETS_FREQUENCY` instead ('1' = the
+            // block's default, so it never wins over a real ALTERNATE_EVERY).
+            const alternate_every = clampInt(settings.alternate_every, 1, 1, 1000);
+            const sweep_frequency = alternate_every > 1 ? alternate_every : clampInt(settings.all_markets_frequency, 1, 1, 1000);
+
+            this._tradeSettings = {
+                multiMarket: sweepsMarkets && !modes.includes('CONDITIONS'),
+                alternateEvery: modes.includes('EVERY_TRADE') ? 1 : sweep_frequency,
+                alternateMarkets: isEnabled(settings.alternate_markets) || modes.includes('AFTER_LOSS'),
+                vhEnabled: isEnabled(settings.vh_enabled),
+                vhMaxSteps: clampInt(settings.vh_max_steps, 1, 1, 100),
+                vhMinTrades: clampInt(settings.vh_min_trades, 1, 1, 100),
+                vhStake: positiveNum(settings.vh_stake, 0.35),
+                // Kept for the strategies that carried them: this build reads the
+                // order it places from the Trade parameters block, so these are
+                // recorded rather than acted on.
+                multiContractSwitching: isEnabled(settings.multi_contract_switching),
+                showAdvanced: isEnabled(settings.show_advanced),
+                hideTradeParameters: isEnabled(settings.hide_trade_parameters),
+            };
+            this._tradesSinceMarketRotation = 0;
+
+            const { multiMarket, alternateEvery, alternateMarkets, vhEnabled } = this._tradeSettings;
+            if (multiMarket) {
+                notify(
+                    alternateMarkets
+                        ? 'Multi-market: moving to the next market after every losing trade'
+                        : `Multi-market: moving to the next market every ${alternateEvery} trade(s)`
+                );
+            }
+            if (vhEnabled) {
+                const { vhMaxSteps, vhMinTrades, vhStake } = this._tradeSettings;
+                notify(
+                    `Virtual hook settings read (steps ${vhMaxSteps}, min trades ${vhMinTrades}, stake ${vhStake}) — ` +
+                        'kept with the strategy; this build does not simulate the hook itself'
+                );
+            }
+
+            return this._tradeSettings;
+        }
+
+        /**
+         * Multi-market mode: once the configured number of trades has settled
+         * (or the trade lost, when `ALTERNATE_MARKETS` is on), move on to the
+         * next volatility market — the same rotation the Rotate market block
+         * performs, so both paths behave identically.
+         */
+        maybeRotateMarket(isWin) {
+            const settings = this._tradeSettings;
+            if (!settings?.multiMarket) return;
+
+            this._tradesSinceMarketRotation = (this._tradesSinceMarketRotation || 0) + 1;
+            const every = settings.alternateEvery || 1;
+            const onLoss = settings.alternateMarkets && !isWin;
+            if (this._tradesSinceMarketRotation < every && !onLoss) return;
+
+            this._tradesSinceMarketRotation = 0;
+            // Never let a market move take the run down with it.
+            Promise.resolve()
+                .then(() => this.rotateToNextVolatilityMarket())
+                .catch(() => {});
         }
 
         /* ------------------------------------------------------------------
@@ -511,5 +600,6 @@ export default Engine =>
         onStrategySettlement(isWin) {
             if (this._contractSequenceActive) this._contractSequenceSettlement(isWin);
             if (this._conceptBlockActive) this._conceptBlockSettlement(isWin);
+            this.maybeRotateMarket(isWin);
         }
     };
