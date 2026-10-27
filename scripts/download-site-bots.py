@@ -29,7 +29,15 @@ Four extraction modes per site:
    URL with {id} replaced by the bot id. Files are saved as
    <site>-<bot id>-xml.xml.
 
-6. bundle catalog mode (bundle_catalog = True, folder_map = {site folder:
+6. async chunk catalog mode (async_xml_catalog = True)
+   The site publishes the bot list as a require.context map in the main bundle
+   ({"./<Bot Name>.xml":["<module id>","<chunk id>"]}) and every XML lives in
+   its own lazy chunk, <base>/static/js/async/<chunk name>.<hash>.js. The chunk
+   name/hash pair comes from the bundle's webpack chunk-filename function.
+   Entries are written to <site>/<site>-<sanitised name>-xml.xml, and with
+   skip_existing only bots we do not have yet are fetched.
+
+7. bundle catalog mode (bundle_catalog = True, folder_map = {site folder:
    local subfolder})
    The site's bot list is a require.context map
    {"./<folder>/<Bot Name>.xml": "<chunk id>"} embedded in the main bundle
@@ -163,6 +171,15 @@ SITES = {
             "_STEP-INDICES-QUANTUM-AI": 84190,
         },
     },
+    # osamtradinghub.pro free-bots page: the bot list is a require.context map
+    # in the main bundle and every XML is a lazy chunk under
+    # /static/js/async/<chunk name>.<hash>.js. skip_existing keeps re-runs
+    # idempotent and makes newly added bots easy to spot by diffing.
+    "osamtradinghub": {
+        "base": "https://osamtradinghub.pro",
+        "async_xml_catalog": True,
+        "skip_existing": True,
+    },
     # chichitraders.site store as it stands today (rebuilt bundle): the bot
     # list is a require.context map inside the main bundle and the XMLs are
     # inlined in the same bundle. New bots land in src/xml/free-bots/chichitraders2
@@ -182,6 +199,7 @@ SITES = {
             "chichitraders/special": "special",
             # Folders the site added later; each one keeps its own creator chip.
             "chichitraders/master": "master",
+            "chichitraders/Hedging pros": "hedging-pros",
             "diceice": "diceice",
             "geelongtrades": "geelongtrades",
             "blocktradelive": "blocktradelive",
@@ -371,6 +389,72 @@ def download_bundle_catalog(site, cfg, out_dir):
     return total
 
 
+def normalize_chunk_id(raw):
+    """Normalise a webpack chunk id key: JS object keys may be printed in
+    exponent form (3000 -> '3e3'), so compare them as integers."""
+    try:
+        return str(int(float(raw)))
+    except ValueError:
+        return raw
+
+
+def download_async_xml_catalog(site, cfg, out_dir):
+    """Async chunk catalog mode: read the require.context bot list out of the
+    main bundle and fetch each bot's own lazy chunk."""
+    total = 0
+    html = http_get(cfg["base"] + "/")
+    found = re.search(r"/static/js/index\.[a-f0-9]+\.js", html)
+    if not found:
+        print("  FAIL bundle: index bundle not referenced in the HTML")
+        return total
+    bundle_js = http_get(cfg["base"] + found.group(0))
+
+    entries = re.findall(r'"(\./[^"]+\.xml)":\["\d+","(\d+)"\]', bundle_js)
+    print(f"  {found.group(0)}: {len(entries)} catalog entries")
+    if not entries:
+        return total
+
+    # The chunk filename function pairs each chunk id with its name and hash.
+    start = bundle_js.find("d.u=e=>")
+    head, _, tail = bundle_js[start:].partition('+"."+')
+    name_map = dict(re.findall(r'([\de]+):"([^"]+)"', head))
+    hash_map = dict(re.findall(r'([\de]+):"([0-9a-f]{8})"', tail))
+    name_map = {normalize_chunk_id(k): v for k, v in name_map.items()}
+    hash_map = {normalize_chunk_id(k): v for k, v in hash_map.items()}
+
+    skip_existing = cfg.get("skip_existing", False)
+    existing = set()
+    if skip_existing and os.path.isdir(out_dir):
+        existing.update(os.listdir(out_dir))
+
+    for rel, chunk_id in entries:
+        name = js_single_quote_unescape(rel[2:])[: -len(".xml")]
+        dest_name = f"{site}-{safe_name(name)}-xml.xml"
+        if skip_existing and dest_name in existing:
+            continue
+        chunk_name = name_map.get(chunk_id, chunk_id)
+        chunk_hash = hash_map.get(chunk_id)
+        if not chunk_hash:
+            print(f"  FAIL extract {name} (no chunk {chunk_id})")
+            continue
+        url = f"{cfg['base']}/static/js/async/{chunk_name}.{chunk_hash}.js"
+        try:
+            body = http_get(url)
+        except Exception as exc:
+            print(f"  FAIL download {name}: {exc}")
+            continue
+        m = re.search(r"let [A-Za-z_$][\w$]*='([\s\S]*?</xml>)(?:\\[\s\S])*?'", body)
+        if not m:
+            print(f"  FAIL extract {name} (chunk {chunk_name})")
+            continue
+        xml = js_single_quote_unescape(m.group(1))
+        with open(os.path.join(out_dir, dest_name), "w", encoding="utf-8") as f:
+            f.write(xml)
+        total += 1
+        print(f"  ok {dest_name} ({len(xml)} bytes)")
+    return total
+
+
 def safe_name(name):
     """Turn '<Bot Name>.xml' into '<Bot-Name>' (ascii, dashes)."""
     return re.sub(r"[^A-Za-z0-9]+", "-", name.replace(".xml", "")).strip("-")
@@ -382,6 +466,9 @@ def download_site(site, cfg, out_dir):
 
     if cfg.get("bundle_catalog"):
         return download_bundle_catalog(site, cfg, out_dir)
+
+    if cfg.get("async_xml_catalog"):
+        return download_async_xml_catalog(site, cfg, out_dir)
 
     if cfg.get("catalog"):
         # Catalog API mode: fetch the JSON catalog, then each bot's XML.

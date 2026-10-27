@@ -9573,6 +9573,60 @@ export const FREE_BOTS: TFreeBot[] = [
         "file": "osam-under-super-bot-xml"
     },
     {
+        "id": "osamtradinghub-ADVANCED-DIFFERS-2-2",
+        "name": "osamtradinghub ADVANCED DIFFERS 2 2",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-ADVANCED-DIFFERS-2-2-xml"
+    },
+    {
+        "id": "osamtradinghub-ADVANCED-O-U-J2-1",
+        "name": "osamtradinghub ADVANCED O U J2 1",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-ADVANCED-O-U-J2-1-xml"
+    },
+    {
+        "id": "osamtradinghub-EVEN-Autobot-1",
+        "name": "osamtradinghub EVEN Autobot 1",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-EVEN-Autobot-1-xml"
+    },
+    {
+        "id": "osamtradinghub-MENTORSHIP-2-1",
+        "name": "osamtradinghub MENTORSHIP 2 1",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-MENTORSHIP-2-1-xml"
+    },
+    {
+        "id": "osamtradinghub-ODD-Autobot-1-1",
+        "name": "osamtradinghub ODD Autobot 1 1",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-ODD-Autobot-1-1-xml"
+    },
+    {
+        "id": "osamtradinghub-OVER-UNDER-AUTOBOT",
+        "name": "osamtradinghub OVER UNDER AUTOBOT",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-OVER-UNDER-AUTOBOT-xml"
+    },
+    {
+        "id": "osamtradinghub-PATEL-with-Entry",
+        "name": "osamtradinghub PATEL with Entry",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-PATEL-with-Entry-xml"
+    },
+    {
+        "id": "osamtradinghub-Raziel-Over-Under",
+        "name": "osamtradinghub Raziel Over Under",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-Raziel-Over-Under-xml"
+    },
+    {
+        "id": "osamtradinghub-Reborn-HnR-1",
+        "name": "osamtradinghub Reborn HnR 1",
+        "creator": "osamtradinghub",
+        "file": "osamtradinghub/osamtradinghub-Reborn-HnR-1-xml"
+    },
+    {
         "id": "oscars_grind_max-stake",
         "name": "oscars grind max stake",
         "creator": "Official",
@@ -12149,6 +12203,11 @@ export const FREE_BOT_CREATORS: TFreeBotCreator[] = [
         "id": "tradepro",
         "label": "tradepro",
         "count": 10
+    },
+    {
+        "id": "osamtradinghub",
+        "label": "osamtradinghub",
+        "count": 9
     },
     {
         "id": "ai",
