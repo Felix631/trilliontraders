@@ -16,6 +16,17 @@ To add one:
 3. Commit both the `.xml` file and the regenerated
    `src/constants/free-bots-config.ts`.
 
+Or download a whole site's bots in one go:
+
+```sh
+python3 scripts/fetch-site-xml-bots.py https://example.com/app#free_bots
+python3 scripts/fetch-site-xml-bots.py https://example.com --dry-run   # report only
+```
+
+It reads the page, the site's JS bundles and its bot endpoints, keeps only
+files that really are Deriv bots, and writes the ones the library does not
+already have into this folder. Run the manifest step above afterwards.
+
 Notes:
 
 - Only bot files you have the right to redistribute belong here.

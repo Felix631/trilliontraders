@@ -11,9 +11,23 @@ import { FREE_BOTS, FREE_BOT_CREATORS } from '@/constants/free-bots-config';
 import './bot-store.scss';
 
 const ALL_CREATORS = 'All';
+const STARRED_FILTER = '__starred__';
 // The library holds ~2,000 strategies; rendering every tile at once would stall
 // the tab, so the shelf pages in 60 at a time.
 const PAGE_SIZE = 60;
+
+/** Filled / hollow star marking a bot the user does not want to lose track of. */
+const StarIcon = ({ filled }: { filled: boolean }) => (
+    <svg viewBox='0 0 24 24' width='16' height='16' aria-hidden='true' focusable='false'>
+        <path
+            d='M12 2.6l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.45 6.19 20.5 7.3 14.03 2.6 9.45l6.5-.95L12 2.6z'
+            fill={filled ? 'currentColor' : 'none'}
+            stroke='currentColor'
+            strokeWidth='1.6'
+            strokeLinejoin='round'
+        />
+    </svg>
+);
 
 /**
  * Bot Store — the community strategy shelf, as its own tab.
@@ -25,19 +39,28 @@ const PAGE_SIZE = 60;
 const BotStore = observer(() => {
     const { free_bots, dashboard } = useStore();
     const { is_loading, loading_bot_id, loadFreeBot, user_bots, loadUserBot, removeUserBot } = free_bots;
+    const favorite_bot_ids = free_bots.favorite_bot_ids ?? [];
+    const { toggleFavorite } = free_bots;
     const my_bots = user_bots ?? [];
     const [search_value, setSearchValue] = React.useState('');
     const [selected_creator, setSelectedCreator] = React.useState(ALL_CREATORS);
     const [visible_count, setVisibleCount] = React.useState(PAGE_SIZE);
 
+    const is_favorite = (bot_id: string) => favorite_bot_ids.includes(bot_id);
+
+    // Starred bots float to the top of whatever is on screen — the full shelf or
+    // a single creator's folder — without disturbing the order of the rest.
     const filtered_bots = React.useMemo(() => {
         const query = search_value.trim().toLowerCase();
-        return FREE_BOTS.filter(bot => {
-            const matches_creator = selected_creator === ALL_CREATORS || bot.creator === selected_creator;
+        const matches = FREE_BOTS.filter(bot => {
+            const matches_creator =
+                selected_creator === ALL_CREATORS ||
+                (selected_creator === STARRED_FILTER ? is_favorite(bot.id) : bot.creator === selected_creator);
             const matches_search = !query || `${bot.name} ${bot.creator}`.toLowerCase().includes(query);
             return matches_creator && matches_search;
         });
-    }, [search_value, selected_creator]);
+        return [...matches].sort((a, b) => Number(is_favorite(b.id)) - Number(is_favorite(a.id)));
+    }, [search_value, selected_creator, favorite_bot_ids]);
 
     // A new query or creator restarts the shelf from the first page.
     React.useEffect(() => setVisibleCount(PAGE_SIZE), [search_value, selected_creator]);
@@ -162,6 +185,17 @@ const BotStore = observer(() => {
                     >
                         {localize('All Bots')} ({FREE_BOTS.length})
                     </button>
+                    <button
+                        type='button'
+                        className={classNames('bot-store__chip', 'bot-store__chip--starred', {
+                            'bot-store__chip--active': selected_creator === STARRED_FILTER,
+                        })}
+                        onClick={() => setSelectedCreator(STARRED_FILTER)}
+                        data-testid='dt_free-bots-starred-filter'
+                    >
+                        <StarIcon filled />
+                        {localize('Starred')} ({favorite_bot_ids.length})
+                    </button>
                     {FREE_BOT_CREATORS.map(creator => (
                         <button
                             key={creator.id}
@@ -190,7 +224,25 @@ const BotStore = observer(() => {
                             >
                                 <div className='bot-store__tile-top'>
                                     <span className='bot-store__tile-creator'>{bot.creator}</span>
-                                    <span className='bot-store__tile-price'>{localize('FREE')}</span>
+                                    <div className='bot-store__tile-actions'>
+                                        <span className='bot-store__tile-price'>{localize('FREE')}</span>
+                                        <button
+                                            type='button'
+                                            className={classNames('bot-store__star', {
+                                                'bot-store__star--on': is_favorite(bot.id),
+                                            })}
+                                            aria-pressed={is_favorite(bot.id)}
+                                            title={
+                                                is_favorite(bot.id)
+                                                    ? localize('Remove from starred')
+                                                    : localize('Star this bot')
+                                            }
+                                            onClick={() => toggleFavorite(bot.id)}
+                                            data-testid={`dt_free-bots-star-${bot.id}`}
+                                        >
+                                            <StarIcon filled={is_favorite(bot.id)} />
+                                        </button>
+                                    </div>
                                 </div>
                                 <Text
                                     as='p'
@@ -224,7 +276,9 @@ const BotStore = observer(() => {
                 {!filtered_bots.length && (
                     <div className='bot-store__empty'>
                         <Text as='p' color='disabled' size='xs' align='center'>
-                            {localize('No bots match your search. Try a different keyword or creator.')}
+                            {selected_creator === STARRED_FILTER && !search_value.trim()
+                                ? localize('No starred bots yet — tap the star on any bot to pin it here.')
+                                : localize('No bots match your search. Try a different keyword or creator.')}
                         </Text>
                     </div>
                 )}

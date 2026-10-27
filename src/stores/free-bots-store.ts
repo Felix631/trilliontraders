@@ -17,8 +17,11 @@ export type TUserBot = {
 };
 
 const USER_BOTS_STORAGE_KEY = 'user_bots';
+const FAVORITE_BOTS_STORAGE_KEY = 'favorite_bots';
 /** IndexedDB is generous, but a runaway import should not fill it. */
 const MAX_USER_BOTS = 200;
+/** Starring is a shortlist, not a second library. */
+const MAX_FAVORITE_BOTS = 200;
 
 export default class FreeBotsStore {
     root_store: RootStore;
@@ -26,6 +29,8 @@ export default class FreeBotsStore {
     loading_bot_id: string | null = null;
     user_bots: TUserBot[] = [];
     is_user_bots_loaded = false;
+    /** Ids of the bots the user starred, most recent first. */
+    favorite_bot_ids: string[] = [];
 
     constructor(root_store: RootStore) {
         makeObservable(this, {
@@ -33,14 +38,50 @@ export default class FreeBotsStore {
             loading_bot_id: observable,
             user_bots: observable,
             is_user_bots_loaded: observable,
+            favorite_bot_ids: observable,
             loadFreeBot: action,
             loadUserBot: action,
             addUserBots: action,
             removeUserBot: action,
+            loadFavorites: action,
+            toggleFavorite: action,
         });
         this.root_store = root_store;
         this.loadUserBots();
+        this.loadFavorites();
     }
+
+    /**
+     * Starred bots survive a reload the same way imported ones do. A star is
+     * only a marker on the shelf — the bot itself still lives in the library —
+     * so nothing here is authoritative for loading a bot.
+     */
+    loadFavorites = async () => {
+        try {
+            const stored = await localForage.getItem(FAVORITE_BOTS_STORAGE_KEY);
+            this.favorite_bot_ids = Array.isArray(stored) ? (stored as string[]).filter(id => typeof id === 'string') : [];
+        } catch (error) {
+            console.error('[TrillionTraders] Could not read the starred bots:', error);
+        }
+    };
+
+    private persistFavorites = async () => {
+        try {
+            await localForage.setItem(FAVORITE_BOTS_STORAGE_KEY, this.favorite_bot_ids.slice(0, MAX_FAVORITE_BOTS));
+        } catch (error) {
+            console.error('[TrillionTraders] Could not save the starred bots:', error);
+        }
+    };
+
+    isFavorite = (bot_id: string) => !!bot_id && this.favorite_bot_ids.includes(bot_id);
+
+    toggleFavorite = async (bot_id: string) => {
+        if (!bot_id) return;
+        this.favorite_bot_ids = this.isFavorite(bot_id)
+            ? this.favorite_bot_ids.filter(id => id !== bot_id)
+            : [bot_id, ...this.favorite_bot_ids].slice(0, MAX_FAVORITE_BOTS);
+        await this.persistFavorites();
+    };
 
     /**
      * Loads a community bot from the Free Bots library into the Bot Builder.

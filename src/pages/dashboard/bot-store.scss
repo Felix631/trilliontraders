@@ -240,6 +240,27 @@
             color: var(--ux-text-on-accent);
             box-shadow: var(--ux-glow-blue);
         }
+
+        &--starred {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ux-gold);
+            border-color: color-mix(in srgb, var(--ux-gold) 38%, var(--ux-border));
+
+            &:hover {
+                color: var(--ux-gold);
+                background: color-mix(in srgb, var(--ux-gold) 12%, transparent);
+                border-color: color-mix(in srgb, var(--ux-gold) 55%, transparent);
+            }
+
+            &.bot-store__chip--active {
+                background: linear-gradient(120deg, var(--ux-gold), color-mix(in srgb, var(--ux-gold) 55%, #b7791f));
+                border-color: transparent;
+                color: #241a02;
+                box-shadow: var(--ux-glow-gold);
+            }
+        }
     }
 
     /* ---- Grid + tiles --------------------------------------------------- */
@@ -284,6 +305,48 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
+    }
+
+    &__tile-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    &__star {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.6rem;
+        height: 2.6rem;
+        padding: 0;
+        border: 1px solid var(--ux-border);
+        border-radius: var(--ux-r-pill);
+        background: transparent;
+        color: var(--ux-text-mute);
+        cursor: pointer;
+        transition: color var(--ux-t-fast) var(--ux-ease), background var(--ux-t-fast) var(--ux-ease),
+            border-color var(--ux-t-fast) var(--ux-ease), transform var(--ux-t-fast) var(--ux-ease);
+
+        &:hover {
+            color: var(--ux-gold);
+            border-color: color-mix(in srgb, var(--ux-gold) 50%, transparent);
+            background: color-mix(in srgb, var(--ux-gold) 10%, transparent);
+            transform: scale(1.06);
+        }
+
+        &:focus-visible {
+            outline: none;
+            border-color: var(--ux-gold);
+            box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--ux-gold) 26%, transparent);
+        }
+
+        &--on {
+            color: var(--ux-gold);
+            border-color: color-mix(in srgb, var(--ux-gold) 55%, transparent);
+            background: color-mix(in srgb, var(--ux-gold) 14%, transparent);
+            box-shadow: var(--ux-glow-gold);
+        }
     }
 
     &__tile-creator {
@@ -373,5 +436,9 @@
         &:hover {
             transform: none;
         }
+    }
+
+    .bot-store__star:hover {
+        transform: none;
     }
 }
