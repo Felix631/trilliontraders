@@ -1,15 +1,13 @@
 /**
- * The pre-React cover must already be the app's own canvas.
- *
- * The splash is inline in index.html (there is no stylesheet yet when it shows),
- * so it cannot read the Aurora Deep tokens. These assertions keep the values it
- * hardcodes in sync with the system palette: ink #050b1c under the blue → cyan
- * → emerald spectrum, rather than the maroon/gold cover it used to render.
+ * The pre-React cover must already be the app's own canvas, and must stay up until
+ * React's splash (the same loading card) has painted — otherwise the light page
+ * background flashes between the two.
  */
 const fs = require('fs');
 const path = require('path');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../index.html'), 'utf8');
+const reactSplash = fs.readFileSync(path.resolve(__dirname, '../../components/loader/chunk-loader.tsx'), 'utf8');
 
 describe('the boot splash', () => {
     it('paints the Aurora Deep canvas instead of the old maroon/gold cover', () => {
@@ -24,8 +22,55 @@ describe('the boot splash', () => {
         expect(html).toMatch(/rgba\(16, 185, 129/);
     });
 
-    it('still covers the app and is torn down once the bundle runs', () => {
+    it('covers the app with the same loading card the React splash renders', () => {
         expect(html).toMatch(/id="df-boot-splash"/);
         expect(html).toMatch(/#df-boot-splash\[data-done='1'\]\s*\{\s*display:\s*none;/);
+
+        expect(html).toContain('df-boot-card');
+        // Both screens say the same things, so the handover is invisible. The React
+        // title interpolates the app name (brand.config.json), so only its template
+        // and the cover's resolved name can be compared.
+        ['Synthetic indices, trading bots and live charts in one hub.', 'Getting your trading hub ready.'].forEach(
+            line => {
+                expect(html).toContain(line);
+                expect(reactSplash).toContain(line);
+            }
+        );
+        expect(html).toContain('Welcome to Trillion Trades');
+        expect(reactSplash).toContain("localize('Welcome to {{app}}'");
+    });
+});
+
+describe('hideBootSplash', () => {
+    beforeEach(() => {
+        jest.resetModules();
+        jest.useFakeTimers();
+        document.body.innerHTML = '<div id="df-boot-splash"></div>';
+    });
+
+    afterEach(() => jest.useRealTimers());
+
+    const coverDone = () => document.getElementById('df-boot-splash')!.getAttribute('data-done');
+
+    it('leaves the cover up when the bundle merely executes', () => {
+        require('../boot-splash');
+
+        expect(coverDone()).toBeNull();
+    });
+
+    it('hides the cover once the React splash asks it to', () => {
+        const { hideBootSplash } = require('../boot-splash');
+
+        hideBootSplash();
+
+        expect(coverDone()).toBe('1');
+    });
+
+    it('hides the cover after the safety timeout if React never paints', () => {
+        require('../boot-splash');
+
+        jest.advanceTimersByTime(8000);
+
+        expect(coverDone()).toBe('1');
     });
 });

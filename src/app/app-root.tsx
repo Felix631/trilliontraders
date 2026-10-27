@@ -11,7 +11,7 @@ import './app-root.scss';
 const AppContent = lazy(() => import('./app-content'));
 
 const AppRootLoader = () => {
-    return <ChunkLoader message={localize('Loading...')} />;
+    return <ChunkLoader variant='splash' progress={58} message={localize('Loading your workspace...')} />;
 };
 
 const ErrorComponentWrapper = observer(() => {

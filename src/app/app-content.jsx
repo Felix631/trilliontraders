@@ -197,7 +197,11 @@ const AppContent = observer(() => {
                 </Suspense>
             )}
             {is_loading ? (
-                <ChunkLoader message={localize('Initializing TrillionTraders account...')} />
+                <ChunkLoader
+                    variant='splash'
+                    progress={86}
+                    message={localize('Loading markets and your account...')}
+                />
             ) : (
                 <AuthLoadingWrapper>
                     <ThemeProvider theme={is_dark_mode_on ? 'dark' : 'light'}>
