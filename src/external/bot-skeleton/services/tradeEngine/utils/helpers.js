@@ -32,6 +32,37 @@ export const barrierForContractType = (contract_type, barrier) => {
     return `${is_lower ? '-' : '+'}${text.slice(1)}`;
 };
 
+/**
+ * The other name each side of a High/Low trade is known by.
+ *
+ * Community builders call the two sides of a Higher/Lower trade HIGHER and
+ * LOWER; this engine prices and buys the same two contracts as CALL and PUT (see
+ * `opposites` in constants/config). A purchase block that asked for HIGHER never
+ * matched a proposal and was refused with "Selected proposal does not exist",
+ * so a name is resolved to whichever spelling the trade definition offers.
+ */
+const CONTRACT_TYPE_ALIASES = {
+    HIGHER: 'CALL',
+    LOWER: 'PUT',
+    CALL: 'HIGHER',
+    PUT: 'LOWER',
+};
+
+/**
+ * The contract type to buy, spelled the way the trade definition holds it.
+ *
+ * @param contract_type the type a block asked for
+ * @param offered every contract type the running strategy prices
+ */
+export const resolveOfferedContractType = (contract_type, offered) => {
+    if (!contract_type) return '';
+    const types = Array.from(offered || []);
+    if (!types.length || types.includes(contract_type)) return contract_type;
+
+    const alias = CONTRACT_TYPE_ALIASES[contract_type];
+    return alias && types.includes(alias) ? alias : contract_type;
+};
+
 export const tradeOptionToProposal = (trade_option, purchase_reference) =>
     trade_option.contractTypes.map(type => {
         const proposal = {

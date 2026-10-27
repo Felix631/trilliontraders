@@ -6,6 +6,10 @@
  * `vh_*` mutation that carried the virtual-hook settings. This suite is the
  * guard: every setting the shared library puts on the block has to load, keep
  * its value, and come back out of the builder.
+ *
+ * They are also only *drawn* for a bot that uses one of them: the rest of the
+ * library exported them all switched off, so four rows of dead settings used to
+ * sit on nearly every bot in the builder.
  */
 const fs = require('fs');
 const path = require('path');
@@ -69,6 +73,16 @@ const mutationAttrs = block => {
     return attrs;
 };
 
+/**
+ * Which of the extra rows are drawn, in block order. Only the market trio is
+ * always on the block; the text between fields is a label, not a field.
+ */
+const BASE_FIELDS = ['MARKET_LIST', 'SUBMARKET_LIST', 'SYMBOL_LIST'];
+const extraRowVisibility = block =>
+    block.inputList
+        .filter(input => input.fieldRow.some(field => field.name && !BASE_FIELDS.includes(field.name)))
+        .map(input => input.isVisible());
+
 describe('the Market block extra settings', () => {
     let workspace;
     let warnings;
@@ -87,8 +101,8 @@ describe('the Market block extra settings', () => {
         ['initSvg', 'queueRender', 'render', 'renderEfficiently'].forEach(m => {
             prototype[m] = () => {};
         });
-        if (window.Blockly.Input) window.Blockly.Input.prototype.setVisible = () => {};
-
+        // Input.setVisible is left alone on purpose: whether the extra rows are
+        // drawn is what this suite checks.
         warnings = [];
         jest.spyOn(console, 'warn').mockImplementation((...args) => warnings.push(args.map(String).join(' ')));
 
@@ -282,6 +296,51 @@ describe('the Market block extra settings', () => {
         expect(problems).toEqual([]);
     }, 120000);
 
+    it('draws only market > submarket > symbol on a bot that uses none of the settings', () => {
+        const file = 'src/xml/free-bots/githinji/githinji-Digits-Sniper-xml.xml';
+        const block = window.Blockly.Xml.domToBlock(marketBlockXml(file), workspace);
+
+        expect(extraRowVisibility(block)).toEqual([false, false, false, false]);
+
+        // …while the settings the file did carry are all still on the block, and
+        // save back exactly as they were read.
+        const text = window.Blockly.Xml.domToText(window.Blockly.Xml.blockToDom(block, true));
+        expect(text).toContain('<field name="MULTI_MARKET">FALSE</field>');
+        expect(text).toContain('<field name="VH_SETTINGS_BTN">VH Settings</field>');
+        expect(warnings).toEqual([]);
+    });
+
+    it('draws them on the bot that uses them', () => {
+        const block = window.Blockly.Xml.domToBlock(marketBlockXml(MARKET_FILE), workspace);
+        expect(extraRowVisibility(block)).toEqual([true, true, true, true]);
+
+        // One setting switched on is enough — the file only sets the mode.
+        const on = window.Blockly.Xml.domToBlock(
+            window.Blockly.utils.xml.textToDom(
+                '<xml><block type="trade_definition_market">' +
+                    '<field name="MARKET_LIST">synthetic_index</field>' +
+                    '<field name="SUBMARKET_LIST">random_index</field>' +
+                    '<field name="SYMBOL_LIST">R_100</field>' +
+                    '<field name="MULTI_MARKET">TRUE</field></block></xml>'
+            ).getElementsByTagName('block')[0],
+            workspace
+        );
+        expect(extraRowVisibility(on)).toEqual([true, true, true, true]);
+        expect(warnings).toEqual([]);
+    });
+
+    it('follows a setting being turned on and off in the builder', () => {
+        const file = 'src/xml/free-bots/githinji/githinji-Digits-Sniper-xml.xml';
+        const block = window.Blockly.Xml.domToBlock(marketBlockXml(file), workspace);
+        expect(extraRowVisibility(block)).toEqual([false, false, false, false]);
+
+        block.setFieldValue('TRUE', 'VH_ENABLED');
+        expect(extraRowVisibility(block)).toEqual([true, true, true, true]);
+
+        block.setFieldValue('FALSE', 'VH_ENABLED');
+        expect(extraRowVisibility(block)).toEqual([false, false, false, false]);
+    });
+
     it('still builds a Market block that predates the settings', () => {
         const legacy = window.Blockly.utils.xml.textToDom(
             '<xml><block type="trade_definition_market"><field name="MARKET_LIST">volidx</field>' +
@@ -290,6 +349,7 @@ describe('the Market block extra settings', () => {
         ).getElementsByTagName('block')[0];
 
         const block = window.Blockly.Xml.domToBlock(legacy, workspace);
+        expect(extraRowVisibility(block)).toEqual([false, false, false, false]);
         expect(fieldMap(block)).toEqual({
             MARKET_LIST: 'volidx',
             SUBMARKET_LIST: 'random_index',

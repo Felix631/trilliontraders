@@ -101,6 +101,29 @@ describe('the barrier each leg of a high/low pair sends', () => {
     });
 });
 
+describe('the contract type a purchase step asks for', () => {
+    const { resolveOfferedContractType } = require('../../utils/helpers');
+
+    it('resolves the HIGHER/LOWER spelling to the one the definition prices', () => {
+        // Community builders name the sides of a Higher/Lower trade HIGHER and
+        // LOWER; this engine prices them as CALL and PUT.
+        expect(resolveOfferedContractType('HIGHER', ['CALL', 'PUT'])).toBe('CALL');
+        expect(resolveOfferedContractType('LOWER', ['CALL', 'PUT'])).toBe('PUT');
+        // And the other way round, for a definition that offers them by name.
+        expect(resolveOfferedContractType('CALL', ['HIGHER', 'LOWER'])).toBe('HIGHER');
+        expect(resolveOfferedContractType('PUT', ['HIGHER', 'LOWER'])).toBe('LOWER');
+    });
+
+    it('leaves every other name alone', () => {
+        expect(resolveOfferedContractType('CALL', ['CALL', 'PUT'])).toBe('CALL');
+        expect(resolveOfferedContractType('DIGITOVER', ['CALL', 'PUT'])).toBe('DIGITOVER');
+        // Nothing to resolve against: the name is used as it is.
+        expect(resolveOfferedContractType('CALL', [])).toBe('CALL');
+        expect(resolveOfferedContractType('CALL')).toBe('CALL');
+        expect(resolveOfferedContractType('', ['CALL', 'PUT'])).toBe('');
+    });
+});
+
 describe('the two-contract purchase', () => {
     beforeEach(() => {
         api_base.api = {
@@ -143,6 +166,53 @@ describe('the two-contract purchase', () => {
         // One refusal must not lose the order that went through.
         expect(engine.contractId).toBe(222);
         expect(engine.store.dispatch).toHaveBeenCalled();
+    });
+
+    it('buys both legs straight from the trade parameters when there are no proposals', async () => {
+        api_base.api.send.mockImplementation(message =>
+            Promise.resolve(accepted({}, message.parameters.contract_type === 'CALL' ? 111 : 222))
+        );
+
+        const engine = make_engine();
+        // What a strategy without a Payout block looks like: no proposals are
+        // subscribed, so a pair bought by proposal id could never be priced.
+        engine.is_proposal_subscription_required = false;
+        engine.options = { contractTypes: ['CALL', 'PUT'] };
+        engine.tradeOptions = {
+            amount: 1,
+            basis: 'stake',
+            duration: 2,
+            duration_unit: 't',
+            barrierOffset: '+0.5',
+            symbol: 'R_100',
+        };
+        engine.selectProposal = jest.fn(() => {
+            throw new Error('proposals were never requested');
+        });
+
+        await engine.purchasePair('CALL', 'PUT');
+
+        expect(engine.selectProposal).not.toHaveBeenCalled();
+        expect(api_base.api.send).toHaveBeenCalledTimes(2);
+
+        const [higher, lower] = api_base.api.send.mock.calls.map(([message]) => message.parameters);
+        expect(higher).toMatchObject({ contract_type: 'CALL', barrier: '+0.5', duration: 2, duration_unit: 't' });
+        // The Lower leg is priced below the entry spot, not above it.
+        expect(lower).toMatchObject({ contract_type: 'PUT', barrier: '-0.5', duration: 2, duration_unit: 't' });
+        expect(engine.contractId).toBe(111);
+    });
+
+    it('prices both legs before either order goes out', async () => {
+        api_base.api.send.mockImplementation(() => Promise.resolve(accepted({}, 111)));
+
+        const engine = make_engine();
+        engine.selectProposal = jest.fn(contract_type => {
+            if (contract_type === 'PUT') throw { error: { code: 'InvalidBarrier', message: 'Invalid barrier.' } };
+            return { id: 'p1', askPrice: 0.5 };
+        });
+
+        await expect(engine.purchasePair('CALL', 'PUT')).rejects.toMatchObject({ error: { message: 'Invalid barrier.' } });
+        expect(api_base.api.send).not.toHaveBeenCalled();
     });
 
     it('falls back to a single purchase when only one side is set', async () => {

@@ -1,7 +1,7 @@
 import { LogTypes } from '../../../constants/messages';
 import { api_base } from '../../api/api-base';
 import { contract as broadcastContract, contractStatus, info, log } from '../utils/broadcast';
-import { doUntilDone, getUUID, recoverFromError, tradeOptionToBuy } from '../utils/helpers';
+import { doUntilDone, getUUID, recoverFromError, resolveOfferedContractType, tradeOptionToBuy } from '../utils/helpers';
 import { purchaseSuccessful } from './state/actions';
 import { BEFORE_PURCHASE } from './state/constants';
 
@@ -25,9 +25,7 @@ export default Engine =>
             // read). The definition already fixes the contract type this trade
             // buys, so use it instead of sending an order with no type — which
             // the API rejects and which used to stop the whole bot.
-            if (!contract_type || contract_type === 'undefined' || contract_type === 'null') {
-                contract_type = this.tradeOptions?.contract_type;
-            }
+            contract_type = this.resolvePurchaseContractType(contract_type);
             if (!contract_type) {
                 return Promise.resolve();
             }
@@ -161,12 +159,19 @@ export default Engine =>
             });
         }
 
-        /** The contract type a purchase step asked for, falling back to the trade definition. */
+        /**
+         * The contract type a purchase step asked for, falling back to the trade
+         * definition when the block left it empty, and resolved to the spelling
+         * the definition prices (HIGHER/LOWER arrive as CALL/PUT) so a purchase
+         * always finds the proposal it is meant to buy.
+         */
         resolvePurchaseContractType(contract_type) {
-            if (!contract_type || contract_type === 'undefined' || contract_type === 'null') {
-                return this.tradeOptions?.contract_type || '';
-            }
-            return contract_type;
+            const requested =
+                !contract_type || contract_type === 'undefined' || contract_type === 'null'
+                    ? this.tradeOptions?.contract_type || ''
+                    : contract_type;
+
+            return resolveOfferedContractType(requested, this.options?.contractTypes);
         }
 
         buyProposal({ id, askPrice }) {
@@ -174,14 +179,27 @@ export default Engine =>
         }
 
         /**
+         * Sends one leg of a pair: by proposal id when the strategy buys from
+         * proposals, straight from the trade parameters otherwise.
+         */
+        buyLeg({ quote, message }) {
+            if (message) return doUntilDone(() => api_base.api.send(message));
+            return this.buyProposal(quote);
+        }
+
+        /**
          * Buy two contracts at the same moment — the Purchase two contracts
          * block, e.g. Rise and Fall together.
          *
-         * Both orders are sent together, from the proposals the trade definition
-         * already holds (so they share the configured stake and duration). The
-         * first contract drives the bot's normal flow — during/after purchase,
-         * totals, the journal — and the second is followed to settlement on its
-         * own so both sides land in the totals.
+         * Both orders are sent together, each with the configured stake and
+         * duration. A strategy that buys from proposals (it has a Payout block)
+         * buys each leg by proposal id; any other strategy buys both legs straight
+         * from the trade parameters, exactly as a single purchase does — without
+         * this the pair block could never work in a bot that does not ask for
+         * payouts, and it failed with "Proposals are not ready". The first
+         * contract drives the bot's normal flow — during/after purchase, totals,
+         * the journal — and the second is followed to settlement on its own so
+         * both sides land in the totals.
          */
         async purchasePair(contract_type, second_contract_type) {
             // Prevent calling purchase twice
@@ -197,33 +215,28 @@ export default Engine =>
                 return this.purchase(first_type || second_type);
             }
 
-            let first_quote;
-            let second_quote;
-            try {
-                first_quote = this.selectProposal(first_type);
-                second_quote = this.selectProposal(second_type);
-            } catch (error) {
-                // Never buy a single leg of a pair. An unhedged order is not what
-                // the block asked for, and buying it silently is what made a bad
-                // barrier look like "the bot only takes one trade". Surface the
-                // reason the second leg could not be priced instead.
-                throw error;
-            }
+            // Every leg is priced before anything is sent: never buy a single leg
+            // of a pair. An unhedged order is not what the block asked for, and
+            // buying it silently is what made a bad barrier look like "the bot
+            // only takes one trade".
+            const orders = [first_type, second_type].map(type =>
+                this.is_proposal_subscription_required
+                    ? { contract_type: type, quote: this.selectProposal(type) }
+                    : { contract_type: type, message: tradeOptionToBuy(type, this.tradeOptions) }
+            );
 
             this.isSold = false;
 
             contractStatus({
                 id: 'contract.purchase_sent',
-                data: first_quote.askPrice + second_quote.askPrice,
+                data: orders.reduce(
+                    (total, order) => total + Number(order.quote ? order.quote.askPrice : this.tradeOptions.amount),
+                    0
+                ),
             });
 
-            const orders = [
-                { contract_type: first_type, quote: first_quote },
-                { contract_type: second_type, quote: second_quote },
-            ];
-
             // Both sends go out together; one refusal must not lose the other.
-            const results = await Promise.allSettled(orders.map(order => this.buyProposal(order.quote)));
+            const results = await Promise.allSettled(orders.map(order => this.buyLeg(order)));
             const bought = results
                 .map((result, index) =>
                     result.status === 'fulfilled' && result.value?.buy

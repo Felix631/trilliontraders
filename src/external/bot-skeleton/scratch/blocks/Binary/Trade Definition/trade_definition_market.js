@@ -61,6 +61,39 @@ const VH_FIELD_ATTRIBUTES = {
 
 const MANAGED_MUTATION_ATTRIBUTES = Object.values(VH_FIELD_ATTRIBUTES);
 
+/**
+ * The extra settings, each with the value this build treats as "off".
+ *
+ * They are shown only for a bot that actually uses one of them. Almost the whole
+ * shared library was exported from builds that wrote every one of these onto
+ * this block switched off, so drawing them all put four extra rows of dead
+ * settings on every bot in the builder.
+ *
+ * `null` marks a setting that is only a caption (the settings-button label):
+ * its text is never a reason to show the rows.
+ */
+const EXTRA_SETTINGS = {
+    MULTI_MARKET: ['FALSE', 'DISABLE', ''],
+    ALTERNATE_EVERY: ['1'],
+    ALTERNATE_MARKETS: ['FALSE', 'DISABLE', ''],
+    VH_ENABLED: ['FALSE', 'DISABLE', ''],
+    VH_MAX_STEPS: ['1'],
+    VH_MIN_TRADES: ['1'],
+    VH_STAKE: ['0.35'],
+    VH_SETTINGS_BTN: null,
+    MARKET_CHANGE_MODE: ['EVERY_X_RUNS'],
+    ALTERNATE_MODE: ['EVERY_X_RUNS'],
+    CHANGE_AFTER_LIST: ['EVERY_X_RUNS'],
+    ALL_MARKETS_FREQUENCY: ['1'],
+    TRADE_ALL_VOLATILITY: ['FALSE', 'DISABLE', ''],
+    TRADE_ALL_MARKETS: ['FALSE', 'DISABLE', ''],
+    MULTI_CONTRACT_SWITCHING: ['FALSE', 'DISABLE', ''],
+    SHOW_ADVANCED: ['FALSE', 'DISABLE', ''],
+    HIDE_TRADE_PARAMETERS: ['FALSE', 'DISABLE', ''],
+};
+
+const EXTRA_SETTING_NAMES = Object.keys(EXTRA_SETTINGS);
+
 /** Reads a field only when this block really declares it. */
 const fieldValue = (block, name, fallback = '') => {
     const field = block.getField?.(name);
@@ -220,6 +253,11 @@ window.Blockly.Blocks.trade_definition_market = {
             console.warn('[TrillionTraders] This Blockly build has no serializable field_label; VH label kept static.');
         }
 
+        // The extra settings are hidden until one of them is actually used, so a
+        // bot that never touches them shows only market > submarket > symbol.
+        this.watchExtraSettings();
+        this.updateExtraSettingsVisibility();
+
         this.setMovable(false);
         this.setDeletable(false);
         this.setInputsInline(false);
@@ -265,10 +303,91 @@ window.Blockly.Blocks.trade_definition_market = {
         const vh_enabled = xml_element.getAttribute('vh_enabled');
         if (vh_enabled !== null) apply('VH_ENABLED', vhEnabledFromMutation(vh_enabled));
     },
+    /**
+     * The rows drawn on top of the market/submarket/symbol trio — one per group
+     * of extra settings. A row counts as extra when every field on it is an
+     * extra setting; the text between the fields is a label, not a field, so it
+     * does not count.
+     */
+    extraSettingInputs() {
+        return this.inputList.filter(input => {
+            const names = input.fieldRow.map(field => field.name).filter(Boolean);
+            return names.length > 0 && names.every(name => EXTRA_SETTING_NAMES.includes(name));
+        });
+    },
+    /** What a setting reads on the block, or the value about to be set on it. */
+    extraSettingValue(name, override) {
+        if (override && Object.prototype.hasOwnProperty.call(override, name)) return override[name];
+        return this.getField(name) ? this.getFieldValue(name) : undefined;
+    },
+    /** True when the strategy really uses one of the extra settings. */
+    usesExtraSettings(override) {
+        return EXTRA_SETTING_NAMES.some(name => {
+            const off_values = EXTRA_SETTINGS[name];
+            if (!off_values) return false;
+            const value = this.extraSettingValue(name, override);
+            return value !== undefined && !off_values.includes(String(value).trim());
+        });
+    },
+    /**
+     * Shows or hides those rows. Only what is drawn changes: every field stays
+     * on the block, so the settings a strategy arrived with save back untouched.
+     */
+    showExtraSettings(visible) {
+        let has_changed = false;
+        this.extraSettingInputs().forEach(input => {
+            if (input.isVisible() !== visible) {
+                input.setVisible(visible);
+                has_changed = true;
+            }
+        });
+
+        if (has_changed && this.rendered) {
+            this.render();
+            this.bumpNeighbours();
+        }
+
+        return has_changed;
+    },
+    /**
+     * Keeps the rows in step with the settings the block holds. `override` holds
+     * the field being set: a field's validator runs before its own value is
+     * stored, so the incoming value has to stand in for it.
+     */
+    updateExtraSettingsVisibility(override) {
+        return this.showExtraSettings(this.usesExtraSettings(override));
+    },
+    /**
+     * A loaded strategy sets fields through the field itself and the builder
+     * through the block, and a field's validator is the one hook both go
+     * through — so that is where the rows are kept up to date from.
+     */
+    watchExtraSettings() {
+        EXTRA_SETTING_NAMES.forEach(name => {
+            const field = this.getField(name);
+            if (!field || typeof field.setValidator !== 'function') return;
+            const previous = typeof field.getValidator === 'function' ? field.getValidator() : null;
+            field.setValidator(value => {
+                const validated = previous ? previous.call(field, value) : value;
+                this.updateExtraSettingsVisibility({ [name]: value });
+                return validated;
+            });
+        });
+    },
     customContextMenu(menu) {
         const menu_items = [localize('Enable Block'), localize('Disable Block')];
         excludeOptionFromContextMenu(menu, menu_items);
-        modifyContextMenu(menu);
+
+        // The rows are hidden on a bot that does not use them, so the menu is how
+        // they are reached when one of them has to be turned on by hand.
+        const show = !this.usesExtraSettings();
+        modifyContextMenu(menu, [
+            {
+                text: show ? localize('Show extra market settings') : localize('Hide extra market settings'),
+                enabled: true,
+                callback: () => this.showExtraSettings(show),
+            },
+        ]);
     },
     onchange(event) {
         const allowed_events = ['BLOCK_CREATE', 'BLOCK_CHANGE', 'BLOCK_DRAG'];

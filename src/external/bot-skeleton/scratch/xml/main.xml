@@ -6,23 +6,6 @@
         <field name="MARKET_LIST"></field>
         <field name="SUBMARKET_LIST"></field>
         <field name="SYMBOL_LIST"></field>
-        <field name="MULTI_MARKET">FALSE</field>
-        <field name="ALTERNATE_EVERY">1</field>
-        <field name="ALTERNATE_MARKETS">FALSE</field>
-        <field name="VH_ENABLED">FALSE</field>
-        <field name="VH_MAX_STEPS">1</field>
-        <field name="VH_MIN_TRADES">1</field>
-        <field name="VH_STAKE">0.35</field>
-        <field name="VH_SETTINGS_BTN">VH Settings</field>
-        <field name="MARKET_CHANGE_MODE">EVERY_X_RUNS</field>
-        <field name="ALTERNATE_MODE">EVERY_X_RUNS</field>
-        <field name="CHANGE_AFTER_LIST">EVERY_X_RUNS</field>
-        <field name="ALL_MARKETS_FREQUENCY">1</field>
-        <field name="TRADE_ALL_VOLATILITY">FALSE</field>
-        <field name="TRADE_ALL_MARKETS">FALSE</field>
-        <field name="MULTI_CONTRACT_SWITCHING">FALSE</field>
-        <field name="SHOW_ADVANCED">FALSE</field>
-        <field name="HIDE_TRADE_PARAMETERS">FALSE</field>
         <next>
           <block type="trade_definition_tradetype" deletable="false" movable="false">
             <field name="TRADETYPECAT_LIST"></field>

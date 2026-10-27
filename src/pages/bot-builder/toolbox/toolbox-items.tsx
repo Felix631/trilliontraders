@@ -60,28 +60,13 @@ export const ToolboxItems = () =>
                             <Field name='MARKET_LIST' />
                             <Field name='SUBMARKET_LIST' />
                             <Field name='SYMBOL_LIST' />
-                            {/* The extra settings the community builds put on this block:
-                                multi-market mode, market sweeping and the virtual-hook
-                                settings. They are part of the block, so they belong in
-                                the menu too — otherwise a strategy that arrived with
-                                them cannot be rebuilt or edited here. */}
-                            <Field name='MULTI_MARKET'>FALSE</Field>
-                            <Field name='ALTERNATE_EVERY'>1</Field>
-                            <Field name='ALTERNATE_MARKETS'>FALSE</Field>
-                            <Field name='VH_ENABLED'>FALSE</Field>
-                            <Field name='VH_MAX_STEPS'>1</Field>
-                            <Field name='VH_MIN_TRADES'>1</Field>
-                            <Field name='VH_STAKE'>0.35</Field>
-                            <Field name='VH_SETTINGS_BTN'>VH Settings</Field>
-                            <Field name='MARKET_CHANGE_MODE'>EVERY_X_RUNS</Field>
-                            <Field name='ALTERNATE_MODE'>EVERY_X_RUNS</Field>
-                            <Field name='CHANGE_AFTER_LIST'>EVERY_X_RUNS</Field>
-                            <Field name='ALL_MARKETS_FREQUENCY'>1</Field>
-                            <Field name='TRADE_ALL_VOLATILITY'>FALSE</Field>
-                            <Field name='TRADE_ALL_MARKETS'>FALSE</Field>
-                            <Field name='MULTI_CONTRACT_SWITCHING'>FALSE</Field>
-                            <Field name='SHOW_ADVANCED'>FALSE</Field>
-                            <Field name='HIDE_TRADE_PARAMETERS'>FALSE</Field>
+                            {/* The extra settings the community builds put on this block
+                                (multi-market mode, market sweeping, the virtual hook) are
+                                part of the block, but they stay hidden on a bot that does
+                                not use them — otherwise every strategy carries four rows
+                                of dead settings in the builder. Turn one on from the
+                                block's context menu, or open a bot that already uses
+                                them, and the rows appear. */}
                             <Next>
                                 <Block type='trade_definition_tradetype' deletable='false' movable='false'>
                                     <Field name='TRADETYPECAT_LIST' />
