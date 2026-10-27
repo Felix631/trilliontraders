@@ -1,75 +1,50 @@
-import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { api_base } from '@/external/bot-skeleton/services/api/api-base';
-import { useApiBase } from '@/hooks/useApiBase';
-import {
-    cacheCountryCode,
-    fetchClientCountryCode,
-    getCountryEmoji,
-    getCountryName,
-    normalizeCountryCode,
-    readCachedCountryCode,
-} from '@/utils/client-country';
+import classNames from 'classnames';
 
 /**
- * The signed-in client's country, as a flag chip in the top-right header.
+ * The account avatar, drawn the way chichitraders draws it: the United States
+ * flag for a real account, a bold "D" for a demo one.
  *
- * The code is cached so the flag is there on the first paint after a reload,
- * then refreshed from the API (and on every account switch, in case the two
- * accounts sit in different countries).
+ * Both marks are inline — no remote image — so the avatar is there on the first
+ * paint and cannot fail to load.
  */
-const CountryFlag = observer(() => {
-    const { isAuthorized, activeLoginid } = useApiBase();
-    const [country_code, setCountryCode] = useState(readCachedCountryCode);
-    const [is_image_broken, setIsImageBroken] = useState(false);
+export const RealAccountFlag = () => (
+    <svg
+        className='acc-info__real-account-flag'
+        viewBox='0 0 48 48'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+        focusable='false'
+    >
+        <rect width='48' height='48' fill='#ffffff' />
+        <path d='M0 4h48v4H0zM0 12h48v4H0zM0 20h48v4H0zM0 28h48v4H0zM0 36h48v4H0zM0 44h48v4H0z' fill='#d7193f' />
+        <path d='M0 0h25v26H0z' fill='#16458d' />
+        <path
+            d='M4 4h2v2H4zM11.5 4h2v2h-2zM19 4h2v2h-2zM7.5 9h2v2h-2zM15 9h2v2h-2zM4 14h2v2H4zM11.5 14h2v2h-2zM19 14h2v2h-2zM7.5 19h2v2h-2zM15 19h2v2h-2z'
+            fill='#ffffff'
+        />
+    </svg>
+);
 
-    useEffect(() => {
-        setIsImageBroken(false);
-    }, [country_code]);
+export const DemoAccountMark = () => (
+    <span className='acc-info__demo-account-mark' aria-hidden='true'>
+        D
+    </span>
+);
 
-    useEffect(() => {
-        if (!isAuthorized || !activeLoginid) return;
+type TAccountAvatar = {
+    is_virtual?: boolean;
+    /** Wrapper class — `acc-info__id` in the chip, smaller inside the dropdown. */
+    className?: string;
+};
 
-        let cancelled = false;
-        const load = async () => {
-            const code = await fetchClientCountryCode(api_base.api);
-            if (cancelled || !code) return;
-            cacheCountryCode(code);
-            setCountryCode(code);
-        };
-        load();
+const AccountAvatar = ({ is_virtual, className = 'acc-info__id' }: TAccountAvatar) => (
+    <span
+        className={classNames(className, { [`${className}--virtual`]: is_virtual })}
+        aria-hidden='true'
+        data-testid='dt_account_avatar'
+    >
+        {is_virtual ? <DemoAccountMark /> : <RealAccountFlag />}
+    </span>
+);
 
-        return () => {
-            cancelled = true;
-        };
-    }, [isAuthorized, activeLoginid]);
-
-    const code = normalizeCountryCode(country_code);
-    if (!code) return null;
-
-    const country_name = getCountryName(code);
-
-    return (
-        <span className='country-flag' title={country_name} aria-label={country_name} data-testid='dt_country_flag'>
-            {is_image_broken ? (
-                <span className='country-flag__emoji' aria-hidden='true'>
-                    {getCountryEmoji(code)}
-                </span>
-            ) : (
-                <img
-                    className='country-flag__image'
-                    src={`https://flagcdn.com/w40/${code}.png`}
-                    srcSet={`https://flagcdn.com/w80/${code}.png 2x`}
-                    alt=''
-                    width='20'
-                    height='15'
-                    loading='lazy'
-                    onError={() => setIsImageBroken(true)}
-                />
-            )}
-            <span className='country-flag__code'>{code.toUpperCase()}</span>
-        </span>
-    );
-});
-
-export default CountryFlag;
+export default AccountAvatar;

@@ -174,6 +174,21 @@
         pointer-events: none;
         display: flex;
         align-items: center;
+        justify-content: center;
+        flex: 0 0 3.4rem;
+        width: 3.4rem;
+        height: 3.4rem;
+        overflow: hidden;
+        border-radius: 50%;
+        background: var(--general-section-1);
+        box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
+
+        // Demo accounts get a rounded square and a paler fill, so the avatar
+        // shape alone tells the two apart.
+        &--virtual {
+            border-radius: 1.1rem;
+            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        }
 
         &-icon {
             display: flex;
@@ -181,6 +196,24 @@
             justify-content: center;
             margin-right: 0.8rem;
         }
+    }
+
+    &__real-account-flag {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__demo-account-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--text-prominent);
+        font-size: 1.6rem;
+        font-weight: 800;
+        line-height: 1;
     }
 
     &__separator {
@@ -735,7 +768,9 @@
 
     &__account {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
         padding: .8rem 1.6rem;
         cursor: pointer;
         background: var(--general-main-2);
@@ -762,6 +797,38 @@
 
         &--virtual {
             color: $color-yellow;
+        }
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    // The same avatar as the chip, one size down.
+    &__avatar {
+        display: grid;
+        place-items: center;
+        flex: 0 0 2.6rem;
+        width: 2.6rem;
+        height: 2.6rem;
+        overflow: hidden;
+        border-radius: 50%;
+        background: var(--general-section-1);
+
+        &--virtual {
+            border-radius: 0.85rem;
+            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        }
+
+        .acc-info__real-account-flag {
+            width: 100%;
+            height: 100%;
+        }
+
+        .acc-info__demo-account-mark {
+            font-size: 1.25rem;
         }
     }
 

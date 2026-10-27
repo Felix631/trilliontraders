@@ -14,7 +14,6 @@ import { Localize } from '@deriv-com/translations';
 import { Header, useDevice, Wrapper } from '@deriv-com/ui';
 import { AppLogo } from '../app-logo';
 import AccountSwitcher from './account-switcher';
-import CountryFlag from './country-flag';
 import MenuItems from './menu-items';
 import MobileMenu from './mobile-menu';
 import './header.scss';
@@ -171,11 +170,11 @@ const AppHeader = observer(() => {
                         </div>
                     );
                 } else if (position === 'right') {
-                    // For right section - country flag, account switcher on desktop,
-                    // then the transfer button; this is the top-right cluster.
+                    // For right section - the account switcher (which carries the
+                    // account's country flag) on desktop, then the transfer
+                    // button; this is the top-right cluster.
                     return (
                         <div className='auth-actions'>
-                            <CountryFlag />
                             {isDesktop && (
                                 <div className='account-info'>
                                     <AccountSwitcher activeAccount={activeAccount} />

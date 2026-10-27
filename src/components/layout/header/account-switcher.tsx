@@ -10,6 +10,7 @@ import { isDemoAccount } from '@/utils/account-helpers';
 import { Localize } from '@deriv-com/translations';
 import { TAccountSwitcher } from './common/types';
 import AccountInfoWrapper from './account-info-wrapper';
+import AccountAvatar from './country-flag';
 import './account-switcher.scss';
 
 const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
@@ -92,7 +93,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                         }
                     }}
                 >
-                    <span className='acc-info__id' aria-hidden='true'></span>
+                    <AccountAvatar is_virtual={isVirtual} />
                     <div className='acc-info__content'>
                         <div className='acc-info__account-type-header'>
                             <Text as='p' size='xs' className='acc-info__account-type'>
@@ -159,25 +160,28 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                                 }
                             }}
                         >
-                            <Text
-                                size='xxxs'
-                                className={classNames('acc-dropdown__account-type', {
-                                    'acc-dropdown__account-type--virtual': account.isVirtual,
-                                })}
-                            >
-                                {account.isVirtual ? (
-                                    <Localize i18n_default_text='Demo account' />
-                                ) : (
-                                    <Localize i18n_default_text='Real account' />
-                                )}
-                            </Text>
-                            <Text size='xs' weight='bold' className='acc-dropdown__balance'>
-                                {account.currency ? (
-                                    `${account.balance} ${getCurrencyDisplayCode(account.currency)}`
-                                ) : (
-                                    <Localize i18n_default_text='No currency assigned' />
-                                )}
-                            </Text>
+                            <AccountAvatar is_virtual={account.isVirtual} className='acc-dropdown__avatar' />
+                            <div className='acc-dropdown__details'>
+                                <Text
+                                    size='xxxs'
+                                    className={classNames('acc-dropdown__account-type', {
+                                        'acc-dropdown__account-type--virtual': account.isVirtual,
+                                    })}
+                                >
+                                    {account.isVirtual ? (
+                                        <Localize i18n_default_text='Demo account' />
+                                    ) : (
+                                        <Localize i18n_default_text='Real account' />
+                                    )}
+                                </Text>
+                                <Text size='xs' weight='bold' className='acc-dropdown__balance'>
+                                    {account.currency ? (
+                                        `${account.balance} ${getCurrencyDisplayCode(account.currency)}`
+                                    ) : (
+                                        <Localize i18n_default_text='No currency assigned' />
+                                    )}
+                                </Text>
+                            </div>
                         </div>
                     ))}
                 </div>

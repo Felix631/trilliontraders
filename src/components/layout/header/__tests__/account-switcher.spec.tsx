@@ -92,6 +92,33 @@ describe('AccountSwitcher', () => {
         expect(screen.getByTestId('dt_balance')).toHaveTextContent('100.00 USD');
     });
 
+    it('shows the United States flag on a real account\u2019s avatar', () => {
+        const { container } = render(<AccountSwitcher activeAccount={mockActiveAccount} />);
+
+        const avatar = screen.getByTestId('dt_account_avatar');
+        expect(avatar).toHaveClass('acc-info__id');
+        expect(avatar).not.toHaveClass('acc-info__id--virtual');
+        expect(container.querySelector('svg.acc-info__real-account-flag')).toBeInTheDocument();
+        expect(container.querySelector('.acc-info__demo-account-mark')).not.toBeInTheDocument();
+    });
+
+    it('shows a D mark, not a flag, on a demo account\u2019s avatar', () => {
+        const { container } = render(<AccountSwitcher activeAccount={{ ...mockActiveAccount, isVirtual: true }} />);
+
+        const avatar = screen.getByTestId('dt_account_avatar');
+        expect(avatar).toHaveClass('acc-info__id--virtual');
+        expect(avatar).toHaveTextContent('D');
+        expect(container.querySelector('svg.acc-info__real-account-flag')).not.toBeInTheDocument();
+    });
+
+    it('gives every account in the dropdown the matching avatar', () => {
+        const { container } = render(<AccountSwitcher activeAccount={mockActiveAccount} />);
+        fireEvent.click(screen.getByTestId('dt_acc_info'));
+
+        expect(container.querySelectorAll('.acc-dropdown__avatar')).toHaveLength(2);
+        expect(container.querySelectorAll('.acc-dropdown__avatar--virtual')).toHaveLength(1);
+    });
+
     it('opens dropdown on click when multiple accounts exist', () => {
         render(<AccountSwitcher activeAccount={mockActiveAccount} />);
         fireEvent.click(screen.getByTestId('dt_acc_info'));
