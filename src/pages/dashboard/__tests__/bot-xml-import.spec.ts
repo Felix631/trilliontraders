@@ -7,6 +7,7 @@ import {
     deriveBotName,
     extractBotFileUrls,
     extractBotPageLinks,
+    extractJsonStrategies,
     fetchSiteBots,
     hashBotXml,
     validateBotXml,
@@ -93,6 +94,35 @@ describe('finding bot files on a page', () => {
     });
 });
 
+describe('strategies served as JSON', () => {
+    it('takes the strategy out of a JSON answer, unescaped', () => {
+        const payload = JSON.stringify({ name: 'Premium Strategy', xml: BOT_XML });
+
+        const strategies = extractJsonStrategies(payload);
+
+        expect(strategies).toHaveLength(1);
+        expect(strategies[0].name).toBe('Premium Strategy');
+        expect(strategies[0].xml).toContain('trade_definition');
+    });
+
+    it('reads a catalog of strategies, keeping each entry’s own name', () => {
+        const payload = JSON.stringify({
+            folders: [{ bots: [{ name: 'Alpha', content: BOT_XML }, { name: 'Beta', data: { xml: BOT_XML } }] }],
+        });
+
+        const strategies = extractJsonStrategies(payload);
+
+        expect(strategies.map(entry => entry.name)).toEqual(['Alpha', 'Beta']);
+        expect(
+            collectBotsFromDocument(payload, 'https://library.example.com/api/bots').map(bot => bot.name)
+        ).toEqual(['Alpha', 'Beta']);
+    });
+
+    it('ignores JSON that carries no strategy', () => {
+        expect(extractJsonStrategies('{"ok":true,"bots":[{"id":"a"}]}')).toEqual([]);
+    });
+});
+
 /**
  * An empty import must say why, because "no bot files were found" reads as a bug
  * when the real cause is the site itself.
@@ -137,5 +167,44 @@ describe('explaining a page with no bots', () => {
 
         expect(bots).toHaveLength(0);
         expect(errors[0]).toMatch(/no bot files were found on that page/i);
+    });
+});
+
+/**
+ * "The request could not be made" told the user nothing about whose fault the
+ * download was or what to do next, so the reasons are now named one by one.
+ */
+describe('explaining a download nothing could fetch', () => {
+    const original_fetch = global.fetch;
+
+    afterEach(() => {
+        global.fetch = original_fetch;
+    });
+
+    it('names the CORS refusal and the JavaScript files the site hides behind', async () => {
+        global.fetch = jest.fn(async (url: string) => {
+            if (String(url).includes('r.jina.ai')) {
+                return {
+                    ok: false,
+                    status: 422,
+                    text: async () =>
+                        '{"message":"Failed to interpret …: unexpected content type application/javascript"}',
+                };
+            }
+            throw new TypeError('Failed to fetch');
+        }) as unknown as typeof fetch;
+
+        await expect(fetchSiteBots('https://library.example.com/static/app.js')).rejects.toThrow(
+            /no CORS header.*JavaScript files/i
+        );
+    });
+
+    it('keeps a members-only refusal in plain words', async () => {
+        global.fetch = jest.fn(async (url: string) => {
+            if (String(url).includes('r.jina.ai')) return { ok: false, status: 401, text: async () => '' };
+            throw new TypeError('Failed to fetch');
+        }) as unknown as typeof fetch;
+
+        await expect(fetchSiteBots('https://library.example.com/bots')).rejects.toThrow(/was refused \(HTTP 401\)/i);
     });
 });

@@ -170,7 +170,11 @@ const BotImporter = observer(() => {
                 <section className='bot-importer__card'>
                     <div className='bot-importer__card-head'>
                         <h3>{localize('From a site link')}</h3>
-                        <p>{localize('The page that lists the bots works best — for example a bot store or library page.')}</p>
+                        <p>
+                            {localize(
+                                'Paste the page that lists the bots, or one bot’s direct .xml link. Because a browser cannot read another site directly, the page is fetched through a public read-only mirror. A library the site draws only with its own JavaScript cannot be read this way — for those, run scripts/fetch-site-xml-bots.py in this repository and upload what it finds.'
+                            )}
+                        </p>
                     </div>
                     <form className='bot-importer__form' onSubmit={handle_fetch}>
                         <input

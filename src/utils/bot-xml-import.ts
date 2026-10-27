@@ -92,6 +92,45 @@ export const extractInlineBotXml = (text: string): string[] => {
     return found;
 };
 
+/**
+ * Strategies hidden in a JSON answer — `{"xml": "<xml …"}`, a list of them, or
+ * a catalog whose entries carry a strategy field. The XML is taken from the
+ * parsed value rather than from the raw text, because JSON escaping (`\"`)
+ * inside a strategy would otherwise make it unparseable.
+ */
+export const extractJsonStrategies = (text: string): { name: string; xml: string }[] => {
+    const trimmed = text.trim();
+    if (!/^[[{]/.test(trimmed)) return [];
+
+    let payload: unknown;
+    try {
+        payload = JSON.parse(trimmed);
+    } catch {
+        return [];
+    }
+
+    const found: { name: string; xml: string }[] = [];
+    const visit = (node: unknown, hint: string) => {
+        if (Array.isArray(node)) {
+            node.forEach(item => visit(item, hint));
+            return;
+        }
+        if (!node || typeof node !== 'object') return;
+
+        const record = node as Record<string, unknown>;
+        const name = typeof record.name === 'string' && record.name ? record.name : hint;
+        Object.entries(record).forEach(([key, value]) => {
+            if (typeof value === 'string' && /^(xml|content|strategy|strategy_xml|body)$/i.test(key) && isBotXml(value)) {
+                found.push({ name, xml: value });
+            } else if (value && typeof value === 'object') {
+                visit(value, name);
+            }
+        });
+    };
+    visit(payload, '');
+    return found;
+};
+
 const toAbsoluteUrl = (value: string, base_url: string) => {
     try {
         const url = new URL(value, base_url);
@@ -166,58 +205,97 @@ export const deriveBotName = (source: string, fallback = 'Imported bot') => {
     return cleaned.length > 70 ? `${cleaned.slice(0, 67)}…` : cleaned;
 };
 
-const withTimeout = async (url: string) => {
+const withTimeout = async (url: string, headers?: Record<string, string>) => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-        return await fetch(url, { signal: controller.signal, credentials: 'omit' });
+        return await fetch(url, { signal: controller.signal, credentials: 'omit', headers });
     } finally {
         clearTimeout(timer);
     }
 };
 
-/**
- * Bot-library sites do not send CORS headers, so a plain `fetch` is refused by
- * the browser. We try the site itself first and then read-only mirrors that
- * fetch the page on our behalf.
- */
-const PROXY_BUILDERS: ((url: string) => string)[] = [
-    url => url,
-    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-    url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-];
+/** How a URL has to be read: a page to scan, or a file/answer to take as it is. */
+const FETCH_PAGE = 'page';
+const FETCH_RESOURCE = 'resource';
 
-/** A plain-language reason, so the user is never shown a bare status code. */
-const describe_download_failure = (response: Response) => {
-    if (response.status === 401 || response.status === 403) return 'the site refused the download';
-    if (response.status === 404) return 'the file is not there any more';
-    if (response.status === 429) return 'the site is rate-limiting downloads';
-    return `the site answered ${response.status}`;
+/**
+ * Bot-library sites send no CORS headers, so the browser refuses a plain fetch
+ * of their pages. Every URL therefore goes through a chain instead:
+ *
+ *   1. the site itself       — works whenever the host is CORS-friendly
+ *   2. a read-only reader    — hands the page back as HTML or as plain text
+ *   3. public raw proxies    — last resort, often down or rate-limited
+ *
+ * The reader is asked for the format the caller wants: HTML is what makes an
+ * SPA's own script tags (and therefore its bot links) readable, while plain text
+ * is what an `.xml` file or a JSON answer needs. Asking for the wrong one is
+ * exactly what made this fail before — the reader answers 422 for JavaScript,
+ * which is now surfaced as the reason rather than hidden behind a generic error.
+ */
+type TFetchAttempt = { label: string; target: string; headers?: Record<string, string> };
+
+const attempts_for = (url: string, mode: string): TFetchAttempt[] => {
+    const encoded = encodeURIComponent(url);
+    const formats = mode === FETCH_PAGE ? ['html', 'text'] : ['text', 'html'];
+
+    return [
+        { label: 'the site itself', target: url },
+        ...formats.map(format => ({
+            label: 'a read-only mirror',
+            target: `https://r.jina.ai/${url}`,
+            headers: { 'x-return-format': format },
+        })),
+        { label: 'a public proxy', target: `https://api.allorigins.win/raw?url=${encoded}` },
+        { label: 'a public proxy', target: `https://api.codetabs.com/v1/proxy?quest=${encoded}` },
+        { label: 'a public proxy', target: `https://api.cors.lol/?url=${encoded}` },
+    ];
 };
 
-export const fetchTextThroughProxy = async (url: string): Promise<string> => {
+/** A plain-language reason, so the user is never shown a bare status code. */
+const describe_failure = (label: string, response: Response | null, body: string, error?: unknown) => {
+    if (response) {
+        if (response.status === 422 && /javascript|unexpected content type/i.test(body)) {
+            return 'its bots sit inside JavaScript files and read-only mirrors will not fetch those';
+        }
+        if (response.status === 401 || response.status === 403) return `${label} was refused (HTTP ${response.status})`;
+        if (response.status === 404) return 'the file is not there any more';
+        if (response.status === 429) return `${label} is rate-limiting requests right now`;
+        return `${label} answered HTTP ${response.status}`;
+    }
+    if (error instanceof DOMException && error.name === 'AbortError') return `${label} did not answer in time`;
+    if (label === 'the site itself') {
+        return 'the site does not let a browser at another address read it (it sends no CORS header)';
+    }
+    return `${label} could not be reached`;
+};
+
+export const fetchTextThroughProxy = async (url: string, mode: string = FETCH_RESOURCE): Promise<string> => {
     const failures: string[] = [];
 
-    for (const build of PROXY_BUILDERS) {
-        const target = build(url);
+    for (const attempt of attempts_for(url, mode)) {
         try {
-            const response = await withTimeout(target);
+            const response = await withTimeout(attempt.target, attempt.headers);
             if (!response.ok) {
-                failures.push(describe_download_failure(response));
+                let body = '';
+                try {
+                    body = (await response.text()).slice(0, 400);
+                } catch {
+                    /* the answer is unreadable — the status is enough */
+                }
+                failures.push(describe_failure(attempt.label, response, body));
                 continue;
             }
             const text = await response.text();
             if (text && text.length > 20) return text;
-            failures.push('the answer was empty');
+            failures.push(`${attempt.label} sent an empty answer`);
         } catch (error) {
-            const aborted = error instanceof DOMException && error.name === 'AbortError';
-            failures.push(aborted ? 'the site did not answer in time' : 'the request could not be made');
+            failures.push(describe_failure(attempt.label, null, '', error));
         }
     }
 
-    const reason = [...new Set(failures)][0] ?? 'the request could not be made';
-    throw new Error(`Could not download ${url} — ${reason}.`);
+    const reasons = [...new Set(failures)].slice(0, 3).join('; ');
+    throw new Error(`Could not download ${url} — ${reasons || 'every route to it failed'}.`);
 };
 
 /**
@@ -242,7 +320,7 @@ const describe_empty_page = (html: string): string => {
     const script_count = html.match(/<script\b/gi)?.length ?? 0;
     const xml_links = html.match(/(?:href|src)\s*=\s*["'][^"']+\.xml/gi)?.length ?? 0;
     if (script_count >= 3 && xml_links === 0) {
-        return 'That page builds its bot list in the browser, so its HTML links to no bot files and there is nothing for us to download. Paste a direct .xml link instead, or drop the bot file in the box below.';
+        return 'That page builds its bot list in the browser, so its bots live in JavaScript files that read-only mirrors will not fetch. Run scripts/fetch-site-xml-bots.py in this repository to pull them out here on your machine, or paste a direct .xml link / drop the bot file below.';
     }
 
     return 'No bot files were found on that page. Open the page that lists the bots, or paste a direct .xml link, and try again.';
@@ -256,6 +334,23 @@ const buildBot = (name: string, xml: string, source_url: string): TImportedBot =
 });
 
 export const collectBotsFromDocument = (text: string, base_url: string, fallback_name?: string): TImportedBot[] => {
+    // A JSON answer can mention `<xml>` without being a bot document, so its
+    // strategies are taken from the parsed payload first.
+    const json = extractJsonStrategies(text);
+    if (json.length) {
+        return json
+            .slice(0, MAX_BOTS_PER_IMPORT)
+            .map((entry, index) => {
+                try {
+                    const name = entry.name || `${fallback_name || deriveBotName(base_url)} ${index + 1}`;
+                    return buildBot(name, validateBotXml(entry.xml), base_url);
+                } catch {
+                    return null;
+                }
+            })
+            .filter((bot): bot is TImportedBot => bot !== null);
+    }
+
     if (isBotXml(text)) {
         try {
             return [buildBot(fallback_name || deriveBotName(base_url), validateBotXml(text), base_url)];
@@ -283,7 +378,7 @@ export const fetchSiteBots = async (
     }
 
     on_progress?.('Opening the link…');
-    const page = await fetchTextThroughProxy(trimmed);
+    const page = await fetchTextThroughProxy(trimmed, FETCH_PAGE);
 
     const bots: TImportedBot[] = [];
     const errors: string[] = [];
@@ -303,7 +398,7 @@ export const fetchSiteBots = async (
     for (const [index, file_url] of file_urls.entries()) {
         on_progress?.(`Downloading bot ${index + 1} of ${file_urls.length}…`);
         try {
-            const file = await fetchTextThroughProxy(file_url);
+            const file = await fetchTextThroughProxy(file_url, FETCH_RESOURCE);
             addBot(buildBot(deriveBotName(file_url), validateBotXml(file), file_url));
         } catch (error) {
             errors.push(`${deriveBotName(file_url)}: ${error instanceof Error ? error.message : String(error)}`);
@@ -313,10 +408,9 @@ export const fetchSiteBots = async (
     // 3. Nothing downloadable yet — open the individual bot pages instead.
     if (!bots.length) {
         const page_links = extractBotPageLinks(page, trimmed);
-        for (const [index, page_url] of page_links.entries()) {
-            on_progress?.(`Reading bot page ${index + 1} of ${page_links.length}…`);
-            try {
-                const sub_page = await fetchTextThroughProxy(page_url);
+        for (const [index, page_url] of page_links.entries()) {                on_progress?.(`Reading bot page ${index + 1} of ${page_links.length}…`);
+                try {
+                    const sub_page = await fetchTextThroughProxy(page_url, FETCH_PAGE);
                 collectBotsFromDocument(sub_page, page_url).forEach(addBot);
             } catch (error) {
                 errors.push(`${page_url}: ${error instanceof Error ? error.message : String(error)}`);
