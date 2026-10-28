@@ -8,6 +8,10 @@ const path = require('path');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../../../index.html'), 'utf8');
 const reactSplash = fs.readFileSync(path.resolve(__dirname, '../../components/loader/chunk-loader.tsx'), 'utf8');
+const reactSplashStyles = fs.readFileSync(
+    path.resolve(__dirname, '../../components/loader/chunk-loader.scss'),
+    'utf8'
+);
 
 describe('the boot splash', () => {
     it('paints the Aurora Deep canvas instead of the old maroon/gold cover', () => {
@@ -20,6 +24,13 @@ describe('the boot splash', () => {
         expect(html).toMatch(/rgba\(37, 99, 235/);
         expect(html).toMatch(/rgba\(34, 211, 238/);
         expect(html).toMatch(/rgba\(16, 185, 129/);
+    });
+
+    it('leaves the canvas clean — no grid lines over it', () => {
+        expect(html).not.toContain('4.4rem');
+        expect(html).not.toContain('rgba(148, 197, 255, 0.07)');
+        expect(reactSplashStyles).not.toContain('4.4rem');
+        expect(reactSplashStyles).not.toContain('rgba(148, 197, 255, 0.07)');
     });
 
     it('covers the app with the same loading card the React splash renders', () => {
@@ -38,6 +49,11 @@ describe('the boot splash', () => {
         );
         expect(html).toContain('Welcome to Trillion Trades');
         expect(reactSplash).toContain("localize('Welcome to {{app}}'");
+        // …and the cover lists the same boot stages, with the first one running.
+        ['Connecting to the server', 'Loading your workspace', 'Loading markets and your account'].forEach(label => {
+            expect(html).toContain(label);
+            expect(reactSplash).toContain(label);
+        });
     });
 });
 

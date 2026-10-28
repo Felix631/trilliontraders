@@ -10,9 +10,11 @@ import TransactionDetailsModal from '@/components/transaction-details';
 import { api_base, ApiHelpers, ServerTime } from '@/external/bot-skeleton';
 import { CONNECTION_STATUS } from '@/external/bot-skeleton/services/api/observables/connection-status-stream';
 import { useApiBase } from '@/hooks/useApiBase';
+import { useBootProgress } from '@/hooks/useBootProgress';
 import useDevMode from '@/hooks/useDevMode';
 import { useStore } from '@/hooks/useStore';
 import useThemeSwitcher from '@/hooks/useThemeSwitcher';
+import { bootProgress } from '@/stores/boot-progress-store';
 import { isPreviewMode } from '@/utils/is-preview-mode';
 import { ThemeProvider } from '@deriv-com/quill-ui';
 import { setSmartChartsPublicPath } from '@deriv-com/smartcharts-champion';
@@ -36,6 +38,7 @@ const PreviewBranding =
 const AppContent = observer(() => {
     const [is_api_initialized, setIsApiInitialized] = React.useState(false);
     const [is_loading, setIsLoading] = React.useState(true);
+    const boot = useBootProgress();
 
     const store = useStore();
     const { app, transactions, common, client } = store;
@@ -187,6 +190,14 @@ const AppContent = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [is_api_initialized, client.loginid]);
 
+    // Everything is loaded: let the boot bar finish counting to 100% and sit there
+    // for a beat. Until it does, the splash stays up — the app opens without it.
+    const show_boot_splash = is_loading || !boot.done;
+
+    React.useEffect(() => {
+        if (!is_loading && !common?.error) bootProgress.finish();
+    }, [is_loading, common?.error]);
+
     if (common?.error) return null;
 
     return (
@@ -196,12 +207,8 @@ const AppContent = observer(() => {
                     <PreviewBranding />
                 </Suspense>
             )}
-            {is_loading ? (
-                <ChunkLoader
-                    variant='splash'
-                    progress={86}
-                    message={localize('Loading markets and your account...')}
-                />
+            {show_boot_splash ? (
+                <ChunkLoader variant='splash' stage='markets' />
             ) : (
                 <AuthLoadingWrapper>
                     <ThemeProvider theme={is_dark_mode_on ? 'dark' : 'light'}>

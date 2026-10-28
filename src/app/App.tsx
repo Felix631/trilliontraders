@@ -39,7 +39,7 @@ const router = createBrowserRouter(
             path='/'
             element={
                 <Suspense
-                    fallback={<ChunkLoader variant='splash' progress={24} message={localize('Connecting to the server...')} />}
+                    fallback={<ChunkLoader variant='splash' stage='connecting' />}
                 >
                     <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
                         <LanguageHandler>
