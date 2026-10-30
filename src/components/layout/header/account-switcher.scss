@@ -139,8 +139,9 @@
         line-height: 1.4;
         pointer-events: none;
         margin: 0;
-        font-size: 1.4rem;
-        color: var(--status-success);
+        font-size: 1.8rem;
+        // The dark bar's green, set as one value so both themes match.
+        color: $color-green-1;
 
         &--no-currency {
             @include typeface(--small-left-normal-grey);
@@ -159,14 +160,16 @@
         height: 3.4rem;
         overflow: hidden;
         border-radius: 50%;
-        background: var(--general-section-1);
-        box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
+        // A real account is the flag alone, filling the circle: no disc, no ring.
+        // The demo tile carries the fill so the two shapes still read apart.
+        background: transparent;
 
         // Demo accounts get a rounded square and a paler fill, so the avatar
         // shape alone tells the two apart.
         &--virtual {
             border-radius: 1.1rem;
             background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+            box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
         }
 
         &-icon {
@@ -174,15 +177,6 @@
             align-items: center;
             justify-content: center;
             margin-right: 0.8rem;
-        }
-
-        // The flag fills the whole avatar by default, which drowns the ring it sits
-        // in. Drawn smaller inside it, the real account has the same weight as the
-        // demo "D" beside it.
-        .acc-info__real-account-flag {
-            width: 2.2rem;
-            height: 2.2rem;
-            border-radius: 0.3rem;
         }
     }
 
@@ -268,8 +262,13 @@
         }
     }
 
+    // The typeface mixin resets the size and the grey ink, so the chip's one figure
+    // is set after it: bigger than body copy, in the site green in both themes.
     .acc-info__balance {
         @include typeface(--paragraph-left-bold-black);
+
+        font-size: 1.8rem;
+        color: $color-green-1;
     }
 
     &--is-disabled {
@@ -813,17 +812,11 @@
         height: 2.6rem;
         overflow: hidden;
         border-radius: 50%;
-        background: var(--general-section-1);
+        background: transparent;
 
         &--virtual {
             border-radius: 0.85rem;
             background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
-        }
-
-        .acc-info__real-account-flag {
-            width: 1.8rem;
-            height: 1.8rem;
-            border-radius: 0.25rem;
         }
 
         .acc-info__demo-account-mark {
@@ -832,9 +825,9 @@
     }
 
     &__balance {
-        color: var(--text-prominent);
+        color: $color-green-1;
         line-height: 1.4;
-        font-size: 1.2rem;
+        font-size: 1.45rem;
     }
 }
 
