@@ -152,29 +152,30 @@
 
     &__id {
         pointer-events: none;
-        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 3.4rem;
-        width: 3.4rem;
-        height: 3.4rem;
+        // A real account is the flag alone, in a circle. The circle is drawn a step
+        // inside the demo tile's 3.4rem slot — the flag fills its whole disc, while
+        // the tile keeps a pale margin around its mark — so the two boxes read as
+        // the same size. The inline margins keep the slot itself 3.4rem wide.
+        flex: 0 0 3rem;
+        width: 3rem;
+        height: 3rem;
+        margin-inline: 0.2rem;
         overflow: hidden;
-        // One box for both accounts: the same rounded square, the same fill and
-        // the same ring, whether the account is real or a demo. Only the mark
-        // inside differs — the flag, or the "D" — so the avatar reads as a single
-        // component instead of two different shapes.
-        border-radius: 1.1rem;
-        background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        border-radius: 50%;
+        background: transparent;
 
-        // Painted above the mark, so the full-bleed flag carries exactly the edge
-        // the "D" tile gets — an inset shadow behind the mark would be covered by
-        // the flag.
-        &::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
+        // Demo accounts get the full slot: a rounded square with a paler fill and a
+        // ring, so the avatar shape tells the two apart.
+        &--virtual {
+            flex: 0 0 3.4rem;
+            width: 3.4rem;
+            height: 3.4rem;
+            margin-inline: 0;
+            border-radius: 1.1rem;
+            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
             box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
         }
 
@@ -809,26 +810,26 @@
         min-width: 0;
     }
 
-    // The same avatar as the chip, one size down: identical box for both kinds
-    // of account, so a real row and a demo row are only told apart by the mark
-    // they carry.
+    // The same avatar as the chip, one size down, on the same rule: the flag
+    // circle sits inside the 2.6rem slot the demo tile fills.
     &__avatar {
         display: grid;
         place-items: center;
-        position: relative;
-        flex: 0 0 2.6rem;
-        width: 2.6rem;
-        height: 2.6rem;
+        flex: 0 0 2.3rem;
+        width: 2.3rem;
+        height: 2.3rem;
+        margin-inline: 0.15rem;
         overflow: hidden;
-        border-radius: 0.85rem;
-        background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        border-radius: 50%;
+        background: transparent;
 
-        &::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
+        &--virtual {
+            flex: 0 0 2.6rem;
+            width: 2.6rem;
+            height: 2.6rem;
+            margin-inline: 0;
+            border-radius: 0.85rem;
+            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
         }
 
         .acc-info__demo-account-mark {
