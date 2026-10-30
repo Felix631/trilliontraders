@@ -128,27 +128,6 @@
         margin-inline-start: 1rem;
     }
 
-    &__account-type-header {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        margin-bottom: 0.2rem;
-    }
-
-    &__account-type {
-        @include typeface(--xxsmall-left-normal-green);
-
-        line-height: 1;
-        margin: 0;
-        font-size: var(--text-size-xxs);
-    }
-
-    &--is-virtual {
-        .acc-info__account-type {
-            color: $color-yellow;
-        }
-    }
-
     &__balance-section {
         display: flex;
         align-items: center;
@@ -230,10 +209,12 @@
         pointer-events: none;
     }
 
+    // The chip is the balance alone, so the dropdown arrow sits beside it.
     &__select-arrow {
         pointer-events: none;
         display: flex;
         align-items: center;
+        margin-inline-start: 0.6rem;
         transform: rotate(0);
         transform-origin: 50% 50%;
         transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -865,14 +846,8 @@
  * --------------------------------------------------------------------------- */
 .theme--light {
     .acc-info {
-        &__balance,
-        &__account-type {
+        &__balance {
             color: #86efd5;
-        }
-
-        // Demo accounts are flagged yellow; the chrome needs a paler one.
-        &--is-virtual .acc-info__account-type {
-            color: #ffd166;
         }
     }
 

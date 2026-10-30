@@ -94,15 +94,24 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                     }}
                 >
                     <AccountAvatar is_virtual={isVirtual} />
+                    {/* The chip shows the balance alone — demo or real is carried by
+                        the avatar's shape and mark, not by a line of text. */}
                     <div className='acc-info__content'>
-                        <div className='acc-info__account-type-header'>
-                            <Text as='p' size='xs' className='acc-info__account-type'>
-                                {isVirtual ? (
-                                    <Localize i18n_default_text='Demo account' />
-                                ) : (
-                                    <Localize i18n_default_text='Real account' />
-                                )}
-                            </Text>
+                        <div className='acc-info__balance-section'>
+                            {(typeof balance !== 'undefined' || !currency) && (
+                                <p
+                                    data-testid='dt_balance'
+                                    className={classNames('acc-info__balance', {
+                                        'acc-info__balance--no-currency': !currency && !isVirtual,
+                                    })}
+                                >
+                                    {!currency ? (
+                                        <Localize i18n_default_text='No currency assigned' />
+                                    ) : (
+                                        `${balance} ${getCurrencyDisplayCode(currency)}`
+                                    )}
+                                </p>
+                            )}
                             {showChevron && (
                                 <span
                                     className={classNames('acc-info__select-arrow', {
@@ -121,22 +130,6 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                                 </span>
                             )}
                         </div>
-                        {(typeof balance !== 'undefined' || !currency) && (
-                            <div className='acc-info__balance-section'>
-                                <p
-                                    data-testid='dt_balance'
-                                    className={classNames('acc-info__balance', {
-                                        'acc-info__balance--no-currency': !currency && !isVirtual,
-                                    })}
-                                >
-                                    {!currency ? (
-                                        <Localize i18n_default_text='No currency assigned' />
-                                    ) : (
-                                        `${balance} ${getCurrencyDisplayCode(currency)}`
-                                    )}
-                                </p>
-                            </div>
-                        )}
                     </div>
                 </div>
             </AccountInfoWrapper>

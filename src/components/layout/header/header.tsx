@@ -156,105 +156,86 @@ const AppHeader = observer(() => {
         navigateToTransfer(transferCurrency);
     }, [authData?.currency]);
 
-    const renderAccountSection = useCallback(
-        (position: 'left' | 'right' = 'right') => {
-            // Show account switcher and logout when user is fully authenticated
-            if (activeLoginid && !is_account_regenerating) {
-                if (position === 'left' && !isDesktop) {
-                    // For mobile left section - only account switcher
-                    return (
-                        <div className='auth-actions'>
-                            <div className='account-info'>
-                                <AccountSwitcher activeAccount={activeAccount} />
-                            </div>
-                        </div>
-                    );
-                } else if (position === 'right') {
-                    // For right section - the account switcher (which carries the
-                    // account's country flag) on desktop, then the transfer
-                    // button; this is the top-right cluster.
-                    return (
-                        <div className='auth-actions'>
-                            {isDesktop && (
-                                <div className='account-info'>
-                                    <AccountSwitcher activeAccount={activeAccount} />
-                                </div>
-                            )}
-                            <Button
-                                primary
-                                disabled={client?.is_logging_out || !authData?.currency}
-                                onClick={handleTransfer}
-                            >
-                                <Localize i18n_default_text='Transfer' />
-                            </Button>
-                        </div>
-                    );
-                }
-            }
-            // Show login button only when fully settled (not during OAuth flow)
-            else if (
-                position === 'right' &&
-                !isOAuthPending &&
-                ((!is_account_regenerating && !isAuthorizing && !activeLoginid) || authTimeout)
-            ) {
-                // Disable auth buttons until the OAuth app id is configured, so the
-                // click handlers (which would otherwise log "Failed to generate OAuth
-                // URL") never fire. The env-not-set toast explains why.
-                const isAuthConfigured = Boolean(process.env.NEXT_PUBLIC_DERIV_APP_ID);
-                return (
-                    <div className='auth-actions'>
-                        <Button tertiary disabled={!isAuthConfigured} onClick={handleLogin}>
-                            <Localize i18n_default_text='Log in' />
-                        </Button>
-                        <Button primary_light disabled={!isAuthConfigured} onClick={handleSignup}>
-                            <Localize i18n_default_text='Sign up' />
-                        </Button>
-                    </div>
-                );
-            }
-            // Default: Show spinner during loading states or when authorizing
-            else if (position === 'right') {
-                return (
-                    <div className='auth-actions auth-actions--loading'>
-                        <svg
-                            className='auth-actions__spinner'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <circle
-                                cx='12'
-                                cy='12'
-                                r='10'
-                                stroke='currentColor'
-                                strokeWidth='2.5'
-                                strokeLinecap='round'
-                                strokeDasharray='31.416'
-                                strokeDashoffset='10'
-                            />
-                        </svg>
-                    </div>
-                );
-            }
+    // The transfer button is the one thing that sits in the middle of the bar: a
+    // small pill of its own rather than part of the account cluster on the right.
+    const renderTransferSection = useCallback(() => {
+        if (!activeLoginid || is_account_regenerating) return null;
 
-            return null;
-        },
-        [
-            isAuthorizing,
-            isDesktop,
-            activeLoginid,
-            client,
-            activeAccount,
-            authTimeout,
-            is_account_regenerating,
-            isOAuthPending,
-            authData,
-            canStartOAuth,
-            handleLogin,
-            handleSignup,
-            handleTransfer,
-        ]
-    );
+        return (
+            <Button
+                primary
+                className='app-header__transfer'
+                disabled={client?.is_logging_out || !authData?.currency}
+                onClick={handleTransfer}
+            >
+                <Localize i18n_default_text='Transfer' />
+            </Button>
+        );
+    }, [activeLoginid, is_account_regenerating, client?.is_logging_out, authData?.currency, handleTransfer]);
+
+    const renderAccountSection = useCallback(() => {
+        // The account switcher alone owns the far right, where the transfer button
+        // used to sit: the chip (avatar + balance) is the last thing in the bar.
+        if (activeLoginid && !is_account_regenerating) {
+            return (
+                <div className='auth-actions'>
+                    <div className='account-info'>
+                        <AccountSwitcher activeAccount={activeAccount} />
+                    </div>
+                </div>
+            );
+        }
+        // Show login button only when fully settled (not during OAuth flow)
+        if (!isOAuthPending && ((!is_account_regenerating && !isAuthorizing && !activeLoginid) || authTimeout)) {
+            // Disable auth buttons until the OAuth app id is configured, so the
+            // click handlers (which would otherwise log "Failed to generate OAuth
+            // URL") never fire. The env-not-set toast explains why.
+            const isAuthConfigured = Boolean(process.env.NEXT_PUBLIC_DERIV_APP_ID);
+            return (
+                <div className='auth-actions'>
+                    <Button tertiary disabled={!isAuthConfigured} onClick={handleLogin}>
+                        <Localize i18n_default_text='Log in' />
+                    </Button>
+                    <Button primary_light disabled={!isAuthConfigured} onClick={handleSignup}>
+                        <Localize i18n_default_text='Sign up' />
+                    </Button>
+                </div>
+            );
+        }
+        // Default: Show spinner during loading states or when authorizing
+        return (
+            <div className='auth-actions auth-actions--loading'>
+                <svg
+                    className='auth-actions__spinner'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                >
+                    <circle
+                        cx='12'
+                        cy='12'
+                        r='10'
+                        stroke='currentColor'
+                        strokeWidth='2.5'
+                        strokeLinecap='round'
+                        strokeDasharray='31.416'
+                        strokeDashoffset='10'
+                    />
+                </svg>
+            </div>
+        );
+    }, [
+        isAuthorizing,
+        activeLoginid,
+        client,
+        activeAccount,
+        authTimeout,
+        is_account_regenerating,
+        isOAuthPending,
+        canStartOAuth,
+        handleLogin,
+        handleSignup,
+    ]);
 
     if (client?.should_hide_header) return null;
 
@@ -269,11 +250,10 @@ const AppHeader = observer(() => {
                 <Wrapper variant='left'>
                     <MobileMenu onLogout={handleLogout} />
                     <AppLogo />
-                    {isDesktop ? <MenuItems /> : renderAccountSection('left')}
+                    <MenuItems />
                 </Wrapper>
-                <Wrapper variant='right'>
-                    {renderAccountSection('right')}
-                </Wrapper>
+                <div className='app-header__center'>{renderTransferSection()}</div>
+                <Wrapper variant='right'>{renderAccountSection()}</Wrapper>
             </Header>
         </>
     );

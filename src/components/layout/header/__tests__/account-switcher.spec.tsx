@@ -86,10 +86,11 @@ describe('AccountSwitcher', () => {
         expect(container).toBeEmptyDOMElement();
     });
 
-    it('renders active account type and balance', () => {
+    it('renders the balance without a demo or real label', () => {
         render(<AccountSwitcher activeAccount={mockActiveAccount} />);
-        expect(screen.getByText('Real account')).toBeInTheDocument();
         expect(screen.getByTestId('dt_balance')).toHaveTextContent('100.00 USD');
+        expect(screen.queryByText('Real account')).not.toBeInTheDocument();
+        expect(screen.queryByText('Demo account')).not.toBeInTheDocument();
     });
 
     it('shows the United States flag on a real account\u2019s avatar', () => {
