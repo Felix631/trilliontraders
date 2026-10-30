@@ -8,16 +8,18 @@
  * to 100, and the value is eased so the bar and the percentage keep moving on their
  * own instead of sitting on a stage number while the app works.
  */
-export type TBootStage = 'connecting' | 'workspace' | 'markets' | 'ready';
+export type TBootStage = 'connecting' | 'workspace' | 'markets' | 'builder' | 'ready';
 
 /** Boot stages in order; 'ready' means everything is loaded. */
-export const BOOT_STAGES: TBootStage[] = ['connecting', 'workspace', 'markets', 'ready'];
+export const BOOT_STAGES: TBootStage[] = ['connecting', 'workspace', 'markets', 'builder', 'ready'];
 
 /** How far each stage may let the bar climb before it waits for the next one. */
 const STAGE_CEILING: Record<TBootStage, number> = {
     connecting: 34,
     workspace: 68,
-    markets: 96,
+    markets: 94,
+    // The bot builder's workspace — the app's own last step before it opens.
+    builder: 99,
     ready: 100,
 };
 

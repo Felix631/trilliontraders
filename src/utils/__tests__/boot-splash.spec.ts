@@ -54,7 +54,12 @@ describe('the boot splash', () => {
         expect(html).not.toContain('df-boot-badge');
         expect(reactSplash).not.toContain('LogoMark');
         // …and the cover lists the same boot stages, with the first one running.
-        ['Connecting to the server', 'Loading your workspace', 'Loading markets and your account'].forEach(label => {
+        [
+            'Connecting to the server',
+            'Loading your workspace',
+            'Loading markets and your account',
+            'Finishing everything up',
+        ].forEach(label => {
             expect(html).toContain(label);
             expect(reactSplash).toContain(label);
         });

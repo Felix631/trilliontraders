@@ -41,7 +41,7 @@ const AppContent = observer(() => {
     const boot = useBootProgress();
 
     const store = useStore();
-    const { app, transactions, common, client } = store;
+    const { app, transactions, common, client, blockly_store } = store;
     const { is_dark_mode_on } = useThemeSwitcher();
 
     const { recovered_transactions, recoverPendingContracts } = transactions;
@@ -190,13 +190,32 @@ const AppContent = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [is_api_initialized, client.loginid]);
 
-    // Everything is loaded: let the boot bar finish counting to 100% and sit there
-    // for a beat. Until it does, the splash stays up — the app opens without it.
-    const show_boot_splash = is_loading || !boot.done;
+    // The dashboard mounts as soon as its own data is in — underneath the splash — so
+    // the bot builder can initialise its Blockly workspace while the card is still
+    // counting. The last boot step is that workspace: the full-screen "Loading
+    // Blockly..." overlay used to land on top of the freshly-opened dashboard, and
+    // now the splash waits for it, so the app opens straight onto the dashboard.
+    const is_building_workspace = blockly_store.is_loading;
+    const can_open_app = !is_loading || boot.done;
+    const show_boot_splash = !boot.done;
 
     React.useEffect(() => {
-        if (!is_loading && !common?.error) bootProgress.finish();
-    }, [is_loading, common?.error]);
+        if (is_loading || common?.error) return;
+
+        // Read the flag live rather than from this render: the bot builder starts its
+        // own load in a child effect, which has already run by the time this one does.
+        if (blockly_store.is_loading) {
+            bootProgress.startStage('builder');
+            // Never hold the app hostage to the bot builder — if it is still not up,
+            // let the splash go and leave it to its own overlay, as it was before.
+            const timer = setTimeout(() => bootProgress.finish(), 10000);
+            return () => clearTimeout(timer);
+        }
+
+        // Everything is loaded: the bar counts the last stretch to 100% and sits there
+        // for a beat, then the splash leaves the already-mounted dashboard behind it.
+        bootProgress.finish();
+    }, [is_loading, is_building_workspace, common?.error, blockly_store]);
 
     if (common?.error) return null;
 
@@ -207,12 +226,12 @@ const AppContent = observer(() => {
                     <PreviewBranding />
                 </Suspense>
             )}
-            {show_boot_splash ? (
-                <ChunkLoader variant='splash' stage='markets' />
-            ) : (
+            {can_open_app && (
                 <AuthLoadingWrapper>
                     <ThemeProvider theme={is_dark_mode_on ? 'dark' : 'light'}>
-                        <BlocklyLoading />
+                        {/* The splash covers this overlay while the boot is running; once
+                            it is gone the overlay is free to show (workspace reloads). */}
+                        {!show_boot_splash && <BlocklyLoading />}
                         <div className='bot-dashboard bot' data-testid='dt_bot_dashboard'>
                             <Audio />
                             <Main />
@@ -224,6 +243,7 @@ const AppContent = observer(() => {
                     </ThemeProvider>
                 </AuthLoadingWrapper>
             )}
+            {show_boot_splash && <ChunkLoader variant='splash' stage='markets' />}
         </React.Fragment>
     );
 });

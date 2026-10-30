@@ -44,10 +44,13 @@ describe('ChunkLoader', () => {
         it('lists the stages, ticking the ones it has passed', () => {
             const { container } = render(<ChunkLoader variant='splash' stage='connecting' />);
 
-            expect(step_states(container)).toEqual(['done', 'current', 'pending']);
+            expect(step_states(container)).toEqual(['done', 'current', 'pending', 'pending']);
             expect(screen.getByText('Connecting to the server')).toBeInTheDocument();
             expect(screen.getByText('Loading your workspace')).toBeInTheDocument();
             expect(screen.getByText('Loading markets and your account')).toBeInTheDocument();
+            // The bot builder's workspace is finished inside the splash too, so no
+            // second loader is ever painted over the dashboard.
+            expect(screen.getByText('Finishing everything up')).toBeInTheDocument();
         });
 
         it('ticks every stage and says so once the bar is full', () => {
@@ -55,7 +58,7 @@ describe('ChunkLoader', () => {
             mock_progress.percent = 100.0;
             const { container } = render(<ChunkLoader variant='splash' stage='markets' />);
 
-            expect(step_states(container)).toEqual(['done', 'done', 'done']);
+            expect(step_states(container)).toEqual(['done', 'done', 'done', 'done']);
             expect(screen.getByText('Ready — opening your trading hub...')).toBeInTheDocument();
         });
 

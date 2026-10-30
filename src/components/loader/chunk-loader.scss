@@ -4,11 +4,13 @@
  * so the handover between them is invisible.
  */
 .app-root--splash {
-    /* Covers the viewport (above the app's header, below its modals), so no chrome
-       shows while the app boots. */
+    /* Covers the viewport above the whole app — header, toasts, dialogs — because the
+       dashboard is already mounted underneath by the time the bar is near 100%. Its own
+       overlays (e.g. the bot builder's Blockly loader) stay out during the boot, so this
+       is the only screen until the app opens. */
     position: fixed;
     inset: 0;
-    z-index: 4000;
+    z-index: 99998;
     overflow: hidden;
     background:
         radial-gradient(1100px 650px at 18% 8%, rgba(37, 99, 235, 0.42), transparent 62%),

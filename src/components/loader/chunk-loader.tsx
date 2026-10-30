@@ -20,7 +20,9 @@ import './chunk-loader.scss';
  * ticks one behind as they pass, and counts a whole percentage up to 100 in one
  * unbroken bar (src/stores/boot-progress-store.ts) instead of swapping screens. It
  * covers the whole viewport, so the app's header/footer chrome only appears once the
- * boot is done and the dashboard takes over.
+ * boot is done and the dashboard takes over. The dashboard itself is already mounted
+ * underneath by then — the splash waits for the bot builder's workspace too, so no
+ * second loader is ever painted over the app.
  */
 type TChunkLoader = {
     /** Text for the inline variant. */
@@ -57,6 +59,10 @@ const ChunkLoader = ({ message = '', variant = 'inline', stage = 'connecting' }:
         { stage: 'connecting', label: localize('Connecting to the server') },
         { stage: 'workspace', label: localize('Loading your workspace') },
         { stage: 'markets', label: localize('Loading markets and your account') },
+        // The bot builder's Blockly workspace. It used to flash its own full-screen
+        // "Loading Blockly..." overlay on top of the freshly-opened dashboard; it is
+        // the splash's last step now, so the app opens straight onto the dashboard.
+        { stage: 'builder', label: localize('Finishing everything up') },
     ];
 
     const current_index = steps.findIndex(step => step.stage === current_stage);

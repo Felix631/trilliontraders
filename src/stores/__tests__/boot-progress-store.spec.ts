@@ -61,7 +61,13 @@ describe('bootProgress', () => {
 
         store.startStage('markets');
         jest.advanceTimersByTime(30000);
-        expect(store.getSnapshot().percent).toBe(96);
+        expect(store.getSnapshot().percent).toBe(94);
+
+        // The bot builder's workspace is the last step before the bar is full.
+        store.startStage('builder');
+        jest.advanceTimersByTime(30000);
+        expect(store.getSnapshot().percent).toBe(99);
+        expect(store.getSnapshot().stage).toBe('builder');
     });
 
     it('ignores a stage that has already been passed', () => {
@@ -72,7 +78,7 @@ describe('bootProgress', () => {
         store.startStage('connecting');
 
         expect(store.getSnapshot().stage).toBe('markets');
-        expect(store.getSnapshot().percent).toBe(96);
+        expect(store.getSnapshot().percent).toBe(94);
     });
 
     it('shows 100% before the app is allowed to open', () => {
@@ -100,6 +106,8 @@ describe('bootProgress', () => {
         store.startStage('workspace');
         jest.advanceTimersByTime(2000);
         store.startStage('markets');
+        jest.advanceTimersByTime(2000);
+        store.startStage('builder');
         jest.advanceTimersByTime(2000);
         store.finish();
         jest.advanceTimersByTime(10000);
