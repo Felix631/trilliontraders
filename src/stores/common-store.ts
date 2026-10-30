@@ -38,22 +38,35 @@ export default class CommonStore {
             setError: action,
             showError: action,
         });
+
+        // The footer clock has to run from the first render. It used to start only
+        // when a server-time response arrived, so a socket that never answered (or a
+        // visitor who is not authorized yet) left the footer showing the page-load
+        // time forever.
+        this.startClock();
     }
+
+    startClock = () => {
+        if (this.update_time_interval) {
+            clearInterval(this.update_time_interval);
+        }
+
+        this.update_time_interval = setInterval(() => this.updateServerTime(), UPDATE_TIME_INTERVAL);
+    };
 
     setCurrentLanguage = (lang: string) => {
         this.current_language = lang;
     };
 
     setServerTime = (time: moment.Moment, error: boolean) => {
-        if (error) return;
-
-        this.server_time = time;
-
-        if (this.update_time_interval) {
-            clearInterval(this.update_time_interval);
+        // `error` means "this is the local clock, not the server's": the value is
+        // skipped so the footer never claims a bogus server time, but the ticker
+        // still has to run — returning early here was what froze the clock.
+        if (!error) {
+            this.server_time = time;
         }
 
-        this.update_time_interval = setInterval(() => this.updateServerTime(), UPDATE_TIME_INTERVAL);
+        this.startClock();
     };
 
     updateServerTime = () => {

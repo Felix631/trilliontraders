@@ -14,7 +14,12 @@
     border-top: 1px solid var(--general-section-1);
     box-shadow: 0 1px 0 0 var(--general-section-1) inset;
     background: var(--general-main-1);
-    z-index: 2;
+    // The bot dashboard's run-panel rail is a full-height column pinned to the right
+    // edge with z-index 30 (its inner panel is lifted clear of this bar by its own
+    // bottom padding). At 2 the bar sat *under* that strip, so the clock and every
+    // icon — all of them packed at the right end — took no clicks at all.
+    // Above the rail and the header, below every modal (9998+).
+    z-index: 40;
 
     &__icon {
         padding: 0.8rem;
