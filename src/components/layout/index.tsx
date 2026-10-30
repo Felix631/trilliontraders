@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import { Outlet } from 'react-router-dom';
 import { api_base } from '@/external/bot-skeleton';
+import { useBootProgress } from '@/hooks/useBootProgress';
 import { useStore } from '@/hooks/useStore';
 import { useDevice } from '@deriv-com/ui';
 import { crypto_currencies_display_order, fiat_currencies_display_order } from '../shared';
@@ -15,6 +16,17 @@ import './layout.scss';
 const Layout = observer(() => {
     const { isDesktop } = useDevice();
     const store = useStore();
+    // The boot splash covers the viewport while the app starts, so the header (logo,
+    // settings, login/signup) and the footer stay out of the way until the boot has
+    // finished and the dashboard takes over. The timer is only a failsafe: a route
+    // that never boots (e.g. an unknown URL) still gets its chrome back.
+    const { done: is_boot_done } = useBootProgress();
+    const [chrome_failsafe, setChromeFailsafe] = useState(false);
+    useEffect(() => {
+        const timer = setTimeout(() => setChromeFailsafe(true), 8000);
+        return () => clearTimeout(timer);
+    }, []);
+    const show_chrome = is_boot_done || chrome_failsafe;
     const is_quick_strategy_active = store?.quick_strategy?.is_open;
     const isCallbackPage = window.location.pathname === '/callback';
 
@@ -149,11 +161,13 @@ const Layout = observer(() => {
                 'quick-strategy-active': is_quick_strategy_active && !isDesktop,
             })}
         >
-            {!isCallbackPage && <AppHeader isAuthenticating={isAuthenticating || !isInitialAuthCheckComplete} />}
+            {!isCallbackPage && show_chrome && (
+                <AppHeader isAuthenticating={isAuthenticating || !isInitialAuthCheckComplete} />
+            )}
             <Body>
                 <Outlet />
             </Body>
-            {!isCallbackPage && isDesktop && <Footer />}
+            {!isCallbackPage && isDesktop && show_chrome && <Footer />}
         </div>
     );
 });

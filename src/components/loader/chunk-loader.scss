@@ -4,7 +4,11 @@
  * so the handover between them is invisible.
  */
 .app-root--splash {
-    position: relative;
+    /* Covers the viewport (above the app's header, below its modals), so no chrome
+       shows while the app boots. */
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
     overflow: hidden;
     background:
         radial-gradient(1100px 650px at 18% 8%, rgba(37, 99, 235, 0.42), transparent 62%),
@@ -28,7 +32,7 @@
     display: flex;
     flex-direction: column;
     width: min(46rem, calc(100vw - 3.2rem));
-    padding: 2.6rem 2.8rem 2.2rem;
+    padding: 3rem 2.8rem 2.4rem;
     border: 1px solid rgba(148, 197, 255, 0.18);
     border-radius: 2.2rem;
     background: linear-gradient(160deg, rgba(15, 28, 55, 0.94), rgba(5, 11, 28, 0.96));
@@ -36,97 +40,42 @@
         0 2.4rem 6rem rgba(2, 6, 23, 0.65),
         inset 0 0.1rem 0 rgba(255, 255, 255, 0.06);
     color: #e8f1ff;
-    text-align: left;
+    text-align: center;
 
-    /* The header's logo mark is styled by app-logo.scss, which belongs to the lazily
-       loaded layout chunk — it is not on the page yet while we boot, so restate the
-       mark here (scoped to the card, so it reverts once the header's rules load). */
-    .app-header__logo-mark {
-        display: inline-flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .app-header__logo-img {
-        display: block;
-        width: auto;
-        border-radius: 0.8rem;
-    }
-
-    .app-header__logo-badge {
-        display: inline-grid;
-        place-items: center;
-        border-radius: 1rem;
-        background: linear-gradient(140deg, #2563eb, #22d3ee);
-        color: #041022;
-        font-size: 1.7rem;
-        font-weight: 800;
-    }
-
-    .app-header__logo-text {
-        color: #f8fbff;
-        font-size: 1.6rem;
+    /* The app name is the card's only mark — no logo, no badge. The gradient slides
+       across it slowly so the screen feels alive while the bar counts. */
+    &__name {
+        margin: 0;
+        font-size: 2.8rem;
         font-weight: 700;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.005em;
+        line-height: 1.2;
+        background: linear-gradient(92deg, #dbeafe 0%, #7dd3fc 28%, #6ee7b7 52%, #7dd3fc 76%, #dbeafe 100%);
+        background-size: 220% 100%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: boot-splash-shimmer 8s ease-in-out infinite;
+        transition: opacity 0.4s ease;
     }
 
-    &__brand {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1.2rem;
-    }
-
-    &__live {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.35rem 0.9rem;
-        border: 1px solid rgba(16, 185, 129, 0.42);
-        border-radius: 999rem;
-        background: rgba(16, 185, 129, 0.12);
-        color: #6ee7b7;
-        font-size: 1.05rem;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-    }
-
-    &__live-dot {
-        width: 0.7rem;
-        height: 0.7rem;
-        border-radius: 50%;
-        background: #34d399;
-        animation: boot-splash-pulse 1.8s ease-out infinite;
+    &__subtitle {
+        margin: 0.8rem 0 0;
+        font-size: 1.25rem;
+        color: #9fb6d8;
+        transition: opacity 0.4s ease;
     }
 
     &__divider {
         height: 1px;
-        margin: 1.8rem 0;
+        margin: 2rem 0 1.8rem;
         background: linear-gradient(90deg, transparent, rgba(148, 197, 255, 0.35), transparent);
-    }
-
-    &__title {
-        margin: 0;
-        font-size: 2.1rem;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        background: linear-gradient(92deg, #dbeafe, #7dd3fc 45%, #6ee7b7);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    &__subtitle {
-        margin: 0.6rem 0 0;
-        font-size: 1.25rem;
-        color: #9fb6d8;
     }
 
     &__progress {
         display: flex;
         align-items: center;
         gap: 1rem;
-        margin-top: 2rem;
     }
 
     &__bar {
@@ -138,33 +87,35 @@
         background: rgba(148, 197, 255, 0.16);
     }
 
-    /* No transition: the width is the counted percentage itself, so the bar grows
-       exactly as the number climbs. */
+    /* Glides between the counted values instead of stepping. */
     &__bar-fill {
         display: block;
         height: 100%;
         border-radius: inherit;
         background: linear-gradient(90deg, #2563eb, #22d3ee, #10b981);
         box-shadow: 0 0 1.4rem rgba(34, 211, 238, 0.5);
+        transition: width 0.35s ease-out;
     }
 
     &__pct {
         flex: 0 0 auto;
-        min-width: 3.6rem;
+        min-width: 4.2rem;
         color: #7dd3fc;
-        font-size: 1.15rem;
+        font-size: 1.2rem;
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         text-align: right;
+        transition: color 0.35s ease;
     }
 
     &__steps {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin: 1.8rem 0 0;
+        margin: 1.9rem 0 0;
         padding: 0;
         list-style: none;
+        text-align: left;
     }
 
     &__step {
@@ -173,6 +124,9 @@
         gap: 1rem;
         color: #7f95b8;
         font-size: 1.2rem;
+        transition:
+            color 0.35s ease,
+            opacity 0.35s ease;
 
         &--done {
             color: #9fb6d8;
@@ -206,13 +160,28 @@
         border-radius: 50%;
         font-size: 0.95rem;
         line-height: 1;
+        transition:
+            background 0.35s ease,
+            border-color 0.35s ease,
+            color 0.35s ease;
     }
 
     &__footer {
-        margin: 1.8rem 0 0;
+        margin: 1.9rem 0 0;
         color: #8ea6c9;
         font-size: 1.05rem;
-        text-align: center;
+        transition: opacity 0.35s ease;
+    }
+}
+
+@keyframes boot-splash-shimmer {
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
     }
 }
 
@@ -232,19 +201,29 @@
 
 @media (max-width: 480px) {
     .boot-card {
-        padding: 2rem 1.8rem 1.6rem;
+        padding: 2.4rem 1.8rem 1.8rem;
 
-        &__title {
-            font-size: 1.8rem;
+        &__name {
+            font-size: 2.3rem;
         }
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .boot-card {
-        &__live-dot,
+        &__name {
+            animation: none;
+        }
+
         &__step--current .boot-card__step-mark {
             animation: none;
+        }
+
+        &__bar-fill,
+        &__pct,
+        &__step,
+        &__step-mark {
+            transition: none;
         }
     }
 }

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import ChunkLoader from '../chunk-loader';
 
-const mock_progress = { percent: 42, stage: 'workspace', done: false };
+const mock_progress = { percent: 42.6, stage: 'workspace', done: false };
 
 jest.mock('@/hooks/useBootProgress', () => ({ useBootProgress: () => mock_progress }));
 jest.mock('@/stores/boot-progress-store', () => ({ bootProgress: { startStage: jest.fn() } }));
@@ -18,18 +18,27 @@ const step_states = (container: HTMLElement) =>
 describe('ChunkLoader', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mock_progress.percent = 42;
+        mock_progress.percent = 42.6;
         mock_progress.stage = 'workspace';
         mock_progress.done = false;
     });
 
     describe('the boot splash', () => {
-        it('shows the counted percentage with the bar at the same width', () => {
+        it('shows a whole percentage with the bar at the same width', () => {
             const { container } = render(<ChunkLoader variant='splash' stage='connecting' />);
 
             expect(screen.getByTestId('dt_boot_splash')).toBeInTheDocument();
-            expect(screen.getByTestId('dt_boot_percent')).toHaveTextContent('42%');
-            expect((container.querySelector('.boot-card__bar-fill') as HTMLElement).style.width).toBe('42%');
+            // 42.6 counts as 43 — never a decimal.
+            expect(screen.getByTestId('dt_boot_percent')).toHaveTextContent('43%');
+            expect((container.querySelector('.boot-card__bar-fill') as HTMLElement).style.width).toBe('43%');
+        });
+
+        it('centres the app name instead of showing a logo', () => {
+            const { container } = render(<ChunkLoader variant='splash' stage='connecting' />);
+
+            expect(screen.getByTestId('dt_boot_name')).toHaveTextContent('Trillion Trades');
+            expect(container.querySelector('.app-header__logo-mark')).toBeNull();
+            expect(container.querySelector('.boot-card__live')).toBeNull();
         });
 
         it('lists the stages, ticking the ones it has passed', () => {
@@ -43,7 +52,7 @@ describe('ChunkLoader', () => {
 
         it('ticks every stage and says so once the bar is full', () => {
             mock_progress.stage = 'ready';
-            mock_progress.percent = 100;
+            mock_progress.percent = 100.0;
             const { container } = render(<ChunkLoader variant='splash' stage='markets' />);
 
             expect(step_states(container)).toEqual(['done', 'done', 'done']);

@@ -47,8 +47,12 @@ describe('the boot splash', () => {
                 expect(reactSplash).toContain(line);
             }
         );
-        expect(html).toContain('Welcome to Trillion Trades');
-        expect(reactSplash).toContain("localize('Welcome to {{app}}'");
+        // …the app name alone, centred (no logo, no badge)…
+        expect(html).toContain('<h1 class="df-boot-name">Trillion Trades</h1>');
+        expect(reactSplash).toContain("className='boot-card__name'");
+        expect(reactSplash).toContain('{getAppName()}');
+        expect(html).not.toContain('df-boot-badge');
+        expect(reactSplash).not.toContain('LogoMark');
         // …and the cover lists the same boot stages, with the first one running.
         ['Connecting to the server', 'Loading your workspace', 'Loading markets and your account'].forEach(label => {
             expect(html).toContain(label);

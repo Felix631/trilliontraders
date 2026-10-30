@@ -79,7 +79,7 @@
                 display: flex;
                 flex-direction: column;
                 width: min(46rem, calc(100vw - 3.2rem));
-                padding: 2.6rem 2.8rem 2.2rem;
+                padding: 3rem 2.8rem 2.4rem;
                 border: 1px solid rgba(148, 197, 255, 0.18);
                 border-radius: 2.2rem;
                 background: linear-gradient(160deg, rgba(15, 28, 55, 0.94), rgba(5, 11, 28, 0.96));
@@ -87,78 +87,35 @@
                     0 2.4rem 6rem rgba(2, 6, 23, 0.65),
                     inset 0 0.1rem 0 rgba(255, 255, 255, 0.06);
                 color: #e8f1ff;
-                text-align: left;
+                text-align: center;
             }
-            .df-boot-brand {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 1.2rem;
-            }
+            /* The app name is the card's only mark — no logo, no badge. */
             .df-boot-name {
-                display: inline-flex;
-                align-items: center;
-                gap: 1rem;
-                color: #f8fbff;
-                font-size: 1.6rem;
-                font-weight: 700;
-                letter-spacing: 0.01em;
-            }
-            .df-boot-badge {
-                display: inline-grid;
-                place-items: center;
-                width: 3.2rem;
-                height: 3.2rem;
-                border-radius: 1rem;
-                background: linear-gradient(140deg, #2563eb, #22d3ee);
-                color: #041022;
-                font-size: 1.7rem;
-                font-weight: 800;
-            }
-            .df-boot-live {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.6rem;
-                padding: 0.35rem 0.9rem;
-                border: 1px solid rgba(16, 185, 129, 0.42);
-                border-radius: 999rem;
-                background: rgba(16, 185, 129, 0.12);
-                color: #6ee7b7;
-                font-size: 1.05rem;
-                font-weight: 800;
-                letter-spacing: 0.14em;
-            }
-            .df-boot-live i {
-                width: 0.7rem;
-                height: 0.7rem;
-                border-radius: 50%;
-                background: #34d399;
-                animation: df-boot-pulse 1.8s ease-out infinite;
-            }
-            .df-boot-divider {
-                height: 1px;
-                margin: 1.8rem 0;
-                background: linear-gradient(90deg, transparent, rgba(148, 197, 255, 0.35), transparent);
-            }
-            .df-boot-title {
                 margin: 0;
-                font-size: 2.1rem;
+                font-size: 2.8rem;
                 font-weight: 700;
-                letter-spacing: -0.01em;
-                background: linear-gradient(92deg, #dbeafe, #7dd3fc 45%, #6ee7b7);
+                letter-spacing: 0.005em;
+                line-height: 1.2;
+                background: linear-gradient(92deg, #dbeafe 0%, #7dd3fc 28%, #6ee7b7 52%, #7dd3fc 76%, #dbeafe 100%);
+                background-size: 220% 100%;
                 background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
+                animation: df-boot-shimmer 8s ease-in-out infinite;
+            }
+            .df-boot-divider {
+                height: 1px;
+                margin: 2rem 0 1.8rem;
+                background: linear-gradient(90deg, transparent, rgba(148, 197, 255, 0.35), transparent);
             }
             .df-boot-sub {
-                margin: 0.6rem 0 0;
+                margin: 0.8rem 0 0;
                 font-size: 1.25rem;
                 color: #9fb6d8;
             }
             .df-boot-bar {
                 position: relative;
                 height: 0.7rem;
-                margin-top: 2rem;
                 overflow: hidden;
                 border-radius: 999rem;
                 background: rgba(148, 197, 255, 0.16);
@@ -177,9 +134,10 @@
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
-                margin: 1.8rem 0 0;
+                margin: 1.9rem 0 0;
                 padding: 0;
                 list-style: none;
+                text-align: left;
             }
             .df-boot-step {
                 display: flex;
@@ -206,10 +164,19 @@
                 animation: df-boot-pulse 1.8s ease-out infinite;
             }
             .df-boot-footer {
-                margin: 1.8rem 0 0;
+                margin: 1.9rem 0 0;
                 color: #8ea6c9;
                 font-size: 1.05rem;
                 text-align: center;
+            }
+            @keyframes df-boot-shimmer {
+                0%,
+                100% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
             }
             @keyframes df-boot-pulse {
                 0% {
@@ -232,14 +199,15 @@
             }
             @media (max-width: 480px) {
                 .df-boot-card {
-                    padding: 2rem 1.8rem 1.6rem;
+                    padding: 2.4rem 1.8rem 1.8rem;
                 }
-                .df-boot-title {
-                    font-size: 1.8rem;
+                .df-boot-name {
+                    font-size: 2.3rem;
                 }
             }
             @media (prefers-reduced-motion: reduce) {
-                .df-boot-live i,
+                .df-boot-name,
+                .df-boot-step--current .df-boot-step-mark,
                 .df-boot-bar i {
                     animation: none;
                 }
@@ -261,13 +229,9 @@
 
         <div id="df-boot-splash" aria-hidden="true">
             <div class="df-boot-card">
-                <div class="df-boot-brand">
-                    <span class="df-boot-name"><span class="df-boot-badge">T</span>Trillion Trades</span>
-                    <span class="df-boot-live"><i></i>LIVE</span>
-                </div>
-                <span class="df-boot-divider"></span>
-                <h1 class="df-boot-title">Welcome to Trillion Trades</h1>
+                <h1 class="df-boot-name">Trillion Trades</h1>
                 <p class="df-boot-sub">Synthetic indices, trading bots and live charts in one hub.</p>
+                <span class="df-boot-divider"></span>
                 <span class="df-boot-bar"><i></i></span>
                 <ul class="df-boot-steps">
                     <li class="df-boot-step df-boot-step--current">
