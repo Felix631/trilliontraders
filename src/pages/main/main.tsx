@@ -69,6 +69,18 @@ import './tabs-chrome.scss';
 
 const Tutorial = lazy(() => import('../tutorials'));
 
+// The run panel — Summary, Transactions, Journal and the Run/Stop controls — is a
+// bot workspace tool, so it only exists on the tabs that actually run, analyse or
+// scan a strategy. Elsewhere it sat beside a page with nothing to run and there
+// was no reason for it to be on screen at all.
+const RUN_PANEL_TABS = [
+    DBOT_TABS.BOT_BUILDER,
+    DBOT_TABS.ANALYZER,
+    DBOT_TABS.SCANNER,
+    DBOT_TABS.I_LOVE_YOU,
+    DBOT_TABS.MASTER,
+];
+
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
     const { dashboard, load_modal, run_panel, quick_strategy, summary_card, blockly_store } = useStore();
@@ -119,6 +131,7 @@ const AppWrapper = observer(() => {
         'dtrader',
         'bot-importer',
     ];
+    const show_run_panel = RUN_PANEL_TABS.includes(Number(active_tab));
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -669,14 +682,19 @@ const AppWrapper = observer(() => {
                 {/* The run panel's rail — the panel docks into this column and
                     everything else lays out beside it. The Run/Stop control lives
                     inside the panel itself (its footer), so it can never end up
-                    underneath the tab list or off the bottom of the screen. */}
-                <div className='main__run-strategy-wrapper'>
-                    <RunPanel />
-                </div>
+                    underneath the tab list or off the bottom of the screen.
+                    Not mounted on tabs that do not run or scan a strategy: with
+                    the rail gone the body variables are cleared on unmount and
+                    the page takes the full width again. */}
+                {show_run_panel && (
+                    <div className='main__run-strategy-wrapper'>
+                        <RunPanel />
+                    </div>
+                )}
                 <ChartModal />
                 <TradingViewModal />
             </DesktopWrapper>
-            <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>
+            <MobileWrapper>{show_run_panel && !is_open && <RunPanel />}</MobileWrapper>
             <Dialog
                 cancel_button_text={cancel_button_text || localize('Cancel')}
                 className='dc-dialog__wrapper--fixed'
