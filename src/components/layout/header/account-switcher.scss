@@ -152,6 +152,7 @@
 
     &__id {
         pointer-events: none;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -159,16 +160,21 @@
         width: 3.4rem;
         height: 3.4rem;
         overflow: hidden;
-        border-radius: 50%;
-        // A real account is the flag alone, filling the circle: no disc, no ring.
-        // The demo tile carries the fill so the two shapes still read apart.
-        background: transparent;
+        // One box for both accounts: the same rounded square, the same fill and
+        // the same ring, whether the account is real or a demo. Only the mark
+        // inside differs — the flag, or the "D" — so the avatar reads as a single
+        // component instead of two different shapes.
+        border-radius: 1.1rem;
+        background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
 
-        // Demo accounts get a rounded square and a paler fill, so the avatar
-        // shape alone tells the two apart.
-        &--virtual {
-            border-radius: 1.1rem;
-            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        // Painted above the mark, so the full-bleed flag carries exactly the edge
+        // the "D" tile gets — an inset shadow behind the mark would be covered by
+        // the flag.
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
             box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
         }
 
@@ -803,20 +809,26 @@
         min-width: 0;
     }
 
-    // The same avatar as the chip, one size down.
+    // The same avatar as the chip, one size down: identical box for both kinds
+    // of account, so a real row and a demo row are only told apart by the mark
+    // they carry.
     &__avatar {
         display: grid;
         place-items: center;
+        position: relative;
         flex: 0 0 2.6rem;
         width: 2.6rem;
         height: 2.6rem;
         overflow: hidden;
-        border-radius: 50%;
-        background: transparent;
+        border-radius: 0.85rem;
+        background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
 
-        &--virtual {
-            border-radius: 0.85rem;
-            background: linear-gradient(145deg, var(--general-section-1), var(--general-section-2));
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 0 0 0 0.1rem var(--general-section-2);
         }
 
         .acc-info__demo-account-mark {
