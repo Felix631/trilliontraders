@@ -175,6 +175,15 @@
             justify-content: center;
             margin-right: 0.8rem;
         }
+
+        // The flag fills the whole avatar by default, which drowns the ring it sits
+        // in. Drawn smaller inside it, the real account has the same weight as the
+        // demo "D" beside it.
+        .acc-info__real-account-flag {
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 0.3rem;
+        }
     }
 
     &__real-account-flag {
@@ -219,8 +228,16 @@
         transform-origin: 50% 50%;
         transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 
+        // Rendered from a 12×12 viewBox at the button's size: the arrow was a
+        // hairline next to the balance, so it is drawn larger and heavier.
+        svg {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+
         svg path {
             stroke: var(--text-general);
+            stroke-width: 2;
         }
 
         &--invert {
@@ -804,8 +821,9 @@
         }
 
         .acc-info__real-account-flag {
-            width: 100%;
-            height: 100%;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 0.25rem;
         }
 
         .acc-info__demo-account-mark {
@@ -838,16 +856,16 @@
 /* --------------------------------------------------------------------------- *
  * Light mode: the account, its type and its balance stay legible
  *
- * The status green is picked for the dark theme's ink-black chrome. In light mode
- * the header is a brighter blue and the switcher's dropdown is a white surface,
- * so the same teal (#4bb4b3) — and the demo yellow beside it — wash out in both
- * places the account is shown. Each surface gets the pair that reads on it: a
- * mint on the navy chrome, a deep teal / amber on the white dropdown.
+ * The balance keeps the dark theme's colour on the chrome in both themes — one
+ * green for the account figure everywhere. Only the dropdown is a surface that
+ * changes with the theme (white in light mode), so the teal and the demo yellow
+ * beside it need the deeper pair to read there, and the arrow needs white on the
+ * brighter light-mode header band.
  * --------------------------------------------------------------------------- */
 .theme--light {
     .acc-info {
-        &__balance {
-            color: #86efd5;
+        &__select-arrow svg path {
+            stroke: var(--text-colored-background, #fff);
         }
     }
 

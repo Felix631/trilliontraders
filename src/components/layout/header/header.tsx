@@ -179,8 +179,10 @@ const AppHeader = observer(() => {
         if (activeLoginid && !is_account_regenerating) {
             return (
                 <div className='auth-actions'>
-                    <div className='account-info'>
-                        <AccountSwitcher activeAccount={activeAccount} />
+                    <div className='app-header__account-pill'>
+                        <div className='account-info'>
+                            <AccountSwitcher activeAccount={activeAccount} />
+                        </div>
                     </div>
                 </div>
             );

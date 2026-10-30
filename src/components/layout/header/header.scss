@@ -24,6 +24,44 @@
         }
     }
 
+    // The account chip sits inside an outline of its own — the same rounded card
+    // the reference site (chichitraders.site) wraps its account control in — so the
+    // avatar and the balance read as one control rather than loose parts of the bar.
+    &__account-pill {
+        display: flex;
+        align-items: center;
+        height: 4rem;
+        padding-inline: 0.4rem 1.2rem;
+        border: 0.1rem solid var(--site-border);
+        border-radius: var(--ux-r-pill, 999rem);
+        background: color-mix(in srgb, var(--text-colored-background, #fff) 8%, transparent);
+        // Nudged in from the bar's right edge so the outline is not flush with it.
+        margin-inline-end: 1.4rem;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease;
+
+        &:hover {
+            background: color-mix(in srgb, var(--text-colored-background, #fff) 14%, transparent);
+            border-color: color-mix(in srgb, var(--text-colored-background, #fff) 45%, transparent);
+        }
+
+        // The pill owns the padding and the hover fill now, so the chip inside is
+        // just its contents (and keeps the absolute dropdown positioned correctly).
+        .acc-info__wrapper {
+            margin-right: 0;
+        }
+
+        .acc-info {
+            padding: 0;
+            height: 100%;
+
+            &--interactive:hover {
+                background: transparent !important;
+            }
+        }
+    }
+
     &__account-settings {
         padding-inline-end: 1.2rem;
         border-inline-end: 0.1rem solid var(--general-section-1);
