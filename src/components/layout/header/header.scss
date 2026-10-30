@@ -34,12 +34,10 @@
         padding-inline: 0.4rem 1.2rem;
         border: 0.1rem solid var(--site-border);
         border-radius: var(--ux-r-pill, 999rem);
-        background: color-mix(in srgb, var(--text-colored-background, #fff) 8%, transparent);
+        background: transparent;
         // Nudged in from the bar's right edge so the outline is not flush with it.
         margin-inline-end: 1.4rem;
-        transition:
-            background-color 0.2s ease,
-            border-color 0.2s ease;
+        transition: border-color 0.2s ease;
 
         // `--site-border` goes pale in light mode, where that ring read as a brighter,
         // crisper box than the one on the dark bar. Light mode keeps the dark ring so
@@ -49,8 +47,9 @@
             border-color: rgba(79, 140, 255, 0.24);
         }
 
+        // The card is an outline only — no fill, at rest or on hover; the ring
+        // brightening is the whole hover feedback.
         &:hover {
-            background: color-mix(in srgb, var(--text-colored-background, #fff) 14%, transparent);
             border-color: color-mix(in srgb, var(--text-colored-background, #fff) 45%, transparent);
         }
 

@@ -6,7 +6,7 @@
  * Everything here is either a token (see `_ux-tokens.scss`) or a small,
  * reversible layer on top of a class the pages already render:
  *
- *   canvas      → .layout / .main            (aurora mesh, grid, vignette)
+ *   canvas      → .layout / .main            (aurora mesh, vignette)
  *   chrome      → .deriv-header, .dc-tabs__* (royal band, gradient tab pill)
  *   surfaces    → __panel / __card / __grid  (glass cards, hover lift)
  *   headings    → __title / __subtitle       (gradient display type)
@@ -78,12 +78,10 @@
     background-image:
         radial-gradient(70% 62% at 10% 0%, var(--ux-canvas-glow-1), transparent 70%),
         radial-gradient(58% 54% at 90% 3%, var(--ux-canvas-glow-2), transparent 72%),
-        radial-gradient(78% 66% at 62% 100%, var(--ux-canvas-glow-3), transparent 74%),
-        linear-gradient(var(--ux-canvas-grid) 0.1rem, transparent 0.1rem),
-        linear-gradient(90deg, var(--ux-canvas-grid) 0.1rem, transparent 0.1rem);
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
-    background-size: 150% 150%, 150% 150%, 150% 150%, 6.4rem 6.4rem, 6.4rem 6.4rem;
-    background-position: 0% 0%, 100% 0%, 40% 100%, 0 0, 0 0;
+        radial-gradient(78% 66% at 62% 100%, var(--ux-canvas-glow-3), transparent 74%);
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-size: 150% 150%, 150% 150%, 150% 150%;
+    background-position: 0% 0%, 100% 0%, 40% 100%;
 }
 
 .layout {
